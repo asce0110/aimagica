@@ -21,9 +21,10 @@ if (typeof window !== 'undefined') {
   }
 }
 
-// 环境变量配置
-const CDN_ENABLED = process.env.NODE_ENV === 'production' && process.env.NEXT_PUBLIC_ENABLE_CDN === 'true';
-const CDN_BASE_URL = process.env.NEXT_PUBLIC_CDN_BASE_URL || 'https://static.aimagica.ai';
+// 环境变量配置 - 静态导出模式兼容
+const isProduction = typeof window !== 'undefined' && window.location.hostname.includes('pages.dev');
+const CDN_ENABLED = isProduction; // 在Cloudflare Pages上自动启用CDN
+const CDN_BASE_URL = 'https://images.aimagica.ai'; // 直接使用R2域名
 
 /**
  * Hook for getting optimized static asset URLs
