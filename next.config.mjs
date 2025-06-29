@@ -1,6 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages + Next.js 配置（保留API功能）
+  // Cloudflare Pages + Next.js 静态导出配置
+  output: 'export',
+  trailingSlash: true,
+  distDir: 'out',
   
   // 构建时环境变量默认值（避免构建失败）
   env: {
@@ -54,50 +57,13 @@ const nextConfig = {
     return config;
   },
   
-  // 暂时移除外部包配置，回到基础设置
-  
   // 实验性功能
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
   
-  // 重定向配置
-  async redirects() {
-    return [
-      {
-        source: '/home',
-        destination: '/',
-        permanent: true,
-      },
-    ]
-  },
-  
-  // 头部配置 - 安全和SEO
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
-        ],
-      },
-    ]
-  },
+  // 注意：静态导出模式不支持 redirects 和 headers
+  // 这些功能需要在 Cloudflare Pages 或 CDN 层面处理
 }
 
 export default nextConfig
