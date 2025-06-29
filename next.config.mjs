@@ -44,6 +44,41 @@ const nextConfig = {
     // 禁用webpack缓存以避免大文件
     config.cache = false;
     
+    // 修复SSR兼容性问题
+    if (isServer) {
+      // 服务器端不打包某些客户端专用模块
+      config.externals = config.externals || [];
+      config.externals.push({
+        'canvas': 'canvas',
+        'utf-8-validate': 'utf-8-validate',
+        'bufferutil': 'bufferutil',
+      });
+      
+      // 添加全局变量定义，解决SSR错误
+      config.plugins.push(
+        new config.webpack.DefinePlugin({
+          'typeof self': '"undefined"',
+          'typeof window': '"undefined"',
+          'typeof document': '"undefined"',
+        })
+      );
+    }
+    
+    // 通用fallback配置
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+      crypto: false,
+      path: false,
+      stream: false,
+      util: false,
+      url: false,
+      querystring: false,
+      buffer: false,
+    };
+    
     // 生产环境优化
     if (!dev) {
       // 更激进的代码分割
@@ -75,16 +110,6 @@ const nextConfig = {
             }
           },
         },
-      };
-    }
-    
-    // 代码分割优化
-    if (!isServer) {
-      config.resolve.fallback = {
-        ...config.resolve.fallback,
-        fs: false,
-        net: false,
-        tls: false,
       };
     }
     
