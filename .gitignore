@@ -68,3 +68,16 @@ tmp/
 *.pack
 *.map
 !*.min.map
+
+# R2 CDN and static files management
+public/static-urls.json
+backup-static-files.json
+.env.r2
+R2_CONFIG_TEMPLATE.md
+
+# Static files (after uploaded to R2 CDN)
+# Uncomment these lines after uploading to R2:
+# public/images/aimagica-logo.png
+# public/images/backgrounds/*.jpeg
+# public/placeholder-*.png
+# public/placeholder-*.jpg
