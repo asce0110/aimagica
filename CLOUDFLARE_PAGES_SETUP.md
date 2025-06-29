@@ -1,90 +1,96 @@
 # Cloudflare Pages 部署设置指南
 
-## 🚀 部署步骤
+## 🚀 快速部署
 
-### 1. GitHub 连接
-- 访问 [Cloudflare Pages Dashboard](https://dash.cloudflare.com/pages)
-- 点击 "Create a project"
-- 选择 "Connect to Git"
-- 选择仓库：`asce0110/aimagica`
+### 1. 环境变量配置
 
-### 2. 构建配置
-```
-Framework preset: Next.js
-Build command: pnpm build:cf
-Build output directory: .next
-```
+在 Cloudflare Dashboard > Settings > Environment variables 中添加以下变量：
 
-### 3. 必须配置的环境变量
-
-#### Supabase 配置
-```
-NEXT_PUBLIC_SUPABASE_URL=https://vvrkbpnnlxjqyhmmovro.supabase.co
-NEXT_PUBLIC_SUPABASE_ANON_KEY=您的真实anon_key
-SUPABASE_SERVICE_ROLE_KEY=您的真实service_role_key
-```
-
-#### Google OAuth 配置
-```
-GOOGLE_CLIENT_ID=您的Google客户端ID
-GOOGLE_CLIENT_SECRET=您的Google客户端密钥
-```
-
-#### NextAuth 配置
-```
-NEXTAUTH_URL=https://aimagica.pages.dev
-NEXTAUTH_SECRET=您的随机密钥字符串
-```
-
-#### Cloudflare R2 配置
-```
-R2_ACCOUNT_ID=9a54200354c496d0e610009d7ab97c17
-R2_ACCESS_KEY_ID=您的R2访问密钥ID
-R2_SECRET_ACCESS_KEY=您的R2秘密访问密钥
-NEXT_PUBLIC_R2_PUBLIC_URL=https://images.aimagica.ai
-```
-
-#### CDN 和构建优化
-```
+#### 核心配置（必须）
+```bash
+# CDN配置
 NEXT_PUBLIC_ENABLE_CDN=true
-SKIP_BUILD_STATIC_GENERATION=true
-NEXT_DISABLE_SWC=false
+NEXT_PUBLIC_CDN_BASE_URL=https://images.aimagica.ai
+
+# 数据库配置
+NEXT_PUBLIC_SUPABASE_URL=https://vvrkbpnnlxjqyhmmovro.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2cmticG5ubHhqcXlobW1vdnJvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3MzQ2MTAzMzQsImV4cCI6MjA1MDE4NjMzNH0.OPgJGMi2mQRnUxL-KJ3TdWNDKRzYVYZVMZJlAfOJAkw
+
+# 生产环境标识
+NODE_ENV=production
 ```
 
-## 🔐 环境变量设置位置
+#### NextAuth配置（如需认证功能）
+```bash
+NEXTAUTH_SECRET=your-random-secret-string
+NEXTAUTH_URL=https://your-site.pages.dev
+GOOGLE_CLIENT_ID=your-google-client-id
+GOOGLE_CLIENT_SECRET=your-google-client-secret
+```
 
-1. 登录 Cloudflare Dashboard
-2. 进入 Pages 项目
-3. 点击 "Settings" 标签
-4. 点击 "Environment variables"
-5. 添加 "Production" 环境变量
+### 2. 构建设置
 
-## ✅ 验证部署
+在 Cloudflare Pages > Settings > Builds and deployments：
+
+```bash
+Build command: pnpm build
+Build output directory: out
+Node.js version: 18.17.0
+```
+
+### 3. 验证部署
 
 部署成功后，检查以下功能：
-- [ ] 首页加载正常
-- [ ] 用户登录功能
-- [ ] 图像生成功能
-- [ ] 管理后台访问
-- [ ] R2 CDN图像加载
 
-## 🛠️ 故障排除
+1. **静态图片加载**：
+   - Logo: `https://your-site.pages.dev/images/aimagica-logo.png`
+   - 应该自动重定向到: `https://images.aimagica.ai/images/aimagica-logo.png`
 
-### 构建失败
-- 确保所有环境变量已设置
-- 检查R2存储桶权限
-- 验证Supabase连接
+2. **CDN状态检查**：
+   - 打开浏览器开发者工具 > Network
+   - 刷新页面，检查图片请求是否指向`images.aimagica.ai`
 
-### 运行时错误
-- 检查Cloudflare Pages日志
-- 验证API路由响应
-- 确认数据库连接状态
+3. **控制台日志**：
+   - 应该看到: `📦 Loaded static URL mapping: 15 files`
 
-## 📊 性能优化
+## 🔧 故障排除
 
-已实现的优化：
-- ✅ R2 CDN静态资源
-- ✅ 代码分割和懒加载
-- ✅ 图像压缩和缓存
-- ✅ API路由优化
-- ✅ 构建大小控制(<25MB) 
+### 问题1: 图片无法加载（404错误）
+
+**原因**: CDN环境变量未设置或设置错误
+
+**解决方案**:
+1. 确认设置了 `NEXT_PUBLIC_ENABLE_CDN=true`
+2. 确认设置了 `NEXT_PUBLIC_CDN_BASE_URL=https://images.aimagica.ai`
+3. 重新部署网站
+
+### 问题2: 显示本地图片路径
+
+**原因**: 环境变量未生效或CDN未启用
+
+**解决方案**:
+1. 检查Environment variables页面是否正确保存
+2. 确认是Production环境（不是Preview）
+3. 清除Cloudflare缓存并重新部署
+
+### 问题3: 部署失败
+
+**原因**: 构建配置或依赖问题
+
+**解决方案**:
+1. 检查Build logs中的具体错误
+2. 确认使用了正确的Node.js版本
+3. 清除依赖缓存：删除`.next`目录并重新构建
+
+## 📊 性能监控
+
+部署成功后的预期性能：
+- 首页加载: < 2秒
+- 图片加载: < 1秒 (CDN加速)
+- 构建时间: 2-3分钟
+
+## 🔗 相关链接
+
+- [项目GitHub](https://github.com/asce0110/aimagica)
+- [Cloudflare R2文档](https://developers.cloudflare.com/r2/)
+- [Next.js静态导出](https://nextjs.org/docs/app/building-your-application/deploying/static-exports) 

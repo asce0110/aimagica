@@ -1,51 +1,35 @@
 "use client"
 
-import React, { useState, useRef, useEffect } from "react"
+import React, { useState, useEffect, useRef } from "react"
 import { Button } from "@/components/ui/button"
-import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
-import { useSession, signIn, signOut } from "next-auth/react"
-import {
-  Palette,
-  Wand2,
-  Download,
-  Share2,
-  Heart,
-  Star,
-  Brush,
-  Sparkles,
-  BookOpen,
-  CreditCard,
-  User,
-  Settings,
+import { Card, CardContent } from "@/components/ui/card"
+import { 
+  Heart, 
+  Download, 
+  Share2, 
+  Sparkles, 
+  Crown, 
+  User, 
   LogOut,
-  Crown,
-  Users,
-  Zap,
-  ImageIcon,
-  PenTool,
-  Layers,
-  ArrowRight,
-  Facebook,
-  Twitter,
-  Instagram,
-  Youtube,
-  Mail,
-  Phone,
-  MapPin,
-  HelpCircle,
-  FileText,
   Shield,
-  Send,
-  Eye,
+  CreditCard,
+  Eye
 } from "lucide-react"
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu"
+import { useSession, signIn, signOut } from "next-auth/react"
+import { useRouter } from "next/navigation"
+import { cn } from "@/lib/utils"
+import { GenerationInterface } from "@/components/generation-interface"
+import { GenerationInterfaceSimple } from "@/components/generation-interface-simple"
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
+import { ImageViewer } from "@/components/image-viewer"
+import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
+import { PromptsComm unity } from "@/components/prompts-community"
+import { useMobile } from "@/hooks/use-mobile"
+import { PerformanceMonitor } from "@/components/performance-monitor"
+import { WaitingGame } from "@/components/waiting-game"
+import Link from "next/link"
+import Image from "next/image"
+import useStaticUrl from "@/hooks/use-static-url"
 
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
@@ -78,6 +62,7 @@ import PerformanceMonitor from "@/components/performance-monitor"
 import { useHighPriorityImagePreloader, IMAGE_SETS } from "@/hooks/use-image-preloader"
 
 export default function AISketchPlatform() {
+  const logoUrl = useStaticUrl('/images/aimagica-logo.png');
   const [currentStep, setCurrentStep] = useState("create")
   const [isUserNavigating, setIsUserNavigating] = useState(false) // 用户手动导航标记
   const [isRendering, setIsRendering] = useState(false)
@@ -262,7 +247,6 @@ export default function AISketchPlatform() {
     }
   ]
 
-  const { isMobile, isTablet, deviceType } = useMobile()
   const router = useRouter()
   const renderProgressRef = useRef<HTMLDivElement>(null)
 
@@ -745,7 +729,7 @@ export default function AISketchPlatform() {
             <div className="flex items-center space-x-2 md:space-x-4">
               <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12 overflow-hidden">
                 <img 
-                  src="/images/aimagica-logo.png" 
+                  src={useStaticUrl('/images/aimagica-logo.png')} 
                   alt="Aimagica Logo" 
                   className="w-full h-full object-contain"
                 />

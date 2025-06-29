@@ -107,6 +107,38 @@ Visit [**aimagica.ai**](https://aimagica.ai) to start creating amazing AI art:
 - **🌟 Regular Updates**: New features and styles added frequently
 - **🔒 Privacy Focused**: Your creations remain private unless you choose to share
 
+### R2 CDN 部署状态 ✅
+- **静态资源CDN**: 15个文件已上传到R2 (2.19MB)
+- **CDN域名**: https://images.aimagica.ai
+- **主要资源**: Logo (1021KB), 背景图 (1.2MB), 示例图标 (4个), 占位符 (9个)
+
+### 📦 部署后图片无法加载？
+
+如果部署后图片无法显示，请按以下步骤解决：
+
+#### 1. 检查Cloudflare Pages环境变量
+在Cloudflare Dashboard → 你的项目 → Settings → Environment variables 中确保设置：
+
+```bash
+NEXT_PUBLIC_ENABLE_CDN=true
+NEXT_PUBLIC_CDN_BASE_URL=https://images.aimagica.ai
+NODE_ENV=production
+```
+
+#### 2. 验证CDN状态
+- 打开浏览器开发者工具 → Network标签
+- 刷新页面，图片请求应该指向 `images.aimagica.ai` 而不是本地路径
+- 控制台应显示：`📦 Loaded static URL mapping: 15 files`
+
+#### 3. 常见问题
+| 问题 | 原因 | 解决方案 |
+|------|------|----------|
+| 图片404 | 环境变量未设置 | 设置`NEXT_PUBLIC_ENABLE_CDN=true` |
+| 显示本地路径 | CDN未启用 | 设置`NEXT_PUBLIC_CDN_BASE_URL` |
+| 控制台无日志 | 映射文件未加载 | 检查`/static-urls.json`是否存在 |
+
+详细部署指南：[CLOUDFLARE_PAGES_SETUP.md](./CLOUDFLARE_PAGES_SETUP.md)
+
 ---
 
 **Start creating stunning AI art today at [aimagica.ai](https://aimagica.ai)**
