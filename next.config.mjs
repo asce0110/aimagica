@@ -1,9 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages + Next.js 静态导出配置
-  output: 'export',
-  trailingSlash: true,
-  distDir: 'out',
+  // Cloudflare Pages + Next.js 配置（保留API功能）
   
   eslint: {
     ignoreDuringBuilds: true,
@@ -28,24 +25,12 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Webpack 配置优化 - 简化版本
-  webpack: (config, { isServer, webpack }) => {
+  // Webpack 配置优化
+  webpack: (config, { isServer }) => {
     // 禁用webpack缓存以避免大文件
     config.cache = false;
     
-    // 最简单的服务端polyfill方法
-    if (isServer) {
-      // 在模块加载前全局定义 self
-      config.plugins.push(
-        new webpack.BannerPlugin({
-          banner: 'if(typeof self === "undefined") { global.self = global; globalThis.self = globalThis; }',
-          raw: true,
-          entryOnly: false,
-        })
-      );
-    }
-    
-    // 代码分割优化 - 简化版本
+    // 代码分割优化
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -58,24 +43,50 @@ const nextConfig = {
     return config;
   },
   
-  // 服务端外部包 - 仅外部化Supabase相关包
-  serverExternalPackages: [
-    '@supabase/supabase-js', 
-    '@supabase/realtime-js',
-    '@supabase/auth-js',
-    '@supabase/postgrest-js',
-    '@supabase/storage-js',
-    '@supabase/functions-js',
-    '@supabase/ssr'
-  ],
+  // 暂时移除外部包配置，回到基础设置
   
   // 实验性功能
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
   
-  // 注意：静态导出模式不支持 redirects 和 headers
-  // 这些配置需要在 Cloudflare Pages 或 CDN 层面处理
+  // 重定向配置
+  async redirects() {
+    return [
+      {
+        source: '/home',
+        destination: '/',
+        permanent: true,
+      },
+    ]
+  },
+  
+  // 头部配置 - 安全和SEO
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'X-Frame-Options',
+            value: 'DENY',
+          },
+          {
+            key: 'X-Content-Type-Options',
+            value: 'nosniff',
+          },
+          {
+            key: 'Referrer-Policy',
+            value: 'origin-when-cross-origin',
+          },
+          {
+            key: 'Permissions-Policy',
+            value: 'camera=(), microphone=(), geolocation=()',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 export default nextConfig

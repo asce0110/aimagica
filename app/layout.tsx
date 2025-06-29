@@ -1,3 +1,6 @@
+// 全局polyfill - 必须在所有其他导入之前
+import '../globals-polyfill'
+
 import type { Metadata } from 'next'
 import './globals.css'
 import Providers from '@/components/session-provider'
