@@ -30,14 +30,39 @@ const nextConfig = {
     // 禁用webpack缓存以避免大文件
     config.cache = false;
     
-    // 修复服务端"self is not defined"错误
+    // 修复服务端"self is not defined"错误 - 更强力的方法
     if (isServer) {
+      // 方法1: DefinePlugin
       config.plugins.push(
         new webpack.DefinePlugin({
-          'globalThis.self': 'globalThis',
-          'global.self': 'global',
+          'typeof self': '"object"',
+          'self': 'globalThis',
         })
       );
+      
+      // 方法2: ProvidePlugin
+      config.plugins.push(
+        new webpack.ProvidePlugin({
+          self: 'globalThis',
+        })
+      );
+      
+      // 方法3: 注入polyfill到所有server chunks
+      const originalEntry = config.entry;
+      config.entry = async () => {
+        const entries = await originalEntry();
+        
+        // 为所有entry points添加polyfill
+        Object.keys(entries).forEach(key => {
+          if (Array.isArray(entries[key])) {
+            entries[key].unshift('./lib/polyfills.js');
+          } else if (typeof entries[key] === 'string') {
+            entries[key] = ['./lib/polyfills.js', entries[key]];
+          }
+        });
+        
+        return entries;
+      };
     }
     
     // 代码分割优化
@@ -76,6 +101,7 @@ const nextConfig = {
   // 实验性功能
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    instrumentationHook: true,
   },
   
   // 重定向配置
