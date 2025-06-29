@@ -112,6 +112,42 @@ Visit [**aimagica.ai**](https://aimagica.ai) to start creating amazing AI art:
 - **CDN域名**: https://images.aimagica.ai
 - **主要资源**: Logo (1021KB), 背景图 (1.2MB), 示例图标 (4个), 占位符 (9个)
 
+### 🚀 OpenNext.js 部署选项
+
+项目现在支持使用OpenNext.js进行更灵活的云部署：
+
+#### 什么是OpenNext.js？
+OpenNext.js是一个开源工具，可以将Next.js应用转换为可部署到各种云平台的包，提供：
+- **更好的SSR支持**: 解决复杂的服务器端渲染问题
+- **函数分割**: API路由和页面路由独立打包
+- **云平台兼容**: 支持AWS Lambda、Node.js服务器等
+- **冷启动优化**: 几乎没有冷启动时间
+
+#### 使用方法
+
+```bash
+# 安装依赖（已添加到项目中）
+pnpm install
+
+# 使用OpenNext.js构建
+pnpm build:opennext
+
+# 输出将在 .open-next 目录中
+```
+
+#### 配置文件
+项目包含 `open-next.config.ts` 配置文件，可以自定义：
+- 运行时环境（Node.js/Cloudflare Workers）
+- 函数分割策略
+- 图片优化设置
+- 中间件配置
+
+#### 何时使用OpenNext.js？
+- 遇到Cloudflare Pages的SSR兼容性问题时
+- 需要部署到AWS Lambda或其他云平台时
+- 需要更精细的函数分割控制时
+- 原生Next.js部署出现问题时
+
 ### 📦 部署后图片无法加载？
 
 如果部署后图片无法显示，请按以下步骤解决：
