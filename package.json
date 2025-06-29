@@ -6,6 +6,7 @@
     "dev": "next dev",
     "build": "pnpm clean && next build",
     "build:cf": "pnpm clean && next build",
+    "build:static": "pnpm clean && cp next.config.static.mjs next.config.mjs && next build && cp next.config.mjs.backup next.config.mjs",
     "start": "next start",
     "lint": "next lint",
     "type-check": "tsc --noEmit",
