@@ -1,61 +1,79 @@
-import { useMemo } from 'react';
+import { useMemo, useState, useEffect } from 'react';
 
 // 静态资源URL映射（由构建时生成）
 let staticUrlMapping: Record<string, string> = {};
+let isMapLoaded = false;
 
-// 在客户端加载URL映射
-if (typeof window !== 'undefined') {
-  try {
-    // 尝试加载静态URL映射文件
-    fetch('/static-urls.json')
-      .then(response => response.json())
-      .then(mapping => {
-        staticUrlMapping = mapping;
-        console.log('📦 Loaded static URL mapping:', Object.keys(mapping).length, 'files');
-      })
-      .catch(() => {
-        console.log('📦 No static URL mapping found, using local files');
-      });
-  } catch (error) {
-    console.log('📦 Using local static files (no CDN mapping)');
-  }
+// 预加载映射表
+if (typeof window !== 'undefined' && !isMapLoaded) {
+  fetch('/static-urls.json')
+    .then(response => response.json())
+    .then(mapping => {
+      staticUrlMapping = mapping;
+      isMapLoaded = true;
+      console.log('📦 Loaded static URL mapping:', Object.keys(mapping).length, 'files');
+      // 触发重新渲染使用CDN URL的组件
+      window.dispatchEvent(new Event('staticUrlsLoaded'));
+    })
+    .catch(() => {
+      console.log('📦 No static URL mapping found, using local files');
+      isMapLoaded = true;
+    });
 }
 
 // 环境变量配置 - 静态导出模式兼容
 const isProduction = typeof window !== 'undefined' && window.location.hostname.includes('pages.dev');
 const CDN_ENABLED = isProduction; // 在Cloudflare Pages上自动启用CDN
-// 临时使用直接的R2 URL，而不是自定义域名
-const CDN_BASE_URL = 'https://9a54200354c496d0e610009d7ab97c17.r2.cloudflarestorage.com/ai-sketch';
+// 使用自定义域名
+const CDN_BASE_URL = 'https://images.aimagica.ai';
 
 /**
  * Hook for getting optimized static asset URLs
  * Automatically switches between local files and CDN based on environment
  */
 export function useStaticUrl(localPath: string): string {
+  const [mappingLoaded, setMappingLoaded] = useState(isMapLoaded);
+  
+  useEffect(() => {
+    const handleMappingLoaded = () => {
+      setMappingLoaded(true);
+    };
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener('staticUrlsLoaded', handleMappingLoaded);
+      return () => window.removeEventListener('staticUrlsLoaded', handleMappingLoaded);
+    }
+  }, []);
+
   return useMemo(() => {
     // 规范化路径
     const normalizedPath = localPath.startsWith('/') ? localPath : `/${localPath}`;
     
     // 如果禁用CDN，直接返回本地路径
     if (!CDN_ENABLED) {
+      console.log('🏠 CDN disabled, using local:', normalizedPath);
       return normalizedPath;
     }
     
     // 检查映射表中是否有对应的CDN URL
     const cdnUrl = staticUrlMapping[normalizedPath];
     if (cdnUrl) {
+      console.log('📦 Using mapped CDN URL:', cdnUrl);
       return cdnUrl;
     }
     
     // 如果映射表还没加载，根据文件类型智能判断
     if (isStaticAsset(normalizedPath)) {
       const fileName = normalizedPath.replace('/', '');
-      return `${CDN_BASE_URL}/${fileName}`;
+      const fallbackUrl = `${CDN_BASE_URL}/${fileName}`;
+      console.log('🔄 Using fallback CDN URL:', fallbackUrl);
+      return fallbackUrl;
     }
     
     // 默认返回本地路径
+    console.log('🏠 Fallback to local:', normalizedPath);
     return normalizedPath;
-  }, [localPath]);
+  }, [localPath, mappingLoaded]);
 }
 
 /**
