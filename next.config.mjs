@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages + Next.js 配置
+  // Cloudflare Pages + Next.js 配置（保留API功能）
+  
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -17,6 +18,46 @@ const nextConfig = {
         hostname: '**',
       },
     ],
+  },
+  
+  // 优化构建输出以减少文件大小
+  compiler: {
+    removeConsole: process.env.NODE_ENV === 'production',
+  },
+  
+  // Webpack 配置优化
+  webpack: (config, { isServer }) => {
+    // 禁用webpack缓存以避免大文件
+    config.cache = false;
+    
+    // 代码分割优化
+    if (!isServer) {
+      config.resolve.fallback = {
+        ...config.resolve.fallback,
+        fs: false,
+        net: false,
+        tls: false,
+      };
+    }
+    
+    // 优化bundle大小
+    config.optimization = {
+      ...config.optimization,
+      splitChunks: {
+        chunks: 'all',
+        maxSize: 20000, // 限制chunk大小为20KB
+        cacheGroups: {
+          vendor: {
+            test: /[\\/]node_modules[\\/]/,
+            name: 'vendors',
+            priority: 10,
+            chunks: 'all',
+          },
+        },
+      },
+    };
+    
+    return config;
   },
   
   // 实验性功能
