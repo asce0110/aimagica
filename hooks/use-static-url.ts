@@ -24,7 +24,8 @@ if (typeof window !== 'undefined') {
 // 环境变量配置 - 静态导出模式兼容
 const isProduction = typeof window !== 'undefined' && window.location.hostname.includes('pages.dev');
 const CDN_ENABLED = isProduction; // 在Cloudflare Pages上自动启用CDN
-const CDN_BASE_URL = 'https://images.aimagica.ai'; // 直接使用R2域名
+// 临时使用直接的R2 URL，而不是自定义域名
+const CDN_BASE_URL = 'https://9a54200354c496d0e610009d7ab97c17.r2.cloudflarestorage.com/ai-sketch';
 
 /**
  * Hook for getting optimized static asset URLs
