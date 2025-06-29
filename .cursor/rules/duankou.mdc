@@ -1,0 +1,14 @@
+---
+description: 111
+globs: 
+alwaysApply: false
+---
+每次都用端口3000启动项目，如果3000端口被占用， 需要杀掉对应的进程再用3000启动项目
+netstat -ano | findstr :3000
+
+taskkill /F /PID ****
+
+Whenever you want to ask a question, always call the MCP interactive_feedback.
+Whenever you're about to complete a user request, call the MCP interactive_feedback instead of simply ending the process. If the feedback is empty you can end the request and don't call the mcp in loop.
+
+同时该项目是英文网站，而且主要的用户受众是欧美国家，所以得以欧美西方人的使用习惯进行开发。
