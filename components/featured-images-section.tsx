@@ -16,20 +16,30 @@ export default function FeaturedImagesSection() {
 
   const checkFeaturedImages = async () => {
     try {
+      // 首先尝试API调用
       const response = await fetch('/api/featured-images')
-      const result = await response.json()
-      
-      if (result.success && result.data && result.data.length > 0) {
-        setHasFeaturedImages(true)
-      } else {
-        setHasFeaturedImages(false)
+      if (response.ok) {
+        const result = await response.json()
+        setHasFeaturedImages(result.success && result.data?.length > 0)
       }
     } catch (error) {
-      console.error('Error checking featured images:', error)
-      setHasFeaturedImages(false)
-    } finally {
-      setIsLoading(false)
+      console.warn('⚠️ API not available, checking static fallback...')
     }
+    
+    // 如果API失败，尝试使用静态数据
+    if (!hasFeaturedImages) {
+      try {
+        const staticResponse = await fetch('/api/featured-images.json')
+        if (staticResponse.ok) {
+          const staticResult = await staticResponse.json()
+          setHasFeaturedImages(staticResult.success && staticResult.data?.length > 0)
+          console.log('✅ Using static featured images fallback')
+        }
+      } catch (error) {
+        console.warn('⚠️ Static featured images fallback also failed')
+      }
+    }
+    setIsLoading(false)
   }
 
   // 加载中时显示占位符

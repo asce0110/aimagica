@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages + Next.js 静态导出配置
-  output: 'export',
+  // 恢复SSR模式，支持API路由
+  // output: 'export', // 移除静态导出
   trailingSlash: true,
-  distDir: 'out',
+  // distDir: 'out', // 使用默认.next目录
   
   // 构建时环境变量默认值（避免构建失败）
   env: {
@@ -39,10 +39,44 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Webpack 配置优化
-  webpack: (config, { isServer }) => {
+  // Webpack 配置优化 - 大幅减少文件大小
+  webpack: (config, { isServer, dev }) => {
     // 禁用webpack缓存以避免大文件
     config.cache = false;
+    
+    // 生产环境优化
+    if (!dev) {
+      // 更激进的代码分割
+      config.optimization = {
+        ...config.optimization,
+        splitChunks: {
+          chunks: 'all',
+          minSize: 20000,
+          maxSize: 200000,
+          cacheGroups: {
+            default: {
+              minChunks: 2,
+              priority: -20,
+              reuseExistingChunk: true,
+            },
+            vendor: {
+              test: /[\\/]node_modules[\\/]/,
+              name: 'vendors',
+              priority: -10,
+              chunks: 'all',
+              maxSize: 200000,
+            },
+            ui: {
+              test: /[\\/]node_modules[\\/](@radix-ui|lucide-react)[\\/]/,
+              name: 'ui',
+              priority: 10,
+              chunks: 'all',
+              maxSize: 150000,
+            }
+          },
+        },
+      };
+    }
     
     // 代码分割优化
     if (!isServer) {
@@ -57,13 +91,39 @@ const nextConfig = {
     return config;
   },
   
-  // 实验性功能
+  // 实验性功能 - 优化包导入
   experimental: {
-    optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
+    optimizePackageImports: [
+      'lucide-react', 
+      '@radix-ui/react-icons',
+      '@radix-ui/react-accordion',
+      '@radix-ui/react-alert-dialog',
+      '@radix-ui/react-avatar',
+      '@radix-ui/react-checkbox',
+      '@radix-ui/react-collapsible',
+      '@radix-ui/react-context-menu',
+      '@radix-ui/react-dialog',
+      '@radix-ui/react-dropdown-menu',
+      '@radix-ui/react-hover-card',
+      '@radix-ui/react-label',
+      '@radix-ui/react-menubar',
+      '@radix-ui/react-navigation-menu',
+      '@radix-ui/react-popover',
+      '@radix-ui/react-progress',
+      '@radix-ui/react-radio-group',
+      '@radix-ui/react-scroll-area',
+      '@radix-ui/react-select',
+      '@radix-ui/react-separator',
+      '@radix-ui/react-slider',
+      '@radix-ui/react-slot',
+      '@radix-ui/react-switch',
+      '@radix-ui/react-tabs',
+      '@radix-ui/react-toast',
+      '@radix-ui/react-toggle',
+      '@radix-ui/react-toggle-group',
+      '@radix-ui/react-tooltip',
+    ],
   },
-  
-  // 注意：静态导出模式不支持 redirects 和 headers
-  // 这些功能需要在 Cloudflare Pages 或 CDN 层面处理
 }
 
 export default nextConfig

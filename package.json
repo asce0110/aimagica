@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "pnpm clean && next build",
-    "build:cf": "node scripts/remove-api-routes.js && pnpm clean && next build",
+    "build:cf": "pnpm clean && next build",
+    "build:cf-static": "node scripts/remove-api-routes.js && pnpm clean && next build",
     "build:static": "pnpm clean && cp next.config.static.mjs next.config.mjs && next build && cp next.config.mjs.backup next.config.mjs",
     "start": "next start",
     "lint": "next lint",

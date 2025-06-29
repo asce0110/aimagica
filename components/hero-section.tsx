@@ -117,7 +117,7 @@ export default function HeroSection() {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // 获取画廊图片 - 优化版本，使用缓存
+  // 获取画廊图片 - 恢复API调用功能
   useEffect(() => {
     const fetchGalleryImages = async () => {
       try {
@@ -125,7 +125,7 @@ export default function HeroSection() {
         
         // 使用AbortController来处理请求取消
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 5000) // 5秒超时
+        const timeoutId = setTimeout(() => controller.abort(), 8000) // 8秒超时，给API更多时间
         
         const response = await fetch('/api/gallery/public?limit=4&optimize=true', {
           signal: controller.signal,
@@ -151,12 +151,12 @@ export default function HeroSection() {
               })
             }
           } else {
-            console.log('📷 No gallery images available, using example images')
+            console.log('📷 No gallery images available, using example SVG images')
           }
         }
       } catch (error) {
         if (error.name === 'AbortError') {
-          console.warn('⏱️ Gallery image loading timed out, using example images')
+          console.warn('⏱️ Gallery image loading timed out, using example SVG images')
         } else {
           console.warn('⚠️ Failed to load gallery images for hero section:', error)
         }
