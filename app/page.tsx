@@ -13,7 +13,22 @@ import {
   LogOut,
   Shield,
   CreditCard,
-  Eye
+  Eye,
+  Wand2,
+  Star,
+  PenTool,
+  Layers,
+  Zap,
+  ImageIcon,
+  ArrowRight,
+  Facebook,
+  Twitter,
+  Instagram,
+  Youtube,
+  HelpCircle,
+  Mail,
+  Send,
+  FileText
 } from "lucide-react"
 import { useSession, signIn, signOut } from "next-auth/react"
 import { useRouter } from "next/navigation"
