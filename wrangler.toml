@@ -3,6 +3,13 @@ name = "aimagica"
 compatibility_date = "2024-01-15"
 pages_build_output_dir = ".next"
 
+# 环境变量配置
+[env.production.vars]
+# 这些需要在Cloudflare Pages控制台中设置
+# NEXT_PUBLIC_SUPABASE_URL = "https://vvrkbpnnlxjqyhmmovro.supabase.co"
+# NEXT_PUBLIC_SUPABASE_ANON_KEY = "your_anon_key"
+# SUPABASE_SERVICE_ROLE_KEY = "your_service_role_key"
+
 # 重定向规则
 [[redirects]]
 from = "/home"

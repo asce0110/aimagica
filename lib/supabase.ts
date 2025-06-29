@@ -1,12 +1,21 @@
 import { createClient as createSupabaseClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+// 安全的环境变量检查，避免构建时错误
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
+const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || ''
 
-export const supabase = createSupabaseClient(supabaseUrl, supabaseAnonKey)
+// 只有在环境变量存在时才创建客户端
+export const supabase = supabaseUrl && supabaseAnonKey 
+  ? createSupabaseClient(supabaseUrl, supabaseAnonKey)
+  : null
 
 // Server-side client factory function
 export async function createClient() {
+  // 在运行时检查环境变量
+  if (!supabaseUrl || !supabaseAnonKey) {
+    throw new Error('Supabase environment variables are not configured')
+  }
+  
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   if (serviceRoleKey) {
     // Use service role key on server side to bypass RLS when needed
