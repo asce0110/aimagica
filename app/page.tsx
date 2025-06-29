@@ -24,7 +24,7 @@ import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel,
 import ImageViewer from "@/components/image-viewer"
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
 import PromptsCommunity from "@/components/prompts-community"
-import { useMobile } from "@/hooks/use-mobile"
+import useMobile from "@/hooks/use-mobile"
 import PerformanceMonitor from "@/components/performance-monitor"
 import { WaitingGame } from "@/components/waiting-game"
 import Link from "next/link"
@@ -55,7 +55,7 @@ export default function AISketchPlatform() {
   const logoUrl = useStaticUrl('/images/aimagica-logo.png');
   const { data: session } = useSession()
   const router = useRouter()
-  const isMobile = useMobile()
+  const { isMobile } = useMobile()
   const [currentStep, setCurrentStep] = useState("create")
   const [isUserNavigating, setIsUserNavigating] = useState(false) // 用户手动导航标记
   const [isRendering, setIsRendering] = useState(false)
