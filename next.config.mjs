@@ -60,6 +60,9 @@ const nextConfig = {
     return config;
   },
   
+  // 服务端外部包
+  serverExternalPackages: ['@supabase/supabase-js', '@supabase/realtime-js'],
+  
   // 实验性功能
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],

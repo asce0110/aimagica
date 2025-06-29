@@ -119,7 +119,7 @@ export class PaymentSecurity {
   ): Promise<boolean> {
     try {
       // 从数据库获取真实的计划价格
-      const { createClient } = await import('@/lib/supabase/server');
+      const { createClient } = await import('@/lib/supabase-server');
       const supabase = createClient();
 
       const { data: plan, error } = await supabase
