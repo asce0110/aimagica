@@ -129,24 +129,34 @@ OpenNext.js是一个开源工具，可以将Next.js应用转换为可部署到�
 # 安装依赖（已添加到项目中）
 pnpm install
 
-# 使用OpenNext.js构建
+# 使用OpenNext.js构建（自动切换到简化配置）
 pnpm build:opennext
 
 # 输出将在 .open-next 目录中
 ```
 
-#### 配置文件
-项目包含 `open-next.config.ts` 配置文件，可以自定义：
-- 运行时环境（Node.js/Cloudflare Workers）
-- 函数分割策略
-- 图片优化设置
-- 中间件配置
+#### 配置文件说明
+- **`next.config.mjs`**: 标准配置，包含复杂webpack优化（用于Cloudflare Pages）
+- **`next.config.opennext.mjs`**: 简化配置，专门用于OpenNext.js构建
+- **`open-next.config.ts`**: OpenNext.js部署配置
+
+#### 构建过程
+1. 自动备份当前配置文件
+2. 切换到简化的OpenNext.js兼容配置
+3. 执行Next.js构建
+4. 运行OpenNext.js转换
+5. 恢复原始配置文件
 
 #### 何时使用OpenNext.js？
 - 遇到Cloudflare Pages的SSR兼容性问题时
 - 需要部署到AWS Lambda或其他云平台时
 - 需要更精细的函数分割控制时
-- 原生Next.js部署出现问题时
+- 原生Next.js部署出现webpack错误时
+
+#### ⚠️ 注意事项
+- OpenNext.js构建会自动使用简化配置，避免webpack冲突
+- 构建完成后会自动恢复原始配置文件
+- 如果构建失败，请手动恢复配置：`mv next.config.mjs.backup next.config.mjs`
 
 ### 📦 部署后图片无法加载？
 
