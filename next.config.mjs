@@ -58,7 +58,7 @@ const nextConfig = {
     return config;
   },
   
-  // 服务端外部包 - 外部化所有可能有问题的包
+  // 服务端外部包 - 仅外部化Supabase相关包
   serverExternalPackages: [
     '@supabase/supabase-js', 
     '@supabase/realtime-js',
@@ -66,10 +66,7 @@ const nextConfig = {
     '@supabase/postgrest-js',
     '@supabase/storage-js',
     '@supabase/functions-js',
-    '@supabase/ssr',
-    'recharts',
-    'lodash',
-    'crypto-js'
+    '@supabase/ssr'
   ],
   
   // 实验性功能
@@ -77,43 +74,8 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
   },
   
-  // 重定向配置
-  async redirects() {
-    return [
-      {
-        source: '/home',
-        destination: '/',
-        permanent: true,
-      },
-    ]
-  },
-  
-  // 头部配置 - 安全和SEO
-  async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
-          },
-          {
-            key: 'Permissions-Policy',
-            value: 'camera=(), microphone=(), geolocation=()',
-          },
-        ],
-      },
-    ]
-  },
+  // 注意：静态导出模式不支持 redirects 和 headers
+  // 这些配置需要在 Cloudflare Pages 或 CDN 层面处理
 }
 
 export default nextConfig
