@@ -1,0 +1,31 @@
+name = "aimagica"
+compatibility_date = "2024-01-15"
+
+[env.production]
+name = "aimagica"
+
+[build]
+command = "pnpm build"
+cwd = ""
+watch_dir = ""
+
+[build.upload]
+format = "service-worker"
+
+[[redirects]]
+from = "/home"
+to = "/"
+status = 301
+
+[[redirects]]
+from = "/api/*"
+to = "/api/:splat"
+status = 200
+
+[[headers]]
+for = "/*"
+[headers.values]
+X-Frame-Options = "DENY"
+X-Content-Type-Options = "nosniff"
+Referrer-Policy = "origin-when-cross-origin"
+Permissions-Policy = "camera=(), microphone=(), geolocation=()" 

@@ -1,12 +1,16 @@
 {
-  "name": "my-v0-project",
+  "name": "ai-sketch-platform",
   "version": "0.1.0",
   "private": true,
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:cf": "next build",
     "start": "next start",
     "lint": "next lint",
+    "type-check": "tsc --noEmit",
+    "clean": "rm -rf .next out",
+    "deploy:preview": "pnpm build && echo 'Ready for Cloudflare Pages deployment'",
     "git:discard": "git reset --hard HEAD && git clean -fd",
     "git:commit": "sh -c 'COMMIT_MSG=\"$1\"; git add . && git commit -m \"$COMMIT_MSG\" && ts-node scripts/update-technical-changelog.ts --contentFile scripts/.tmp_changelog_content.md' --",
     "git:commit:push": "sh -c 'COMMIT_MSG=\"$1\"; git add . && git commit -m \"$COMMIT_MSG\" && ts-node scripts/update-technical-changelog.ts --contentFile scripts/.tmp_changelog_content.md --perform-amend && git push' --",
