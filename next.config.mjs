@@ -26,9 +26,19 @@ const nextConfig = {
   },
   
   // Webpack 配置优化
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, webpack }) => {
     // 禁用webpack缓存以避免大文件
     config.cache = false;
+    
+    // 修复服务端"self is not defined"错误
+    if (isServer) {
+      config.plugins.push(
+        new webpack.DefinePlugin({
+          'globalThis.self': 'globalThis',
+          'global.self': 'global',
+        })
+      );
+    }
     
     // 代码分割优化
     if (!isServer) {
