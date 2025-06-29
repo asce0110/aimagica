@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// 加载环境变量
+require('dotenv').config({ path: '.env.local' });
+
 const fs = require('fs');
 const path = require('path');
 const { S3Client, PutObjectCommand, HeadObjectCommand } = require('@aws-sdk/client-s3');
@@ -16,7 +19,7 @@ const R2_CONFIG = {
 };
 
 const BUCKET_NAME = process.env.R2_BUCKET_NAME || 'aimagica-static';
-const CDN_URL = process.env.R2_CDN_URL || `https://static.aimagica.ai`;
+const CDN_URL = process.env.R2_CDN_URL || `https://images.aimagica.ai`;
 
 // 初始化 S3 客户端（R2兼容S3 API）
 const s3Client = new S3Client(R2_CONFIG);
