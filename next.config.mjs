@@ -46,20 +46,25 @@ const nextConfig = {
     
     // 修复SSR兼容性问题
     if (isServer) {
-      // 服务器端不打包某些客户端专用模块
+      // 服务器端外部化客户端专用模块
       config.externals = config.externals || [];
       config.externals.push({
         'canvas': 'canvas',
         'utf-8-validate': 'utf-8-validate',
         'bufferutil': 'bufferutil',
+        // Supabase客户端模块
+        '@supabase/realtime-js': '@supabase/realtime-js',
+        'websocket': 'websocket',
+        'ws': 'ws',
       });
       
-      // 添加全局变量定义，解决SSR错误
+      // 定义浏览器全局变量为undefined（防止SSR错误）
       config.plugins.push(
         new webpack.DefinePlugin({
           'typeof self': '"undefined"',
           'typeof window': '"undefined"',
           'typeof document': '"undefined"',
+          'global.self': 'undefined',
         })
       );
     }
@@ -77,6 +82,7 @@ const nextConfig = {
       url: false,
       querystring: false,
       buffer: false,
+      process: false,
     };
     
     // 生产环境优化
