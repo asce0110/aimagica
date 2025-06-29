@@ -23,25 +23,20 @@ import { GenerationInterfaceSimple } from "@/components/generation-interface-sim
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import { ImageViewer } from "@/components/image-viewer"
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
-import { PromptsComm unity } from "@/components/prompts-community"
+import { PromptsCommunity } from "@/components/prompts-community"
 import { useMobile } from "@/hooks/use-mobile"
 import { PerformanceMonitor } from "@/components/performance-monitor"
 import { WaitingGame } from "@/components/waiting-game"
 import Link from "next/link"
 import Image from "next/image"
 import useStaticUrl from "@/hooks/use-static-url"
-
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion"
 import { Input } from "@/components/ui/input"
-import GenerationInterface from "@/components/generation-interface"
 import CommunityGallery from "@/components/community-gallery"
-import PromptsCommunity from "@/components/prompts-community"
 import RecommendationGallery from "@/components/recommendation-gallery"
 import RenderProgress from "@/components/render-progress"
 import GenerationCompletionAlert from "@/components/generation-completion-alert"
-import ImageViewer from "@/components/image-viewer"
 import { useFavorites } from "@/hooks/useFavorites"
-
 import { 
   startGeneration, 
   updateProgress, 
@@ -53,12 +48,7 @@ import {
 import HeroSection from "@/components/hero-section"
 import FeaturedImagesSection from "@/components/featured-images-section"
 import TestimonialsCarousel from "@/components/testimonials-carousel"
-import useMobile from "@/hooks/use-mobile"
 import Head from "next/head"
-import { useRouter } from "next/navigation"
-import Link from "next/link"
-import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
-import PerformanceMonitor from "@/components/performance-monitor"
 import { useHighPriorityImagePreloader, IMAGE_SETS } from "@/hooks/use-image-preloader"
 
 export default function AISketchPlatform() {
