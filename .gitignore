@@ -5,6 +5,10 @@
 /.pnp
 .pnp.js
 .yarn/install-state.gz
+/.pnpm-store
+
+# testing
+/coverage
 
 # next.js
 /.next/
@@ -81,3 +85,10 @@ R2_CONFIG_TEMPLATE.md
 # public/images/backgrounds/*.jpeg
 # public/placeholder-*.png
 # public/placeholder-*.jpg
+
+# cloudflare
+.wrangler/
+wrangler.toml.backup
+
+# R2 uploads that have been uploaded to CDN
+public/images/uploaded-*
