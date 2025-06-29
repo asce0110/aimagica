@@ -40,7 +40,7 @@ const nextConfig = {
   },
   
   // Webpack 配置优化 - 大幅减少文件大小
-  webpack: (config, { isServer, dev }) => {
+  webpack: (config, { isServer, dev, webpack }) => {
     // 禁用webpack缓存以避免大文件
     config.cache = false;
     
@@ -56,7 +56,7 @@ const nextConfig = {
       
       // 添加全局变量定义，解决SSR错误
       config.plugins.push(
-        new config.webpack.DefinePlugin({
+        new webpack.DefinePlugin({
           'typeof self': '"undefined"',
           'typeof window': '"undefined"',
           'typeof document': '"undefined"',
