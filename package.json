@@ -13,6 +13,7 @@
     "upload:r2": "node scripts/upload-to-r2.js",
     "clean:static": "node scripts/clean-uploaded-assets.js",
     "test:r2": "node scripts/test-r2-setup.js",
+    "setup:r2": "node scripts/setup-r2-buckets.js",
     "deploy:full": "pnpm upload:r2 && pnpm build:cf",
     "deploy:clean": "pnpm upload:r2 && pnpm clean:static --force && pnpm build:cf",
     "deploy:preview": "pnpm build:cf && echo 'Ready for Cloudflare Pages deployment'",
