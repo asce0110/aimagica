@@ -247,17 +247,27 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
     fetchStyleData()
   }, [selectedStyleId])
 
-  // 游戏提醒逻辑 - 进入等待界面5秒后显示提醒
+  // 重置游戏提醒状态 - 当progress重置为0时（新的生图开始）
   useEffect(() => {
-    // 当progress第一次>0时启动5秒计时器，只启动一次
+    if (progress === 0) {
+      console.log('🎮 Resetting game reminder states - new generation started')
+      setShowGameReminder(false)
+      setGameReminderDismissed(false)
+      setGameTimerStarted(false)
+    }
+  }, [progress])
+
+  // 游戏提醒逻辑 - 进入等待界面1秒后显示提醒
+  useEffect(() => {
+    // 当progress第一次>0时启动1秒计时器，只启动一次
     if (progress > 0 && progress < 95 && !gameReminderDismissed && !gameTimerStarted) {
-      console.log('🎮 Starting game reminder timer - 5 seconds from now')
+      console.log('🎮 Starting game reminder timer - 1 second from now')
       setGameTimerStarted(true)
       
       const timer = setTimeout(() => {
-        console.log('🎮 Showing game reminder after 5 seconds')
+        console.log('🎮 Showing game reminder after 1 second')
         setShowGameReminder(true)
-      }, 5000) // 5秒后显示提醒
+      }, 1000) // 1秒后显示提醒
       
       return () => clearTimeout(timer)
     }
@@ -268,7 +278,10 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
     progress,
     isGenerationFailed,
     generationError,
-    hasGeneratedImages: generatedImages?.length || 0
+    hasGeneratedImages: generatedImages?.length || 0,
+    showGameReminder,
+    gameReminderDismissed,
+    gameTimerStarted
   })
 
   // 如果生成失败，显示错误界面
@@ -709,6 +722,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
             {/* 关闭按钮 */}
             <button
               onClick={() => {
+                console.log('🎮 User dismissed game reminder')
                 setShowGameReminder(false)
                 setGameReminderDismissed(true)
               }}
