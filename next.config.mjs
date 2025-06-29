@@ -25,47 +25,24 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Webpack 配置优化
+  // Webpack 配置优化 - 简化版本
   webpack: (config, { isServer, webpack }) => {
     // 禁用webpack缓存以避免大文件
     config.cache = false;
     
-    // 修复服务端"self is not defined"错误 - 更强力的方法
+    // 最简单的服务端polyfill方法
     if (isServer) {
-      // 方法1: DefinePlugin
+      // 在模块加载前全局定义 self
       config.plugins.push(
-        new webpack.DefinePlugin({
-          'typeof self': '"object"',
-          'self': 'globalThis',
+        new webpack.BannerPlugin({
+          banner: 'if(typeof self === "undefined") { global.self = global; globalThis.self = globalThis; }',
+          raw: true,
+          entryOnly: false,
         })
       );
-      
-      // 方法2: ProvidePlugin
-      config.plugins.push(
-        new webpack.ProvidePlugin({
-          self: 'globalThis',
-        })
-      );
-      
-      // 方法3: 注入polyfill到所有server chunks
-      const originalEntry = config.entry;
-      config.entry = async () => {
-        const entries = await originalEntry();
-        
-        // 为所有entry points添加polyfill
-        Object.keys(entries).forEach(key => {
-          if (Array.isArray(entries[key])) {
-            entries[key].unshift('./lib/polyfills.js');
-          } else if (typeof entries[key] === 'string') {
-            entries[key] = ['./lib/polyfills.js', entries[key]];
-          }
-        });
-        
-        return entries;
-      };
     }
     
-    // 代码分割优化
+    // 代码分割优化 - 简化版本
     if (!isServer) {
       config.resolve.fallback = {
         ...config.resolve.fallback,
@@ -75,33 +52,26 @@ const nextConfig = {
       };
     }
     
-    // 优化bundle大小
-    config.optimization = {
-      ...config.optimization,
-      splitChunks: {
-        chunks: 'all',
-        maxSize: 20000, // 限制chunk大小为20KB
-        cacheGroups: {
-          vendor: {
-            test: /[\\/]node_modules[\\/]/,
-            name: 'vendors',
-            priority: 10,
-            chunks: 'all',
-          },
-        },
-      },
-    };
-    
     return config;
   },
   
-  // 服务端外部包
-  serverExternalPackages: ['@supabase/supabase-js', '@supabase/realtime-js'],
+  // 服务端外部包 - 外部化所有可能有问题的包
+  serverExternalPackages: [
+    '@supabase/supabase-js', 
+    '@supabase/realtime-js',
+    '@supabase/auth-js',
+    '@supabase/postgrest-js',
+    '@supabase/storage-js',
+    '@supabase/functions-js',
+    '@supabase/ssr',
+    'recharts',
+    'lodash',
+    'crypto-js'
+  ],
   
   // 实验性功能
   experimental: {
     optimizePackageImports: ['lucide-react', '@radix-ui/react-icons'],
-    instrumentationHook: true,
   },
   
   // 重定向配置
