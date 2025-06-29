@@ -10,34 +10,7 @@ import GlassMorphism from "@/components/glass-morphism"
 import { useRouter } from "next/navigation"
 import OptimizedImage from "@/components/ui/optimized-image"
 import { imageCache } from "@/lib/image-cache"
-
-// 优化的示例图片数据 - 直接使用SVG确保显示
-const exampleImages = [
-  { 
-    src: "/images/examples/cat-wizard.svg", 
-    fallback: "/images/examples/cat-wizard.svg",
-    title: "Cat Wizard",
-    preload: true
-  },
-  { 
-    src: "/images/examples/cyber-city.svg", 
-    fallback: "/images/examples/cyber-city.svg",
-    title: "Cyber City",
-    preload: true
-  },
-  { 
-    src: "/images/examples/magic-forest.svg", 
-    fallback: "/images/examples/magic-forest.svg",
-    title: "Magic Forest",
-    preload: false
-  },
-  { 
-    src: "/images/examples/space-art.svg", 
-    fallback: "/images/examples/space-art.svg",
-    title: "Space Art",
-    preload: false
-  },
-]
+import useStaticUrl from "@/hooks/use-static-url"
 
 interface GalleryImage {
   id: string
@@ -52,6 +25,44 @@ interface GalleryImage {
 
 export default function HeroSection() {
   const router = useRouter()
+  
+  // 使用 useStaticUrl hook 获取CDN URL
+  const catWizardUrl = useStaticUrl('/images/examples/cat-wizard.svg')
+  const cyberCityUrl = useStaticUrl('/images/examples/cyber-city.svg')
+  const magicForestUrl = useStaticUrl('/images/examples/magic-forest.svg')
+  const spaceArtUrl = useStaticUrl('/images/examples/space-art.svg')
+  const backgroundUrl = useStaticUrl('/images/backgrounds/0c09cb2f-5876-49e0-9776-ef9c743a2eac.jpeg')
+  const errorPlaceholderUrl = useStaticUrl('/images/placeholder-error.svg')
+  const placeholderUrl = useStaticUrl('/images/placeholder.svg')
+
+  // 优化的示例图片数据 - 使用CDN URL
+  const exampleImages = useMemo(() => [
+    { 
+      src: catWizardUrl, 
+      fallback: catWizardUrl,
+      title: "Cat Wizard",
+      preload: true
+    },
+    { 
+      src: cyberCityUrl, 
+      fallback: cyberCityUrl,
+      title: "Cyber City",
+      preload: true
+    },
+    { 
+      src: magicForestUrl, 
+      fallback: magicForestUrl,
+      title: "Magic Forest",
+      preload: false
+    },
+    { 
+      src: spaceArtUrl, 
+      fallback: spaceArtUrl,
+      title: "Space Art",
+      preload: false
+    },
+  ], [catWizardUrl, cyberCityUrl, magicForestUrl, spaceArtUrl])
+
   const [isMobile, setIsMobile] = useState(false)
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
   const [isMounted, setIsMounted] = useState(false)
@@ -180,7 +191,7 @@ export default function HeroSection() {
         <div 
           className="absolute inset-0 w-full h-full bg-cover bg-center bg-no-repeat"
           style={{ 
-            backgroundImage: `url('/images/backgrounds/0c09cb2f-5876-49e0-9776-ef9c743a2eac.jpeg')`,
+            backgroundImage: `url(${backgroundUrl})`,
             transform: 'scale(1.02)',
           }}
         />
@@ -390,7 +401,7 @@ export default function HeroSection() {
                 
                                  let imageSrc: string
                  if (isGalleryImage) {
-                   imageSrc = hasError ? "/images/placeholder-error.svg" : img.url || "/images/placeholder.svg"
+                   imageSrc = hasError ? errorPlaceholderUrl : img.url || placeholderUrl
                  } else {
                    const exampleImg = img as typeof exampleImages[0]
                    imageSrc = hasError ? exampleImg.fallback : (supportsWebP ? exampleImg.src : exampleImg.fallback)
