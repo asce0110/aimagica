@@ -1,0 +1,77 @@
+# Cloudflare Pages 构建忽略文件
+# 忽略可能导致构建问题的文件和目录
+
+# 开发文件
+*.log
+*.lock
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# 缓存和临时文件
+.next/
+.cache/
+.temp/
+.tmp/
+cache/
+temp/
+tmp/
+
+# 数据库和备份文件
+*.sql
+*.db
+*.sqlite
+backup/
+scripts/backup/
+
+# 大型媒体文件
+*.mp4
+*.mov
+*.avi
+*.mkv
+*.webm
+*.jpg
+*.jpeg
+*.png
+*.gif
+*.svg
+*.webp
+*.avif
+public/images/
+public/uploads/
+
+# 文档和说明文件
+docs/
+README*.md
+CHANGELOG*.md
+*.md
+
+# 测试文件
+test/
+tests/
+__tests__/
+*.test.*
+*.spec.*
+
+# 开发工具配置
+.vscode/
+.idea/
+*.sublime-*
+.DS_Store
+Thumbs.db
+
+# 部署相关
+.vercel/
+.netlify/
+dist/
+build/
+out/
+
+# OpenNext 相关文件（我们现在不使用）
+.open-next/
+open-next.*.ts
+wrangler.*.toml
+
+# Workers 相关（我们使用 Pages Functions）
+workers/

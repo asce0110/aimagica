@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 超快构建模式 - 禁用所有非必要功能
+  // Cloudflare Pages 快速构建模式
   
   eslint: {
     ignoreDuringBuilds: true,
@@ -12,30 +12,28 @@ const nextConfig = {
   // 完全关闭图片优化
   images: {
     unoptimized: true,
-    loader: 'custom',
-    loaderFile: './lib/utils/image-loader.js'
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
   },
   
-  // 关闭所有编译器优化以加速构建
+  // 最小化编译器配置
   compiler: {
     removeConsole: false,
     reactRemoveProperties: false,
     styledComponents: false,
   },
   
-  // 关闭所有实验性功能
+  // 禁用所有实验性功能
   experimental: {
     esmExternals: false,
+    turbo: false,
   },
   
-  // 禁用 SWC 压缩以加速构建
+  // 禁用所有压缩和优化
   swcMinify: false,
-  
-  // 关闭构建时的性能检查
   productionBrowserSourceMaps: false,
-  
-  // 禁用静态优化以加速构建
   generateEtags: false,
+  poweredByHeader: false,
   
   // 最少的环境变量
   env: {
@@ -46,35 +44,44 @@ const nextConfig = {
     NEXT_PUBLIC_R2_PUBLIC_URL: 'https://images.aimagica.ai',
   },
 
-  // webpack配置最小化
-  webpack: (config, { isServer }) => {
-    // 关闭源码映射以加速构建
+  // 极简 webpack 配置
+  webpack: (config, { isServer, dev }) => {
+    // 完全禁用源码映射
     config.devtool = false;
     
-    // 减少模块解析
+    // 最小化模块解析
     config.resolve.symlinks = false;
+    config.resolve.cacheWithContext = false;
     
-    // 减少代码分割，加速构建
+    // 最简单的代码分割
     config.optimization.splitChunks = {
       chunks: 'all',
-      minSize: 20000,
-      maxSize: 200000,
+      minSize: 0,
+      maxSize: 500000,
       cacheGroups: {
-        framework: {
-          name: 'framework',
-          test: /(?<!node_modules.*)[\\/]node_modules[\\/](react|react-dom|scheduler|prop-types|use-subscription)[\\/]/,
-          priority: 40,
-          enforce: true,
+        default: {
+          minChunks: 1,
+          priority: -20,
+          reuseExistingChunk: true,
         },
-        lib: {
+        vendor: {
           test: /[\\/]node_modules[\\/]/,
-          name: 'lib',
-          priority: 30,
+          name: 'vendors',
+          priority: -10,
+          chunks: 'all',
         },
       },
     };
     
-    // 减少模块类型解析
+    // 禁用不必要的插件
+    config.plugins = config.plugins.filter(plugin => {
+      return ![
+        'ForkTsCheckerWebpackPlugin',
+        'ESLintWebpackPlugin',
+      ].includes(plugin.constructor.name);
+    });
+    
+    // 最小化文件处理
     config.module.generator = {
       'asset/resource': {
         filename: 'static/[hash][ext]',
@@ -83,6 +90,12 @@ const nextConfig = {
     
     return config;
   },
+
+  // 禁用不必要的功能
+  onDemandEntries: {
+    maxInactiveAge: 25 * 1000,
+    pagesBufferLength: 2,
+  },
 }
 
-export default nextConfig 
+export default nextConfig
