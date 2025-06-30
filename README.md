@@ -147,11 +147,20 @@ pnpm build:opennext
 4. 运行OpenNext.js转换
 5. 恢复原始配置文件
 
+#### 🚀 Cloudflare Pages 部署
+**对于 Cloudflare Pages，请使用标准构建命令：**
+```bash
+pnpm build:cf
+```
+这个命令会：
+1. 清理旧的构建文件
+2. 执行 Next.js 标准构建
+3. 自动清理大的 webpack 缓存文件（避免 25MB 文件大小限制）
+
 #### 何时使用OpenNext.js？
-- 遇到Cloudflare Pages的SSR兼容性问题时
-- 需要部署到AWS Lambda或其他云平台时
+- 需要部署到 **AWS Lambda** 或其他云平台时
 - 需要更精细的函数分割控制时
-- 原生Next.js部署出现webpack错误时
+- **不要用于 Cloudflare Pages 部署**（应使用 `pnpm build:cf`）
 
 #### ⚠️ 注意事项
 - OpenNext.js构建会自动使用简化配置，避免webpack冲突
@@ -160,11 +169,20 @@ pnpm build:opennext
 
 #### 🔧 常见构建问题
 
-**图片优化错误：**
+**图片优化错误（OpenNext.js）：**
 ```
 ERROR: Could not resolve "../overrides/imageLoader/custom.js"
 ```
 **解决方案：** 已在 `open-next.config.ts` 中设置 `imageOptimization: false` 禁用图片优化，因为项目使用 `unoptimized: true` 配置。
+
+**文件大小限制错误（Cloudflare Pages）：**
+```
+ERROR: Pages only supports files up to 25 MiB in size
+cache/webpack/client-production/0.pack is 123 MiB in size
+```
+**解决方案：** 
+1. 使用 `pnpm build:cf` 而不是 `pnpm build:opennext` 部署到 Cloudflare Pages
+2. 构建脚本会自动清理大的 webpack 缓存文件
 
 ### 📦 部署后图片无法加载？
 
