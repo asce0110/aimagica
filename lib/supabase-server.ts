@@ -7,7 +7,26 @@ export async function createClient() {
   const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
   
   if (!supabaseUrl || !supabaseAnonKey) {
-    throw new Error('Supabase environment variables are not configured')
+    // 在构建时返回一个假的客户端，在运行时抛出错误
+    if (process.env.NODE_ENV === 'production' && (!supabaseUrl || !supabaseAnonKey)) {
+      throw new Error('Supabase environment variables are not configured')
+    }
+    // 构建时使用占位符
+    const placeholderUrl = supabaseUrl || 'https://placeholder.supabase.co'
+    const placeholderKey = supabaseAnonKey || 'placeholder-key'
+    
+    const cookieStore = await cookies()
+    return createServerClient<Database>(
+      placeholderUrl,
+      placeholderKey,
+      {
+        cookies: {
+          get: () => undefined,
+          set: () => {},
+          remove: () => {},
+        },
+      }
+    )
   }
 
   const cookieStore = await cookies()
@@ -49,7 +68,26 @@ export async function createServiceRoleClient() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   
   if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('Supabase environment variables are not configured')
+    // 在构建时返回一个假的客户端，在运行时抛出错误
+    if (process.env.NODE_ENV === 'production' && !serviceRoleKey) {
+      throw new Error('Supabase environment variables are not configured')
+    }
+    // 构建时使用占位符
+    const placeholderUrl = supabaseUrl || 'https://placeholder.supabase.co'
+    const placeholderKey = serviceRoleKey || 'placeholder-key'
+    
+    const cookieStore = await cookies()
+    return createServerClient<Database>(
+      placeholderUrl,
+      placeholderKey,
+      {
+        cookies: {
+          get: () => undefined,
+          set: () => {},
+          remove: () => {},
+        },
+      }
+    )
   }
 
   const cookieStore = await cookies()
@@ -89,7 +127,18 @@ export function createFastServiceRoleClient() {
   const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
   
   if (!supabaseUrl || !serviceRoleKey) {
-    throw new Error('Supabase environment variables are not configured')
+    // 在构建时返回一个假的客户端，在运行时抛出错误
+    if (process.env.NODE_ENV === 'production' && !serviceRoleKey) {
+      throw new Error('Supabase environment variables are not configured')
+    }
+    // 构建时使用占位符
+    const placeholderUrl = supabaseUrl || 'https://placeholder.supabase.co'
+    const placeholderKey = serviceRoleKey || 'placeholder-key'
+    
+    return createSupabaseClient<Database>(
+      placeholderUrl,
+      placeholderKey
+    )
   }
 
   return createSupabaseClient<Database>(

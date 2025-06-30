@@ -70,7 +70,14 @@ export interface MagicCoinSettings {
 }
 
 export class MagicCoinService {
-  private supabase = createFastServiceRoleClient()
+  private _supabase: any = null
+
+  private get supabase() {
+    if (!this._supabase) {
+      this._supabase = createFastServiceRoleClient()
+    }
+    return this._supabase
+  }
 
   // 获取用户魔法币余额
   async getUserBalance(userId: string): Promise<MagicCoinBalance | null> {
