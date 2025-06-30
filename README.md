@@ -149,16 +149,18 @@ pnpm build:opennext
 5. 恢复原始配置文件
 
 #### 🚀 Cloudflare Pages 部署
-**对于 Cloudflare Pages，请使用标准构建命令：**
+**对于 Cloudflare Pages，请使用静态导出构建：**
 ```bash
 pnpm build:cf
 ```
 这个命令会：
 1. 清理旧的构建文件
-2. **自动切换到超简化配置**（`next.config.cf.mjs`）
-3. 执行 Next.js 构建（避免复杂webpack配置）
-4. 清理所有 webpack 缓存文件
+2. **自动切换到静态导出模式**（`next.config.static.mjs`）
+3. 执行 Next.js 静态导出（**完全避免webpack服务端构建**）
+4. 输出到 `out` 目录（**没有巨大的缓存文件**）
 5. **恢复原始配置文件**
+
+⚠️ **重要：** 静态导出模式**不支持API路由**，但彻底解决了156MB缓存文件问题
 
 #### 何时使用OpenNext.js？
 - 需要部署到 **AWS Lambda** 或其他云平台时
