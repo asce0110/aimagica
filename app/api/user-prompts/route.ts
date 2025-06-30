@@ -3,9 +3,17 @@ import { createClient } from '@supabase/supabase-js'
 import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+// 懒加载 Supabase 客户端，避免构建时检查环境变量
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
+  
+  return createClient(supabaseUrl, supabaseServiceKey)
+}
 
 // GET - 获取提示词列表
 export async function GET(request: NextRequest) {
@@ -24,6 +32,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '12')
     const offset = (page - 1) * limit
 
+    const supabase = getSupabaseClient()
     let query = supabase
       .from('user_prompts')
       .select(`
@@ -176,6 +185,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 检查是否有重复的提示词
+    const supabase = getSupabaseClient()
     const { data: existingPrompt } = await supabase
       .from('user_prompts')
       .select('id')

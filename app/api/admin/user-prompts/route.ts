@@ -4,9 +4,17 @@ import { getServerSession } from 'next-auth/next'
 import { authOptions } from '@/app/api/auth/[...nextauth]/route'
 import { isAdmin } from '@/lib/database/admin'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL!
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY!
-const supabase = createClient(supabaseUrl, supabaseServiceKey)
+// 懒加载 Supabase 客户端，避免构建时检查环境变量
+function getSupabaseClient() {
+  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+  const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!supabaseUrl || !supabaseServiceKey) {
+    throw new Error('Missing Supabase environment variables')
+  }
+  
+  return createClient(supabaseUrl, supabaseServiceKey)
+}
 
 // GET - 管理员获取所有提示词（包括待审核的）
 export async function GET(request: NextRequest) {
@@ -32,6 +40,7 @@ export async function GET(request: NextRequest) {
     const limit = parseInt(searchParams.get('limit') || '20')
     const offset = (page - 1) * limit
 
+    const supabase = getSupabaseClient()
     let query = supabase
       .from('user_prompts')
       .select(`
@@ -191,6 +200,7 @@ export async function POST(request: NextRequest) {
 
       case 'delete':
         // 批量删除
+        const supabase = getSupabaseClient()
         const { error: deleteError } = await supabase
           .from('user_prompts')
           .delete()
@@ -210,6 +220,7 @@ export async function POST(request: NextRequest) {
     }
 
     // 执行批量更新
+    const supabase = getSupabaseClient()
     const { error } = await supabase
       .from('user_prompts')
       .update(updateData)
