@@ -159,7 +159,8 @@ pnpm build:cf
 3. 执行 Next.js 构建
 4. **使用 @opennextjs/cloudflare build** 命令转换（专为 Cloudflare 优化）
 5. 输出到 `.open-next/assets` 目录
-6. **恢复原始配置文件**
+6. **清理缓存文件**：移除 `.open-next/assets/cache` 目录避免超过25MB限制
+7. **恢复原始配置文件**
 
 ✅ **优势：** 
 - **官方推荐的方式**（2025年4月发布）
@@ -294,6 +295,16 @@ pnpm build:cf-workers
 - `wrangler.toml` → Cloudflare Pages 配置
 - `wrangler.workers.toml` → Cloudflare Workers 配置  
 - `wrangler.pages.toml` → Pages 专用配置（备用）
+
+**🚀 25MB文件大小限制解决方案：**
+```
+Error: Pages only supports files up to 25 MiB in size
+cache/webpack/client-production/0.pack is 123 MiB in size
+```
+**解决方案：** 确保输出目录配置正确且清理缓存文件：
+1. **正确的输出目录**：`pages_build_output_dir = ".open-next/assets"`（不是`.next`）
+2. **自动缓存清理**：构建命令会自动清理 `.open-next/assets/cache` 目录
+3. **验证方法**：检查 `wrangler.toml` 中的 `pages_build_output_dir` 设置
 
 ### 📦 部署后图片无法加载？
 
