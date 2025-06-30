@@ -158,7 +158,7 @@ pnpm build:cf
 2. **自动切换到 OpenNext.js 简化配置**（`next.config.opennext.mjs`）
 3. 执行 Next.js 构建
 4. **使用 @opennextjs/cloudflare build** 命令转换（专为 Cloudflare 优化）
-5. 输出到 `.open-next/static` 目录
+5. 输出到 `.open-next/assets` 目录
 6. **恢复原始配置文件**
 
 ✅ **优势：** 
@@ -260,6 +260,27 @@ TypeError: _webpack.WebpackError is not a constructor
 **解决方案：** 
 1. 确保项目根目录有 `public/_routes.json` 文件（已包含）
 2. 该文件配置了正确的路由处理规则，告诉 Cloudflare Pages 如何处理 API 路由和静态资源
+
+**Wrangler.toml 配置错误 - 输出目录问题：**
+```
+Error: Output directory ".open-next/static" not found.
+```
+**解决方案：** **关键发现！** OpenNext.js Cloudflare 的输出目录是 `.open-next/assets` 而不是 `.open-next/static`。需要正确配置 `wrangler.toml`：
+```toml
+# Cloudflare Workers 配置（不是 Pages！）
+name = "aimagica"
+main = ".open-next/worker.js"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
+
+[assets]
+directory = ".open-next/assets"  # 注意：是 assets 不是 static！
+binding = "ASSETS"
+```
+**重要：** 
+- 这是 **Cloudflare Workers 配置**，不是 Cloudflare Pages！
+- 不要使用 `pages_build_output_dir`，这是 Pages 的配置
+- OpenNext.js 生成的是 Worker 而不是静态页面
 
 ### 📦 部署后图片无法加载？
 
