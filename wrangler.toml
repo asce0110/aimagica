@@ -1,5 +1,5 @@
 # Cloudflare Pages Configuration (临时回退)
-name = "aimagica"
+name = "aimagic"
 pages_build_output_dir = ".open-next/assets"
 compatibility_date = "2024-12-30"
 
