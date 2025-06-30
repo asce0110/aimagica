@@ -3,7 +3,7 @@ import { createHash } from 'node:crypto';
 
 // 配置常量
 const CONFIG = {
-  STATIC_DOMAIN: 'https://aimagica.pages.dev', // Pages域名作为静态资源CDN
+  STATIC_DOMAIN: 'https://aimagica.pages.dev', // 你的实际Pages域名
   API_VERSION: 'v1',
   CACHE_TTL: 3600, // 1小时缓存
 };
@@ -36,14 +36,15 @@ export default {
         return await handleAPIRoute(request, env, corsHeaders);
       }
 
-      // 健康检查
-      if (path === '/health' || path === '/') {
+      // 健康检查 - 只有 /health 路径，不包括根路径
+      if (path === '/health') {
         return new Response(JSON.stringify({
           status: 'healthy',
           service: 'aimagica-workers',
           version: CONFIG.API_VERSION,
           timestamp: new Date().toISOString(),
           uptime: Date.now(),
+          pages_domain: CONFIG.STATIC_DOMAIN,
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
@@ -54,7 +55,7 @@ export default {
         return await proxyToPages(request, corsHeaders);
       }
 
-      // 页面路由代理到Pages
+      // 所有其他路由（包括根路径）代理到Pages显示网站内容
       return await proxyToPages(request, corsHeaders);
 
     } catch (error) {
