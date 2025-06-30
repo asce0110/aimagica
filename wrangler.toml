@@ -1,7 +1,7 @@
 # Cloudflare Pages Configuration for Next.js
 name = "aimagica"
 compatibility_date = "2024-06-30"
-pages_build_output_dir = "out"
+pages_build_output_dir = ".open-next/static"
 
 # 环境变量配置
 [env.production.vars]
