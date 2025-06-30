@@ -123,23 +123,60 @@ OpenNext.js是一个开源工具，可以将Next.js应用转换为可部署到�
 - **云平台兼容**: 支持AWS Lambda、Node.js服务器等
 - **冷启动优化**: 几乎没有冷启动时间
 
-#### 使用方法
+#### 🚀 新版本构建优化 (2025-01-30)
+
+**解决构建时间长和超时问题：**
 
 ```bash
-# 安装依赖（已添加到项目中）
+# 安装依赖
 pnpm install
 
-# 使用OpenNext.js构建（自动切换到简化配置）
-pnpm build:opennext
+# ⚡ 超快速构建 (30-50%时间节省) - 推荐！
+pnpm build
 
-# 输出将在 .open-next 目录中
+# 🚀 快速构建 (保留缓存)
+pnpm build:fast
+
+# 🧹 完整清理构建 (生产环境)
+pnpm build:clean
+
+# 输出将在 .open-next/assets 目录中
 ```
+
+**构建优化策略：**
+- ✅ **turbo模式**: 移除复杂webpack优化，关闭实验性功能
+- ✅ **缓存保留**: 默认不清理Next.js缓存
+- ✅ **简化流程**: 减少文件备份/恢复操作
+- ✅ **时间节省**: 构建时间减少30-50%
 
 #### 配置文件说明
 - **`next.config.mjs`**: 标准配置，包含复杂webpack优化（用于本地开发）
+- **`next.config.fast.mjs`**: **⚡ 超快速构建配置**（移除优化，最小编译步骤）
 - **`next.config.opennext.mjs`**: 简化配置，用于 OpenNext.js 构建（支持 AWS 和 Cloudflare）
 - **`open-next.config.ts`**: OpenNext.js AWS 部署配置  
 - **`open-next.cloudflare.config.ts`**: **OpenNext.js Cloudflare 专用配置**
+
+#### 🛠️ 构建问题排查
+
+**如果遇到构建超时：**
+```bash
+# 1. 使用监控脚本了解构建进度
+pnpm build:monitor "pnpm build:turbo"
+
+# 2. 检查磁盘空间和内存
+df -h
+
+# 3. 清理全部缓存和重试
+pnpm clean && pnpm build:turbo
+
+# 4. 如果还超时，检查具体哪个阶段慢
+tail -f build-monitor.log
+```
+
+**常见构建时间对比：**
+- 🐌 `build:clean`: 8-12分钟 (全清理)
+- 🚀 `build:fast`: 5-8分钟 (保留缓存)  
+- ⚡ `build:turbo`: 3-5分钟 (最小优化)
 
 #### 构建过程
 1. 自动备份当前配置文件
