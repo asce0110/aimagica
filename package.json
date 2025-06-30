@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "echo '🚀 Cloudflare Workers build...' && cp next.config.pages.mjs next.config.mjs && NODE_ENV=production next build && echo '✅ Workers build completed!'",
     "build:opennext": "npx @opennextjs/cloudflare build",
-    "deploy": "./deploy.sh",
+    "deploy:workers": "./deploy.sh",
     "build:minimal": "echo '🚀 Minimal build mode...' && cp next.config.minimal.mjs next.config.mjs && NODE_ENV=production next build && echo '✅ Minimal build completed!'",
     "build:opennext-only": "npx @opennextjs/cloudflare build",
     "build:turbo": "echo '⚡ Turbo build mode...' && cp next.config.fast.mjs next.config.mjs && next build && npx @opennextjs/cloudflare build && echo '✅ Turbo build completed!'",
