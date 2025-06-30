@@ -181,6 +181,18 @@ pnpm build:cf
 
 #### 🔧 常见构建问题
 
+**✅ 最新修复（2025-01-30）：跨平台兼容性问题**
+```
+sh: 1: powershell: not found
+ELIFECYCLE Command failed with exit code 1
+```
+**问题原因：** Windows 特定的 PowerShell 命令在 Linux 构建环境中失败
+**解决方案：** 
+1. ✅ **修复 clean 脚本**：`powershell -Command` → `rm -rf` (Linux 兼容)
+2. ✅ **修复 Windows 命令**：`copy`/`move` → `cp`/`mv`
+3. ✅ **统一构建流程**：默认 `pnpm build` 现在使用 OpenNext.js Cloudflare 构建
+4. ✅ **所有脚本现在跨平台兼容**：支持 Windows 开发 + Linux 云构建
+
 **OpenNext.js CLI 命令错误：**
 ```
 Error: Error: invalid command, expected 'build' | 'preview' | 'deploy' | 'upload' | 'populateCache'
