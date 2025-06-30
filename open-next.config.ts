@@ -10,11 +10,8 @@ const config: OpenNextConfig = {
     }
   },
   
-  // 图片优化配置（可选）
-  imageOptimization: {
-    // 禁用内置图片优化，使用自定义loader
-    loader: 'custom',
-  },
+  // 禁用图片优化，因为在next.config中已经设置了unoptimized: true
+  imageOptimization: false,
   
   // 移除有问题的functions配置，让OpenNext.js使用默认配置
   // OpenNext.js会自动处理路由分割
