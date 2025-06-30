@@ -75,4 +75,8 @@ const nextConfig = {
   },
 }
 
-export default nextConfig 
+export default nextConfig
+
+// OpenNext.js Cloudflare开发支持
+import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
+initOpenNextCloudflareForDev(); 
