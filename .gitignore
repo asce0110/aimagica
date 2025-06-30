@@ -88,6 +88,7 @@ R2_CONFIG_TEMPLATE.md
 
 # cloudflare
 .wrangler/
+.open-next/
 wrangler.toml.backup
 
 # R2 uploads that have been uploaded to CDN

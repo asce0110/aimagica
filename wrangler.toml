@@ -1,11 +1,30 @@
-# Cloudflare Pages Configuration for OpenNext.js
+# Cloudflare Workers Configuration for OpenNext.js
 name = "aimagica"
+main = ".open-next/worker.js"
 compatibility_date = "2024-12-30"
-pages_build_output_dir = ".open-next/assets"
+compatibility_flags = [
+  "nodejs_compat",
+  "global_fetch_strictly_public"
+]
+
+# Assets binding for static files
+[assets]
+directory = ".open-next/assets"
+binding = "ASSETS"
+
+# Self-reference service binding
+[[services]]
+binding = "WORKER_SELF_REFERENCE"
+service = "aimagica"
+
+# Optional: R2 binding for caching (commented for now)
+# [[r2_buckets]]
+# binding = "NEXT_INC_CACHE_R2_BUCKET"
+# bucket_name = "aimagica-cache"
 
 # 环境变量配置
 [env.production.vars]
-# 这些需要在Cloudflare Pages控制台中设置
+# 这些需要在Cloudflare Workers控制台中设置
 # NEXT_PUBLIC_SUPABASE_URL = "https://vvrkbpnnlxjqyhmmovro.supabase.co"
 # NEXT_PUBLIC_SUPABASE_ANON_KEY = "your_anon_key"
 # SUPABASE_SERVICE_ROLE_KEY = "your_service_role_key"

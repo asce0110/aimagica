@@ -11,6 +11,11 @@
     "build:static": "pnpm clean && rm -rf cache && cp next.config.mjs next.config.mjs.backup && cp next.config.simple.mjs next.config.mjs && next build && mv next.config.mjs.backup next.config.mjs && echo 'Static export completed! Output in out/'",
     "build:cf-static": "node scripts/remove-api-routes.js && pnpm clean && next build",
     "build:opennext": "pnpm clean && cp next.config.mjs next.config.mjs.backup && cp next.config.opennext.mjs next.config.mjs && next build && npx @opennextjs/aws build && mv next.config.mjs.backup next.config.mjs",
+    "build:workers": "pnpm clean && cp next.config.mjs next.config.mjs.backup && cp next.config.opennext.mjs next.config.mjs && opennextjs-cloudflare build && mv next.config.mjs.backup next.config.mjs && echo 'Cloudflare Workers build completed!'",
+    "preview": "pnpm build:workers && opennextjs-cloudflare preview",
+    "deploy": "pnpm build:workers && opennextjs-cloudflare deploy",
+    "upload": "pnpm build:workers && opennextjs-cloudflare upload",
+    "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
 
     "start": "next start",
     "lint": "next lint",
