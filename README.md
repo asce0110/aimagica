@@ -184,6 +184,8 @@ tail -f build-monitor.log
 - ✅ **依赖安装优化**：跳过可选依赖，使用离线缓存
 - ✅ **webpack配置简化**：关闭源码映射和性能检查
 - ✅ **懒加载数据库客户端**：仅在运行时初始化
+- ✅ **🆕 核心服务器函数修复** (2025-01-30)：修复 `lib/supabase-server.ts` 中 `createServiceRoleClient()` 等函数的构建时环境变量检查问题
+- ✅ **🆕 Magic Coins 服务修复**：将 `MagicCoinService` 改为懒加载模式，避免模块顶层立即创建客户端
 
 **构建时间对比（解决20分钟超时问题）：**
 - 🐌 `build:clean`: 8-12分钟 (全清理)
@@ -231,7 +233,25 @@ pnpm build:cf
 
 #### 🔧 常见构建问题
 
-**✅ 最新修复（2025-01-30）：跨平台兼容性问题**
+**✅ 最新修复（2025-01-30）：Supabase客户端构建时初始化错误**
+```
+Error: Supabase environment variables are not configured
+    at createFastServiceRoleClient (.next/server/chunks/7706.js:36:7629)
+    at new MagicCoinService (.next/server/app/api/magic-coins/balance/route.js:1:4699)
+Failed to collect page data for /api/magic-coins/balance
+```
+**问题原因：** 
+1. `lib/supabase-server.ts` 中的 `createServiceRoleClient()` 等函数在构建时立即检查环境变量
+2. `MagicCoinService` 类在模块顶层就创建 Supabase 客户端
+3. Next.js 构建时预加载模块触发环境变量检查，但构建环境没有真实凭据
+
+**解决方案：**
+1. ✅ **修复核心服务器函数**：在 `lib/supabase-server.ts` 中添加构建时占位符逻辑
+2. ✅ **懒加载模式**：将 `MagicCoinService` 的 Supabase 客户端改为 getter 属性懒加载
+3. ✅ **环境检查优化**：构建时使用占位符，生产运行时才进行严格检查
+4. ✅ **涉及文件**：`lib/supabase-server.ts`, `lib/magic-coins.ts`, 8个API路由文件
+
+**✅ 跨平台兼容性问题**
 ```
 sh: 1: powershell: not found
 ELIFECYCLE Command failed with exit code 1
