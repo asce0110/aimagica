@@ -1,18 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 基础配置 - 适用于OpenNext.js
-  // trailingSlash: true, // 暂时禁用避免路由问题
-  
-  // 构建时环境变量默认值
-  env: {
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://vvrkbpnnlxjqyhmmovro.supabase.co',
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'build_placeholder_anon_key',
-    SUPABASE_SERVICE_ROLE_KEY: process.env.SUPABASE_SERVICE_ROLE_KEY || 'build_placeholder_service_key',
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://aimagica.pages.dev',
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'build_placeholder_secret',
-    NEXT_PUBLIC_R2_PUBLIC_URL: process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://images.aimagica.ai',
-    NEXT_PUBLIC_ENABLE_CDN: process.env.NEXT_PUBLIC_ENABLE_CDN || 'true',
-  },
+  // Cloudflare Pages 快速构建模式
   
   eslint: {
     ignoreDuringBuilds: true,
@@ -21,62 +9,88 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // 图片优化配置 
+  // 完全关闭图片优化
   images: {
     unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
+    dangerouslyAllowSVG: true,
+    contentDispositionType: 'attachment',
   },
   
-  // 简化的编译器配置
+  // 最小化编译器配置
   compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
+    removeConsole: false,
+    reactRemoveProperties: false,
+    styledComponents: false,
   },
   
-  // 移除复杂的webpack配置以避免与OpenNext.js冲突
-  // webpack配置由OpenNext.js处理
-  
-  // 实验性功能 - 优化包导入
+  // 禁用所有实验性功能
   experimental: {
-    optimizePackageImports: [
-      'lucide-react', 
-      '@radix-ui/react-icons',
-      '@radix-ui/react-accordion',
-      '@radix-ui/react-alert-dialog',
-      '@radix-ui/react-avatar',
-      '@radix-ui/react-checkbox',
-      '@radix-ui/react-collapsible',
-      '@radix-ui/react-context-menu',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-dropdown-menu',
-      '@radix-ui/react-hover-card',
-      '@radix-ui/react-label',
-      '@radix-ui/react-menubar',
-      '@radix-ui/react-navigation-menu',
-      '@radix-ui/react-popover',
-      '@radix-ui/react-progress',
-      '@radix-ui/react-radio-group',
-      '@radix-ui/react-scroll-area',
-      '@radix-ui/react-select',
-      '@radix-ui/react-separator',
-      '@radix-ui/react-slider',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-switch',
-      '@radix-ui/react-tabs',
-      '@radix-ui/react-toast',
-      '@radix-ui/react-toggle',
-      '@radix-ui/react-toggle-group',
-      '@radix-ui/react-tooltip',
-    ],
+    turbo: false,
   },
+  
+  // 禁用所有压缩和优化
+  productionBrowserSourceMaps: false,
+  generateEtags: false,
+  poweredByHeader: false,
+  
+  // 最少的环境变量
+  env: {
+    NEXT_PUBLIC_SUPABASE_URL: 'https://vvrkbpnnlxjqyhmmovro.supabase.co',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: 'build_placeholder',
+    NEXTAUTH_URL: 'https://aimagica.pages.dev',
+    NEXTAUTH_SECRET: 'build_placeholder',
+    NEXT_PUBLIC_R2_PUBLIC_URL: 'https://images.aimagica.ai',
+  },
+
+  // 极简 webpack 配置
+  webpack: (config, { isServer, dev }) => {
+    // 完全禁用源码映射
+    config.devtool = false;
+    
+    // 最小化模块解析
+    config.resolve.symlinks = false;
+    config.resolve.cacheWithContext = false;
+    
+    // 最简单的代码分割
+    config.optimization.splitChunks = {
+      chunks: 'all',
+      minSize: 0,
+      maxSize: 500000,
+      cacheGroups: {
+        default: {
+          minChunks: 1,
+          priority: -20,
+          reuseExistingChunk: true,
+        },
+        vendor: {
+          test: /[\\/]node_modules[\\/]/,
+          name: 'vendors',
+          priority: -10,
+          chunks: 'all',
+        },
+      },
+    };
+    
+    // 禁用不必要的插件
+    config.plugins = config.plugins.filter(plugin => {
+      return ![
+        'ForkTsCheckerWebpackPlugin',
+        'ESLintWebpackPlugin',
+      ].includes(plugin.constructor.name);
+    });
+    
+    // 最小化文件处理
+    config.module.generator = {
+      'asset/resource': {
+        filename: 'static/[hash][ext]',
+      },
+    };
+    
+    return config;
+  },
+
+  // 禁用静态优化检查以加速构建
+  outputFileTracingRoot: process.cwd(),
 }
 
 export default nextConfig
-
-// OpenNext.js Cloudflare开发支持
-import { initOpenNextCloudflareForDev } from "@opennextjs/cloudflare";
-initOpenNextCloudflareForDev(); 

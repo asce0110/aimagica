@@ -25,12 +25,10 @@ const nextConfig = {
   
   // 禁用所有实验性功能
   experimental: {
-    esmExternals: false,
     turbo: false,
   },
   
   // 禁用所有压缩和优化
-  swcMinify: false,
   productionBrowserSourceMaps: false,
   generateEtags: false,
   poweredByHeader: false,
@@ -91,11 +89,8 @@ const nextConfig = {
     return config;
   },
 
-  // 禁用不必要的功能
-  onDemandEntries: {
-    maxInactiveAge: 25 * 1000,
-    pagesBufferLength: 2,
-  },
+  // 禁用静态优化检查以加速构建
+  outputFileTracingRoot: process.cwd(),
 }
 
 export default nextConfig

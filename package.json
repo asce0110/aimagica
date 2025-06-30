@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "echo '🚀 Cloudflare Pages ultra-fast build...' && cp next.config.pages.mjs next.config.mjs && NODE_ENV=production NEXT_PUBLIC_DISABLE_WEBPACK_CACHE=true next build && echo '✅ Pages build completed!'",
-    "deploy": "echo 'Deploy completed - no additional steps needed for Cloudflare Pages'",
+    "build": "echo '🚀 Cloudflare Workers build...' && cp next.config.pages.mjs next.config.mjs && NODE_ENV=production next build && npx @opennextjs/cloudflare build && echo '✅ Workers build completed!'",
+    "deploy": "npx wrangler deploy",
     "build:minimal": "echo '🚀 Minimal build mode...' && cp next.config.minimal.mjs next.config.mjs && NODE_ENV=production next build && echo '✅ Minimal build completed!'",
     "build:opennext-only": "npx @opennextjs/cloudflare build",
     "build:turbo": "echo '⚡ Turbo build mode...' && cp next.config.fast.mjs next.config.mjs && next build && npx @opennextjs/cloudflare build && echo '✅ Turbo build completed!'",
