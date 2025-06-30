@@ -193,7 +193,8 @@ npx @opennextjs/cloudflare build -c open-next.cloudflare.config.ts
 ```
 Error: The `open-next.config.ts` should have a default export like this:
 ```
-**解决方案：** 使用正确的配置文件格式。配置文件必须包含 `default` 对象、`middleware` 配置等：
+**解决方案1：** 使用默认配置文件名 `open-next.config.ts`（OpenNext.js 默认查找此文件，即使指定了 `-c` 参数也可能忽略）
+**解决方案2：** 使用正确的配置文件格式（不能有TypeScript import或类型定义）：
 ```typescript
 export default {
   default: {
@@ -220,6 +221,7 @@ export default {
   },
 }
 ```
+**注意：** 配置文件必须是纯JavaScript对象导出，不能包含TypeScript import语句或类型定义。
 
 **图片优化错误（OpenNext.js）：**
 ```
