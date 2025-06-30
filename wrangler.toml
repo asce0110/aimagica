@@ -1,14 +1,16 @@
-# Cloudflare Pages Configuration (临时回退)
+# Cloudflare Workers Configuration
 name = "aimagic"
-pages_build_output_dir = ".open-next/assets"
+main = ".open-next/cloudflare-worker.mjs"
 compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
 
 # 环境变量配置
-[env.production.vars]
+[vars]
 # 这些需要在Cloudflare Workers控制台中设置
 # NEXT_PUBLIC_SUPABASE_URL = "https://vvrkbpnnlxjqyhmmovro.supabase.co"
-# NEXT_PUBLIC_SUPABASE_ANON_KEY = "your_anon_key"
+# NEXT_PUBLIC_SUPABASE_ANON_KEY = "your_anon_key"  
 # SUPABASE_SERVICE_ROLE_KEY = "your_service_role_key"
 
-# 注意：Workers不支持 redirects 和 headers 配置
-# 这些功能需要在Worker代码中实现 
+# Workers 资源限制
+[limits]
+cpu_ms = 30000 
