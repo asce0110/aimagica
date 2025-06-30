@@ -136,7 +136,8 @@ pnpm build:opennext
 ```
 
 #### 配置文件说明
-- **`next.config.mjs`**: 标准配置，包含复杂webpack优化（用于Cloudflare Pages）
+- **`next.config.mjs`**: 标准配置，包含复杂webpack优化（用于本地开发）
+- **`next.config.cf.mjs`**: 超简化配置，专门用于Cloudflare Pages（避免巨大缓存文件）
 - **`next.config.opennext.mjs`**: 简化配置，专门用于OpenNext.js构建
 - **`open-next.config.ts`**: OpenNext.js部署配置
 
@@ -154,8 +155,10 @@ pnpm build:cf
 ```
 这个命令会：
 1. 清理旧的构建文件
-2. 执行 Next.js 标准构建
-3. 自动清理大的 webpack 缓存文件（避免 25MB 文件大小限制）
+2. **自动切换到超简化配置**（`next.config.cf.mjs`）
+3. 执行 Next.js 构建（避免复杂webpack配置）
+4. 清理所有 webpack 缓存文件
+5. **恢复原始配置文件**
 
 #### 何时使用OpenNext.js？
 - 需要部署到 **AWS Lambda** 或其他云平台时
@@ -180,9 +183,14 @@ ERROR: Could not resolve "../overrides/imageLoader/custom.js"
 ERROR: Pages only supports files up to 25 MiB in size
 cache/webpack/server-production/0.pack is 156 MiB in size
 ```
+**原因分析：** 
+- 复杂的 webpack 配置（externals、代码分割等）导致巨大的缓存文件
+- Next.js 15.2.4 与复杂配置冲突
+
 **解决方案：** 
-1. 使用 `pnpm build:cf` 而不是 `pnpm build:opennext` 部署到 Cloudflare Pages
-2. 构建脚本会自动清理所有 webpack 缓存文件（client + server）
+1. 使用 `pnpm build:cf` - **自动使用超简化配置**（`next.config.cf.mjs`）
+2. 移除所有复杂的 webpack 配置，让 Next.js 使用默认配置
+3. 构建脚本会自动清理所有 webpack 缓存文件
 
 **Webpack 构建错误（Next.js 15.2.4）：**
 ```
@@ -190,8 +198,9 @@ HookWebpackError: _webpack.WebpackError is not a constructor
 TypeError: _webpack.WebpackError is not a constructor
 ```
 **解决方案：** 
-1. 已禁用 `trailingSlash` 配置避免 webpack 冲突
-2. 确保所有配置文件中的设置保持一致
+1. **根本性修复**：创建专用的 `next.config.cf.mjs` 超简化配置
+2. 移除所有可能导致冲突的复杂 webpack 配置
+3. `pnpm build:cf` 会自动使用简化配置，避免构建错误
 
 **404 页面错误（Cloudflare Pages）：**
 ```

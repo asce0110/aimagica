@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "pnpm clean && next build",
-    "build:cf": "pnpm clean && next build && rm -rf .next/cache || true && echo 'Cleaned all cache for deployment'",
+    "build:cf": "pnpm clean && cp next.config.mjs next.config.mjs.backup && cp next.config.cf.mjs next.config.mjs && next build && rm -rf .next/cache || true && mv next.config.mjs.backup next.config.mjs && echo 'Cleaned all cache for deployment'",
     "build:cf-static": "node scripts/remove-api-routes.js && pnpm clean && next build",
     "build:opennext": "pnpm clean && cp next.config.mjs next.config.mjs.backup && cp next.config.opennext.mjs next.config.mjs && next build && npx @opennextjs/aws build && mv next.config.mjs.backup next.config.mjs",
     "build:static": "pnpm clean && cp next.config.static.mjs next.config.mjs && next build && cp next.config.mjs.backup next.config.mjs",
