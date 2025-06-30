@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "echo '🚀 Cloudflare Workers build...' && cp next.config.pages.mjs next.config.mjs && NODE_ENV=production next build && echo '✅ Workers build completed!'",
     "build:opennext": "npx @opennextjs/cloudflare build",
-    "deploy:workers": "echo '🚀 开始 Cloudflare Pages 部署流程...' && echo '📦 执行构建...' && pnpm build:cf-pages && echo '✅ 构建完成！Pages ready for deployment'",
+    "deploy:workers": "echo '🚀 开始 Cloudflare Pages 部署流程...' && echo '📦 执行构建...' && pnpm build:cf-pages && echo '✅ 构建完成！Pages ready for deployment' && echo '🎉 Cloudflare Pages将自动处理部署！'",
     "build:minimal": "echo '🚀 Minimal build mode...' && cp next.config.minimal.mjs next.config.mjs && NODE_ENV=production next build && echo '✅ Minimal build completed!'",
     "build:opennext-only": "npx @opennextjs/cloudflare build",
     "build:turbo": "echo '⚡ Turbo build mode...' && cp next.config.fast.mjs next.config.mjs && next build && npx @opennextjs/cloudflare build && echo '✅ Turbo build completed!'",

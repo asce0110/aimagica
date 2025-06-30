@@ -1,12 +1,16 @@
-# Cloudflare Workers Configuration
-name = "aimagic"
-main = ".open-next/cloudflare-worker.mjs"
+# Cloudflare Pages Configuration
+name = "aimagica"
+
+# Pages 模式配置 - 不需要 main 字段
+pages_build_output_dir = ".next"
+
+# 兼容性设置
 compatibility_date = "2024-12-30"
 compatibility_flags = ["nodejs_compat"]
 
 # 环境变量配置
 [vars]
-# 这些需要在Cloudflare Workers控制台中设置
+# 这些需要在Cloudflare Pages控制台中设置
 # NEXT_PUBLIC_SUPABASE_URL = "https://vvrkbpnnlxjqyhmmovro.supabase.co"
 # NEXT_PUBLIC_SUPABASE_ANON_KEY = "your_anon_key"  
 # SUPABASE_SERVICE_ROLE_KEY = "your_service_role_key"
