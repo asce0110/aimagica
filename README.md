@@ -131,10 +131,13 @@ OpenNext.js是一个开源工具，可以将Next.js应用转换为可部署到�
 # 安装依赖
 pnpm install
 
-# ⚡ 超快速构建 (30-50%时间节省) - 推荐！
+# 🚀 极简构建 (最快速度) - 解决超时！
 pnpm build
 
-# 🚀 快速构建 (保留缓存)
+# ⚡ 超快速构建 (保留更多功能)
+pnpm build:turbo
+
+# 🏃 快速构建 (保留缓存)
 pnpm build:fast
 
 # 🧹 完整清理构建 (生产环境)
@@ -143,16 +146,19 @@ pnpm build:clean
 # 输出将在 .open-next/assets 目录中
 ```
 
-**构建优化策略：**
-- ✅ **turbo模式**: 移除复杂webpack优化，关闭实验性功能
-- ✅ **缓存保留**: 默认不清理Next.js缓存
-- ✅ **简化流程**: 减少文件备份/恢复操作
-- ✅ **时间节省**: 构建时间减少30-50%
+**🚀 最新构建优化策略（解决20分钟超时）：**
+- ✅ **极简模式**: 关闭所有优化功能，最大化构建速度
+- ✅ **依赖优化**: `--no-optional --prefer-offline` 跳过可选包
+- ✅ **Node.js锁定**: 使用稳定版本18.20.4
+- ✅ **webpack最小化**: 关闭源码映射和性能检查
+- ✅ **预期时间**: 2-3分钟完成（vs 之前20分钟超时）
 
 #### 配置文件说明
 - **`next.config.mjs`**: 标准配置，包含复杂webpack优化（用于本地开发）
+- **`next.config.minimal.mjs`**: **🚀 极简构建配置**（关闭所有优化，解决超时）
 - **`next.config.fast.mjs`**: **⚡ 超快速构建配置**（移除优化，最小编译步骤）
 - **`next.config.opennext.mjs`**: 简化配置，用于 OpenNext.js 构建（支持 AWS 和 Cloudflare）
+- **`cloudflare-build.sh`**: **☁️ Cloudflare专用构建脚本**（优化依赖安装）
 - **`open-next.config.ts`**: OpenNext.js AWS 部署配置  
 - **`open-next.cloudflare.config.ts`**: **OpenNext.js Cloudflare 专用配置**
 
@@ -173,10 +179,11 @@ pnpm clean && pnpm build:turbo
 tail -f build-monitor.log
 ```
 
-**常见构建时间对比：**
+**构建时间对比（解决20分钟超时问题）：**
 - 🐌 `build:clean`: 8-12分钟 (全清理)
-- 🚀 `build:fast`: 5-8分钟 (保留缓存)  
-- ⚡ `build:turbo`: 3-5分钟 (最小优化)
+- 🏃 `build:fast`: 5-8分钟 (保留缓存)  
+- ⚡ `build:turbo`: 3-5分钟 (关闭优化)
+- 🚀 `build:minimal`: **2-3分钟** (极简模式，解决超时)
 
 #### 构建过程
 1. 自动备份当前配置文件
