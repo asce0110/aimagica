@@ -261,26 +261,39 @@ TypeError: _webpack.WebpackError is not a constructor
 1. 确保项目根目录有 `public/_routes.json` 文件（已包含）
 2. 该文件配置了正确的路由处理规则，告诉 Cloudflare Pages 如何处理 API 路由和静态资源
 
-**Wrangler.toml 配置错误 - 输出目录问题：**
+**关键发现：Cloudflare Pages vs Workers 配置冲突**
 ```
-Error: Output directory ".open-next/static" not found.
+A wrangler.toml file was found but it does not appear to be valid.
+Error: Pages only supports files up to 25 MiB in size
 ```
-**解决方案：** **关键发现！** OpenNext.js Cloudflare 的输出目录是 `.open-next/assets` 而不是 `.open-next/static`。需要正确配置 `wrangler.toml`：
-```toml
-# Cloudflare Workers 配置（不是 Pages！）
-name = "aimagica"
-main = ".open-next/worker.js"
-compatibility_date = "2024-12-30"
-compatibility_flags = ["nodejs_compat"]
 
-[assets]
-directory = ".open-next/assets"  # 注意：是 assets 不是 static！
-binding = "ASSETS"
+**问题根源：** `@opennextjs/cloudflare` 专为 **Cloudflare Workers** 设计，但你当前在 **Cloudflare Pages** 环境中！
+
+**🚀 解决方案：选择合适的部署方式**
+
+**选项1：继续使用 Cloudflare Pages（推荐临时解决方案）**
+```bash
+# 使用标准 Next.js 构建（无 OpenNext.js）
+pnpm build:cf-pages
 ```
-**重要：** 
-- 这是 **Cloudflare Workers 配置**，不是 Cloudflare Pages！
-- 不要使用 `pages_build_output_dir`，这是 Pages 的配置
-- OpenNext.js 生成的是 Worker 而不是静态页面
+- ✅ 避免 webpack 缓存问题
+- ✅ 兼容当前 Pages 环境  
+- ❌ 无法使用 OpenNext.js 的 SSR 优化
+
+**选项2：切换到 Cloudflare Workers（推荐长期解决方案）**
+```bash
+# 使用 OpenNext.js 构建（完整功能）
+pnpm build:cf-workers
+```
+- ✅ 完整的 OpenNext.js 功能
+- ✅ 更好的 SSR 和 API 路由支持
+- ✅ Node.js runtime 兼容性
+- ⚠️ 需要切换到 Workers 部署环境
+
+**配置文件说明：**
+- `wrangler.toml` → Cloudflare Pages 配置
+- `wrangler.workers.toml` → Cloudflare Workers 配置  
+- `wrangler.pages.toml` → Pages 专用配置（备用）
 
 ### 📦 部署后图片无法加载？
 
