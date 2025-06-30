@@ -189,6 +189,38 @@ Error: Error: invalid command, expected 'build' | 'preview' | 'deploy' | 'upload
 npx @opennextjs/cloudflare build -c open-next.cloudflare.config.ts
 ```
 
+**OpenNext.js Cloudflare 配置格式错误：**
+```
+Error: The `open-next.config.ts` should have a default export like this:
+```
+**解决方案：** 使用正确的配置文件格式。配置文件必须包含 `default` 对象、`middleware` 配置等：
+```typescript
+export default {
+  default: {
+    override: {
+      wrapper: "cloudflare-node",
+      converter: "edge",
+      proxyExternalRequest: "fetch",
+      incrementalCache: "dummy",
+      tagCache: "dummy",
+      queue: "dummy",
+    },
+  },
+  edgeExternals: ["node:crypto"],
+  middleware: {
+    external: true,
+    override: {
+      wrapper: "cloudflare-edge",
+      converter: "edge",
+      proxyExternalRequest: "fetch",
+      incrementalCache: "dummy",
+      tagCache: "dummy",
+      queue: "dummy",
+    },
+  },
+}
+```
+
 **图片优化错误（OpenNext.js）：**
 ```
 ERROR: Could not resolve "../overrides/imageLoader/custom.js"
