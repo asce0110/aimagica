@@ -1,37 +1,34 @@
-name = "aimagica-auth-worker"
-main = "auth-worker.js"
-compatibility_date = "2024-01-15"
+name = "aimagica-api"
+main = "api-worker.js"
+compatibility_date = "2024-12-30"
+compatibility_flags = ["nodejs_compat"]
 
-# 环境变量配置
+# Worker 路由配置
 [env.production]
-name = "aimagica-auth-worker"
+routes = [
+  "api.aimagica.ai/*",
+  "*.aimagica.ai/api/*"
+]
 
+# 环境变量
 [env.production.vars]
 ENVIRONMENT = "production"
-MAIN_API_BASE = "https://aimagica.ai"
 
-# 开发环境
-[env.dev]
-name = "aimagica-auth-worker-dev"
+[env.development]
+routes = [
+  "api-dev.aimagica.ai/*"
+]
 
-[env.dev.vars]
+[env.development.vars]
 ENVIRONMENT = "development"
-MAIN_API_BASE = "http://localhost:3000"
 
-# 路由配置
-[[env.production.routes]]
-pattern = "auth.aimagica.ai/*"
-zone_name = "aimagica.ai"
+# 资源限制
+[limits]
+cpu_ms = 30000
 
-# KV 存储 (如果需要)
-# [[kv_namespaces]]
-# binding = "AUTH_CACHE"
-# id = "your_kv_namespace_id"
-
-# Durable Objects (如果需要)
-# [[durable_objects.bindings]]
-# name = "SESSION_STORE"
-# class_name = "SessionStore"
+# 兼容性设置
+[placement]
+mode = "smart"
 
 # 计算限制
 [limits]

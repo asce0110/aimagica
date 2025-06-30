@@ -1,21 +1,25 @@
-# Cloudflare Workers Configuration for OpenNext.js
-name = "aimagica"
-main = ".open-next/worker.js"
+# Cloudflare Workers Configuration for Full Application
+name = "aimagica-workers"
+main = "workers/index.js"
 compatibility_date = "2024-12-30"
 compatibility_flags = ["nodejs_compat"]
 
-[assets]
-directory = ".open-next/assets"
-binding = "ASSETS"
-
-# Workers 服务绑定
-[services]
-binding = "WORKER_SELF_REFERENCE"
-service = "aimagica"
+# Workers 资源限制
+[limits]
+cpu_ms = 50000
 
 # 环境变量配置（Workers）
 [env.production.vars]
 # 这些需要在Cloudflare Workers控制台中设置
-# NEXT_PUBLIC_SUPABASE_URL = "https://vvrkbpnnlxjqyhmmovro.supabase.co"
+NEXT_PUBLIC_SUPABASE_URL = "https://vvrkbpnnlxjqyhmmovro.supabase.co"
 # NEXT_PUBLIC_SUPABASE_ANON_KEY = "your_anon_key"
-# SUPABASE_SERVICE_ROLE_KEY = "your_service_role_key" 
+# SUPABASE_SERVICE_ROLE_KEY = "your_service_role_key"
+# NEXTAUTH_URL = "https://aimagica-workers.your-account.workers.dev"
+# NEXTAUTH_SECRET = "your_nextauth_secret"
+# GOOGLE_CLIENT_ID = "your_google_client_id"
+# GOOGLE_CLIENT_SECRET = "your_google_client_secret"
+
+# 开发环境配置
+[env.dev.vars]
+NEXT_PUBLIC_SUPABASE_URL = "https://vvrkbpnnlxjqyhmmovro.supabase.co"
+# 开发环境变量 
