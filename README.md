@@ -157,7 +157,7 @@ pnpm build:cf
 1. 清理旧的构建文件
 2. **自动切换到 OpenNext.js 简化配置**（`next.config.opennext.mjs`）
 3. 执行 Next.js 构建
-4. **使用 @opennextjs/cloudflare 适配器转换**（专为 Cloudflare 优化）
+4. **使用 @opennextjs/cloudflare build** 命令转换（专为 Cloudflare 优化）
 5. 输出到 `.open-next/static` 目录
 6. **恢复原始配置文件**
 
@@ -179,6 +179,15 @@ pnpm build:cf
 - 如果构建失败，请手动恢复配置：`mv next.config.mjs.backup next.config.mjs`
 
 #### 🔧 常见构建问题
+
+**OpenNext.js CLI 命令错误：**
+```
+Error: Error: invalid command, expected 'build' | 'preview' | 'deploy' | 'upload' | 'populateCache'
+```
+**解决方案：** 修复 `package.json` 中的构建命令，添加 `build` 参数：
+```bash
+npx @opennextjs/cloudflare build -c open-next.cloudflare.config.ts
+```
 
 **图片优化错误（OpenNext.js）：**
 ```
