@@ -5,7 +5,7 @@
   "scripts": {
     "dev": "next dev",
     "build": "echo '🚀 Cloudflare Workers build...' && cp next.config.pages.mjs next.config.mjs && NODE_ENV=production next build && npx @opennextjs/cloudflare build && echo '✅ Workers build completed!'",
-    "deploy": "pnpm build && npx wrangler deploy",
+    "deploy": "./deploy.sh",
     "build:minimal": "echo '🚀 Minimal build mode...' && cp next.config.minimal.mjs next.config.mjs && NODE_ENV=production next build && echo '✅ Minimal build completed!'",
     "build:opennext-only": "npx @opennextjs/cloudflare build",
     "build:turbo": "echo '⚡ Turbo build mode...' && cp next.config.fast.mjs next.config.mjs && next build && npx @opennextjs/cloudflare build && echo '✅ Turbo build completed!'",
@@ -19,7 +19,6 @@
     "build:opennext": "pnpm clean && cp next.config.mjs next.config.mjs.backup && cp next.config.opennext.mjs next.config.mjs && next build && npx @opennextjs/aws build && mv next.config.mjs.backup next.config.mjs",
     "build:workers": "pnpm clean && cp next.config.mjs next.config.mjs.backup && cp next.config.opennext.mjs next.config.mjs && npx @opennextjs/cloudflare build && mv next.config.mjs.backup next.config.mjs && echo 'Cloudflare Workers build completed!'",
     "preview": "pnpm build:workers && opennextjs-cloudflare preview",
-    "deploy": "pnpm build:workers && opennextjs-cloudflare deploy",
     "upload": "pnpm build:workers && opennextjs-cloudflare upload",
     "cf-typegen": "wrangler types --env-interface CloudflareEnv cloudflare-env.d.ts",
 
