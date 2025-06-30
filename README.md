@@ -178,11 +178,20 @@ ERROR: Could not resolve "../overrides/imageLoader/custom.js"
 **文件大小限制错误（Cloudflare Pages）：**
 ```
 ERROR: Pages only supports files up to 25 MiB in size
-cache/webpack/client-production/0.pack is 123 MiB in size
+cache/webpack/server-production/0.pack is 156 MiB in size
 ```
 **解决方案：** 
 1. 使用 `pnpm build:cf` 而不是 `pnpm build:opennext` 部署到 Cloudflare Pages
-2. 构建脚本会自动清理大的 webpack 缓存文件
+2. 构建脚本会自动清理所有 webpack 缓存文件（client + server）
+
+**Webpack 构建错误（Next.js 15.2.4）：**
+```
+HookWebpackError: _webpack.WebpackError is not a constructor
+TypeError: _webpack.WebpackError is not a constructor
+```
+**解决方案：** 
+1. 已禁用 `trailingSlash` 配置避免 webpack 冲突
+2. 确保所有配置文件中的设置保持一致
 
 **404 页面错误（Cloudflare Pages）：**
 ```

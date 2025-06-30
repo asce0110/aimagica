@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // 基础配置 - 适用于OpenNext.js
-  trailingSlash: true,
+  // trailingSlash: true, // 暂时禁用避免路由问题
   
   // 构建时环境变量默认值
   env: {
