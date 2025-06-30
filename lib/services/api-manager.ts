@@ -1,11 +1,22 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+// 构建时提供占位符值，避免构建失败
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://build-placeholder.supabase.co'
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'build_placeholder_service_key'
 
+// 懒加载Supabase客户端
 let supabase: any = null
-if (supabaseUrl && supabaseServiceKey) {
-  supabase = createClient(supabaseUrl, supabaseServiceKey)
+
+function getSupabaseClient() {
+  if (!supabase) {
+    const realUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const realKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (realUrl && realKey && realUrl !== 'https://build-placeholder.supabase.co' && realKey !== 'build_placeholder_service_key') {
+      supabase = createClient(realUrl, realKey)
+    }
+  }
+  return supabase
 }
 
 interface ApiConfig {
@@ -49,11 +60,12 @@ export class ApiManager {
    * 获取指定类型的活跃API配置列表
    */
   private async getActiveApiConfigs(type: 'image_generation' | 'video_generation'): Promise<ApiConfig[]> {
-    if (!supabase) {
-      throw new Error('Database not configured')
+    const supabaseClient = getSupabaseClient()
+    if (!supabaseClient) {
+      throw new Error('Database not configured - missing environment variables')
     }
 
-    const { data: configs, error } = await supabase
+    const { data: configs, error } = await supabaseClient
       .from('api_configs')
       .select('*')
       .eq('type', type)
@@ -72,11 +84,12 @@ export class ApiManager {
    * 根据ID获取单个API配置
    */
   private async getApiConfigById(configId: string): Promise<ApiConfig | null> {
-    if (!supabase) {
-      throw new Error('Database not configured')
+    const supabaseClient = getSupabaseClient()
+    if (!supabaseClient) {
+      throw new Error('Database not configured - missing environment variables')
     }
 
-    const { data: config, error } = await supabase
+    const { data: config, error } = await supabaseClient
       .from('api_configs')
       .select('*')
       .eq('id', configId)
@@ -130,10 +143,11 @@ export class ApiManager {
     responseTimeMs: number,
     errorMessage?: string
   ) {
-    if (!supabase) return
+    const supabaseClient = getSupabaseClient()
+    if (!supabaseClient) return
 
     try {
-      await supabase
+      await supabaseClient
         .from('api_usage_logs')
         .insert({
           api_config_id: apiConfigId,
@@ -159,10 +173,11 @@ export class ApiManager {
     isSuccess: boolean,
     errorMessage?: string
   ) {
-    if (!supabase) return
+    const supabaseClient = getSupabaseClient()
+    if (!supabaseClient) return
 
     try {
-      await supabase.rpc('update_api_stats', {
+      await supabaseClient.rpc('update_api_stats', {
         config_id: apiConfigId,
         is_success: isSuccess,
         error_msg: errorMessage || null

@@ -1,28 +1,49 @@
 import { createClient } from '@supabase/supabase-js'
 
-const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || ''
-const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || ''
+// 构建时环境变量获取（提供默认值避免构建失败）
+const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://build-placeholder.supabase.co'
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY || 'build_placeholder_service_key'
 
-// 检查必需的环境变量
-if (!supabaseUrl) {
-  console.error('❌ 缺少环境变量: NEXT_PUBLIC_SUPABASE_URL')
-  console.error('请参考 URGENT_ENV_SETUP.md 配置环境变量')
+// 仅在运行时检查环境变量（不在构建时）
+function checkEnvVarsAtRuntime() {
+  if (process.env.NODE_ENV === 'development' || process.env.NODE_ENV === 'production') {
+    if (!process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      console.error('❌ 缺少环境变量: NEXT_PUBLIC_SUPABASE_URL')
+      console.error('请参考 URGENT_ENV_SETUP.md 配置环境变量')
+      return false
+    }
+
+    if (!process.env.SUPABASE_SERVICE_ROLE_KEY) {
+      console.error('❌ 缺少环境变量: SUPABASE_SERVICE_ROLE_KEY')
+      console.error('请参考 URGENT_ENV_SETUP.md 配置环境变量')
+      return false
+    }
+  }
+  return true
 }
 
-if (!supabaseServiceKey) {
-  console.error('❌ 缺少环境变量: SUPABASE_SERVICE_ROLE_KEY')
-  console.error('请参考 URGENT_ENV_SETUP.md 配置环境变量')
-}
-
-// 使用服务角色密钥创建客户端（可以绕过RLS）
+// 懒加载Supabase客户端
 let supabaseService: any = null
 
-try {
-  if (supabaseUrl && supabaseServiceKey) {
-    supabaseService = createClient(supabaseUrl, supabaseServiceKey)
+function getSupabaseService() {
+  if (!supabaseService) {
+    try {
+      // 在运行时检查环境变量
+      if (!checkEnvVarsAtRuntime()) {
+        return null
+      }
+      
+      const realUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+      const realKey = process.env.SUPABASE_SERVICE_ROLE_KEY
+      
+      if (realUrl && realKey && realUrl !== 'https://build-placeholder.supabase.co' && realKey !== 'build_placeholder_service_key') {
+        supabaseService = createClient(realUrl, realKey)
+      }
+    } catch (error) {
+      console.error('❌ Supabase客户端创建失败:', error)
+    }
   }
-} catch (error) {
-  console.error('❌ Supabase客户端创建失败:', error)
+  return supabaseService
 }
 
 /**
@@ -37,6 +58,7 @@ export async function isAdmin(email: string): Promise<boolean> {
       return false
     }
 
+    const supabaseService = getSupabaseService()
     if (!supabaseService) {
       console.error("❌ Supabase服务未初始化，请检查环境变量配置")
       console.error("请参考 URGENT_ENV_SETUP.md 配置环境变量")
