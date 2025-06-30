@@ -4,7 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "echo '🚀 Cloudflare Workers build...' && cp next.config.pages.mjs next.config.mjs && NODE_ENV=production next build && npx @opennextjs/cloudflare build && echo '✅ Workers build completed!'",
+    "build": "echo '🚀 Cloudflare Workers build...' && cp next.config.pages.mjs next.config.mjs && NODE_ENV=production next build && echo '✅ Workers build completed!'",
+    "build:opennext": "npx @opennextjs/cloudflare build",
     "deploy": "./deploy.sh",
     "build:minimal": "echo '🚀 Minimal build mode...' && cp next.config.minimal.mjs next.config.mjs && NODE_ENV=production next build && echo '✅ Minimal build completed!'",
     "build:opennext-only": "npx @opennextjs/cloudflare build",
