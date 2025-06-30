@@ -2,7 +2,7 @@
 const nextConfig = {
   // 恢复SSR模式，支持API路由
   // output: 'export', // 移除静态导出
-  trailingSlash: true,
+  // trailingSlash: true, // 在Cloudflare Pages上可能导致路由问题，暂时禁用
   // distDir: 'out', // 使用默认.next目录
   
   // 构建时环境变量默认值（避免构建失败）
@@ -39,10 +39,10 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // Webpack 配置优化 - 大幅减少文件大小
+  // Webpack 配置优化 - 简化配置以避免部署问题
   webpack: (config, { isServer, dev, webpack }) => {
-    // 禁用webpack缓存以避免大文件
-    config.cache = false;
+    // 保持默认缓存设置，仅在构建时清理
+    // config.cache = false;
     
     // 修复SSR兼容性问题
     if (isServer) {
