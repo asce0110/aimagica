@@ -220,6 +220,88 @@ pnpm build:cf
 - **专门为 Cloudflare Workers 优化**
 - **避免复杂的 webpack 配置问题**
 
+### 🏗️ 混合架构部署（推荐）
+
+**最佳实践：Cloudflare Workers (API) + Cloudflare Pages (前端)**
+
+这种架构分离前后端，利用各自的优势：
+
+#### 架构图
+```
+┌─────────────────┐    API请求     ┌─────────────────┐
+│ Cloudflare Pages│ ─────────────► │Cloudflare Workers│
+│                 │                │                  │
+│ ✅ Next.js前端  │                │ ✅ 75个API路由   │
+│ ✅ 静态优化     │                │ ✅ 边缘计算      │
+│ ✅ CDN分发      │                │ ✅ 无服务器      │
+│ ✅ SEO友好      │                │ ✅ 低延迟       │
+└─────────────────┘                └─────────────────┘
+```
+
+#### 🚀 一键部署
+```bash
+# 混合架构完整部署
+pnpm deploy:hybrid
+```
+
+#### 分步部署
+```bash
+# 1. 部署API后端到Workers
+pnpm deploy:api
+
+# 2. 部署前端到Pages
+pnpm deploy:pages
+
+# 3. 或者分别构建
+pnpm build:pages  # 构建前端静态文件
+pnpm build:workers # 构建Workers（如需要）
+```
+
+#### 🔧 配置文件
+| 文件 | 用途 | 特点 |
+|------|------|------|
+| `next.config.pages.mjs` | Pages前端配置 | 静态导出、CDN优化 |
+| `wrangler.api.toml` | API Workers配置 | 专注API服务 |
+| `workers/api-only.js` | API Workers代码 | 轻量级、高性能 |
+
+#### 🌐 部署结果
+- **前端**: https://aimagica.pages.dev  
+- **API后端**: https://aimagica-api.403153162.workers.dev  
+- **CDN资源**: https://images.aimagica.ai  
+
+#### ✅ 优势对比
+
+| 特性 | 单体Workers | **混合架构** | 单体Pages |
+|------|-------------|-------------|-----------|
+| 前端性能 | ⚡ 中等 | 🚀 **最优** | ⚡ 良好 |
+| API性能 | 🚀 最优 | 🚀 **最优** | ❌ 受限 |
+| SEO优化 | ⚡ 中等 | 🚀 **最优** | 🚀 优秀 |
+| 缓存策略 | ⚡ 中等 | 🚀 **最优** | ⚡ 良好 |
+| 扩展性 | ⚡ 中等 | 🚀 **最优** | ⚡ 中等 |
+| 维护性 | ⚡ 中等 | 🚀 **最优** | ⚡ 良好 |
+
+#### 🔗 API代理配置
+前端自动代理API请求到Workers：
+```javascript
+// next.config.pages.mjs
+async rewrites() {
+  return [
+    {
+      source: '/api/:path*',
+      destination: 'https://aimagica-api.403153162.workers.dev/api/:path*',
+    },
+  ]
+}
+```
+
+#### 📊 环境变量配置
+在Cloudflare Pages中设置：
+```bash
+NEXT_PUBLIC_API_BASE_URL=https://aimagica-api.403153162.workers.dev
+NEXT_PUBLIC_CDN_URL=https://images.aimagica.ai
+NODE_ENV=production
+```
+
 #### OpenNext.js 适配器选择
 - **`@opennextjs/cloudflare`** → **Cloudflare Pages/Workers** （官方推荐，使用 `pnpm build:cf`）
 - **`@opennextjs/aws`** → **AWS Lambda** （使用 `pnpm build:opennext`）
@@ -414,6 +496,168 @@ NODE_ENV=production
 | 控制台无日志 | 映射文件未加载 | 检查`/static-urls.json`是否存在 |
 
 详细部署指南：[CLOUDFLARE_PAGES_SETUP.md](./CLOUDFLARE_PAGES_SETUP.md)
+
+### 🚀 Vercel 部署（推荐）
+
+**全功能部署到 Vercel 平台，支持所有功能包括 API 路由、支付系统、用户认证等。**
+
+#### 🎯 优势对比
+
+| 特性 | Vercel | Cloudflare | 
+|------|--------|------------|
+| 部署难度 | 🟢 **最简单** | 🟡 中等 |
+| API 路由支持 | 🟢 **原生支持** | 🟡 需配置 |
+| 文件大小限制 | 🟢 **250MB** | 🔴 25MB |
+| 构建时间 | 🟢 **快速** | 🟡 中等 |
+| Next.js 兼容性 | 🟢 **完美** | 🟡 需适配 |
+| 免费额度 | 🟢 **慷慨** | 🟢 充足 |
+| 全球CDN | 🟢 优秀 | 🟢 **最佳** |
+
+#### 🚀 一键部署
+
+**方式1：GitHub 连接（推荐）**
+1. Fork 此仓库到你的 GitHub
+2. 在 [Vercel Dashboard](https://vercel.com/dashboard) 点击 "New Project"
+3. 导入你的 GitHub 仓库
+4. Vercel 会自动检测 Next.js 项目并配置
+5. 配置环境变量（见下方）
+6. 点击 "Deploy" 开始部署
+
+**方式2：Vercel CLI 部署**
+```bash
+# 安装依赖
+pnpm install
+
+# 安装 Vercel CLI
+pnpm add -D vercel
+
+# 登录 Vercel
+pnpm vercel login
+
+# 预览部署（测试）
+pnpm preview:vercel
+
+# 生产部署
+pnpm deploy:vercel
+```
+
+#### 🔧 环境变量配置
+
+**必需配置**（参考 [`env.vercel.template`](./env.vercel.template)）：
+
+在 Vercel Dashboard → 项目设置 → Environment Variables 中添加：
+
+```bash
+# 🔴 核心功能（必需）
+NEXT_PUBLIC_SUPABASE_URL=https://vvrkbpnnlxjqyhmmovro.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+SUPABASE_SERVICE_ROLE_KEY=your_service_role_key
+
+NEXTAUTH_SECRET=your_32_char_random_secret
+NEXTAUTH_URL=https://your-domain.vercel.app
+
+GOOGLE_CLIENT_ID=your_google_client_id
+GOOGLE_CLIENT_SECRET=your_google_client_secret
+
+KIE_AI_API_KEY=your_kie_ai_api_key
+KIE_AI_BASE_URL=https://api.kie.ai
+
+# 🟡 支付功能（商业需要）
+STRIPE_PUBLISHABLE_KEY=pk_live_your_stripe_key
+STRIPE_SECRET_KEY=sk_live_your_stripe_secret
+STRIPE_WEBHOOK_SECRET=whsec_your_webhook_secret
+
+# 🟢 存储功能（推荐）
+CLOUDFLARE_ACCOUNT_ID=your_cloudflare_account_id
+CLOUDFLARE_ACCESS_KEY_ID=your_access_key
+CLOUDFLARE_SECRET_ACCESS_KEY=your_secret_key
+NEXT_PUBLIC_R2_PUBLIC_URL=https://images.aimagica.ai
+```
+
+#### 🔨 构建配置
+
+项目已预配置 Vercel 优化：
+- **`next.config.vercel.mjs`**: Vercel 专用配置
+- **`vercel.json`**: 部署优化设置
+- **`package.json`**: 添加 `build:vercel` 脚本
+
+**构建命令**：`pnpm build:vercel`  
+**输出目录**：`.next`  
+**Node.js 版本**：18.x（推荐）
+
+#### 🌐 域名配置
+
+**自定义域名设置**：
+1. 在 Vercel Dashboard → 项目 → Settings → Domains
+2. 添加你的域名（如 `aimagica.com`）
+3. 根据提示配置 DNS 记录
+4. 更新环境变量 `NEXTAUTH_URL` 为新域名
+5. 更新 Google OAuth 重定向 URI
+
+#### 🔗 Webhook 配置
+
+**Stripe Webhook**：
+```
+URL: https://your-domain.vercel.app/api/payment/webhooks/stripe
+Events: payment_intent.succeeded, checkout.session.completed
+```
+
+**PayPal Webhook**：
+```
+URL: https://your-domain.vercel.app/api/payment/webhooks/paypal
+Events: CHECKOUT.ORDER.APPROVED, PAYMENT.CAPTURE.COMPLETED
+```
+
+#### 📊 性能优化
+
+Vercel 自动提供：
+- **边缘函数**：全球低延迟 API 响应
+- **图片优化**：自动 WebP/AVIF 转换
+- **缓存优化**：智能静态资源缓存
+- **分析监控**：实时性能监控
+
+#### 🐛 常见问题解决
+
+**构建失败 - 环境变量错误**：
+```
+Error: Supabase environment variables are not configured
+```
+**解决方案**：确保在 Vercel 中设置了所有必需的环境变量
+
+**API 路由超时**：
+```
+Function execution timed out after 60 seconds
+```
+**解决方案**：在 `vercel.json` 中已配置更长的超时时间（图像生成 300 秒）
+
+**图片无法加载**：
+```
+Image optimization using the default loader is not compatible with export
+```
+**解决方案**：已在 `next.config.vercel.mjs` 中配置 `unoptimized: false`，Vercel 会处理图片优化
+
+#### 🔄 部署更新
+
+**自动部署**：
+- 推送到 `main` 分支自动触发生产部署
+- 推送到其他分支创建预览部署
+
+**手动部署**：
+```bash
+# 从本地部署
+pnpm deploy:vercel
+
+# 强制重新部署
+vercel --prod --force
+```
+
+#### 💰 成本估算
+
+**Vercel Pro 计划**（适合生产使用）：
+- 月费：$20/month
+- 包含：100GB 带宽，100GB 边缘请求
+- 函数执行：1000 小时/month
+- 适合中小型 AI 图像生成平台
 
 ---
 
