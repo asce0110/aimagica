@@ -8,6 +8,29 @@ const nextConfig = {
   trailingSlash: true,
   skipTrailingSlashRedirect: true,
   
+  // 跳过有问题的页面（这些需要服务端认证）
+  exportPathMap: async function() {
+    return {
+      '/': { page: '/' },
+      '/about': { page: '/about' },
+      '/contact': { page: '/contact' },
+      '/help': { page: '/help' },
+      '/pricing': { page: '/pricing' },
+      '/privacy': { page: '/privacy' },
+      '/terms': { page: '/terms' },
+      '/cookies': { page: '/cookies' },
+      '/text-to-image': { page: '/text-to-image' },
+      '/image-to-image': { page: '/image-to-image' },
+      '/text-to-video': { page: '/text-to-video' },
+      '/gallery': { page: '/gallery' },
+      // 跳过需要认证的管理页面
+      // '/admin/dashboard': { page: '/admin/dashboard' },
+      // '/admin/payment': { page: '/admin/payment' },
+      // '/admin/prompts': { page: '/admin/prompts' },
+      // '/favorites': { page: '/favorites' },
+    }
+  },
+  
   // 完全禁用服务端功能
   images: {
     unoptimized: true,
@@ -26,6 +49,9 @@ const nextConfig = {
     NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'build_placeholder_anon_key',
     NEXT_PUBLIC_R2_PUBLIC_URL: process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://images.aimagica.ai',
     NEXT_PUBLIC_ENABLE_CDN: process.env.NEXT_PUBLIC_ENABLE_CDN || 'true',
+    // 提供构建时环境变量默认值
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://aimagica.pages.dev',
+    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'build_placeholder_secret',
   },
   
   // 构建优化
