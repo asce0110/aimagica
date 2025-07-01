@@ -1,0 +1,36 @@
+name = "aimagica-api"
+main = "workers/api-worker.js"
+compatibility_date = "2024-06-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Workers 配置
+[env.production]
+name = "aimagica-api"
+route = { pattern = "api.aimagica.ai/*", zone_id = "your-zone-id" }
+
+[env.development]
+name = "aimagica-api-dev"
+
+# 环境变量（在 Cloudflare Dashboard 中设置）
+[vars]
+ENVIRONMENT = "production"
+
+# 绑定配置 - 这些需要在 Cloudflare 中配置
+# [r2_buckets]
+# R2_BUCKET = "aimagica-images"
+
+# [d1_databases]
+# DB = "your-d1-database-id"
+
+# 环境变量模板（实际值在 Cloudflare Dashboard 中设置）
+# 需要设置的环境变量：
+# - SUPABASE_URL
+# - SUPABASE_SERVICE_KEY  
+# - NEXTAUTH_SECRET
+# - R2_ACCESS_KEY_ID
+# - R2_SECRET_ACCESS_KEY
+# - R2_ENDPOINT
+# - R2_BUCKET_NAME
+# - KIE_FLUX_API_KEY (如果使用)
+# - PAYPAL_CLIENT_ID
+# - PAYPAL_CLIENT_SECRET
