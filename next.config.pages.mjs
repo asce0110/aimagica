@@ -2,7 +2,9 @@
 const nextConfig = {
   // Cloudflare Pages 静态导出配置
   output: 'export',
-  trailingSlash: true,
+  // 移除 trailingSlash: true 以修复 404 页面错误
+  // trailingSlash: true,
+  skipTrailingSlashRedirect: true,
   distDir: 'out',
   
   // 构建时环境变量默认值
