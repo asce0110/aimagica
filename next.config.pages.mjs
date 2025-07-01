@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages 静态导出配置 - 兼容性增强版本
+  // Cloudflare Pages 静态导出配置 - 彻底修复版本
   output: 'export',
   
   // 关键修复：移除 trailingSlash，添加 skipTrailingSlashRedirect
@@ -10,6 +10,9 @@ const nextConfig = {
   // 强制静态导出设置，避免动态功能
   staticPageGenerationTimeout: 300,
   poweredByHeader: false,
+  
+  // 彻底禁用可能导致问题的功能
+  reactStrictMode: false,
   
   // 构建时环境变量默认值
   env: {
@@ -51,6 +54,21 @@ const nextConfig = {
     optimizePackageImports: ['lucide-react'],
     // 添加静态导出兼容性设置
     esmExternals: false,
+    // 禁用一些可能导致问题的功能
+    serverMinification: false,
+  },
+  
+  // Webpack 配置优化
+  webpack: (config, { isServer }) => {
+    // 解决可能的构建问题
+    config.resolve.fallback = {
+      ...config.resolve.fallback,
+      fs: false,
+      net: false,
+      tls: false,
+    }
+    
+    return config
   },
   
   // 简化重写规则 - 只在非导出模式下使用
