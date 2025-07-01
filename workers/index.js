@@ -3,10 +3,141 @@ import { createHash } from 'node:crypto';
 
 // 配置常量
 const CONFIG = {
-  STATIC_DOMAIN: 'https://aimagica.pages.dev', // 你的实际Pages域名
   API_VERSION: 'v1',
   CACHE_TTL: 3600, // 1小时缓存
 };
+
+// 应用首页HTML
+const APP_HTML = `<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIMAGICA - AI Image Generation Platform</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .gradient-bg { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+        .card-hover:hover { transform: translateY(-2px); transition: all 0.3s ease; }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Header -->
+    <nav class="gradient-bg shadow-lg">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16">
+                <div class="flex items-center">
+                    <h1 class="text-2xl font-bold text-white">🎨 AIMAGICA</h1>
+                    <span class="ml-2 text-blue-100 text-sm">AI Image Generation Platform</span>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <span class="text-blue-100">Powered by Cloudflare Workers</span>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <div class="gradient-bg py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <h2 class="text-4xl md:text-6xl font-bold text-white mb-6">
+                Create Amazing AI Images
+            </h2>
+            <p class="text-xl text-blue-100 mb-8 max-w-2xl mx-auto">
+                Transform your ideas into stunning visual content using our advanced AI image generation platform
+            </p>
+            <div class="space-x-4">
+                <button class="bg-white text-purple-600 px-8 py-3 rounded-lg font-semibold hover:bg-gray-100 transition">
+                    Start Creating
+                </button>
+                <button class="border-2 border-white text-white px-8 py-3 rounded-lg font-semibold hover:bg-white hover:text-purple-600 transition">
+                    View Gallery
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Features Section -->
+    <div class="py-20 bg-white">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-3xl font-bold text-center text-gray-900 mb-12">Platform Features</h3>
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="card-hover bg-gray-50 p-6 rounded-lg">
+                    <div class="text-purple-600 text-3xl mb-4">🎯</div>
+                    <h4 class="text-xl font-semibold mb-2">Text to Image</h4>
+                    <p class="text-gray-600">Create stunning images from text descriptions using advanced AI models</p>
+                </div>
+                <div class="card-hover bg-gray-50 p-6 rounded-lg">
+                    <div class="text-purple-600 text-3xl mb-4">🎨</div>
+                    <h4 class="text-xl font-semibold mb-2">Style Transfer</h4>
+                    <p class="text-gray-600">Apply artistic styles to transform your images with various filters</p>
+                </div>
+                <div class="card-hover bg-gray-50 p-6 rounded-lg">
+                    <div class="text-purple-600 text-3xl mb-4">⚡</div>
+                    <h4 class="text-xl font-semibold mb-2">Fast Generation</h4>
+                    <p class="text-gray-600">Lightning-fast image generation powered by edge computing</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- API Section -->
+    <div class="py-20 bg-gray-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <h3 class="text-3xl font-bold text-center text-gray-900 mb-12">API Endpoints</h3>
+            <div class="bg-white rounded-lg shadow-lg p-6">
+                <div class="space-y-4">
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <span class="font-mono text-sm">GET /api/health</span>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Active</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <span class="font-mono text-sm">GET /api/styles</span>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Active</span>
+                    </div>
+                    <div class="flex justify-between items-center border-b pb-2">
+                        <span class="font-mono text-sm">GET /api/recommendations</span>
+                        <span class="bg-green-100 text-green-800 px-2 py-1 rounded text-xs">Active</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                        <span class="font-mono text-sm">POST /api/generate/*</span>
+                        <span class="bg-yellow-100 text-yellow-800 px-2 py-1 rounded text-xs">Coming Soon</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <p>&copy; 2025 AIMAGICA. Powered by Cloudflare Workers.</p>
+            <p class="text-gray-400 mt-2">Worker URL: <span class="font-mono">aimagica-workers.403153162.workers.dev</span></p>
+        </div>
+    </footer>
+
+    <script>
+        // 简单的交互效果
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('🎨 AIMAGICA Workers loaded successfully!');
+            
+            // API测试功能
+            window.testAPI = async function() {
+                try {
+                    const response = await fetch('/api/health');
+                    const data = await response.json();
+                    console.log('API Health Check:', data);
+                    alert('API is working! Check console for details.');
+                } catch (error) {
+                    console.error('API Error:', error);
+                    alert('API test failed. Check console for details.');
+                }
+            };
+        });
+    </script>
+</body>
+</html>`;
 
 export default {
   async fetch(request, env, ctx) {
@@ -36,7 +167,7 @@ export default {
         return await handleAPIRoute(request, env, corsHeaders);
       }
 
-      // 健康检查 - 只有 /health 路径，不包括根路径
+      // 健康检查
       if (path === '/health') {
         return new Response(JSON.stringify({
           status: 'healthy',
@@ -44,19 +175,19 @@ export default {
           version: CONFIG.API_VERSION,
           timestamp: new Date().toISOString(),
           uptime: Date.now(),
-          pages_domain: CONFIG.STATIC_DOMAIN,
         }), {
           headers: { ...corsHeaders, 'Content-Type': 'application/json' }
         });
       }
 
-      // 静态资源代理到Pages
-      if (isStaticResource(path)) {
-        return await proxyToPages(request, corsHeaders);
-      }
-
-      // 所有其他路由（包括根路径）代理到Pages显示网站内容
-      return await proxyToPages(request, corsHeaders);
+      // 根路径和所有其他路径返回应用首页
+      return new Response(APP_HTML, {
+        headers: { 
+          ...corsHeaders, 
+          'Content-Type': 'text/html; charset=utf-8',
+          'Cache-Control': 'public, max-age=300'
+        }
+      });
 
     } catch (error) {
       console.error('Worker error:', error);
@@ -297,49 +428,4 @@ async function handleKieFluxGeneration(request, env, corsHeaders) {
     status: 501,
     headers: { ...corsHeaders, 'Content-Type': 'application/json' }
   });
-}
-
-// 静态资源检查
-function isStaticResource(path) {
-  const staticExtensions = ['.js', '.css', '.png', '.jpg', '.jpeg', '.gif', '.svg', '.ico', '.woff', '.woff2', '.ttf'];
-  return staticExtensions.some(ext => path.toLowerCase().endsWith(ext)) || 
-         path.startsWith('/_next/') || 
-         path.startsWith('/images/') ||
-         path.startsWith('/api/');
-}
-
-// 代理到Pages
-async function proxyToPages(request, corsHeaders) {
-  try {
-    const url = new URL(request.url);
-    const pagesUrl = new URL(url.pathname + url.search, CONFIG.STATIC_DOMAIN);
-    
-    const response = await fetch(pagesUrl.toString(), {
-      method: request.method,
-      headers: request.headers,
-      body: request.method !== 'GET' && request.method !== 'HEAD' ? request.body : undefined,
-    });
-
-    // 复制响应但添加CORS头
-    const newResponse = new Response(response.body, {
-      status: response.status,
-      statusText: response.statusText,
-      headers: {
-        ...Object.fromEntries(response.headers),
-        ...corsHeaders,
-      },
-    });
-
-    return newResponse;
-  } catch (error) {
-    console.error('Proxy error:', error);
-    
-    return new Response(JSON.stringify({
-      error: 'Proxy error',
-      message: 'Failed to proxy request to Pages',
-    }), {
-      status: 502,
-      headers: { ...corsHeaders, 'Content-Type': 'application/json' }
-    });
-  }
 } 
