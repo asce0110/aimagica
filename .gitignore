@@ -12,7 +12,7 @@
 
 # next.js
 /.next/
-/out/
+# /out/  # Temporarily commented to commit static build
 *.cache
 
 # production
