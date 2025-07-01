@@ -671,6 +671,32 @@ pnpm build:cf-workers
 - `wrangler.workers.toml` → Cloudflare Workers 配置  
 - `wrangler.pages.toml` → Pages 专用配置（备用）
 
+**🚀 Next.js 15 App Router + 静态导出 404 页面错误：**
+```
+Error: <Html> should not be imported outside of pages/_document.
+Error occurred prerendering page "/404"
+Export encountered an error on /_error: /404, exiting the build.
+```
+**问题原因：** Next.js 15 在 App Router + 静态导出模式下，`trailingSlash: true` 配置会导致404页面预渲染失败
+
+**✅ 解决方案（已修复）：**
+```javascript
+// next.config.pages.mjs
+const nextConfig = {
+  output: 'export',
+  // 移除导致404页面错误的配置
+  // trailingSlash: true,
+  skipTrailingSlashRedirect: true,  // 添加此配置优化路由处理
+  distDir: 'out',
+  // ... 其他配置
+}
+```
+
+**修复结果：**
+- ✅ **构建成功**：88/88 静态页面生成
+- ✅ **404页面正常**：`/_not-found` 页面正确生成
+- ✅ **兼容性修复**：解决 Next.js 15 App Router 静态导出兼容性问题
+
 **🚀 25MB文件大小限制解决方案：**
 ```
 Error: Pages only supports files up to 25 MiB in size
