@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "cross-env NEXT_CONFIG_FILE=next.config.vercel.mjs next build",
     "build:vercel": "cross-env NEXT_CONFIG_FILE=next.config.vercel.mjs next build",
-    "build:pages": "cross-env NEXT_CONFIG_FILE=next.config.static.mjs next build",
+    "build:pages": "cross-env NEXT_CONFIG_FILE=next.config.pages.mjs next build",
     "build:static": "cross-env NEXT_CONFIG_FILE=next.config.static.mjs next build",
     "build:workers": "wrangler deploy",
     "start": "next start",

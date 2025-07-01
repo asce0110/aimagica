@@ -1,34 +1,26 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages 静态导出配置 - 激进修复版本
+  // 强制使用 Pages Router 进行静态导出
   output: 'export',
   
-  // 关键修复：移除 trailingSlash，添加 skipTrailingSlashRedirect
-  skipTrailingSlashRedirect: true,
+  // 基础配置
   distDir: 'out',
+  trailingSlash: true,
   
-  // 强制静态导出设置，避免动态功能
-  staticPageGenerationTimeout: 300,
-  poweredByHeader: false,
-  
-  // 彻底禁用可能导致问题的功能
-  reactStrictMode: false,
-  
-  // 强制禁用错误页面生成
-  generateEtags: false,
-  
-  // 构建时环境变量默认值
-  env: {
-    NEXT_PUBLIC_SUPABASE_URL: process.env.NEXT_PUBLIC_SUPABASE_URL || 'https://vvrkbpnnlxjqyhmmovro.supabase.co',
-    NEXT_PUBLIC_SUPABASE_ANON_KEY: process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY || 'build_placeholder_anon_key',
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://aimagica.pages.dev',
-    NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'build_placeholder_secret',
-    NEXT_PUBLIC_R2_PUBLIC_URL: process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://images.aimagica.ai',
-    NEXT_PUBLIC_ENABLE_CDN: process.env.NEXT_PUBLIC_ENABLE_CDN || 'true',
-    NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://aimagica-api.your-domain.workers.dev',
+  // 完全禁用图片优化
+  images: {
+    unoptimized: true,
   },
   
-  // 简化构建配置
+  // 环境变量
+  env: {
+    NEXT_PUBLIC_API_BASE_URL: 'https://api.aimagica.ai',
+    NEXT_PUBLIC_SUPABASE_URL: 'https://vvrkbpnnlxjqyhmmovro.supabase.co',
+    NEXT_PUBLIC_SUPABASE_ANON_KEY: 'build_placeholder_anon_key',
+    NEXT_PUBLIC_R2_PUBLIC_URL: 'https://images.aimagica.ai',
+  },
+  
+  // 禁用所有检查
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -36,37 +28,14 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // 图片优化配置 - Pages专用
-  images: {
-    unoptimized: true,
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: '**',
-      },
-    ],
-  },
-  
-  // 编译器配置
-  compiler: {
-    removeConsole: process.env.NODE_ENV === 'production',
-  },
-  
-  // 最小化实验性功能 - 移除appDir配置避免冲突
+  // 强制禁用 App Router
   experimental: {
-    optimizePackageImports: ['lucide-react'],
-    // 添加静态导出兼容性设置
-    esmExternals: false,
-    // 禁用一些可能导致问题的功能
-    serverMinification: false,
-    // 移除appDir配置，让Next.js自动处理
-    // 彻底禁用App Router的404处理，使用Pages Router
-    skipMiddlewareUrlNormalize: true,
+    appDir: false,
   },
   
-  // Webpack 配置优化
-  webpack: (config, { isServer, dev }) => {
-    // 解决可能的构建问题
+  // 简化 Webpack 配置
+  webpack: (config, { dev, isServer }) => {
+    // 禁用问题模块
     config.resolve.fallback = {
       ...config.resolve.fallback,
       fs: false,
@@ -74,49 +43,34 @@ const nextConfig = {
       tls: false,
     }
     
-    // 在生产构建中禁用某些插件
-    if (!dev && isServer) {
-      // 强制跳过错误页面相关的处理
-      config.plugins = config.plugins.filter(plugin => 
-        !plugin.constructor.name.includes('Error') &&
-        !plugin.constructor.name.includes('NotFound')
-      )
-    }
-    
     return config
   },
   
-  // 静态导出优化 - 禁用有问题的内部页面生成
-  generateBuildId: () => 'cloudflare-pages-build',
-  
-  // 明确禁用内部路由处理
-  async redirects() {
-    return []
+  // 静态页面映射 - 使用 Pages Router
+  exportPathMap: async function () {
+    return {
+      '/': { page: '/' },
+      '/about': { page: '/about' },
+      '/contact': { page: '/contact' },
+      '/pricing': { page: '/pricing' },
+    }
   },
-
-  // 移除可能导致问题的 rewrites 配置
+  
+  // 禁用优化
+  swcMinify: false,
+  
+  // 禁用所有动态功能
   async rewrites() {
     return []
   },
   
-  // 基础安全头部
+  async redirects() {
+    return []
+  },
+  
   async headers() {
-    return [
-      {
-        source: '/(.*)',
-        headers: [
-          {
-            key: 'X-Frame-Options',
-            value: 'DENY',
-          },
-          {
-            key: 'X-Content-Type-Options',
-            value: 'nosniff',
-          },
-        ],
-      },
-    ]
+    return []
   },
 }
 
-export default nextConfig 
+export default nextConfig
