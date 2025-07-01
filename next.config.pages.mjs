@@ -52,15 +52,14 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // 最小化实验性功能
+  // 最小化实验性功能 - 移除appDir配置避免冲突
   experimental: {
     optimizePackageImports: ['lucide-react'],
     // 添加静态导出兼容性设置
     esmExternals: false,
     // 禁用一些可能导致问题的功能
     serverMinification: false,
-    // 强制禁用App Router的一些功能
-    appDir: true, // 确保使用App Router但不生成内部错误页面
+    // 移除appDir配置，让Next.js自动处理
     // 彻底禁用App Router的404处理，使用Pages Router
     skipMiddlewareUrlNormalize: true,
   },
