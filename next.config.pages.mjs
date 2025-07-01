@@ -1,9 +1,9 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages 静态导出配置
+  // Cloudflare Pages 静态导出配置 - 简化版本
   output: 'export',
-  // 移除 trailingSlash: true 以修复 404 页面错误
-  // trailingSlash: true,
+  
+  // 关键修复：移除 trailingSlash，添加 skipTrailingSlashRedirect
   skipTrailingSlashRedirect: true,
   distDir: 'out',
   
@@ -15,10 +15,10 @@ const nextConfig = {
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'build_placeholder_secret',
     NEXT_PUBLIC_R2_PUBLIC_URL: process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://images.aimagica.ai',
     NEXT_PUBLIC_ENABLE_CDN: process.env.NEXT_PUBLIC_ENABLE_CDN || 'true',
-    // Workers API 基础URL
     NEXT_PUBLIC_API_BASE_URL: process.env.NEXT_PUBLIC_API_BASE_URL || 'https://aimagica-api.your-domain.workers.dev',
   },
   
+  // 简化构建配置
   eslint: {
     ignoreDuringBuilds: true,
   },
@@ -26,7 +26,7 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // 图片优化配置 - Pages不支持动态优化
+  // 图片优化配置 - Pages专用
   images: {
     unoptimized: true,
     remotePatterns: [
@@ -42,41 +42,13 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // 实验性功能优化
+  // 移除复杂的实验性功能，避免构建问题
   experimental: {
-    optimizePackageImports: [
-      'lucide-react', 
-      '@radix-ui/react-icons',
-      '@radix-ui/react-accordion',
-      '@radix-ui/react-alert-dialog',
-      '@radix-ui/react-avatar',
-      '@radix-ui/react-checkbox',
-      '@radix-ui/react-collapsible',
-      '@radix-ui/react-context-menu',
-      '@radix-ui/react-dialog',
-      '@radix-ui/react-dropdown-menu',
-      '@radix-ui/react-hover-card',
-      '@radix-ui/react-label',
-      '@radix-ui/react-menubar',
-      '@radix-ui/react-navigation-menu',
-      '@radix-ui/react-popover',
-      '@radix-ui/react-progress',
-      '@radix-ui/react-radio-group',
-      '@radix-ui/react-scroll-area',
-      '@radix-ui/react-select',
-      '@radix-ui/react-separator',
-      '@radix-ui/react-slider',
-      '@radix-ui/react-slot',
-      '@radix-ui/react-switch',
-      '@radix-ui/react-tabs',
-      '@radix-ui/react-toast',
-      '@radix-ui/react-toggle',
-      '@radix-ui/react-toggle-group',
-      '@radix-ui/react-tooltip',
-    ],
+    // 最小化实验性功能
+    optimizePackageImports: ['lucide-react'],
   },
   
-  // API 路由重写到 Workers
+  // 简化重写规则
   async rewrites() {
     return [
       {
@@ -86,7 +58,7 @@ const nextConfig = {
     ]
   },
   
-  // 头部配置
+  // 基础安全头部
   async headers() {
     return [
       {
@@ -99,10 +71,6 @@ const nextConfig = {
           {
             key: 'X-Content-Type-Options',
             value: 'nosniff',
-          },
-          {
-            key: 'Referrer-Policy',
-            value: 'strict-origin-when-cross-origin',
           },
         ],
       },
