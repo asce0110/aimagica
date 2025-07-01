@@ -9,8 +9,9 @@ const nextConfig = {
   trailingSlash: true,
   
   // 跳过有问题的页面（这些需要服务端认证）
-  exportPathMap: async function() {
-    return {
+  exportPathMap: async function(defaultPathMap, { dev, dir, outDir, distDir, buildId }) {
+    // 只导出我们明确指定的页面，排除所有内置错误页面
+    const safePages = {
       '/': { page: '/' },
       '/about': { page: '/about' },
       '/contact': { page: '/contact' },
@@ -23,12 +24,14 @@ const nextConfig = {
       '/image-to-image': { page: '/image-to-image' },
       '/text-to-video': { page: '/text-to-video' },
       '/gallery': { page: '/gallery' },
-      // 跳过需要认证的管理页面
-      // '/admin/dashboard': { page: '/admin/dashboard' },
-      // '/admin/payment': { page: '/admin/payment' },
-      // '/admin/prompts': { page: '/admin/prompts' },
-      // '/favorites': { page: '/favorites' },
+      // 明确排除所有错误页面和认证页面
+      // '/404': 排除
+      // '/500': 排除  
+      // '/_error': 排除
+      // '/admin/*': 排除
+      // '/favorites': 排除
     }
+    return safePages
   },
   
   // 强制静态导出设置，避免动态功能
@@ -40,6 +43,9 @@ const nextConfig = {
   
   // 强制禁用错误页面生成
   generateEtags: false,
+  
+  // 禁用内置错误页面生成
+  generateBuildId: () => 'static-build',
   
   // 构建时环境变量默认值
   env: {
@@ -111,7 +117,6 @@ const nextConfig = {
   },
   
   // 静态导出优化 - 禁用有问题的内部页面生成
-  generateBuildId: () => 'cloudflare-pages-build',
   
   // 明确禁用内部路由处理
   async redirects() {
