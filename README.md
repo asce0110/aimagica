@@ -186,6 +186,13 @@ tail -f build-monitor.log
 - ✅ **懒加载数据库客户端**：仅在运行时初始化
 - ✅ **🆕 核心服务器函数修复** (2025-01-30)：修复 `lib/supabase-server.ts` 中 `createServiceRoleClient()` 等函数的构建时环境变量检查问题
 - ✅ **🆕 Magic Coins 服务修复**：将 `MagicCoinService` 改为懒加载模式，避免模块顶层立即创建客户端
+- ✅ **🆕 Next.js 15 404页面错误修复** (2025-07-01)：
+  - 问题：`Error: <Html> should not be imported outside of pages/_document`
+  - 原因：混合使用 App Router + Pages Router 时，Next.js 15 在处理404页面时出现冲突
+  - 解决方案：
+    1. 删除 `pages/404.js` 文件，避免与内部错误处理冲突
+    2. 修改 `next.config.pages.mjs`，移除 rewrites fallback 配置
+    3. 让 Next.js 使用默认的 404 处理机制
 
 **构建时间对比（解决20分钟超时问题）：**
 - 🐌 `build:clean`: 8-12分钟 (全清理)
@@ -885,7 +892,7 @@ Function execution timed out after 60 seconds
 ```
 Image optimization using the default loader is not compatible with export
 ```
-**解决方案**：已在 `next.config.vercel.mjs` 中配置 `unoptimized: false`，Vercel 会处理图片优化
+**解决方案：** 已在 `next.config.vercel.mjs` 中配置 `unoptimized: false`，Vercel 会处理图片优化
 
 #### 🔄 部署更新
 

@@ -61,6 +61,8 @@ const nextConfig = {
     serverMinification: false,
     // 强制禁用App Router的一些功能
     appDir: true, // 确保使用App Router但不生成内部错误页面
+    // 彻底禁用App Router的404处理，使用Pages Router
+    skipMiddlewareUrlNormalize: true,
   },
   
   // Webpack 配置优化
@@ -90,6 +92,11 @@ const nextConfig = {
   
   // 明确禁用内部路由处理
   async redirects() {
+    return []
+  },
+
+  // 移除可能导致问题的 rewrites 配置
+  async rewrites() {
     return []
   },
   
