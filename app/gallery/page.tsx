@@ -9,7 +9,7 @@ import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog"
 import { motion } from "framer-motion"
-import { useSession } from "next-auth/react"
+import { useSessionCompat as useSession } from "@/components/session-provider"
 import { toast } from "sonner"
 
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"

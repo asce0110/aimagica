@@ -16,7 +16,8 @@ import {
 import { useRouter } from "next/navigation"
 import { motion } from "framer-motion"
 import { Alert, AlertDescription } from "@/components/ui/alert"
-import { signIn, useSession } from "next-auth/react"
+import { signIn } from "next-auth/react"
+import { useSessionCompat as useSession } from "@/components/session-provider"
 import Link from "next/link"
 
 export default function AdminLoginPage() {

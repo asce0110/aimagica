@@ -6,7 +6,7 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Avatar, AvatarContent, AvatarImage } from "@/components/ui/avatar"
-import { useSession, signOut } from "next-auth/react"
+import { useSessionCompat as useSession, signOutCompat as signOut } from "@/components/session-provider"
 import { 
   BarChart, 
   Bar, 

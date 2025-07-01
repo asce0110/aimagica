@@ -30,7 +30,7 @@ import {
   Send,
   FileText
 } from "lucide-react"
-import { useSession, signIn, signOut } from "next-auth/react"
+import { useSessionCompat as useSession, signOutCompat as signOut } from "@/components/session-provider"
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import GenerationInterface from "@/components/generation-interface"

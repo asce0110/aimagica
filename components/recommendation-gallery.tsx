@@ -4,7 +4,7 @@ import { useState, useEffect } from "react"
 import { Card, CardContent } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Heart, Eye, Sparkles, RefreshCw } from "lucide-react"
-import { useSession } from "next-auth/react"
+import { useSessionCompat as useSession } from "@/components/session-provider"
 import { imageCache } from "@/lib/image-cache"
 
 interface RecommendationImage {

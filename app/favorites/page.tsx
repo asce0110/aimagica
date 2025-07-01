@@ -1,7 +1,7 @@
 "use client"
 
 import React, { useState, useEffect } from "react"
-import { useSession } from "next-auth/react"
+import { useSessionCompat as useSession } from "@/components/session-provider"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { Heart, ArrowLeft, Download, Share2, Trash2, Eye } from "lucide-react"
