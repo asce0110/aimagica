@@ -6,6 +6,30 @@ const nextConfig = {
   // 关键修复：移除 trailingSlash，添加 skipTrailingSlashRedirect
   skipTrailingSlashRedirect: true,
   distDir: 'out',
+  trailingSlash: true,
+  
+  // 跳过有问题的页面（这些需要服务端认证）
+  exportPathMap: async function() {
+    return {
+      '/': { page: '/' },
+      '/about': { page: '/about' },
+      '/contact': { page: '/contact' },
+      '/help': { page: '/help' },
+      '/pricing': { page: '/pricing' },
+      '/privacy': { page: '/privacy' },
+      '/terms': { page: '/terms' },
+      '/cookies': { page: '/cookies' },
+      '/text-to-image': { page: '/text-to-image' },
+      '/image-to-image': { page: '/image-to-image' },
+      '/text-to-video': { page: '/text-to-video' },
+      '/gallery': { page: '/gallery' },
+      // 跳过需要认证的管理页面
+      // '/admin/dashboard': { page: '/admin/dashboard' },
+      // '/admin/payment': { page: '/admin/payment' },
+      // '/admin/prompts': { page: '/admin/prompts' },
+      // '/favorites': { page: '/favorites' },
+    }
+  },
   
   // 强制静态导出设置，避免动态功能
   staticPageGenerationTimeout: 300,
