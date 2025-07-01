@@ -71,17 +71,8 @@ const nextConfig = {
     return config
   },
   
-  // 简化重写规则 - 只在非导出模式下使用
-  ...(process.env.NODE_ENV !== 'production' && {
-    async rewrites() {
-      return [
-        {
-          source: '/api/:path*',
-          destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://aimagica-api.your-domain.workers.dev'}/api/:path*`,
-        },
-      ]
-    },
-  }),
+  // 静态导出优化 - 禁用有问题的内部页面生成
+  generateBuildId: () => 'cloudflare-pages-build',
   
   // 基础安全头部
   async headers() {

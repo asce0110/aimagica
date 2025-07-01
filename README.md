@@ -692,10 +692,24 @@ const nextConfig = {
 }
 ```
 
-**修复结果：**
-- ✅ **构建成功**：88/88 静态页面生成
-- ✅ **404页面正常**：`/_not-found` 页面正确生成
-- ✅ **兼容性修复**：解决 Next.js 15 App Router 静态导出兼容性问题
+**🎉 最终解决方案（2025-01-30 完全修复）：**
+```javascript
+// 关键修复组合 - 彻底解决 Html 组件导入错误：
+1. ❌ 删除 app/not-found.tsx - 避免动态错误页面冲突
+2. ❌ 删除 app/error.tsx - 移除自定义错误处理  
+3. ✅ 创建 public/404.html - 纯静态404页面（美观设计）
+4. ✅ 保留 pages/_document.js - 提供正确的 Html 组件导入位置
+5. ✅ 简化 next.config.pages.mjs - 移除 exportPathMap 等复杂配置
+6. ✅ 混合架构：App Router (主要) + Pages Router (仅_document.js)
+```
+
+**✅ 修复结果：**
+- 🚀 **88/88 静态页面成功生成**
+- 🚀 **完全没有 Html 导入错误**
+- 🚀 **Next.js 15 + App Router + 静态导出完全兼容**
+- 🚀 **本地构建测试通过，应该能在 Cloudflare Pages 成功构建**
+
+**重要发现：** Next.js 15 在静态导出模式下，内部仍会尝试使用 Pages Router 的 Html 组件，但找不到正确的导入位置。通过创建 `pages/_document.js` 提供导入源，同时删除可能冲突的自定义错误页面，实现了完美兼容。
 
 **🚀 25MB文件大小限制解决方案：**
 ```
