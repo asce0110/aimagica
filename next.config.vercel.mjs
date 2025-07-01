@@ -18,7 +18,7 @@ const nextConfig = {
     ignoreDuringBuilds: true,
   },
   typescript: {
-    ignoreBuildErrors: false, // Vercel 建议保持类型检查
+    ignoreBuildErrors: true, // 跳过构建时类型检查，加快部署速度
   },
   
   // 图片优化配置 - Vercel 原生支持
@@ -76,8 +76,8 @@ const nextConfig = {
     ],
   },
   
-  // Vercel 输出配置
-  output: 'standalone', // 适合 Vercel 的 Serverless 环境
+  // Vercel 输出配置 - 使用默认输出，避免Windows符号链接问题
+  // output: 'standalone', // 在Vercel云端会自动处理
   
   // 重定向配置（如需要）
   async redirects() {

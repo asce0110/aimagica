@@ -4,26 +4,14 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "NEXT_CONFIG_FILE=next.config.mjs next build",
-    "build:minimal": "NEXT_CONFIG_FILE=next.config.minimal.mjs next build",
-    "build:fast": "NEXT_CONFIG_FILE=next.config.fast.mjs next build",
-    "build:turbo": "NEXT_CONFIG_FILE=next.config.fast.mjs NODE_ENV=production node --max-old-space-size=4096 ./node_modules/.bin/next build",
-    "build:clean": "pnpm clean && NEXT_CONFIG_FILE=next.config.mjs next build",
-    "build:opennext": "NEXT_CONFIG_FILE=next.config.opennext.mjs next build && npx open-next@latest build",
-    "build:pages": "NEXT_CONFIG_FILE=next.config.pages.mjs next build",
+    "build": "cross-env NEXT_CONFIG_FILE=next.config.vercel.mjs next build",
     "build:vercel": "cross-env NEXT_CONFIG_FILE=next.config.vercel.mjs next build",
-    "build:monitor": "node scripts/build-monitor.js",
-    "deploy:workers": "pnpm wrangler deploy --config wrangler.workers.toml",
-    "deploy:api": "pnpm wrangler deploy --config wrangler.api.toml",
-    "deploy:pages": "pnpm build:pages && pnpm wrangler pages deploy out --project-name aimagica",
-    "deploy:hybrid": "bash scripts/deploy-hybrid.sh",
+    "start": "next start",
+    "lint": "next lint",
     "deploy:vercel": "vercel --prod",
     "preview:vercel": "vercel",
     "verify:vercel": "node scripts/verify-vercel-deploy.js",
-    "start": "next start",
-    "lint": "next lint",
-    "wrangler": "wrangler",
-    "clean": "rm -rf .next out .open-next node_modules/.cache"
+    "clean": "rm -rf .next out node_modules/.cache"
   },
   "dependencies": {
     "@auth/prisma-adapter": "^2.9.1",
@@ -94,19 +82,14 @@
     "zod": "^3.24.1"
   },
   "devDependencies": {
-    "@opennextjs/aws": "^3.6.6",
-    "@opennextjs/cloudflare": "^1.3.1",
-    "@stagewise/toolbar-next": "^0.4.4",
     "@types/mime-types": "^2.1.4",
     "@types/node": "^22",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "cross-env": "^7.0.3",
-    "dotenv-cli": "^8.0.0",
     "postcss": "^8.5",
     "tailwindcss": "^3.4.17",
     "typescript": "^5",
-    "vercel": "^44.2.7",
-    "wrangler": "^3.80.0"
+    "vercel": "^44.2.7"
   }
 }
