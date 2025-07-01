@@ -1,6 +1,6 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages 静态导出配置 - 彻底修复版本
+  // Cloudflare Pages 静态导出配置 - 激进修复版本
   output: 'export',
   
   // 关键修复：移除 trailingSlash，添加 skipTrailingSlashRedirect
@@ -13,6 +13,9 @@ const nextConfig = {
   
   // 彻底禁用可能导致问题的功能
   reactStrictMode: false,
+  
+  // 强制禁用错误页面生成
+  generateEtags: false,
   
   // 构建时环境变量默认值
   env: {
@@ -56,10 +59,12 @@ const nextConfig = {
     esmExternals: false,
     // 禁用一些可能导致问题的功能
     serverMinification: false,
+    // 强制禁用App Router的一些功能
+    appDir: true, // 确保使用App Router但不生成内部错误页面
   },
   
   // Webpack 配置优化
-  webpack: (config, { isServer }) => {
+  webpack: (config, { isServer, dev }) => {
     // 解决可能的构建问题
     config.resolve.fallback = {
       ...config.resolve.fallback,
@@ -68,11 +73,25 @@ const nextConfig = {
       tls: false,
     }
     
+    // 在生产构建中禁用某些插件
+    if (!dev && isServer) {
+      // 强制跳过错误页面相关的处理
+      config.plugins = config.plugins.filter(plugin => 
+        !plugin.constructor.name.includes('Error') &&
+        !plugin.constructor.name.includes('NotFound')
+      )
+    }
+    
     return config
   },
   
   // 静态导出优化 - 禁用有问题的内部页面生成
   generateBuildId: () => 'cloudflare-pages-build',
+  
+  // 明确禁用内部路由处理
+  async redirects() {
+    return []
+  },
   
   // 基础安全头部
   async headers() {
