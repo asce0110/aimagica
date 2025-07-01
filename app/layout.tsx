@@ -5,6 +5,7 @@ import StagewiseWrapper from '@/components/stagewise-wrapper'
 import FloatingGenerationTips from '@/components/floating-generation-tips'
 
 export const metadata: Metadata = {
+  metadataBase: new URL('https://aimagica.ai'),
   title: 'Image to Image AI Generator | Transform Images with AIMAGICA',
   description: 'Upload your images and transform them into stunning AI artworks. Advanced image-to-image AI technology with multiple art styles. Transform any photo into art in 30 seconds!',
   keywords: 'image to image, AI image transformer, photo to art converter, image enhancement AI, AI art from photos',

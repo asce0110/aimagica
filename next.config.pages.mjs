@@ -28,9 +28,9 @@ const nextConfig = {
     ignoreBuildErrors: true,
   },
   
-  // 强制禁用 App Router
+  // 启用 App Router（Next.js 13.4+ 默认启用）
   experimental: {
-    appDir: false,
+    // appDir: true, // Next.js 13.4+ 中默认启用，无需显式设置
   },
   
   // 简化 Webpack 配置
@@ -46,15 +46,8 @@ const nextConfig = {
     return config
   },
   
-  // 静态页面映射 - 使用 Pages Router
-  exportPathMap: async function () {
-    return {
-      '/': { page: '/' },
-      '/about': { page: '/about' },
-      '/contact': { page: '/contact' },
-      '/pricing': { page: '/pricing' },
-    }
-  },
+  // App Router 静态导出不需要 exportPathMap
+  // 页面会自动从 app 目录结构中导出
   
   // 禁用优化
   swcMinify: false,
