@@ -1,0 +1,6 @@
+[build]
+command = "npm run build:pages"
+destination = "out"
+
+[env.production.vars]
+ENVIRONMENT = "production"
