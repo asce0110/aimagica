@@ -7,7 +7,7 @@ name = "aimagica-pages"
 
 # 构建配置
 [build]
-command = "pnpm run build:pages"
+command = "npm run build:pages"
 destination = "./out"
 
 # 头部配置
