@@ -1,0 +1,35 @@
+name = "aimagica-api"
+main = "workers/api-worker.js"
+compatibility_date = "2024-01-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Workers 环境变量配置
+[env.production]
+name = "aimagica-api"
+
+# 资源限制
+[limits]
+cpu_ms = 50000  # 50秒CPU时间
+
+# KV存储绑定（如需要）
+# [[kv_namespaces]]
+# binding = "CACHE"
+# id = "your_kv_namespace_id"
+
+# R2存储绑定
+# [[r2_buckets]]
+# binding = "R2_BUCKET"
+# bucket_name = "aimagica-storage"
+
+# 环境变量（生产环境中应该在Cloudflare Dashboard设置）
+[vars]
+NODE_ENV = "production"
+
+# 自定义域名（可选）
+# [[routes]]
+# pattern = "api.aimagica.ai/*"
+# zone_name = "aimagica.ai"
+
+# 触发器配置
+[[triggers]]
+crons = ["0 0 * * *"]  # 每日统计任务 

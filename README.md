@@ -302,6 +302,217 @@ NEXT_PUBLIC_CDN_URL=https://images.aimagica.ai
 NODE_ENV=production
 ```
 
+### 🔧 详细部署指南：Cloudflare Pages + Workers 混合架构
+
+#### 📋 部署前准备
+
+**1. 验证配置**
+```bash
+# 检查所有配置文件是否就绪
+pnpm verify:cloudflare
+```
+
+**2. 安装 Wrangler CLI**
+```bash
+# 全局安装
+npm install -g wrangler
+
+# 或使用项目依赖
+pnpm install
+
+# 登录 Cloudflare
+wrangler login
+```
+
+#### 🔨 步骤1：部署 Workers API
+
+**配置 Workers 环境变量**
+
+在 [Cloudflare Dashboard](https://dash.cloudflare.com) → Workers & Pages → aimagica-api → Settings → Variables：
+
+```bash
+# 核心配置
+SUPABASE_URL=https://your-project.supabase.co
+SUPABASE_SERVICE_KEY=your_service_role_key
+NEXTAUTH_SECRET=your_32_char_random_secret
+
+# R2 存储
+R2_ACCESS_KEY_ID=your_r2_access_key
+R2_SECRET_ACCESS_KEY=your_r2_secret_key
+R2_ENDPOINT=https://your-account-id.r2.cloudflarestorage.com
+R2_BUCKET_NAME=aimagica-storage
+
+# AI 服务
+KIEFLUX_API_KEY=your_kieflux_api_key
+KIEFLUX_API_URL=https://api.kieflux.com
+
+# 支付配置
+PAYPAL_CLIENT_ID=your_paypal_client_id
+PAYPAL_CLIENT_SECRET=your_paypal_client_secret
+```
+
+**部署 Workers**
+```bash
+# 部署 API Workers
+pnpm deploy:workers
+
+# 或使用 wrangler 直接部署
+wrangler deploy --config wrangler.workers.toml
+```
+
+**获取 Workers 域名**
+```bash
+# 部署成功后，记录显示的域名
+✅ https://aimagica-api.your-subdomain.workers.dev
+```
+
+#### 🔨 步骤2：部署 Pages 前端
+
+**更新 API 基础 URL**
+
+更新 `next.config.pages.mjs` 和 `wrangler.pages.toml` 中的 Workers 域名：
+
+```javascript
+// next.config.pages.mjs
+env: {
+  NEXT_PUBLIC_API_BASE_URL: 'https://aimagica-api.your-subdomain.workers.dev',
+}
+
+// wrangler.pages.toml
+[[redirects]]
+from = "/api/*"
+to = "https://aimagica-api.your-subdomain.workers.dev/api/:splat"
+```
+
+**配置 Pages 环境变量**
+
+在 Cloudflare Dashboard → Pages → aimagica-pages → Settings → Environment Variables：
+
+```bash
+# 前端配置
+NEXT_PUBLIC_API_BASE_URL=https://aimagica-api.your-subdomain.workers.dev
+NEXT_PUBLIC_SUPABASE_URL=https://your-project.supabase.co
+NEXT_PUBLIC_SUPABASE_ANON_KEY=your_supabase_anon_key
+NEXT_PUBLIC_R2_PUBLIC_URL=https://images.aimagica.ai
+NEXTAUTH_URL=https://aimagica.pages.dev
+NEXTAUTH_SECRET=your_32_char_random_secret
+NODE_ENV=production
+```
+
+**构建和部署 Pages**
+```bash
+# 构建前端静态文件
+pnpm build:pages
+
+# 部署到 Pages
+pnpm deploy:pages
+
+# 或使用 wrangler 直接部署
+wrangler pages deploy out --project-name aimagica-pages
+```
+
+#### 🔨 步骤3：连接测试
+
+**测试 API 连接**
+```bash
+# 测试 Workers API
+curl https://aimagica-api.your-subdomain.workers.dev/api/test
+
+# 应该返回
+{"message":"Workers API is working!","timestamp":"..."}
+```
+
+**测试前端**
+```bash
+# 访问前端网站
+open https://aimagica.pages.dev
+
+# 检查 API 代理是否工作
+# 浏览器开发者工具 → Network → 查看 /api/ 请求是否代理到 Workers
+```
+
+#### 🔨 步骤4：自定义域名（可选）
+
+**设置 Workers 自定义域名**
+
+1. 在 Cloudflare Dashboard → Workers & Pages → aimagica-api → Settings → Triggers
+2. 添加自定义域名：`api.yourdomain.com`
+3. 配置 DNS 记录（自动）
+
+**设置 Pages 自定义域名**
+
+1. 在 Cloudflare Dashboard → Pages → aimagica-pages → Custom domains
+2. 添加自定义域名：`yourdomain.com`
+3. 配置 DNS 记录（自动）
+
+**更新配置**
+```bash
+# 更新环境变量
+NEXT_PUBLIC_API_BASE_URL=https://api.yourdomain.com
+NEXTAUTH_URL=https://yourdomain.com
+
+# 更新重定向配置
+# wrangler.pages.toml
+to = "https://api.yourdomain.com/api/:splat"
+```
+
+#### 🔍 故障排除
+
+**常见问题1：API 路由 404**
+```bash
+# 检查 Workers 部署状态
+wrangler tail aimagica-api
+
+# 检查路由配置
+curl -v https://aimagica-api.your-subdomain.workers.dev/api/test
+```
+
+**常见问题2：CORS 错误**
+```javascript
+// 检查 workers/api-worker.js 中的 CORS 配置
+const corsHeaders = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS, PATCH',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, X-Requested-With',
+}
+```
+
+**常见问题3：环境变量未生效**
+```bash
+# 重新部署 Workers
+wrangler deploy --config wrangler.workers.toml
+
+# 重新部署 Pages
+wrangler pages deploy out --project-name aimagica-pages --compatibility-date 2024-01-01
+```
+
+#### 📊 部署完成检查清单
+
+- [ ] ✅ Workers API 部署成功
+- [ ] ✅ Pages 前端部署成功
+- [ ] ✅ API 基础 URL 配置正确
+- [ ] ✅ 环境变量全部设置
+- [ ] ✅ CORS 配置正确
+- [ ] ✅ 测试 API 连接成功
+- [ ] ✅ 前端可以调用 API
+- [ ] ✅ 用户认证正常
+- [ ] ✅ 图片上传/显示正常
+- [ ] ✅ 支付功能正常（如果启用）
+
+#### 🚀 一键部署脚本
+
+**完整部署流程**
+```bash
+# 1. 验证配置
+pnpm verify:cloudflare
+
+# 2. 部署所有服务
+pnpm deploy:cloudflare
+
+# 3. 监控部署状态
+pnpm tail:workers
+```
+
 #### OpenNext.js 适配器选择
 - **`@opennextjs/cloudflare`** → **Cloudflare Pages/Workers** （官方推荐，使用 `pnpm build:cf`）
 - **`@opennextjs/aws`** → **AWS Lambda** （使用 `pnpm build:opennext`）
