@@ -1,11 +1,15 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // Cloudflare Pages 静态导出配置 - 简化版本
+  // Cloudflare Pages 静态导出配置 - 兼容性增强版本
   output: 'export',
   
   // 关键修复：移除 trailingSlash，添加 skipTrailingSlashRedirect
   skipTrailingSlashRedirect: true,
   distDir: 'out',
+  
+  // 强制静态导出设置，避免动态功能
+  staticPageGenerationTimeout: 300,
+  poweredByHeader: false,
   
   // 构建时环境变量默认值
   env: {
@@ -42,21 +46,24 @@ const nextConfig = {
     removeConsole: process.env.NODE_ENV === 'production',
   },
   
-  // 移除复杂的实验性功能，避免构建问题
+  // 最小化实验性功能
   experimental: {
-    // 最小化实验性功能
     optimizePackageImports: ['lucide-react'],
+    // 添加静态导出兼容性设置
+    esmExternals: false,
   },
   
-  // 简化重写规则
-  async rewrites() {
-    return [
-      {
-        source: '/api/:path*',
-        destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://aimagica-api.your-domain.workers.dev'}/api/:path*`,
-      },
-    ]
-  },
+  // 简化重写规则 - 只在非导出模式下使用
+  ...(process.env.NODE_ENV !== 'production' && {
+    async rewrites() {
+      return [
+        {
+          source: '/api/:path*',
+          destination: `${process.env.NEXT_PUBLIC_API_BASE_URL || 'https://aimagica-api.your-domain.workers.dev'}/api/:path*`,
+        },
+      ]
+    },
+  }),
   
   // 基础安全头部
   async headers() {
