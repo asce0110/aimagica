@@ -117,17 +117,27 @@ export default function HeroSection() {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // 获取画廊图片 - 恢复API调用功能
+  // 获取画廊图片 - 使用workers API
   useEffect(() => {
     const fetchGalleryImages = async () => {
       try {
         setImagesLoading(true)
         
+        // 从lib/api-config.ts获取正确的API URL
+        const { getApiEndpoint } = await import('@/lib/api-config')
+        const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
+        
+        if (!apiUrl) {
+          console.log('📷 Gallery API not available, using example SVG images')
+          setImagesLoading(false)
+          return
+        }
+        
         // 使用AbortController来处理请求取消
         const controller = new AbortController()
         const timeoutId = setTimeout(() => controller.abort(), 8000) // 8秒超时，给API更多时间
         
-        const response = await fetch('/api/gallery/public?limit=4&optimize=true', {
+        const response = await fetch(`${apiUrl}?limit=4&optimize=true`, {
           signal: controller.signal,
           headers: {
             'Cache-Control': 'public, max-age=300', // 5分钟缓存
@@ -139,11 +149,23 @@ export default function HeroSection() {
         if (response.ok) {
           const result = await response.json()
           if (result.success && result.data?.length > 0) {
-            setGalleryImages(result.data)
-            console.log(`✅ Loaded ${result.data.length} gallery images for hero section`)
+            // 转换API数据格式以匹配GalleryImage接口
+            const transformedImages = result.data.map((item: any, index: number) => ({
+              id: item.id || index.toString(),
+              url: item.url || item.image_url || placeholderUrl,
+              title: item.title || item.prompt?.substring(0, 50) + "..." || "Untitled",
+              author: item.author || item.user_name || "Anonymous",
+              createdAt: item.createdAt || item.created_at || "Unknown",
+              prompt: item.prompt || "No prompt available",
+              style: item.style || item.style_name || "Art",
+              rotation: Math.random() * 4 - 2,
+            }))
+            
+            setGalleryImages(transformedImages)
+            console.log(`✅ Loaded ${transformedImages.length} gallery images for hero section from workers API`)
             
             // 预加载画廊图片到缓存
-            const imageUrls = result.data.map((img: any) => img.url).filter(Boolean)
+            const imageUrls = transformedImages.map((img: any) => img.url).filter(Boolean)
             if (imageUrls.length > 0) {
               console.log('🚀 开始预加载画廊图片到缓存')
               imageCache.preloadImages(imageUrls).catch(error => {

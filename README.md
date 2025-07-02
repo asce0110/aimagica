@@ -194,6 +194,15 @@ tail -f build-monitor.log
     2. 创建 `app/not-found.tsx` 文件，正确处理 App Router 的 404 页面
     3. 修改 `next.config.pages.mjs`，移除 appDir 显式配置和 rewrites fallback
     4. 让 Next.js 自动处理混合路由的 404 页面生成
+- ✅ **🆕 图片加载问题修复** (2025-07-01)：
+  - 问题：Gallery页面和首页Hero区域图片无法加载
+  - 原因：错误地替换了 `MagicImage` 组件为普通 `img` 标签，丢失了Next.js图片优化；Gallery页面使用硬编码数据而非API；HeroSection使用错误的API路径
+  - 解决方案：
+    1. 恢复 `MagicImage` 组件使用，保持Next.js图片优化和错误处理
+    2. 恢复Gallery页面完整API调用逻辑，从workers数据库加载真实图片
+    3. 修复HeroSection组件API路径，使用 `getApiEndpoint('GALLERY_PUBLIC')` 获取正确的workers API URL
+    4. 添加API数据格式转换，确保兼容现有接口
+    5. 保持fallback机制，API失败时使用静态示例数据
 
 **构建时间对比（解决20分钟超时问题）：**
 - 🐌 `build:clean`: 8-12分钟 (全清理)
