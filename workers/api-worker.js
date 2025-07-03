@@ -71,6 +71,7 @@ const routeHandlers = {
   'images/save': handleImagesSave,
   'images/upload-base64': handleImagesUploadBase64,
   'images/upload-to-r2': handleImagesUploadToR2,
+  'images/proxy/:url': handleImageProxy,
   
   // Magic coins routes
   'magic-coins/balance': handleMagicCoinsBalance,
@@ -324,7 +325,9 @@ async function handleGalleryPublic(request, env) {
     // 转换为Gallery格式
     const galleryImages = images.map(image => ({
       id: image.id,
-      url: image.generated_image_url,
+      url: image.generated_image_url ? 
+        `https://aimagica-api.403153162.workers.dev/api/images/proxy/${encodeURIComponent(image.generated_image_url)}` : 
+        '/images/placeholder.svg',
       title: (image.prompt?.substring(0, 50) + '...' || 'Untitled'),
       author: 'AIMAGICA User',
       authorAvatar: "/images/aimagica-logo.png",
@@ -565,4 +568,52 @@ async function handleTest(request, env) {
   }), {
     headers: { 'Content-Type': 'application/json' }
   })
+}
+
+// 图片代理处理函数 - 解决不翻墙无法访问R2直链的问题
+async function handleImageProxy(request, env) {
+  try {
+    // 从URL路径中提取图片URL参数
+    const url = new URL(request.url)
+    const pathParts = url.pathname.split('/')
+    const imageUrlParam = pathParts[pathParts.length - 1]
+    const imageUrl = decodeURIComponent(imageUrlParam)
+    
+    console.log('🖼️ Proxying image:', imageUrl)
+    
+    // 验证URL是否为有效的图片URL
+    if (!imageUrl || (!imageUrl.startsWith('http') && !imageUrl.startsWith('https'))) {
+      return new Response('Invalid image URL', { status: 400 })
+    }
+    
+    // 获取原始图片
+    const imageResponse = await fetch(imageUrl, {
+      headers: {
+        'User-Agent': 'AIMAGICA-Proxy/1.0'
+      }
+    })
+    
+    if (!imageResponse.ok) {
+      console.error('❌ Failed to fetch image:', imageResponse.status)
+      return new Response('Image not found', { status: 404 })
+    }
+    
+    // 获取内容类型
+    const contentType = imageResponse.headers.get('content-type') || 'image/jpeg'
+    
+    // 返回代理的图片，添加适当的缓存头
+    return new Response(imageResponse.body, {
+      headers: {
+        'Content-Type': contentType,
+        'Cache-Control': 'public, max-age=31536000', // 缓存1年
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET',
+        'Access-Control-Allow-Headers': 'Content-Type',
+      }
+    })
+    
+  } catch (error) {
+    console.error('❌ Image proxy error:', error)
+    return new Response('Proxy error', { status: 500 })
+  }
 } 
