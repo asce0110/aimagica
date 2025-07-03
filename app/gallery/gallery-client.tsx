@@ -342,40 +342,6 @@ export default function GalleryClient() {
   
   // 使用 useStaticUrl 处理图片路径
   const logoUrl = useStaticUrl('/images/aimagica-logo.png')
-  const placeholderUserUrl = useStaticUrl('/placeholder-user.jpg')
-  const magicForestUrl = useStaticUrl('/images/examples/magic-forest.svg')
-  const cyberCityUrl = useStaticUrl('/images/examples/cyber-city.svg')
-  const spaceArtUrl = useStaticUrl('/images/examples/space-art.svg')
-  const catWizardUrl = useStaticUrl('/images/examples/cat-wizard.svg')
-  
-  // 更新静态数据以使用正确的URL
-  const staticGalleryImages = useMemo(() => [
-    {
-      ...galleryImages[0],
-      url: magicForestUrl,
-      authorAvatar: placeholderUserUrl,
-    },
-    {
-      ...galleryImages[1],
-      url: cyberCityUrl,
-      authorAvatar: placeholderUserUrl,
-    },
-    {
-      ...galleryImages[2],
-      url: spaceArtUrl,
-      authorAvatar: placeholderUserUrl,
-    },
-    {
-      ...galleryImages[3],
-      url: catWizardUrl,
-      authorAvatar: placeholderUserUrl,
-    },
-    ...galleryImages.slice(4).map(img => ({
-      ...img,
-      url: magicForestUrl, // 使用第一个图片作为备用
-      authorAvatar: placeholderUserUrl,
-    }))
-  ], [magicForestUrl, cyberCityUrl, spaceArtUrl, catWizardUrl, placeholderUserUrl])
   
   const [images, setImages] = useState<GalleryImage[]>(() => {
     const staticData = getStaticGalleryData()
@@ -385,7 +351,7 @@ export default function GalleryClient() {
   const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据
   const [error, setError] = useState<string | null>(null)
   const [apiAttempted, setApiAttempted] = useState(false)
-  const [emergencyMode, setEmergencyMode] = useState(false) // 紧急模式：完全跳过API
+  const [emergencyMode, setEmergencyMode] = useState(true) // 紧急模式：完全跳过API，只使用本地静态图片
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [comments, setComments] = useState<Comment[]>(sampleComments)
   const [newComment, setNewComment] = useState("")

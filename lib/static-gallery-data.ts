@@ -66,14 +66,14 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       isLiked: true,
       createdAt: '6/25/2025',
       prompt: 'A cyberpunk city with neon lights reflecting in the rain',
-      style: 'Chibi Diorama',
+      style: 'Cyberpunk',
       tags: ['cyberpunk', 'city', 'neon', 'rain'],
       size: 'horizontal',
       rotation: -1.2
     },
     {
       id: '9912c424-e6a2-4ac1-98de-77bac4200978',
-      url: '/images/gallery/105948948301872216168/1750861881556_A_peaceful_zen_garden_with_che.jpeg',
+      url: '/images/gallery/9912c424-e6a2-4ac1-98de-77bac4200978-fbd736fa.jpeg',
       title: 'Peaceful Zen Garden',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -93,7 +93,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '294ff75d-8579-4d3d-87ee-811b69b15a99',
-      url: 'https://tempfile.aiquickdraw.com/v/68f5527672694583a3f90d9dbaec819f_0_1750696712.png',
+      url: '/images/gallery/294ff75d-8579-4d3d-87ee-811b69b15a99-5479e3c7.png',
       title: 'Digital Art Creation',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -113,7 +113,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '5abb0316-b1d9-4c3a-ac97-76fcbe63f52b',
-      url: '/images/gallery/105948948301872216168/1749971728392_________.png',
+      url: '/images/gallery/5abb0316-b1d9-4c3a-ac97-76fcbe63f52b-fbb64e00.png',
       title: 'Fantasy Landscape',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -133,7 +133,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '2afbdc00-d083-46bf-8167-28d81971226f',
-      url: '/images/gallery/105948948301872216168/1749919511990________________.png',
+      url: '/images/gallery/2afbdc00-d083-46bf-8167-28d81971226f-fb48974a.png',
       title: 'Abstract Composition',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -153,7 +153,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '04033a15-7dfc-4b96-8999-91e6915ac926',
-      url: '/images/gallery/105948948301872216168/1749916206895_____.png',
+      url: '/images/gallery/04033a15-7dfc-4b96-8999-91e6915ac926-34c9105b.png',
       title: 'Portrait Study',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -173,7 +173,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: 'b3a47ac4-6386-41b1-8702-de4cf5ff03c1',
-      url: '/images/gallery/105948948301872216168/1749915657307______.png',
+      url: '/images/gallery/b3a47ac4-6386-41b1-8702-de4cf5ff03c1-38528305.png',
       title: 'Nature Scene',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -193,7 +193,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '82db65f1-d54e-4f7f-a9c3-c3f5e902643b',
-      url: '/images/gallery/115340097862236142261/1749913956478________.png',
+      url: '/images/gallery/82db65f1-d54e-4f7f-a9c3-c3f5e902643b-d36a1d13.png',
       title: 'Character Design',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -213,7 +213,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '22ab8354-87e8-4a74-a37b-c3f08f1ced20',
-      url: '/images/gallery/105948948301872216168/1749885738447_AI_Generated_Artwork.png',
+      url: '/images/gallery/22ab8354-87e8-4a74-a37b-c3f08f1ced20-286738dd.png',
       title: 'AI Generated Artwork',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -233,7 +233,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '341851d0-7c3b-4119-b503-102c0aee0d8f',
-      url: 'https://images.aimagica.ai/admin_uploads/105948948301872216168/1749364319065_ee1d327b665d45f5bbb133de6849b6.png',
+      url: '/images/gallery/341851d0-7c3b-4119-b503-102c0aee0d8f-b4209676.png',
       title: 'Creative Design',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
