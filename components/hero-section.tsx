@@ -14,7 +14,7 @@ import useStaticUrl from "@/hooks/use-static-url"
 import { preloadImageMapping } from "@/lib/image-url-mapper"
 import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import { getApiEndpoint } from "@/lib/api-config"
-import { useCachedHeroImages } from "@/hooks/use-cached-hero-images"
+import { useSmartHeroImages } from "@/hooks/use-smart-hero-images"
 
 interface GalleryImage {
   id: string
@@ -30,8 +30,63 @@ interface GalleryImage {
 export default function HeroSection() {
   const router = useRouter()
   
-  // 使用缓存的Hero图片
-  const { images: cachedHeroImages, isLoading: heroImagesLoading, cacheStatus } = useCachedHeroImages()
+  // 使用智能Hero图片管理
+  const { 
+    images: smartHeroImages, 
+    isLoading: heroImagesLoading, 
+    isRefreshing,
+    cacheStatus, 
+    lastUpdate,
+    refreshImages 
+  } = useSmartHeroImages({
+    maxAge: 30, // 缓存30分钟
+    fallbackImages: [
+      {
+        id: 'fallback-1',
+        url: '/images/hero-cache/hero-1-japanese-anime.png',
+        title: 'Japanese Anime Style',
+        author: 'AIMAGICA User',
+        createdAt: '最近',
+        prompt: 'Japanese Anime Style',
+        style: 'Anime',
+        rotation: 2.5,
+        isCached: true
+      },
+      {
+        id: 'fallback-2', 
+        url: '/images/hero-cache/hero-2-cyberpunk-city.jpeg',
+        title: 'Cyberpunk City',
+        author: 'AIMAGICA User',
+        createdAt: '最近',
+        prompt: 'A cyberpunk city with neon lights',
+        style: 'Cyberpunk',
+        rotation: -1.2,
+        isCached: true
+      },
+      {
+        id: 'fallback-3',
+        url: '/images/hero-cache/hero-3-zen-garden.jpeg',
+        title: 'Zen Garden',
+        author: 'AIMAGICA User',
+        createdAt: '最近',
+        prompt: 'A peaceful zen garden',
+        style: 'Photography',
+        rotation: 1.8,
+        isCached: true
+      },
+      {
+        id: 'fallback-4',
+        url: '/images/hero-cache/hero-4-digital-art.png',
+        title: 'Digital Art',
+        author: 'AIMAGICA User',
+        createdAt: '最近',
+        prompt: 'Beautiful digital artwork',
+        style: 'Digital Art',
+        rotation: -2.1,
+        isCached: true
+      }
+    ]
+  })
   
   // 使用 useStaticUrl hook 获取CDN URL
   const catWizardUrl = useStaticUrl('/images/examples/cat-wizard.svg')
@@ -114,10 +169,15 @@ export default function HeroSection() {
   useEffect(() => {
     setIsMounted(true)
     
-    // 打印缓存状态
+    // 打印智能缓存状态
     if (!heroImagesLoading) {
-      console.log('🎯 Hero缓存状态:', cacheStatus)
-      console.log('📸 Hero图片数据:', cachedHeroImages.map(img => ({ 
+      console.log('🎯 Hero智能缓存状态:', {
+        cacheStatus,
+        lastUpdate: lastUpdate?.toLocaleTimeString(),
+        isRefreshing,
+        imageCount: smartHeroImages.length
+      })
+      console.log('📸 Hero图片数据:', smartHeroImages.map(img => ({ 
         title: img.title, 
         isCached: img.isCached,
         url: img.url
@@ -131,7 +191,7 @@ export default function HeroSection() {
     checkMobile()
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
-  }, [heroImagesLoading, cacheStatus, cachedHeroImages])
+  }, [heroImagesLoading, cacheStatus, smartHeroImages, lastUpdate, isRefreshing])
 
   // 网络连通性检测
   useEffect(() => {
@@ -341,7 +401,7 @@ export default function HeroSection() {
                 <div className="flex flex-col gap-8">
                   {/* 第一排 - 挂在绳子上 */}
                   <div className="grid grid-cols-2 gap-4 justify-items-center">
-                    {(!heroImagesLoading && cachedHeroImages.length > 0 ? cachedHeroImages : exampleImages).slice(0, 2).map((img, index) => {
+                    {(!heroImagesLoading && smartHeroImages.length > 0 ? smartHeroImages : exampleImages).slice(0, 2).map((img, index) => {
                       const hangHeight = [2, 4][index]
                       const aspectRatios = ['aspect-[4/5]', 'aspect-[3/4]']
                       const aspectRatio = aspectRatios[index % aspectRatios.length]
@@ -351,7 +411,7 @@ export default function HeroSection() {
                           key={`mobile-top-${index}`}
                           className={`group cursor-pointer relative photo-sway-${index + 1} w-36`}
                           style={{ 
-                            transform: `rotate(${!heroImagesLoading && cachedHeroImages.length > 0 ? img.rotation || 0 : imageRotations[index]}deg)`,
+                            transform: `rotate(${!heroImagesLoading && smartHeroImages.length > 0 ? img.rotation || 0 : imageRotations[index]}deg)`,
                             marginTop: `${hangHeight * 0.5}rem`
                           }}
                           onClick={() => router.push("/gallery")}
@@ -366,7 +426,7 @@ export default function HeroSection() {
                           {/* 照片 */}
                           <div className={`${aspectRatio} w-full rounded-lg overflow-hidden transform hover:scale-110 hover:rotate-0 transition-all shadow-xl relative bg-white`}>
                             <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
-                              {!heroImagesLoading && cachedHeroImages.length > 0 ? (
+                              {!heroImagesLoading && smartHeroImages.length > 0 ? (
                                 <SimpleGalleryImage
                                   src={img.url || placeholderUrl}
                                   alt={img.title}
@@ -393,7 +453,7 @@ export default function HeroSection() {
                   
                   {/* 第二排 - 挂在第一排下面 */}
                   <div className="grid grid-cols-2 gap-4 justify-items-center">
-                    {(!heroImagesLoading && cachedHeroImages.length > 0 ? cachedHeroImages : exampleImages).slice(2, 4).map((img, index) => {
+                    {(!heroImagesLoading && smartHeroImages.length > 0 ? smartHeroImages : exampleImages).slice(2, 4).map((img, index) => {
                       const realIndex = index + 2
                       const aspectRatios = ['aspect-[5/4]', 'aspect-[4/3]']
                       const aspectRatio = aspectRatios[index % aspectRatios.length]
@@ -403,7 +463,7 @@ export default function HeroSection() {
                           key={`mobile-bottom-${index}`}
                           className={`group cursor-pointer relative photo-sway-${realIndex + 1} w-32`}
                           style={{ 
-                            transform: `rotate(${!heroImagesLoading && cachedHeroImages.length > 0 ? img.rotation || 0 : imageRotations[realIndex]}deg)`
+                            transform: `rotate(${!heroImagesLoading && smartHeroImages.length > 0 ? img.rotation || 0 : imageRotations[realIndex]}deg)`
                           }}
                           onClick={() => router.push("/gallery")}
                         >
@@ -417,7 +477,7 @@ export default function HeroSection() {
                           {/* 照片 */}
                           <div className={`${aspectRatio} w-full rounded-lg overflow-hidden transform hover:scale-110 hover:rotate-0 transition-all shadow-xl relative bg-white`}>
                             <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
-                              {!heroImagesLoading && cachedHeroImages.length > 0 ? (
+                              {!heroImagesLoading && smartHeroImages.length > 0 ? (
                                 <SimpleGalleryImage
                                   src={img.url || placeholderUrl}
                                   alt={img.title}
@@ -444,7 +504,7 @@ export default function HeroSection() {
 
             {/* 桌面端：横向4张布局 */}
             <div className="hidden md:grid md:grid-cols-4 md:gap-4 md:pt-4">
-            {!isMounted ? null : (!heroImagesLoading && cachedHeroImages.length > 0 ? cachedHeroImages : exampleImages).slice(0, 4).map((img, index) => {
+            {!isMounted ? null : (!heroImagesLoading && smartHeroImages.length > 0 ? smartHeroImages : exampleImages).slice(0, 4).map((img, index) => {
               const hangHeight = [2, 4, 3, 1][index]
               const aspectRatios = ['aspect-[4/5]', 'aspect-[3/4]', 'aspect-[5/4]', 'aspect-[4/3]']
               const aspectRatio = aspectRatios[index % aspectRatios.length]
@@ -454,7 +514,7 @@ export default function HeroSection() {
                   key={`desktop-${index}`}
                   className={`group cursor-pointer relative photo-sway-${index + 1}`}
                   style={{ 
-                    transform: `rotate(${!heroImagesLoading && cachedHeroImages.length > 0 ? img.rotation || 0 : imageRotations[index]}deg)`,
+                    transform: `rotate(${!heroImagesLoading && smartHeroImages.length > 0 ? img.rotation || 0 : imageRotations[index]}deg)`,
                     marginTop: `${hangHeight * 0.5}rem`
                   }}
                   onClick={() => router.push("/gallery")}
@@ -494,6 +554,28 @@ export default function HeroSection() {
           </div>
 
           <div className="text-center mt-8">
+            {/* 智能缓存状态指示器 */}
+            {!heroImagesLoading && (
+              <div className="mb-4 flex items-center justify-center gap-2 text-sm">
+                <div className={`w-2 h-2 rounded-full ${
+                  cacheStatus === 'live' ? 'bg-green-500' :
+                  cacheStatus === 'cached' ? 'bg-yellow-500' : 'bg-gray-500'
+                }`} />
+                <span className="text-[#f5f1e8]/70">
+                  {cacheStatus === 'live' ? '🔄 最新内容' :
+                   cacheStatus === 'cached' ? '⚡ 缓存内容' : '📱 离线内容'}
+                </span>
+                {isRefreshing && (
+                  <span className="text-[#f5f1e8]/50 animate-pulse">正在更新...</span>
+                )}
+                {lastUpdate && (
+                  <span className="text-[#f5f1e8]/50 text-xs">
+                    {lastUpdate.toLocaleTimeString()}
+                  </span>
+                )}
+              </div>
+            )}
+            
             <Button
               onClick={() => router.push("/gallery")}
               className="bg-[#8b7355] hover:bg-[#7a6449] text-[#f5f1e8] font-black px-8 py-3 rounded-xl shadow-lg transform hover:scale-110 transition-all"
