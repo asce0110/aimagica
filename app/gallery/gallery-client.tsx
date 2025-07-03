@@ -45,14 +45,33 @@ import MagicImage from "@/components/ui/magic-image"
 import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import RobustGalleryImage from "@/components/ui/robust-gallery-image"
 import SimpleImage from "@/components/ui/simple-image"
-import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
+// 完全移除静态数据依赖，只使用本地hero-cache图片
 import useStaticUrl from "@/hooks/use-static-url"
 // 移除智能加载，回到简单可靠的模式
 import { useRouter } from "next/navigation"
 // import { browserCacheManager } from "@/lib/browser-cache-manager" // 临时禁用
 
-// 使用静态Gallery数据类型
-type GalleryImage = StaticGalleryImage
+// 定义Gallery图片类型
+interface GalleryImage {
+  id: string | number
+  url: string
+  title: string
+  author: string
+  authorAvatar: string
+  likes: number
+  comments: number
+  views: number
+  downloads: number
+  isPremium: boolean
+  isFeatured: boolean
+  isLiked: boolean
+  createdAt: string
+  prompt: string
+  style: string
+  tags: string[]
+  size: 'small' | 'medium' | 'large' | 'vertical' | 'horizontal'
+  rotation: number
+}
 
 interface Comment {
   id: string | number
@@ -522,10 +541,8 @@ export default function GalleryClient() {
     console.log('🎯 Gallery图片URL列表:', localCacheImages.map(img => ({ id: img.id, url: img.url, title: img.title })))
     return localCacheImages
   })
-  const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据
+  const [loading, setLoading] = useState(false) // 始终为false，因为本地图片无需加载时间
   const [error, setError] = useState<string | null>(null)
-  const [apiAttempted, setApiAttempted] = useState(false)
-  const [emergencyMode, setEmergencyMode] = useState(true) // 紧急模式：完全跳过API，只使用本地图片
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [comments, setComments] = useState<Comment[]>(sampleComments)
   const [newComment, setNewComment] = useState("")
@@ -558,104 +575,15 @@ export default function GalleryClient() {
     }
   }, [localCacheImages])
 
-  // 在后台尝试加载API数据（不阻塞UI显示）
+  // 完全跳过API调用，只使用本地hero-cache图片
   useEffect(() => {
-    if (emergencyMode) {
-      console.log('🚨 紧急模式：完全跳过API，只使用静态数据')
-      return
-    }
-    
-    if (apiAttempted) {
-      console.log('⚠️ API已经尝试过，跳过重复请求')
-      return // 避免重复请求
-    }
-    
-    const fetchGalleryImages = async () => {
-      try {
-        setApiAttempted(true)
-        console.log('🚀 开始尝试加载API数据...')
-        
-        const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
-        console.log('🔗 API URL:', apiUrl)
-        
-        if (!apiUrl) {
-          console.log('❌ Gallery API not available - keeping static data')
-          return
-        }
-        
-        console.log('📞 Calling API in background:', `${apiUrl}?limit=50`)
-        
-        // 添加超时控制
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 15000) // 15秒超时
-        
-        const response = await fetch(`${apiUrl}?limit=50`, {
-          headers: {
-            'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache',
-            'X-Request-Time': Date.now().toString()
-          },
-          signal: controller.signal
-        })
-        
-        clearTimeout(timeoutId)
-        
-        if (!response.ok) {
-          console.warn(`Failed to fetch gallery images: ${response.statusText}`)
-          return
-        }
-        
-        const result = await response.json()
-        console.log('📦 API Response:', result)
-        
-        if (result.success && result.data && Array.isArray(result.data) && result.data.length > 0) {
-          // 将API数据转换为GalleryImage格式，但只作为增强内容
-          const transformedImages = result.data.slice(0, 12).map((item: any, index: number) => ({
-            id: `api-${item.id || index}`,
-            url: item.url || item.image_url || "/placeholder.svg",
-            title: item.title || item.prompt?.substring(0, 50) + "..." || "Untitled",
-            author: item.author || item.user_name || "Anonymous",
-            authorAvatar: item.authorAvatar || item.user_avatar || "/placeholder.svg?height=50&width=50&text=A",
-            likes: item.likes || item.like_count || Math.floor(Math.random() * 1000),
-            comments: item.comments || item.comment_count || Math.floor(Math.random() * 100),
-            views: item.views || item.view_count || Math.floor(Math.random() * 5000),
-            downloads: item.downloads || Math.floor(Math.random() * 500),
-            isPremium: item.isPremium || false,
-            isFeatured: item.isFeatured || item.is_featured || false,
-            isLiked: item.isLiked || item.is_liked || false,
-            createdAt: item.createdAt || item.created_at || "Unknown",
-            prompt: item.prompt || "No prompt available",
-            style: item.style || item.style_name || "Art",
-            tags: item.tags || (item.prompt ? item.prompt.split(' ').slice(0, 5) : ["art"]),
-            size: ["small", "medium", "large", "vertical", "horizontal"][Math.floor(Math.random() * 5)] as any,
-            rotation: Math.random() * 4 - 2,
-          }))
-          
-          // 将本地缓存图片与API图片合并，保证本地图片优先显示
-          setImages(prev => {
-            const combinedImages = [...localCacheImages, ...transformedImages]
-            console.log(`✅ 合并显示: ${localCacheImages.length}张本地图片 + ${transformedImages.length}张API图片`)
-            return combinedImages
-          })
-          
-          // 只预加载前几张API图片，避免网络压力
-          const previewApiUrls = transformedImages.slice(0, 4).map(img => img.url).filter(Boolean)
-          if (previewApiUrls.length > 0) {
-            preloadNewImages(previewApiUrls)
-          }
-        }
-      } catch (error) {
-        console.warn('⚠️ Error fetching gallery images (continuing with static data):', error)
-        
-        // 如果API失败，确保使用本地缓存图片
-        console.log('🔄 API失败，继续使用本地缓存图片:', localCacheImages.length, '张图片')
-        // 不需要setImages，因为已经初始化为localCacheImages了
-      }
-    }
-
-    // 延迟一点再尝试API，确保初始渲染不受影响
-    setTimeout(fetchGalleryImages, 100)
-  }, [apiAttempted])
+    console.log('🚨 Gallery已设为本地模式：只使用hero-cache图片，跳过所有API调用')
+    console.log('📊 当前Gallery图片:', images.map(img => ({
+      id: img.id,
+      url: img.url,
+      title: img.title
+    })))
+  }, [])
 
   useEffect(() => {
     const checkMobile = () => {
@@ -667,21 +595,7 @@ export default function GalleryClient() {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // 预加载新API图片的函数
-  const preloadNewImages = (imageUrls: string[]) => {
-    console.log('🚀 开始预加载API图片:', imageUrls.length, '张')
-    
-    imageUrls.forEach((url, index) => {
-      const img = new Image()
-      img.onload = () => {
-        console.log(`✅ API图片预加载成功: ${url.substring(url.lastIndexOf('/') + 1)} (${index + 1}/${imageUrls.length})`)
-      }
-      img.onerror = () => {
-        console.warn(`⚠️ API图片预加载失败: ${url}`)
-      }
-      img.src = url
-    })
-  }
+  // 已移除API相关功能，不再需要预加载远程图片
 
   // 获取图片详细信息
   const fetchImageDetails = async (imageId: string | number) => {
