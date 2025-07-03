@@ -70,6 +70,93 @@ export default function HeroSection() {
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
   const [isMounted, setIsMounted] = useState(false)
   const [imagesLoading, setImagesLoading] = useState(false) // 直接使用静态数据，不需要加载状态
+  
+  // 直接导入静态数据，确保立即可用
+  const staticGalleryImages = useMemo(() => {
+    // 模拟静态数据，使用我们确认可访问的R2 URL
+    return [
+      {
+        id: '386628e0-61b1-4966-8575-2c2f2f162e3a',
+        url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750949808349_Japanese_Anime_Style.png',
+        title: 'Japanese Anime Style',
+        author: 'AIMAGICA User',
+        authorAvatar: '/images/aimagica-logo.png',
+        likes: 1243,
+        comments: 89,
+        views: 5678,
+        downloads: 432,
+        isPremium: false,
+        isFeatured: true,
+        isLiked: false,
+        createdAt: '6/26/2025',
+        prompt: 'Japanese Anime Style',
+        style: 'Anime',
+        tags: ['anime', 'japanese', 'style'],
+        size: 'medium' as const,
+        rotation: 2.5
+      },
+      {
+        id: '48a8804f-9028-4132-85dd-d5c4d807c75e',
+        url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750862975446_A_cyberpunk_city_with_neon_lig.jpeg',
+        title: 'Cyberpunk City with Neon Lights',
+        author: 'AIMAGICA User',
+        authorAvatar: '/images/aimagica-logo.png',
+        likes: 982,
+        comments: 56,
+        views: 4321,
+        downloads: 321,
+        isPremium: true,
+        isFeatured: false,
+        isLiked: true,
+        createdAt: '6/25/2025',
+        prompt: 'A cyberpunk city with neon lights reflecting in the rain',
+        style: 'Chibi Diorama',
+        tags: ['cyberpunk', 'city', 'neon', 'rain'],
+        size: 'horizontal' as const,
+        rotation: -1.2
+      },
+      {
+        id: '9912c424-e6a2-4ac1-98de-77bac4200978',
+        url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750861881556_A_peaceful_zen_garden_with_che.jpeg',
+        title: 'Peaceful Zen Garden',
+        author: 'AIMAGICA User',
+        authorAvatar: '/images/aimagica-logo.png',
+        likes: 756,
+        comments: 42,
+        views: 3210,
+        downloads: 198,
+        isPremium: false,
+        isFeatured: false,
+        isLiked: false,
+        createdAt: '6/24/2025',
+        prompt: 'A peaceful zen garden with cherry blossoms',
+        style: 'Photography',
+        tags: ['zen', 'garden', 'peace', 'nature'],
+        size: 'vertical' as const,
+        rotation: 1.8
+      },
+      {
+        id: '294ff75d-8579-4d3d-87ee-811b69b15a99',
+        url: 'https://tempfile.aiquickdraw.com/v/68f5527672694583a3f90d9dbaec819f_0_1750696712.png',
+        title: 'Digital Art Creation',
+        author: 'AIMAGICA User',
+        authorAvatar: '/images/aimagica-logo.png',
+        likes: 1567,
+        comments: 103,
+        views: 6789,
+        downloads: 543,
+        isPremium: true,
+        isFeatured: true,
+        isLiked: false,
+        createdAt: '6/23/2025',
+        prompt: 'Beautiful digital artwork with vibrant colors',
+        style: 'Digital Art',
+        tags: ['digital', 'art', 'vibrant', 'colors'],
+        size: 'medium' as const,
+        rotation: -2.1
+      }
+    ]
+  }, [])
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set())
   const [networkConnectivity, setNetworkConnectivity] = useState<'unknown' | 'good' | 'limited' | 'poor'>('unknown')
   const [forceLocalImages, setForceLocalImages] = useState(false)
@@ -92,13 +179,19 @@ export default function HeroSection() {
   // 预加载关键图片
   useEffect(() => {
     const preloadImages = () => {
+      // 预加载前2张Hero图片（优先级最高）
+      staticGalleryImages.slice(0, 2).forEach((img) => {
+        const preloadImg = new window.Image()
+        preloadImg.src = img.url
+        console.log(`🚀 预加载Hero图片: ${img.title}`)
+      })
+      
+      // 预加载示例图片
       exampleImages.forEach((img) => {
         if (img.preload) {
-          // 预加载WebP版本
           const webpImg = new window.Image()
           webpImg.src = img.src
           
-          // 预加载fallback版本
           const fallbackImg = new window.Image()
           fallbackImg.src = img.fallback
         }
@@ -113,17 +206,11 @@ export default function HeroSection() {
   useEffect(() => {
     setIsMounted(true)
     
-    // 预加载图片映射
-    preloadImageMapping()
-
-    // 直接使用静态Gallery数据，确保图片能在任何环境下显示
-    import('@/lib/static-gallery-data').then(({ getStaticGalleryData }) => {
-      const staticData = getStaticGalleryData().slice(0, 4) // 只取前4张用于Hero
-      setGalleryImages(staticData)
-      setNetworkConnectivity('good')
-      console.log('✅ Hero区域已加载静态Gallery图片:', staticData.length)
-      console.log('🔗 静态图片URLs:', staticData.map(img => ({ title: img.title, url: img.url })))
-    })
+    // 直接使用硬编码的静态数据，不依赖API或动态导入
+    setGalleryImages(staticGalleryImages)
+    setNetworkConnectivity('good')
+    console.log('✅ Hero区域已加载硬编码静态数据:', staticGalleryImages.length)
+    console.log('🔗 静态图片URLs:', staticGalleryImages.map(img => ({ title: img.title, url: img.url })))
 
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -162,82 +249,6 @@ export default function HeroSection() {
     }
   }, [])
 
-  // 获取真实Gallery图片显示在Hero区域
-  useEffect(() => {
-    const fetchGalleryForHero = async () => {
-      console.log('🎨 Hero区域开始获取真实Gallery图片')
-      setImagesLoading(true)
-      
-      try {
-        // 尝试从Workers API获取真实Gallery图片  
-        const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
-        if (!apiUrl) {
-          throw new Error('Gallery API endpoint not available')
-        }
-        
-        console.log('📞 Hero调用API:', `${apiUrl}?limit=4&featured=true`)
-        
-        // 添加超时控制
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 8000) // 8秒超时
-        
-        const response = await fetch(`${apiUrl}?limit=4&featured=true`, {
-          signal: controller.signal
-        })
-        clearTimeout(timeoutId)
-        
-        console.log('📦 Hero API响应:', {
-          ok: response.ok,
-          status: response.status,
-          statusText: response.statusText
-        })
-        
-        if (response.ok) {
-          const result = await response.json()
-          console.log('📄 Hero API数据:', result)
-          
-          if (result.success && result.data && result.data.length > 0) {
-            console.log('✅ Hero区域获取到真实Gallery图片:', result.data.length)
-            setNetworkConnectivity('good')
-            
-            // 转换API数据为Hero需要的格式，优先使用originalUrl避免代理层
-            const transformedImages = result.data.map((item: any, index: number) => ({
-              id: item.id || index,
-              url: item.originalUrl || item.url || item.image_url, // 优先使用originalUrl跳过代理
-              title: item.title || item.prompt?.substring(0, 50) + "..." || "AI Creation",
-              author: item.author || item.user_name || "AI Artist",
-              createdAt: item.createdAt || item.created_at || "Recently",
-              prompt: item.prompt || "Amazing AI artwork",
-              style: item.style || "Digital Art",
-              rotation: Math.random() * 4 - 2
-            }))
-            setGalleryImages(transformedImages)
-            setImagesLoading(false)
-            return
-          }
-        } else {
-          setNetworkConnectivity('limited')
-        }
-        
-        console.log('⚠️ 未获取到Gallery数据，使用示例图片')
-        
-      } catch (error) {
-        console.log('⚠️ Gallery API调用失败，使用示例图片:', error)
-        setNetworkConnectivity('limited')
-        
-        if (error instanceof Error && error.name === 'AbortError') {
-          console.log('⏰ API请求超时')
-          setNetworkConnectivity('poor')
-        }
-      }
-      
-      // 如果API调用失败，使用示例图片
-      setImagesLoading(false)
-      console.log('✅ Hero区域图片初始化完成')
-    }
-
-    fetchGalleryForHero()
-  }, [])
 
   // 处理图片加载错误
   const handleImageError = (imageId: string) => {
