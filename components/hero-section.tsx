@@ -11,6 +11,7 @@ import { useRouter } from "next/navigation"
 import OptimizedImage from "@/components/ui/optimized-image"
 import { imageCache } from "@/lib/image-cache"
 import useStaticUrl from "@/hooks/use-static-url"
+import { getApiEndpoint } from "@/lib/api-config"
 
 interface GalleryImage {
   id: string
@@ -117,21 +118,53 @@ export default function HeroSection() {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // 优化：在静态模式下直接使用本地示例图片，不依赖API
+  // 获取Gallery图片显示在Hero区域
   useEffect(() => {
-    const initializeHeroImages = async () => {
-      console.log('🎨 初始化Hero区域图片 - 使用本地示例图片')
+    const fetchGalleryForHero = async () => {
+      console.log('🎨 Hero区域开始获取Gallery图片')
       setImagesLoading(true)
       
-      // 短暂延迟以模拟加载过程，让用户看到加载动画
-      await new Promise(resolve => setTimeout(resolve, 500))
+      try {
+        // 尝试从Workers API获取Gallery图片  
+        const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
+        if (!apiUrl) {
+          throw new Error('Gallery API endpoint not available')
+        }
+        const response = await fetch(`${apiUrl}?limit=4&featured=true`)
+        
+        if (response.ok) {
+          const result = await response.json()
+          if (result.success && result.data && result.data.length > 0) {
+            console.log('✅ Hero区域获取到Gallery图片:', result.data.length)
+            // 转换API数据为Hero需要的格式
+            const transformedImages = result.data.map((item: any, index: number) => ({
+              id: item.id || index,
+              url: item.url || item.image_url,
+              title: item.title || item.prompt?.substring(0, 50) + "..." || "AI Creation",
+              author: item.author || item.user_name || "AI Artist",
+              createdAt: item.createdAt || item.created_at || "Recently",
+              prompt: item.prompt || "Amazing AI artwork",
+              style: item.style || "Digital Art",
+              rotation: Math.random() * 4 - 2 // 随机旋转角度
+            }))
+            setGalleryImages(transformedImages)
+            setImagesLoading(false)
+            return
+          }
+        }
+        
+        console.log('⚠️ 未获取到Gallery数据，使用示例图片')
+        
+      } catch (error) {
+        console.log('⚠️ Gallery API调用失败，使用示例图片:', error)
+      }
       
-      // 直接设置为false，使用本地示例图片
+      // 如果API调用失败，使用示例图片
       setImagesLoading(false)
-      console.log('✅ Hero区域图片初始化完成 - 使用本地SVG示例图片')
+      console.log('✅ Hero区域图片初始化完成 - 使用本地示例图片')
     }
 
-    initializeHeroImages()
+    fetchGalleryForHero()
   }, [])
 
   // 处理图片加载错误
@@ -311,8 +344,9 @@ export default function HeroSection() {
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
             {!isMounted ? (
               // 初始挂载前不显示任何内容，避免hydration mismatch
-              null
+              console.log('🔍 Rendering path: Not mounted') || null
             ) : imagesLoading ? (
+              console.log('🔍 Rendering path: Loading state') ||
               // 加载状态 - 显示4个加载占位符
               Array.from({ length: 4 }).map((_, index) => {
                 const hangHeight = [2, 4, 3, 1][index]
@@ -353,6 +387,9 @@ export default function HeroSection() {
                 )
               })
             ) : (
+              console.log('🔍 Rendering path: Actual images') ||
+              console.log('🔍 galleryImages.length:', galleryImages.length) ||
+              console.log('🔍 exampleImages.length:', exampleImages.length) ||
               // 实际图片 - 优化版本
               (galleryImages.length > 0 ? galleryImages : exampleImages).slice(0, 4).map((img, index) => {
                 // 为图片添加不同的悬挂高度和比例
@@ -397,7 +434,7 @@ export default function HeroSection() {
                         <img
                           src={imageSrc}
                           alt={isGalleryImage ? img.title : img.title}
-                          className="w-full h-full object-cover transition-opacity duration-300"
+                          className="w-full h-full object-contain transition-opacity duration-300"
                           loading={index < 2 ? "eager" : "lazy"}
                           onError={(e) => {
                             console.error(`🖼️ Hero图片加载失败: ${imageSrc}`);
