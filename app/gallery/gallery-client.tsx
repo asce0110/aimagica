@@ -36,8 +36,7 @@ import {
   ThumbsUp,
   ExternalLink,
   Copy,
-  Check,
-  Menu
+  Check
 } from "lucide-react"
 import { useSessionCompat as useSession } from "@/components/session-provider"
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
@@ -45,33 +44,13 @@ import MagicImage from "@/components/ui/magic-image"
 import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import RobustGalleryImage from "@/components/ui/robust-gallery-image"
 import SimpleImage from "@/components/ui/simple-image"
-// 完全移除静态数据依赖，只使用本地hero-cache图片
+import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
-// 移除智能加载，回到简单可靠的模式
-import { useRouter } from "next/navigation"
+import { getSmartImageUrl, preloadNewImages, getImageLoadingProps, preloadLocalMappedImages } from "@/lib/smart-image-url"
 // import { browserCacheManager } from "@/lib/browser-cache-manager" // 临时禁用
 
-// 定义Gallery图片类型
-interface GalleryImage {
-  id: string | number
-  url: string
-  title: string
-  author: string
-  authorAvatar: string
-  likes: number
-  comments: number
-  views: number
-  downloads: number
-  isPremium: boolean
-  isFeatured: boolean
-  isLiked: boolean
-  createdAt: string
-  prompt: string
-  style: string
-  tags: string[]
-  size: 'small' | 'medium' | 'large' | 'vertical' | 'horizontal'
-  rotation: number
-}
+// 使用静态Gallery数据类型
+type GalleryImage = StaticGalleryImage
 
 interface Comment {
   id: string | number
@@ -357,7 +336,6 @@ const sampleComments: Comment[] = [
 
 export default function GalleryClient() {
   const { data: session } = useSession()
-  const router = useRouter()
   
   // 添加调试信息
   console.log('🎯 GalleryClient组件初始化')
@@ -370,179 +348,44 @@ export default function GalleryClient() {
   const spaceArtUrl = useStaticUrl('/images/examples/space-art.svg')
   const catWizardUrl = useStaticUrl('/images/examples/cat-wizard.svg')
   
-  // 创建本地高质量缓存图片集合 - 只使用真实存在的hero-cache图片
-  const localCacheImages = useMemo(() => [
+  // 更新静态数据以使用正确的URL
+  const staticGalleryImages = useMemo(() => [
     {
-      id: 'cache-1',
-      url: '/images/hero-cache/hero-1-japanese-anime.png',
-      title: 'Japanese Anime Style',
-      author: 'AIMAGICA User',
+      ...galleryImages[0],
+      url: magicForestUrl,
       authorAvatar: placeholderUserUrl,
-      likes: 1243,
-      comments: 89,
-      views: 5678,
-      downloads: 432,
-      isPremium: false,
-      isFeatured: true,
-      isLiked: false,
-      createdAt: '2 days ago',
-      prompt: 'Beautiful anime character with glowing eyes and flowing hair',
-      style: 'Anime',
-      tags: ['anime', 'character', 'glow', 'beautiful'],
-      size: 'medium' as const,
-      rotation: 2.5,
     },
     {
-      id: 'cache-2',
-      url: '/images/hero-cache/hero-2-cyberpunk-city.jpeg',
-      title: 'Cyberpunk City',
-      author: 'AIMAGICA User',
+      ...galleryImages[1],
+      url: cyberCityUrl,
       authorAvatar: placeholderUserUrl,
-      likes: 982,
-      comments: 56,
-      views: 4321,
-      downloads: 321,
-      isPremium: true,
-      isFeatured: false,
-      isLiked: true,
-      createdAt: '1 week ago',
-      prompt: 'A cyberpunk city with neon lights and flying cars',
-      style: 'Cyberpunk',
-      tags: ['cyberpunk', 'city', 'neon', 'scifi'],
-      size: 'horizontal' as const,
-      rotation: -1.2,
     },
     {
-      id: 'cache-3',
-      url: '/images/hero-cache/hero-3-zen-garden.jpeg',
-      title: 'Zen Garden',
-      author: 'AIMAGICA User',
+      ...galleryImages[2],
+      url: spaceArtUrl,
       authorAvatar: placeholderUserUrl,
-      likes: 756,
-      comments: 42,
-      views: 3210,
-      downloads: 198,
-      isPremium: false,
-      isFeatured: false,
-      isLiked: false,
-      createdAt: '3 days ago',
-      prompt: 'Peaceful zen garden with stones and flowing water',
-      style: 'Photography',
-      tags: ['zen', 'garden', 'peace', 'nature'],
-      size: 'vertical' as const,
-      rotation: 1.8,
     },
     {
-      id: 'cache-4',
-      url: '/images/hero-cache/hero-4-digital-art.png',
-      title: 'Digital Art',
-      author: 'AIMAGICA User',
+      ...galleryImages[3],
+      url: catWizardUrl,
       authorAvatar: placeholderUserUrl,
-      likes: 1567,
-      comments: 103,
-      views: 6789,
-      downloads: 543,
-      isPremium: true,
-      isFeatured: true,
-      isLiked: false,
-      createdAt: '5 days ago',
-      prompt: 'Beautiful digital artwork with vibrant colors',
-      style: 'Digital Art',
-      tags: ['digital', 'art', 'vibrant', 'colors'],
-      size: 'small' as const,
-      rotation: -2.1,
     },
-    // 复用相同图片创建更多变体 - 不同的标题和描述
-    {
-      id: 'cache-5',
-      url: '/images/hero-cache/hero-1-japanese-anime.png',
-      title: 'Anime Dreams',
-      author: 'AIMAGICA Pro',
+    ...galleryImages.slice(4).map(img => ({
+      ...img,
+      url: magicForestUrl, // 使用第一个图片作为备用
       authorAvatar: placeholderUserUrl,
-      likes: 2134,
-      comments: 167,
-      views: 8765,
-      downloads: 876,
-      isPremium: true,
-      isFeatured: true,
-      isLiked: false,
-      createdAt: '1 day ago',
-      prompt: 'Dreamy anime character in a fantasy world setting',
-      style: 'Anime',
-      tags: ['anime', 'dreams', 'fantasy', 'character'],
-      size: 'large' as const,
-      rotation: 3,
-    },
-    {
-      id: 'cache-6',
-      url: '/images/hero-cache/hero-2-cyberpunk-city.jpeg',
-      title: 'Neon Metropolis',
-      author: 'AIMAGICA Pro',
-      authorAvatar: placeholderUserUrl,
-      likes: 1876,
-      comments: 92,
-      views: 7654,
-      downloads: 654,
-      isPremium: false,
-      isFeatured: false,
-      isLiked: true,
-      createdAt: '2 weeks ago',
-      prompt: 'Futuristic neon-lit metropolis with flying vehicles',
-      style: 'Cyberpunk',
-      tags: ['neon', 'metropolis', 'future', 'cyberpunk'],
-      size: 'horizontal' as const,
-      rotation: -1.5,
-    },
-    {
-      id: 'cache-7',
-      url: '/images/hero-cache/hero-3-zen-garden.jpeg',
-      title: 'Peaceful Meditation',
-      author: 'AIMAGICA Pro',
-      authorAvatar: placeholderUserUrl,
-      likes: 1432,
-      comments: 78,
-      views: 5432,
-      downloads: 432,
-      isPremium: false,
-      isFeatured: false,
-      isLiked: false,
-      createdAt: '4 days ago',
-      prompt: 'Serene meditation garden with flowing water elements',
-      style: 'Photography',
-      tags: ['meditation', 'zen', 'peaceful', 'nature'],
-      size: 'vertical' as const,
-      rotation: 1,
-    },
-    {
-      id: 'cache-8',
-      url: '/images/hero-cache/hero-4-digital-art.png',
-      title: 'Digital Masterpiece',
-      author: 'AIMAGICA Pro',
-      authorAvatar: placeholderUserUrl,
-      likes: 2345,
-      comments: 145,
-      views: 9876,
-      downloads: 765,
-      isPremium: true,
-      isFeatured: true,
-      isLiked: false,
-      createdAt: '1 week ago',
-      prompt: 'Stunning digital artwork with vibrant color palette',
-      style: 'Digital Art',
-      tags: ['digital', 'masterpiece', 'vibrant', 'art'],
-      size: 'medium' as const,
-      rotation: -2.5,
-    }
-  ], [placeholderUserUrl])
+    }))
+  ], [magicForestUrl, cyberCityUrl, spaceArtUrl, catWizardUrl, placeholderUserUrl])
   
   const [images, setImages] = useState<GalleryImage[]>(() => {
-    // 优先使用本地缓存图片 - 完全模仿Hero的成功策略
-    console.log('📦 初始化本地缓存图片:', localCacheImages.length, '张图片')
-    console.log('🎯 Gallery图片URL列表:', localCacheImages.map(img => ({ id: img.id, url: img.url, title: img.title })))
-    return localCacheImages
+    const staticData = getStaticGalleryData()
+    console.log('📦 初始化静态数据:', staticData.length, '张图片')
+    return staticData
   })
-  const [loading, setLoading] = useState(false) // 始终为false，因为本地图片无需加载时间
+  const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据
   const [error, setError] = useState<string | null>(null)
+  const [apiAttempted, setApiAttempted] = useState(false)
+  const [emergencyMode, setEmergencyMode] = useState(false) // 紧急模式：完全跳过API
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [comments, setComments] = useState<Comment[]>(sampleComments)
   const [newComment, setNewComment] = useState("")
@@ -551,41 +394,129 @@ export default function GalleryClient() {
   const [searchQuery, setSearchQuery] = useState("")
   const [imageAspectRatios, setImageAspectRatios] = useState<{[key: string]: string}>({})
 
-  // 预加载本地缓存图片 - 完全模仿Hero区域的预加载策略
+  // 预加载关键图片，提升用户体验 - 临时禁用
+  // useEffect(() => {
+  //   const preloadCriticalImages = async () => {
+  //     const currentImages = filteredImages.slice(0, 8) // 预加载前8张
+  //     const imageUrls = currentImages.map(img => img.url).filter(Boolean)
+  //     
+  //     if (imageUrls.length > 0) {
+  //       console.log('🚀 预加载Gallery关键图片:', imageUrls.length)
+  //       try {
+  //         await browserCacheManager.preloadImages(imageUrls, {
+  //           maxAge: 30 * 60 * 1000, // 30分钟缓存
+  //           preloadPriority: 'high',
+  //           retryCount: 3
+  //         })
+  //         console.log('✅ Gallery关键图片预加载完成')
+  //       } catch (error) {
+  //         console.warn('⚠️ 预加载部分失败:', error)
+  //       }
+  //     }
+  //   }
+  //   
+  //   // 延迟预加载，确保不影响初始渲染
+  //   setTimeout(preloadCriticalImages, 500)
+  // }, [filteredImages])
+
+  // 在后台尝试加载API数据（不阻塞UI显示）
   useEffect(() => {
-    const preloadLocalImages = () => {
-      console.log('🚀 开始预加载Gallery本地缓存图片...')
-      
-      // 预加载前4张最重要的图片
-      localCacheImages.slice(0, 4).forEach((img, index) => {
-        const preloadImg = new Image()
-        preloadImg.onload = () => {
-          console.log(`✅ 预加载成功: ${img.title} (${index + 1}/4)`)
+    if (emergencyMode) {
+      console.log('🚨 紧急模式：完全跳过API，只使用静态数据')
+      return
+    }
+    
+    if (apiAttempted) {
+      console.log('⚠️ API已经尝试过，跳过重复请求')
+      return // 避免重复请求
+    }
+    
+    const fetchGalleryImages = async () => {
+      try {
+        setApiAttempted(true)
+        console.log('🚀 开始尝试加载API数据...')
+        
+        const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
+        console.log('🔗 API URL:', apiUrl)
+        
+        if (!apiUrl) {
+          console.log('❌ Gallery API not available - keeping static data')
+          return
         }
-        preloadImg.onerror = () => {
-          console.warn(`⚠️ 预加载失败: ${img.title}`)
+        
+        console.log('📞 Calling API in background:', `${apiUrl}?limit=50`)
+        
+        // 添加超时控制
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 15000) // 15秒超时
+        
+        const response = await fetch(`${apiUrl}?limit=50`, {
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache',
+            'X-Request-Time': Date.now().toString()
+          },
+          signal: controller.signal
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (!response.ok) {
+          console.warn(`Failed to fetch gallery images: ${response.statusText}`)
+          return
         }
-        preloadImg.src = img.url
-      })
+        
+        const result = await response.json()
+        console.log('📦 API Response:', result)
+        
+        if (result.success && result.data && Array.isArray(result.data) && result.data.length > 0) {
+          // 将API数据转换为GalleryImage格式，使用代理URL避免CORS问题
+          const transformedImages = result.data.map((item: any, index: number) => ({
+            id: item.id || index,
+            url: item.url || item.image_url || "/placeholder.svg",
+            title: item.title || item.prompt?.substring(0, 50) + "..." || "Untitled",
+            author: item.author || item.user_name || "Anonymous",
+            authorAvatar: item.authorAvatar || item.user_avatar || "/placeholder.svg?height=50&width=50&text=A",
+            likes: item.likes || item.like_count || Math.floor(Math.random() * 1000),
+            comments: item.comments || item.comment_count || Math.floor(Math.random() * 100),
+            views: item.views || item.view_count || Math.floor(Math.random() * 5000),
+            downloads: item.downloads || Math.floor(Math.random() * 500),
+            isPremium: item.isPremium || false,
+            isFeatured: item.isFeatured || item.is_featured || false,
+            isLiked: item.isLiked || item.is_liked || false,
+            createdAt: item.createdAt || item.created_at || "Unknown",
+            prompt: item.prompt || "No prompt available",
+            style: item.style || item.style_name || "Art",
+            tags: item.tags || (item.prompt ? item.prompt.split(' ').slice(0, 5) : ["art"]),
+            size: ["small", "medium", "large", "vertical", "horizontal"][Math.floor(Math.random() * 5)] as any,
+            rotation: Math.random() * 4 - 2,
+          }))
+          
+          setImages(transformedImages)
+          console.log(`✅ Successfully loaded ${transformedImages.length} real gallery images from API`)
+          
+          // 预加载新上传的图片
+          const newImageUrls = transformedImages.map(img => img.url).filter(Boolean)
+          preloadNewImages(newImageUrls)
+        }
+      } catch (error) {
+        console.warn('⚠️ Error fetching gallery images (continuing with static data):', error)
+        
+        // 如果API失败，确保使用静态数据
+        const fallbackData = getStaticGalleryData()
+        console.log('🔄 API失败，使用静态数据作为备用:', fallbackData.length, '张图片')
+        setImages(fallbackData)
+      }
     }
 
-    // 立即预加载，确保快速显示
-    if (typeof window !== 'undefined' && localCacheImages.length > 0) {
-      preloadLocalImages()
-    }
-  }, [localCacheImages])
-
-  // 完全跳过API调用，只使用本地hero-cache图片
-  useEffect(() => {
-    console.log('🚨 Gallery已设为本地模式：只使用hero-cache图片，跳过所有API调用')
-    console.log('📊 当前Gallery图片:', images.map(img => ({
-      id: img.id,
-      url: img.url,
-      title: img.title
-    })))
-  }, [])
+    // 延迟一点再尝试API，确保初始渲染不受影响
+    setTimeout(fetchGalleryImages, 100)
+  }, [apiAttempted])
 
   useEffect(() => {
+    // 预加载本地映射的图片，提升静态图片加载速度
+    preloadLocalMappedImages()
+    
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
@@ -594,8 +525,6 @@ export default function GalleryClient() {
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
-
-  // 已移除API相关功能，不再需要预加载远程图片
 
   // 获取图片详细信息
   const fetchImageDetails = async (imageId: string | number) => {
@@ -754,88 +683,6 @@ export default function GalleryClient() {
     }
   }
 
-  const handleShare = async () => {
-    if (!selectedImage) return
-
-    try {
-      if (navigator.share) {
-        await navigator.share({
-          title: selectedImage.title,
-          text: `Check out this amazing artwork: "${selectedImage.title}" by ${selectedImage.author}`,
-          url: window.location.href,
-        })
-      } else {
-        // 回退到复制链接
-        await navigator.clipboard.writeText(window.location.href)
-        console.log('✅ Link copied to clipboard')
-        // 这里可以添加 toast 提示
-      }
-    } catch (error) {
-      console.error('❌ Error sharing:', error)
-    }
-  }
-
-  const handleDownload = async () => {
-    if (!selectedImage) return
-
-    try {
-      const response = await fetch(selectedImage.url)
-      const blob = await response.blob()
-      const url = window.URL.createObjectURL(blob)
-      const a = document.createElement('a')
-      a.href = url
-      a.download = `${selectedImage.title.replace(/[^a-z0-9]/gi, '_').toLowerCase()}.jpg`
-      document.body.appendChild(a)
-      a.click()
-      document.body.removeChild(a)
-      window.URL.revokeObjectURL(url)
-      console.log('✅ Image downloaded successfully')
-    } catch (error) {
-      console.error('❌ Error downloading image:', error)
-    }
-  }
-
-  const handleAddComment = async () => {
-    if (!newComment.trim() || !selectedImage) return
-
-    try {
-      const newCommentObj: Comment = {
-        id: Date.now(),
-        author: session?.user?.name || 'Anonymous',
-        authorAvatar: session?.user?.image || '/placeholder-user.jpg',
-        content: newComment.trim(),
-        likes: 0,
-        isLiked: false,
-        createdAt: 'just now'
-      }
-
-      setComments(prev => [newCommentObj, ...prev])
-      setNewComment('')
-      console.log('✅ Comment added successfully')
-    } catch (error) {
-      console.error('❌ Error adding comment:', error)
-    }
-  }
-
-  const handleCommentLike = async (commentId: string | number) => {
-    try {
-      setComments(prev =>
-        prev.map(comment =>
-          comment.id === commentId
-            ? {
-                ...comment,
-                isLiked: !comment.isLiked,
-                likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
-              }
-            : comment
-        )
-      )
-      console.log('✅ Comment like toggled successfully')
-    } catch (error) {
-      console.error('❌ Error toggling comment like:', error)
-    }
-  }
-
   if (loading) {
     return (
       <div className="min-h-screen bg-gradient-to-br from-purple-100 via-pink-50 to-indigo-100 flex items-center justify-center">
@@ -854,15 +701,20 @@ export default function GalleryClient() {
         <div className="container mx-auto">
           <div className="flex justify-between items-center">
             {/* Logo和品牌 */}
-            <div
-              className="flex items-center space-x-3 cursor-pointer transform hover:scale-105 transition-all"
-              onClick={() => router.push("/")}
-            >
+            <div className="flex items-center space-x-3 cursor-pointer transform hover:scale-105 transition-all">
               <div className="relative">
                 <img
-                  src="/images/aimagica-logo.png"
+                  src={logoUrl}
                   alt="AIMAGICA"
                   className="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-lg transform rotate-3 hover:rotate-0 transition-all"
+                  onError={(e) => {
+                    console.error('🖼️ Gallery logo加载失败:', logoUrl);
+                    // 尝试使用备用logo
+                    const target = e.currentTarget as HTMLImageElement;
+                    if (!target.src.includes('placeholder-logo')) {
+                      target.src = '/placeholder-logo.png';
+                    }
+                  }}
                 />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#d4a574] rounded-full animate-pulse"></div>
               </div>
@@ -870,7 +722,7 @@ export default function GalleryClient() {
                 <h1
                   className="text-lg md:text-xl font-black text-white transform -rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "var(--font-accent)",
                     textShadow: "2px 2px 0px #333",
                   }}
                 >
@@ -878,197 +730,73 @@ export default function GalleryClient() {
                 </h1>
                 <p
                   className="text-xs text-gray-400 transform rotate-1"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  className="font-accent"
                 >
                   Magic Gallery ✨
                 </p>
               </div>
             </div>
 
-            {/* 桌面导航菜单 */}
-            <nav className="hidden md:flex items-center space-x-1">
-              <Button
-                onClick={() => router.push("/")}
-                variant="ghost"
-                className="text-white hover:bg-white/10 font-black rounded-xl px-4 py-2 transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
-              >
-                HOME 🏠
-              </Button>
-
-              <Button
-                variant="ghost"
-                className="text-[#d4a574] hover:bg-white/10 font-black rounded-xl px-4 py-2 transform hover:scale-105 transition-all border-b-2 border-[#d4a574]"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
-              >
-                GALLERY 🖼️
-              </Button>
-
-              <Button
-                onClick={() => router.push("/text-to-video")}
-                variant="ghost"
-                className="text-white hover:bg-white/10 font-black rounded-xl px-4 py-2 transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
-              >
-                VIDEO STUDIO 🎬
-              </Button>
-
-              <Button
-                variant="ghost"
-                className="text-white hover:bg-white/10 font-black rounded-xl px-4 py-2 transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
-              >
-                LEARN 📚
-              </Button>
-            </nav>
-
-            {/* PRO按钮和移动菜单 */}
-            <div className="flex items-center space-x-3">
-              <Button
-                className="bg-[#d4a574] hover:bg-[#c19660] text-black font-black px-3 py-2 rounded-xl shadow-lg transform rotate-1 hover:rotate-0 transition-all text-xs md:text-sm"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
-              >
-                <Crown className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
-                PRO
-              </Button>
-
-              {/* 移动菜单按钮 */}
-              <Button
-                onClick={() => setIsMobile(!isMobile)}
-                variant="ghost"
-                className="md:hidden text-white hover:bg-white/10 p-2 rounded-xl"
-              >
-                {isMobile ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-              </Button>
+            {/* 搜索框 */}
+            <div className="flex items-center space-x-4">
+              <div className="relative">
+                <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+                <Input
+                  placeholder="Search magical creations..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="pl-10 w-64 bg-[#1a1a1a] border-2 border-[#444] text-white placeholder:text-gray-400 rounded-xl font-bold"
+                  className="font-accent"
+                />
+              </div>
             </div>
           </div>
-
-          {/* 移动导航菜单 */}
-          {isMobile && (
-            <div className="md:hidden mt-4 p-4 bg-[#1a1a1a] rounded-xl border-2 border-[#333] shadow-lg">
-              <nav className="flex flex-col space-y-2">
-                <Button
-                  onClick={() => {
-                    router.push("/")
-                    setIsMobile(false)
-                  }}
-                  variant="ghost"
-                  className="text-white hover:bg-white/10 font-black rounded-xl px-4 py-3 text-left justify-start transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
-                >
-                  <Sparkles className="w-4 h-4 mr-3" />
-                  HOME 🏠
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  className="text-[#d4a574] hover:bg-white/10 font-black rounded-xl px-4 py-3 text-left justify-start transform hover:scale-105 transition-all border-l-4 border-[#d4a574]"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
-                >
-                  <Eye className="w-4 h-4 mr-3" />
-                  GALLERY 🖼️
-                </Button>
-
-                <Button
-                  onClick={() => {
-                    router.push("/text-to-video")
-                    setIsMobile(false)
-                  }}
-                  variant="ghost"
-                  className="text-white hover:bg-white/10 font-black rounded-xl px-4 py-3 text-left justify-start transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
-                >
-                  <MessageCircle className="w-4 h-4 mr-3" />
-                  VIDEO STUDIO 🎬
-                </Button>
-
-                <Button
-                  variant="ghost"
-                  className="text-white hover:bg-white/10 font-black rounded-xl px-4 py-3 text-left justify-start transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
-                >
-                  <Star className="w-4 h-4 mr-3" />
-                  LEARN 📚
-                </Button>
-              </nav>
-            </div>
-          )}
         </div>
       </header>
 
       <div className="container mx-auto px-4 md:px-6 py-6 md:py-8">
-        {/* 搜索和过滤器 - 有意设计得不那么整齐 */}
+        {/* 过滤器标签 - 每个标签都有不同的旋转角度 */}
         <div className="mb-8 flex flex-wrap gap-4 items-start">
-          {/* 搜索框 - 稍微倾斜 */}
-          <div
-            className="relative flex-1 min-w-[200px] max-w-md transform -rotate-1"
-            style={{ boxShadow: "3px 3px 0 #333" }}
-          >
-            <Input
-              placeholder="Search magical creations..."
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-              className="bg-[#1a1a1a] border-2 border-[#444] text-white placeholder:text-gray-400 rounded-xl font-bold pl-4 pr-10"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
-            />
-            <div className="absolute right-3 top-1/2 transform -translate-y-1/2 text-[#d4a574]">✨</div>
-          </div>
-
-          {/* 过滤器标签 - 每个标签都有不同的旋转角度 */}
           <Tabs value={filter} onValueChange={setFilter} className="flex-1 min-w-[200px]">
             <TabsList className="bg-[#1a1a1a] border-2 border-[#444] rounded-xl p-1 flex flex-wrap gap-1">
               <TabsTrigger
                 value="all"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform rotate-1 hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                className="font-accent"
               >
                 All Magic
               </TabsTrigger>
               <TabsTrigger
-                value="featured"
-                className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-1 hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
-              >
-                Featured ⭐
-              </TabsTrigger>
-              <TabsTrigger
                 value="fantasy"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform rotate-0.5 hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                className="font-accent"
               >
                 Fantasy 🧙‍♂️
               </TabsTrigger>
               <TabsTrigger
                 value="cyberpunk"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-0.5 hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                className="font-accent"
               >
                 Cyberpunk 🤖
+              </TabsTrigger>
+              <TabsTrigger
+                value="sci-fi"
+                className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-1 hover:scale-105 transition-all"
+                className="font-accent"
+              >
+                Sci-Fi 🚀
               </TabsTrigger>
             </TabsList>
           </Tabs>
         </div>
 
-        {/* 加载状态 */}
-        {loading && (
-          <div className="text-center py-12">
-            <div className="w-12 h-12 mx-auto mb-4 border-4 border-[#d4a574] border-t-transparent rounded-full animate-spin"></div>
-            <p 
-              className="text-[#d4a574] font-bold text-lg"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
-            >
-              Loading amazing artworks... ✨
-            </p>
-          </div>
-        )}
-
-        {/* 错误状态 */}
+        {/* 错误提示 */}
         {error && (
           <motion.div 
-            className="bg-red-500/20 border-2 border-red-500/50 rounded-xl p-4 mb-6 text-red-300"
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            className="bg-red-100 border border-red-300 text-red-700 px-4 py-3 rounded mb-6"
+            initial={{ opacity: 0, y: -20 }}
+            animate={{ opacity: 1, y: 0 }}
           >
             <p className="font-medium">⚠️ {error}</p>
             <p className="text-sm mt-1">Showing backup images instead.</p>
@@ -1099,30 +827,9 @@ export default function GalleryClient() {
           </motion.div>
         )}
 
-        {/* 无数据状态 */}
-        {!loading && !error && filteredImages.length === 0 && (
-          <div className="text-center py-12">
-            <div className="w-16 h-16 mx-auto mb-4 bg-[#d4a574]/20 rounded-full flex items-center justify-center">
-              <span className="text-2xl">🎨</span>
-            </div>
-            <p 
-              className="text-[#d4a574] font-bold text-lg mb-2"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
-            >
-              No artworks found
-            </p>
-            <p 
-              className="text-gray-400 text-sm"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
-            >
-              Be the first to share your amazing creation!
-            </p>
-          </div>
-        )}
-
         {/* 画廊 - 瀑布流布局 */}
         <motion.div 
-          className="columns-2 md:columns-3 lg:columns-5 xl:columns-5 gap-4 md:gap-6"
+          className="columns-2 md:columns-3 lg:columns-4 xl:columns-5 gap-4 md:gap-6"
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
@@ -1160,108 +867,80 @@ export default function GalleryClient() {
                   transition: { duration: 0.2 },
                 }}
               >
-                {/* 图片卡片 - 不规则的边框和阴影 */}
-                <div
-                  className="group relative bg-[#1a1a1a] rounded-lg overflow-hidden border-2 border-[#333] hover:border-[#d4a574] transition-all cursor-pointer shadow-lg hover:shadow-xl"
+                <Card 
+                  className="group overflow-hidden bg-white/60 backdrop-blur-sm border-white/30 shadow-lg hover:shadow-xl transition-all duration-300"
                   style={{
                     aspectRatio: getAspectRatio(),
                     width: "100%",
-                    height: "auto",
                   }}
                 >
-                  {/* 图片容器 - 白边框效果 */}
-                  <div className="w-full h-full relative bg-white rounded-md p-1">
-                    <div className="w-full h-full bg-white rounded-sm overflow-hidden relative">
-                      <SimpleImage
-                        src={image.url || "/placeholder.svg"}
-                        alt={image.title}
-                        className="w-full h-full object-cover"
-                        loading={index < 4 ? "eager" : "lazy"}
-                        onError={() => {
-                          console.error(`🖼️ Gallery图片加载失败:`, {
-                            url: image.url,
-                            title: image.title,
-                            index
-                          });
-                        }}
-                        onLoad={() => {
-                          console.log(`✅ Gallery图片加载成功:`, {
-                            url: image.url,
-                            title: image.title,
-                            index
-                          });
-                        }}
-                      />
-                      
-                      {/* 悬停覆盖层 */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 z-10">
-                        <h3
-                          className="text-white font-bold text-sm mb-1 transform rotate-0.5"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
-                        >
-                          {image.title}
-                        </h3>
-                        <p
-                          className="text-gray-300 text-xs transform -rotate-0.5"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
-                        >
-                          by {image.author}
-                        </p>
+                  <CardContent className="p-0 h-full">
+                    {/* 图片容器 - 白边框效果 */}
+                    <div className="w-full h-full relative bg-white rounded-md p-1">
+                      <div className="w-full h-full bg-white rounded-sm overflow-hidden relative">
+                        <SimpleImage
+                          src={image.url || "/placeholder.svg"}
+                          alt={image.title}
+                          className="w-full h-full object-cover"
+                          loading="lazy"
+                          onError={() => {
+                            console.error(`🖼️ Gallery图片加载失败:`, {
+                              url: image.url,
+                              title: image.title,
+                              index
+                            });
+                          }}
+                          onLoad={() => {
+                            console.log(`✅ Gallery图片加载成功:`, {
+                              url: image.url,
+                              title: image.title,
+                              index
+                            });
+                          }}
+                        />
+                        
+                        {/* 悬停覆盖层 */}
+                        <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 z-10">
+                          <h3 className="text-white font-bold text-sm mb-1">
+                            {image.title}
+                          </h3>
+                          <p className="text-gray-300 text-xs">
+                            by {image.author}
+                          </p>
+                        </div>
+
+                        {/* 标签 */}
+                        <div className="absolute top-2 left-2 flex gap-1">
+                          {image.isFeatured && <Badge variant="secondary" className="text-xs bg-yellow-500/80 text-white"><Star className="h-3 w-3" /></Badge>}
+                          {image.isPremium && <Badge variant="secondary" className="text-xs bg-purple-500/80 text-white"><Crown className="h-3 w-3" /></Badge>}
+                        </div>
+
+                        {/* 统计信息 */}
+                        <div className="absolute bottom-2 right-2 flex items-center gap-2 text-white text-xs">
+                          <div className="flex items-center gap-1 bg-black/50 rounded px-2 py-1">
+                            <Heart className="h-3 w-3" />
+                            {image.likes > 1000 ? `${(image.likes / 1000).toFixed(1)}k` : image.likes}
+                          </div>
+                          <div className="flex items-center gap-1 bg-black/50 rounded px-2 py-1">
+                            <Eye className="h-3 w-3" />
+                            {image.views > 1000 ? `${(image.views / 1000).toFixed(1)}k` : image.views}
+                          </div>
+                        </div>
+
+                        {/* 喜欢标记 */}
+                        {image.isLiked && (
+                          <div className="absolute bottom-2 left-2 z-20">
+                            <Heart className="w-4 h-4 text-red-500 fill-red-500" />
+                          </div>
+                        )}
                       </div>
-
-                      {/* 装饰元素 - 随机位置的小圆点 */}
-                      <div
-                        className="absolute w-2 h-2 md:w-3 md:h-3 rounded-full bg-[#d4a574] z-20"
-                        style={{
-                          top: `${5 + ((index * 7) % 15)}%`,
-                          right: `${5 + ((index * 11) % 15)}%`,
-                          opacity: 0.7,
-                        }}
-                      ></div>
-
-                      {/* 精选标记 - 不规则位置 */}
-                      {image.isFeatured && (
-                        <div
-                          className="absolute top-2 right-2 md:top-3 md:right-3 transform rotate-12 bg-[#d4a574] rounded-full p-1 md:p-1.5 shadow-lg z-20"
-                          style={{ boxShadow: "2px 2px 0 #333" }}
-                        >
-                          <Star className="w-2 h-2 md:w-3 md:h-3 text-black fill-black" />
-                        </div>
-                      )}
-
-                      {/* 喜欢标记 */}
-                      {image.isLiked && (
-                        <div className="absolute bottom-2 left-2 md:bottom-3 md:left-3 transform -rotate-6 z-20">
-                          <Heart className="w-3 h-3 md:w-4 md:h-4 text-red-500 fill-red-500" />
-                        </div>
-                      )}
-
-                      {/* 高级标记 */}
-                      {image.isPremium && (
-                        <div className="absolute top-2 left-2 md:top-3 md:left-3 transform -rotate-12 z-20">
-                          <Crown className="w-3 h-3 md:w-4 md:h-4 text-[#d4a574]" />
-                        </div>
-                      )}
                     </div>
-                  </div>
-                </div>
+                  </CardContent>
+                </Card>
 
-                {/* 图片下方的互动信息 - 稍微倾斜 */}
-                <div
-                  className="mt-2 flex justify-between items-center px-1"
-                  style={{ transform: `rotate(${rotation / 3}deg)` }}
-                >
-                  <div className="flex items-center space-x-2 text-xs text-gray-400">
-                    <span className="flex items-center">
-                      <Heart className="w-3 h-3 mr-0.5" />
-                      {image.likes > 1000 ? `${(image.likes / 1000).toFixed(1)}k` : image.likes}
-                    </span>
-                    <span className="flex items-center">
-                      <Eye className="w-3 h-3 mr-0.5" />
-                      {image.views > 1000 ? `${(image.views / 1000).toFixed(1)}k` : image.views}
-                    </span>
-                  </div>
-                  <span className="text-xs text-gray-500" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                {/* 图片下方的时间信息 */}
+                <div className="mt-2 flex justify-center">
+                  <span className="text-xs text-gray-500" className="font-accent">
                     {image.createdAt}
                   </span>
                 </div>
@@ -1269,22 +948,6 @@ export default function GalleryClient() {
             )
           })}
         </motion.div>
-
-        {/* 加载更多按钮 - 不规则形状 */}
-        {!loading && filteredImages.length > 0 && (
-          <div className="text-center mt-12">
-            <Button
-              className="bg-[#d4a574] hover:bg-[#c19660] text-black font-black px-8 py-3 rounded-xl shadow-lg transform rotate-1 hover:rotate-0 transition-all"
-              style={{
-                fontFamily: "Comic Sans MS, cursive",
-                boxShadow: "4px 4px 0 #333",
-                clipPath: "polygon(0% 0%, 100% 5%, 98% 100%, 2% 95%)",
-              }}
-            >
-              Load More Magic ✨
-            </Button>
-          </div>
-        )}
       </div>
 
       {/* 图片详情对话框 */}
@@ -1324,7 +987,7 @@ export default function GalleryClient() {
                     <h2
                       className="text-lg md:text-xl font-black text-white mb-1 transform -rotate-1"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         textShadow: "2px 2px 0px #333",
                       }}
                     >
@@ -1336,23 +999,15 @@ export default function GalleryClient() {
                         alt={selectedImage.author}
                         className="w-6 h-6 rounded-full border-2 border-[#444]"
                         onError={(e) => {
-                          console.error('🖼️ 图片作者头像加载失败:', selectedImage.authorAvatar, selectedImage.author);
                           e.currentTarget.src = getFallbackAvatarUrl(selectedImage.author);
                         }}
-                        onLoad={() => {
-                          console.log('✅ 图片作者头像加载成功:', selectedImage.authorAvatar, selectedImage.author);
-                        }}
                       />
-                      <p className="text-[#d4a574] font-bold text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <p className="text-[#d4a574] font-bold text-sm" className="font-accent">
                         by {selectedImage.author}
                       </p>
                       {selectedImage.isPremium && <Crown className="w-4 h-4 text-[#d4a574]" />}
                     </div>
                   </div>
-
-                  {/* 装饰元素 */}
-                  <div className="absolute top-4 right-4 w-8 h-8 rounded-full border-2 border-[#d4a574] opacity-50 transform rotate-12"></div>
-                  <div className="absolute bottom-20 left-4 w-4 h-4 rounded-full bg-[#d4a574] opacity-30 transform -rotate-12"></div>
                 </>
               )}
             </div>
@@ -1361,6 +1016,15 @@ export default function GalleryClient() {
             <div className="p-6 overflow-y-auto bg-[#0a0a0a]">
               {selectedImage && (
                 <>
+                  <DialogHeader className="border-b border-[#333] pb-4 mb-4">
+                    <DialogTitle 
+                      className="text-xl font-black text-white"
+                      className="font-accent"
+                    >
+                      {selectedImage.title}
+                    </DialogTitle>
+                  </DialogHeader>
+
                   {/* 统计信息 - 不规则排列 */}
                   <div className="flex flex-wrap gap-3 mb-6">
                     <Button
@@ -1372,7 +1036,7 @@ export default function GalleryClient() {
                           : "bg-[#1a1a1a] text-white hover:bg-[#2a2a2a]"
                       } font-bold rounded-lg border-2 border-[#444]`}
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -1383,7 +1047,7 @@ export default function GalleryClient() {
                     <span
                       className="flex items-center text-gray-300 font-bold transform -rotate-1 bg-[#1a1a1a] px-2 py-1 rounded-lg border-2 border-[#444]"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "1px 1px 0 #333",
                       }}
                     >
@@ -1394,7 +1058,7 @@ export default function GalleryClient() {
                     <span
                       className="flex items-center text-gray-300 font-bold transform rotate-0.5 bg-[#1a1a1a] px-2 py-1 rounded-lg border-2 border-[#444]"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "1px 1px 0 #333",
                       }}
                     >
@@ -1404,7 +1068,7 @@ export default function GalleryClient() {
 
                     <span
                       className="ml-auto text-gray-400 font-bold text-sm transform -rotate-1"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      className="font-accent"
                     >
                       {selectedImage.createdAt}
                     </span>
@@ -1415,7 +1079,7 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-3 transform -rotate-1"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
@@ -1430,7 +1094,7 @@ export default function GalleryClient() {
                     >
                       <p
                         className="text-gray-200 font-bold text-sm leading-relaxed"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        className="font-accent"
                       >
                         "{selectedImage.prompt}"
                       </p>
@@ -1442,7 +1106,7 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-3 transform rotate-0.5"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
@@ -1452,7 +1116,7 @@ export default function GalleryClient() {
                       <Badge
                         className="bg-[#d4a574] text-black font-black transform rotate-1"
                         style={{
-                          fontFamily: "Comic Sans MS, cursive",
+                          fontFamily: "var(--font-accent)",
                           boxShadow: "1px 1px 0 #333",
                         }}
                       >
@@ -1464,7 +1128,7 @@ export default function GalleryClient() {
                           variant="outline"
                           className="bg-[#1a1a1a] border-2 border-[#444] text-gray-300 font-bold hover:bg-[#2a2a2a]"
                           style={{
-                            fontFamily: "Comic Sans MS, cursive",
+                            fontFamily: "var(--font-accent)",
                             transform: `rotate(${(index % 3) - 1}deg)`,
                           }}
                         >
@@ -1477,10 +1141,9 @@ export default function GalleryClient() {
                   {/* 操作按钮 - 不规则形状 */}
                   <div className="flex gap-3 mb-6">
                     <Button
-                      onClick={handleShare}
                       className="bg-[#4a5a4a] hover:bg-[#5a6a5a] text-white font-black rounded-xl flex-1 border-2 border-[#666] transform -rotate-0.5 hover:scale-105 transition-all"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -1488,10 +1151,9 @@ export default function GalleryClient() {
                       Share
                     </Button>
                     <Button
-                      onClick={handleDownload}
                       className="bg-[#d4a574] hover:bg-[#c19660] text-black font-black rounded-xl flex-1 transform rotate-0.5 hover:scale-105 transition-all"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -1505,89 +1167,78 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-4 transform -rotate-0.5"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
                       Magic Comments 💬
                     </h3>
 
-                    {/* 添加评论 */}
-                    <div className="flex space-x-3 mb-4">
-                      <img
-                        src={session?.user?.image || "/placeholder.svg?height=40&width=40&text=A"}
-                        alt="Your Avatar"
-                        className="w-8 h-8 rounded-full border-2 border-[#444] transform rotate-3"
-                      />
-                      <div className="flex-1 flex transform -rotate-0.5">
-                        <Input
-                          placeholder="Add your magical comment..."
-                          value={newComment}
-                          onChange={(e) => setNewComment(e.target.value)}
-                          className="flex-1 bg-[#1a1a1a] border-2 border-[#444] text-white placeholder:text-gray-400 rounded-l-xl font-bold"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
-                        />
-                        <Button
-                          onClick={handleAddComment}
-                          className="bg-[#d4a574] hover:bg-[#c19660] text-black font-black rounded-r-xl"
+                    {/* 评论列表 - 显示示例评论 */}
+                    <div className="space-y-4 max-h-60 overflow-y-auto">
+                      {comments.map((comment, index) => (
+                        <div
+                          key={comment.id}
+                          className="bg-[#1a1a1a] rounded-xl p-4 border-2 border-[#444] shadow-md"
                           style={{
-                            fontFamily: "Comic Sans MS, cursive",
-                            boxShadow: "2px 2px 0 #333",
+                            transform: `rotate(${(index % 3) - 1}deg)`,
+                            boxShadow: `${(index % 3) - 1}px ${(index % 2) + 1}px 0 #333`,
                           }}
                         >
-                          <Send className="w-4 h-4" />
-                        </Button>
-                      </div>
-                    </div>
-
-                    {/* 评论列表 */}
-                    <div className="space-y-4 max-h-[300px] overflow-y-auto">
-                      {comments.map((comment, index) => (
-                        <motion.div
-                          key={comment.id}
-                          className="flex space-x-3 p-3 bg-[#1a1a1a] rounded-lg border border-[#333] shadow-sm transform"
-                          style={{ transform: `rotate(${(index % 3) - 1}deg)` }}
-                          initial={{ opacity: 0, x: -20 }}
-                          animate={{ opacity: 1, x: 0 }}
-                          transition={{ delay: index * 0.1 }}
-                        >
-                          <img
-                            src={getProxiedAvatarUrl(comment.authorAvatar)}
-                            alt={comment.author}
-                            className="w-8 h-8 rounded-full border-2 border-[#444] flex-shrink-0"
-                            onError={(e) => {
-                              e.currentTarget.src = getFallbackAvatarUrl(comment.author);
-                            }}
-                          />
-                          <div className="flex-1">
-                            <div className="flex items-center space-x-2 mb-1">
-                              <p className="font-bold text-[#d4a574] text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
-                                {comment.author}
-                              </p>
-                              <span className="text-xs text-gray-500">
-                                {comment.createdAt}
-                              </span>
-                            </div>
-                            <p className="text-gray-200 text-sm leading-relaxed" style={{ fontFamily: "Comic Sans MS, cursive" }}>
-                              {comment.content}
-                            </p>
-                            <div className="flex items-center space-x-3 mt-2">
-                              <Button
-                                size="sm"
-                                variant="ghost"
-                                onClick={() => handleCommentLike(comment.id)}
-                                className={`text-xs p-1 h-auto ${
-                                  comment.isLiked ? "text-red-400" : "text-gray-400 hover:text-red-400"
-                                }`}
+                          <div className="flex items-start space-x-3">
+                            <img
+                              src={getProxiedAvatarUrl(comment.authorAvatar)}
+                              alt={comment.author}
+                              className="w-8 h-8 rounded-full border-2 border-[#444]"
+                              onError={(e) => {
+                                e.currentTarget.src = getFallbackAvatarUrl(comment.author);
+                              }}
+                            />
+                            <div className="flex-1">
+                              <div className="flex justify-between items-start">
+                                <div>
+                                  <span
+                                    className="text-white font-black text-sm"
+                                    className="font-accent"
+                                  >
+                                    {comment.author}
+                                  </span>
+                                  <span
+                                    className="text-gray-400 font-bold text-xs ml-2"
+                                    className="font-accent"
+                                  >
+                                    {comment.createdAt}
+                                  </span>
+                                </div>
+                              </div>
+                              <p
+                                className="text-gray-200 font-bold text-sm mt-1"
+                                className="font-accent"
                               >
-                                <Heart className="w-3 h-3 mr-1" fill={comment.isLiked ? "currentColor" : "none"} />
-                                {comment.likes}
-                              </Button>
+                                {comment.content}
+                              </p>
+                              <div className="flex items-center mt-2">
+                                <span
+                                  className="text-gray-400 font-bold text-xs"
+                                  className="font-accent"
+                                >
+                                  {comment.likes} likes
+                                </span>
+                              </div>
                             </div>
                           </div>
-                        </motion.div>
+                        </div>
                       ))}
                     </div>
+
+                    {comments.length === 0 && (
+                      <p 
+                        className="text-center text-gray-500 py-8"
+                        className="font-accent"
+                      >
+                        No comments yet. Be the first to share your thoughts!
+                      </p>
+                    )}
                   </div>
                 </>
               )}
