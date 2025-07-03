@@ -10,14 +10,6 @@
   --font-heading: 'Orbitron', 'Arial Black', sans-serif; /* 科技感标题字体 */
   --font-body: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif; /* 现代正文字体 */
   --font-accent: 'Exo 2', 'Impact', sans-serif; /* 强调字体 */
-  
-  /* 桌面端hero区域专用字体 - 还原到以前的配置 */
-  --font-hero-desktop: 'Comic Sans MS', cursive; /* 桌面端hero区域使用可爱字体 */
-  
-  /* 移动端优化字体 - 简洁好看的标准字体 */
-  --font-mobile-heading: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; /* 移动端标题字体 */
-  --font-mobile-body: 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; /* 移动端正文字体 */
-  --font-mobile-button: 'SF Pro Display', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; /* 移动端按钮字体 */
 }
 
 @layer base {
@@ -169,29 +161,20 @@
   font-family: var(--font-accent);
 }
 
-/* 桌面端hero区域专用字体类 */
-.font-hero-desktop {
-  font-family: var(--font-hero-desktop);
-}
-
-/* 移动端字体优化 - 保持简洁 */
+/* 移动端字体优化 */
 @media (max-width: 768px) {
-  /* 移动端全局字体重置 - 使用简洁好看的字体 */
-  body {
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  .font-heading {
+    font-weight: 700;
+    letter-spacing: 0.025em;
   }
   
-  /* 移动端标题字体 */
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
+  .font-accent {
     font-weight: 600;
-    letter-spacing: -0.02em; /* 稍微收紧字间距，提高可读性 */
   }
   
-  /* 移动端按钮字体 */
+  /* 确保按钮文字在移动端清晰 */
   button, .btn {
-    font-family: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif;
-    font-weight: 500;
-    letter-spacing: -0.01em;
+    font-family: var(--font-accent);
+    font-weight: 600;
   }
 }

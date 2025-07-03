@@ -722,16 +722,12 @@ export default function GalleryClient() {
                 <h1
                   className="text-lg md:text-xl font-black text-white transform -rotate-1"
                   style={{
-                    fontFamily: "var(--font-accent)",
                     textShadow: "2px 2px 0px #333",
                   }}
                 >
                   AIMAGICA
                 </h1>
-                <p
-                  className="text-xs text-gray-400 transform rotate-1"
-                  className="font-accent"
-                >
+                <p className="text-xs text-gray-400 transform rotate-1">
                   Magic Gallery ✨
                 </p>
               </div>
@@ -746,7 +742,6 @@ export default function GalleryClient() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 w-64 bg-[#1a1a1a] border-2 border-[#444] text-white placeholder:text-gray-400 rounded-xl font-bold"
-                  className="font-accent"
                 />
               </div>
             </div>
@@ -762,28 +757,24 @@ export default function GalleryClient() {
               <TabsTrigger
                 value="all"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform rotate-1 hover:scale-105 transition-all"
-                className="font-accent"
               >
                 All Magic
               </TabsTrigger>
               <TabsTrigger
                 value="fantasy"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform rotate-0.5 hover:scale-105 transition-all"
-                className="font-accent"
               >
                 Fantasy 🧙‍♂️
               </TabsTrigger>
               <TabsTrigger
                 value="cyberpunk"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-0.5 hover:scale-105 transition-all"
-                className="font-accent"
               >
                 Cyberpunk 🤖
               </TabsTrigger>
               <TabsTrigger
                 value="sci-fi"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-1 hover:scale-105 transition-all"
-                className="font-accent"
               >
                 Sci-Fi 🚀
               </TabsTrigger>
@@ -940,7 +931,7 @@ export default function GalleryClient() {
 
                 {/* 图片下方的时间信息 */}
                 <div className="mt-2 flex justify-center">
-                  <span className="text-xs text-gray-500" className="font-accent">
+                  <span className="text-xs text-gray-500">
                     {image.createdAt}
                   </span>
                 </div>
@@ -987,7 +978,6 @@ export default function GalleryClient() {
                     <h2
                       className="text-lg md:text-xl font-black text-white mb-1 transform -rotate-1"
                       style={{
-                        fontFamily: "var(--font-accent)",
                         textShadow: "2px 2px 0px #333",
                       }}
                     >
@@ -1002,7 +992,7 @@ export default function GalleryClient() {
                           e.currentTarget.src = getFallbackAvatarUrl(selectedImage.author);
                         }}
                       />
-                      <p className="text-[#d4a574] font-bold text-sm" className="font-accent">
+                      <p className="text-[#d4a574] font-bold text-sm">
                         by {selectedImage.author}
                       </p>
                       {selectedImage.isPremium && <Crown className="w-4 h-4 text-[#d4a574]" />}
@@ -1017,10 +1007,7 @@ export default function GalleryClient() {
               {selectedImage && (
                 <>
                   <DialogHeader className="border-b border-[#333] pb-4 mb-4">
-                    <DialogTitle 
-                      className="text-xl font-black text-white"
-                      className="font-accent"
-                    >
+                    <DialogTitle className="text-xl font-black text-white">
                       {selectedImage.title}
                     </DialogTitle>
                   </DialogHeader>
@@ -1036,7 +1023,6 @@ export default function GalleryClient() {
                           : "bg-[#1a1a1a] text-white hover:bg-[#2a2a2a]"
                       } font-bold rounded-lg border-2 border-[#444]`}
                       style={{
-                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -1047,7 +1033,6 @@ export default function GalleryClient() {
                     <span
                       className="flex items-center text-gray-300 font-bold transform -rotate-1 bg-[#1a1a1a] px-2 py-1 rounded-lg border-2 border-[#444]"
                       style={{
-                        fontFamily: "var(--font-accent)",
                         boxShadow: "1px 1px 0 #333",
                       }}
                     >
@@ -1058,7 +1043,6 @@ export default function GalleryClient() {
                     <span
                       className="flex items-center text-gray-300 font-bold transform rotate-0.5 bg-[#1a1a1a] px-2 py-1 rounded-lg border-2 border-[#444]"
                       style={{
-                        fontFamily: "var(--font-accent)",
                         boxShadow: "1px 1px 0 #333",
                       }}
                     >
@@ -1066,10 +1050,7 @@ export default function GalleryClient() {
                       {selectedImage.views}
                     </span>
 
-                    <span
-                      className="ml-auto text-gray-400 font-bold text-sm transform -rotate-1"
-                      className="font-accent"
-                    >
+                    <span className="ml-auto text-gray-400 font-bold text-sm transform -rotate-1">
                       {selectedImage.createdAt}
                     </span>
                   </div>
@@ -1079,7 +1060,6 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-3 transform -rotate-1"
                       style={{
-                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
@@ -1092,10 +1072,7 @@ export default function GalleryClient() {
                         clipPath: "polygon(0% 0%, 100% 2%, 99% 98%, 1% 100%)",
                       }}
                     >
-                      <p
-                        className="text-gray-200 font-bold text-sm leading-relaxed"
-                        className="font-accent"
-                      >
+                      <p className="text-gray-200 font-bold text-sm leading-relaxed">
                         "{selectedImage.prompt}"
                       </p>
                     </div>
@@ -1106,7 +1083,6 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-3 transform rotate-0.5"
                       style={{
-                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
@@ -1116,7 +1092,6 @@ export default function GalleryClient() {
                       <Badge
                         className="bg-[#d4a574] text-black font-black transform rotate-1"
                         style={{
-                          fontFamily: "var(--font-accent)",
                           boxShadow: "1px 1px 0 #333",
                         }}
                       >
@@ -1128,7 +1103,6 @@ export default function GalleryClient() {
                           variant="outline"
                           className="bg-[#1a1a1a] border-2 border-[#444] text-gray-300 font-bold hover:bg-[#2a2a2a]"
                           style={{
-                            fontFamily: "var(--font-accent)",
                             transform: `rotate(${(index % 3) - 1}deg)`,
                           }}
                         >
@@ -1143,7 +1117,6 @@ export default function GalleryClient() {
                     <Button
                       className="bg-[#4a5a4a] hover:bg-[#5a6a5a] text-white font-black rounded-xl flex-1 border-2 border-[#666] transform -rotate-0.5 hover:scale-105 transition-all"
                       style={{
-                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -1153,7 +1126,6 @@ export default function GalleryClient() {
                     <Button
                       className="bg-[#d4a574] hover:bg-[#c19660] text-black font-black rounded-xl flex-1 transform rotate-0.5 hover:scale-105 transition-all"
                       style={{
-                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -1167,7 +1139,6 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-4 transform -rotate-0.5"
                       style={{
-                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
@@ -1197,31 +1168,19 @@ export default function GalleryClient() {
                             <div className="flex-1">
                               <div className="flex justify-between items-start">
                                 <div>
-                                  <span
-                                    className="text-white font-black text-sm"
-                                    className="font-accent"
-                                  >
+                                  <span className="text-white font-black text-sm">
                                     {comment.author}
                                   </span>
-                                  <span
-                                    className="text-gray-400 font-bold text-xs ml-2"
-                                    className="font-accent"
-                                  >
+                                  <span className="text-gray-400 font-bold text-xs ml-2">
                                     {comment.createdAt}
                                   </span>
                                 </div>
                               </div>
-                              <p
-                                className="text-gray-200 font-bold text-sm mt-1"
-                                className="font-accent"
-                              >
+                              <p className="text-gray-200 font-bold text-sm mt-1">
                                 {comment.content}
                               </p>
                               <div className="flex items-center mt-2">
-                                <span
-                                  className="text-gray-400 font-bold text-xs"
-                                  className="font-accent"
-                                >
+                                <span className="text-gray-400 font-bold text-xs">
                                   {comment.likes} likes
                                 </span>
                               </div>
@@ -1232,10 +1191,7 @@ export default function GalleryClient() {
                     </div>
 
                     {comments.length === 0 && (
-                      <p 
-                        className="text-center text-gray-500 py-8"
-                        className="font-accent"
-                      >
+                      <p className="text-center text-gray-500 py-8">
                         No comments yet. Be the first to share your thoughts!
                       </p>
                     )}

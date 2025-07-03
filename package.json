@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "next dev",
+    "dev": "cross-env NEXT_CONFIG_FILE=next.config.dev.mjs next dev",
     "build": "cross-env NEXT_CONFIG_FILE=next.config.vercel.mjs next build",
     "build:vercel": "cross-env NEXT_CONFIG_FILE=next.config.vercel.mjs next build",
     "download-gallery-images": "node scripts/download-gallery-images.js",
