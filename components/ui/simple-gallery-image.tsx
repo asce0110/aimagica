@@ -1,6 +1,6 @@
 "use client"
 
-import { useState, useMemo } from "react"
+import { useState, useMemo, useEffect } from "react"
 import { optimizeImageUrl, getOptimalImageSize, generateImageSrcSet } from "@/lib/image-optimizer"
 import { Sparkles, Image } from "lucide-react"
 
@@ -27,6 +27,7 @@ export default function SimpleGalleryImage({
 }: SimpleGalleryImageProps) {
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
+  const [timeoutTriggered, setTimeoutTriggered] = useState(false)
   
   // 优化图片URL和生成srcSet
   const optimizedImage = useMemo(() => {
@@ -40,6 +41,20 @@ export default function SimpleGalleryImage({
       fallbackSrc: src // 保留原始URL作为fallback
     }
   }, [src])
+
+  // 添加超时处理
+  useEffect(() => {
+    if (isLoading && !hasError) {
+      const timeout = setTimeout(() => {
+        console.warn(`⏰ SimpleGalleryImage 加载超时: ${src}`)
+        setTimeoutTriggered(true)
+        setHasError(true)
+        setIsLoading(false)
+      }, 8000) // 8秒超时，给Hero图片更短的等待时间
+
+      return () => clearTimeout(timeout)
+    }
+  }, [isLoading, hasError, src])
   
   const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     const target = e.target as HTMLImageElement

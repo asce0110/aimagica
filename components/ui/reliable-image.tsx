@@ -47,7 +47,7 @@ export default function ReliableImage({
       timeoutRef.current = setTimeout(() => {
         console.warn(`图片加载超时: ${src}`)
         setImageStatus('error')
-      }, 10000) // 10秒超时
+      }, 8000) // 缩短为8秒超时，更快显示错误状态
     }
 
     return () => {

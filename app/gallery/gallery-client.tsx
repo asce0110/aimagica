@@ -376,6 +376,7 @@ export default function GalleryClient() {
   const [images, setImages] = useState<GalleryImage[]>(getStaticGalleryData())
   const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据
   const [error, setError] = useState<string | null>(null)
+  const [apiAttempted, setApiAttempted] = useState(false)
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [comments, setComments] = useState<Comment[]>(sampleComments)
   const [newComment, setNewComment] = useState("")
@@ -411,8 +412,11 @@ export default function GalleryClient() {
 
   // 在后台尝试加载API数据（不阻塞UI显示）
   useEffect(() => {
+    if (apiAttempted) return // 避免重复请求
+    
     const fetchGalleryImages = async () => {
       try {
+        setApiAttempted(true)
         const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
         console.log('🔗 API URL:', apiUrl)
         
@@ -422,7 +426,12 @@ export default function GalleryClient() {
         }
         
         console.log('📞 Calling API in background:', `${apiUrl}?limit=50`)
-        const response = await fetch(`${apiUrl}?limit=50`)
+        const response = await fetch(`${apiUrl}?limit=50`, {
+          headers: {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          }
+        })
         
         if (!response.ok) {
           console.warn(`Failed to fetch gallery images: ${response.statusText}`)
@@ -465,7 +474,7 @@ export default function GalleryClient() {
 
     // 延迟一点再尝试API，确保初始渲染不受影响
     setTimeout(fetchGalleryImages, 100)
-  }, [])
+  }, [apiAttempted])
 
   useEffect(() => {
     const checkMobile = () => {
@@ -751,6 +760,16 @@ export default function GalleryClient() {
           >
             <p className="font-medium">⚠️ {error}</p>
             <p className="text-sm mt-1">Showing backup images instead.</p>
+            <button 
+              onClick={() => {
+                setError(null)
+                setApiAttempted(false)
+                setImages(getStaticGalleryData())
+              }}
+              className="text-sm mt-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors"
+            >
+              🔄 重新加载
+            </button>
           </motion.div>
         )}
 

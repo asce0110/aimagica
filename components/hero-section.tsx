@@ -431,14 +431,14 @@ export default function HeroSection() {
                                   src={img.url || placeholderUrl}
                                   alt={img.title}
                                   className="w-full h-full object-cover transition-opacity duration-300"
-                                  loading="lazy"
+                                  loading="eager"
                                 />
                               ) : (
                                 <img
                                   src={img.src}
                                   alt={img.title}
                                   className="w-full h-full object-cover transition-opacity duration-300"
-                                  loading="lazy"
+                                  loading="eager"
                                 />
                               )}
                             </div>
