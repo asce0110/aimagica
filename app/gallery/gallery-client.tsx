@@ -337,8 +337,8 @@ const sampleComments: Comment[] = [
 export default function GalleryClient() {
   const { data: session } = useSession()
   
-  // 添加调试信息
-  console.log('🎯 GalleryClient组件初始化')
+  // 添加调试信息 - 已还原到原始版本
+  console.log('🎯 GalleryClient组件初始化 - 原始版本已还原')
   
   // 使用 useStaticUrl 处理图片路径
   const logoUrl = useStaticUrl('/images/aimagica-logo.png')
