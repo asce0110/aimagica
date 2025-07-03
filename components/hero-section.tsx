@@ -503,13 +503,6 @@ export default function HeroSection() {
           </div>
 
           <div className="text-center mt-8">
-            {/* 简化状态指示器 */}
-            {!heroImagesLoading && !error && (
-              <div className="mb-4 flex items-center justify-center gap-2 text-sm">
-                <div className="w-2 h-2 rounded-full bg-green-500" />
-                <span className="text-[#f5f1e8]/70">📱 静态内容</span>
-              </div>
-            )}
             
             <Button
               onClick={() => router.push("/gallery")}

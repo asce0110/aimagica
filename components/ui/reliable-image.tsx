@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useRef, useEffect } from "react"
+import { Sparkles, Wand2, Image } from "lucide-react"
 
 interface ReliableImageProps {
   src: string
@@ -76,32 +77,78 @@ export default function ReliableImage({
 
   return (
     <div className={`relative w-full h-full ${className}`}>
-      {/* 始终显示的背景层 - 确保不会白屏 */}
-      <div className="absolute inset-0 bg-gradient-to-br from-gray-100 via-gray-50 to-gray-100">
-        {/* 加载状态 */}
+      {/* 始终显示的背景层 - 魔法风格 */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#f5f1e8] via-[#ebe5d6] to-[#e1d4c0] rounded-lg overflow-hidden">
+        {/* 加载状态 - 魔法风格 */}
         {imageStatus === 'loading' && (
-          <div className="absolute inset-0 flex items-center justify-center">
+          <div className="absolute inset-0 flex items-center justify-center p-4">
             <div className="text-center">
-              <div className="w-12 h-12 mx-auto mb-3 bg-gray-200 rounded-lg flex items-center justify-center animate-pulse">
-                <div className="text-lg">📷</div>
+              {/* 魔法光环 */}
+              <div className="relative w-16 h-16 mx-auto mb-4">
+                {/* 外圈光环 */}
+                <div className="absolute inset-0 rounded-full border-2 border-[#d4a574]/40 animate-spin"></div>
+                
+                {/* 内圈光环 - 反向旋转 */}
+                <div className="absolute inset-2 rounded-full border-2 border-[#8b7355]/60 animate-[spin_1.5s_linear_infinite_reverse]"></div>
+                
+                {/* 中心魔法棒图标 */}
+                <div className="absolute inset-0 flex items-center justify-center">
+                  <Wand2 className="w-6 h-6 text-[#8b7355] animate-pulse" />
+                </div>
+                
+                {/* 魔法粒子 */}
+                <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#d4a574] rounded-full animate-ping"></div>
+                <div className="absolute -bottom-1 -left-1 w-1.5 h-1.5 bg-[#8b7355] rounded-full animate-ping delay-300"></div>
+                <div className="absolute top-1/2 -left-2 w-1 h-1 bg-[#f5f1e8] rounded-full animate-ping delay-700"></div>
+                <div className="absolute top-1/4 -right-2 w-1 h-1 bg-[#d4a574] rounded-full animate-ping delay-1000"></div>
               </div>
-              <div className="text-sm text-gray-400 font-medium">加载中...</div>
-              <div className="w-8 h-1 mx-auto mt-2 bg-gray-200 rounded-full overflow-hidden">
-                <div className="h-full bg-blue-400 rounded-full animate-pulse" style={{ width: '60%' }}></div>
+              
+              {/* 魔法加载文字 */}
+              <div 
+                className="text-sm text-[#8b7355] font-bold mb-2"
+                style={{ fontFamily: "var(--font-accent)" }}
+              >
+                ✨ 施展魔法中...
+              </div>
+              
+              {/* 魔法进度条 */}
+              <div className="w-12 h-1.5 mx-auto bg-[#8b7355]/20 rounded-full overflow-hidden shadow-inner">
+                <div 
+                  className="h-full bg-gradient-to-r from-[#8b7355] to-[#d4a574] rounded-full animate-pulse shadow-lg" 
+                  style={{ width: '70%' }}
+                ></div>
               </div>
             </div>
           </div>
         )}
 
-        {/* 错误状态 */}
+        {/* 错误状态 - 魔法风格 */}
         {imageStatus === 'error' && (
-          <div className="absolute inset-0 flex items-center justify-center">
-            <div className="text-center p-4">
-              <div className="w-12 h-12 mx-auto mb-3 bg-gray-300 rounded-lg flex items-center justify-center">
-                <div className="text-lg">🖼️</div>
+          <div className="absolute inset-0 flex items-center justify-center p-4">
+            <div className="text-center">
+              {/* 破碎的魔法水晶 */}
+              <div className="relative w-14 h-14 mx-auto mb-3">
+                <div className="w-full h-full bg-gradient-to-br from-[#d4a574]/30 to-[#8b7355]/30 rounded-lg border-2 border-dashed border-[#8b7355]/40 flex items-center justify-center transform rotate-12">
+                  <Image className="w-6 h-6 text-[#8b7355]/60" />
+                </div>
+                {/* 破碎效果 */}
+                <div className="absolute top-0 right-0 w-3 h-3 text-[#8b7355]/40">⚡</div>
+                <div className="absolute bottom-1 left-1 w-2 h-2 text-[#d4a574]/60">💫</div>
               </div>
-              <div className="text-sm text-gray-500 font-medium mb-1">图片暂时无法显示</div>
-              <div className="text-xs text-gray-400 max-w-[150px] truncate">{alt}</div>
+              
+              <div 
+                className="text-sm text-[#8b7355]/80 font-bold mb-1"
+                style={{ fontFamily: "var(--font-accent)" }}
+              >
+                🔮 魔法暂时失效
+              </div>
+              
+              <div 
+                className="text-xs text-[#8b7355]/60 max-w-[120px] truncate"
+                style={{ fontFamily: "var(--font-accent)" }}
+              >
+                {alt}
+              </div>
             </div>
           </div>
         )}

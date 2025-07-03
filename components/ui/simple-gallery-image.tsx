@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react"
 import { optimizeImageUrl, getOptimalImageSize, generateImageSrcSet } from "@/lib/image-optimizer"
+import { Sparkles, Image } from "lucide-react"
 
 interface SimpleGalleryImageProps {
   src: string
@@ -65,8 +66,18 @@ export default function SimpleGalleryImage({
   
   if (hasError) {
     return (
-      <div className={`${className} bg-gray-200 flex items-center justify-center`}>
-        <span className="text-gray-500 text-sm">图片加载失败</span>
+      <div className={`${className} bg-gradient-to-br from-[#f5f1e8] to-[#e1d4c0] flex items-center justify-center p-2 rounded-lg border border-[#8b7355]/20`}>
+        <div className="text-center">
+          <div className="w-8 h-8 mx-auto mb-1 bg-gradient-to-br from-[#d4a574]/30 to-[#8b7355]/30 rounded-lg border border-dashed border-[#8b7355]/40 flex items-center justify-center transform rotate-12">
+            <Image className="w-4 h-4 text-[#8b7355]/60" />
+          </div>
+          <div 
+            className="text-xs text-[#8b7355]/80 font-bold"
+            style={{ fontFamily: "var(--font-accent)" }}
+          >
+            🔮 魔法失效
+          </div>
+        </div>
       </div>
     )
   }
@@ -74,8 +85,26 @@ export default function SimpleGalleryImage({
   return (
     <>
       {isLoading && (
-        <div className={`${className} bg-gray-100 flex items-center justify-center animate-pulse`}>
-          <div className="text-gray-400 text-xs">加载中...</div>
+        <div className={`${className} bg-gradient-to-br from-[#f5f1e8] to-[#ebe5d6] flex items-center justify-center p-2 rounded-lg`}>
+          <div className="text-center">
+            {/* 迷你魔法光环 */}
+            <div className="relative w-8 h-8 mx-auto mb-1">
+              <div className="absolute inset-0 rounded-full border border-[#d4a574]/40 animate-spin"></div>
+              <div className="absolute inset-1 rounded-full border border-[#8b7355]/60 animate-[spin_1.5s_linear_infinite_reverse]"></div>
+              <div className="absolute inset-0 flex items-center justify-center">
+                <Sparkles className="w-3 h-3 text-[#8b7355] animate-pulse" />
+              </div>
+              {/* 迷你魔法粒子 */}
+              <div className="absolute -top-0.5 -right-0.5 w-1 h-1 bg-[#d4a574] rounded-full animate-ping"></div>
+              <div className="absolute -bottom-0.5 -left-0.5 w-1 h-1 bg-[#8b7355] rounded-full animate-ping delay-300"></div>
+            </div>
+            <div 
+              className="text-xs text-[#8b7355] font-bold"
+              style={{ fontFamily: "var(--font-accent)" }}
+            >
+              ✨ 施法中
+            </div>
+          </div>
         </div>
       )}
       <img
