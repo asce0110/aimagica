@@ -46,6 +46,7 @@ import RobustGalleryImage from "@/components/ui/robust-gallery-image"
 import SimpleImage from "@/components/ui/simple-image"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
+import { getSmartImageUrl, preloadNewImages, getImageLoadingProps, preloadLocalMappedImages } from "@/lib/smart-image-url"
 // import { browserCacheManager } from "@/lib/browser-cache-manager" // 临时禁用
 
 // 使用静态Gallery数据类型
@@ -493,6 +494,10 @@ export default function GalleryClient() {
           
           setImages(transformedImages)
           console.log(`✅ Successfully loaded ${transformedImages.length} real gallery images from API`)
+          
+          // 预加载新上传的图片
+          const newImageUrls = transformedImages.map(img => img.url).filter(Boolean)
+          preloadNewImages(newImageUrls)
         }
       } catch (error) {
         console.warn('⚠️ Error fetching gallery images (continuing with static data):', error)
@@ -509,6 +514,9 @@ export default function GalleryClient() {
   }, [apiAttempted])
 
   useEffect(() => {
+    // 预加载本地映射的图片，提升静态图片加载速度
+    preloadLocalMappedImages()
+    
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }

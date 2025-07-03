@@ -2,6 +2,7 @@
 
 import { useState } from "react"
 import useStaticUrl from "@/hooks/use-static-url"
+import { getImageLoadingProps } from "@/lib/smart-image-url"
 
 interface SimpleImageProps {
   src: string
@@ -32,8 +33,12 @@ export default function SimpleImage({
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   
-  // 使用与Hero区域相同的URL处理方式
-  const staticUrl = useStaticUrl(src)
+  // 使用智能URL策略
+  const smartProps = getImageLoadingProps(src)
+  
+  // 优先使用智能策略的URL，fallback到useStaticUrl
+  const finalUrl = useStaticUrl(smartProps.src)
+  const finalLoading = loading || smartProps.loading
   
   const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     console.error(`❌ SimpleImage 加载失败: ${src}`)
@@ -70,15 +75,15 @@ export default function SimpleImage({
         </div>
       )}
       <img
-        src={staticUrl}
+        src={finalUrl}
         alt={alt}
         className={className}
-        loading={loading}
+        loading={finalLoading}
         onError={handleError}
         onLoad={handleLoad}
         style={{ display: isLoading ? 'none' : 'block' }}
-        // 添加与Hero区域相同的优化属性
-        fetchPriority={loading === 'eager' ? 'high' : 'auto'}
+        // 使用智能策略的优化属性
+        fetchPriority={smartProps.fetchPriority}
         decoding="async"
       />
     </>
