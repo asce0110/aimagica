@@ -122,6 +122,7 @@ export default function HeroSection() {
       setGalleryImages(staticData)
       setNetworkConnectivity('good')
       console.log('✅ Hero区域已加载静态Gallery图片:', staticData.length)
+      console.log('🔗 静态图片URLs:', staticData.map(img => ({ title: img.title, url: img.url })))
     })
 
     const checkMobile = () => {

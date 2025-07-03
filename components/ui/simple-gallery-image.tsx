@@ -27,14 +27,15 @@ export default function SimpleGalleryImage({
   const [isLoading, setIsLoading] = useState(true)
   
   const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    console.error(`❌ 图片加载失败: ${src}`)
+    console.error(`❌ SimpleGalleryImage 加载失败: ${src}`)
+    console.error('错误详情:', e)
     setHasError(true)
     setIsLoading(false)
     onError?.(e)
   }
   
   const handleLoad = (e: React.SyntheticEvent<HTMLImageElement>) => {
-    console.log(`✅ 图片加载成功: ${src}`)
+    console.log(`✅ SimpleGalleryImage 加载成功: ${src}`)
     setIsLoading(false)
     onLoad?.(e)
   }

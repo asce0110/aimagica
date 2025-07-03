@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>图片显示测试</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .test-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; }
+        .test-item { border: 1px solid #ccc; padding: 10px; text-align: center; }
+        img { max-width: 100%; height: auto; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <h1>AIMAGICA 图片显示测试</h1>
+    <div id="results"></div>
+
+    <script>
+        const testImages = [
+            // 本地静态图片
+            {
+                name: "本地Gallery图片1",
+                url: "/images/gallery/386628e0-61b1-4966-8575-2c2f2f162e3a-f897c7ae.png"
+            },
+            {
+                name: "本地Gallery图片2", 
+                url: "/images/gallery/48a8804f-9028-4132-85dd-d5c4d807c75e-13630e73.jpeg"
+            },
+            // 示例图片
+            {
+                name: "示例图片 - Cat Wizard",
+                url: "/images/examples/cat-wizard.svg"
+            },
+            {
+                name: "示例图片 - Cyber City",
+                url: "/images/examples/cyber-city.svg"
+            },
+            // Logo
+            {
+                name: "Logo图片",
+                url: "/images/aimagica-logo.png"
+            },
+            // 远程R2图片（直接URL）
+            {
+                name: "R2图片（直接访问）",
+                url: "https://images.aimagica.ai/gallery/105948948301872216168/1749885523704_AI_Generated_Artwork.png"
+            }
+        ];
+
+        function createTestItem(test) {
+            const div = document.createElement('div');
+            div.className = 'test-item';
+            
+            const title = document.createElement('h3');
+            title.textContent = test.name;
+            div.appendChild(title);
+            
+            const urlDiv = document.createElement('div');
+            urlDiv.textContent = `URL: ${test.url}`;
+            urlDiv.style.fontSize = '12px';
+            urlDiv.style.color = '#666';
+            urlDiv.style.marginBottom = '10px';
+            div.appendChild(urlDiv);
+            
+            const img = document.createElement('img');
+            img.src = test.url;
+            
+            const status = document.createElement('div');
+            status.textContent = '加载中...';
+            
+            img.onload = () => {
+                status.textContent = '✅ 加载成功';
+                status.className = 'success';
+            };
+            
+            img.onerror = () => {
+                status.textContent = '❌ 加载失败';
+                status.className = 'error';
+                img.style.display = 'none';
+            };
+            
+            div.appendChild(img);
+            div.appendChild(status);
+            
+            return div;
+        }
+
+        const resultsDiv = document.getElementById('results');
+        resultsDiv.className = 'test-grid';
+        
+        testImages.forEach(test => {
+            resultsDiv.appendChild(createTestItem(test));
+        });
+
+        // 添加网络环境检测
+        const networkDiv = document.createElement('div');
+        networkDiv.innerHTML = `
+            <h2>网络环境检测</h2>
+            <p>当前域名: ${window.location.hostname}</p>
+            <p>当前协议: ${window.location.protocol}</p>
+            <p>User Agent: ${navigator.userAgent}</p>
+        `;
+        document.body.insertBefore(networkDiv, resultsDiv);
+    </script>
+</body>
+</html>

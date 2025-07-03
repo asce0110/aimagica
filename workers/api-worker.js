@@ -322,29 +322,63 @@ async function handleGalleryPublic(request, env) {
     const images = await response.json()
     console.log(`✅ Found ${images.length} real images from database`)
     
-    // 转换为Gallery格式
-    const galleryImages = images.map(image => ({
-      id: image.id,
-      url: image.generated_image_url ? 
-        `https://aimagica-api.403153162.workers.dev/api/images/proxy/${encodeURIComponent(image.generated_image_url)}` : 
-        '/images/placeholder.svg',
-      title: (image.prompt?.substring(0, 50) + '...' || 'Untitled'),
-      author: 'AIMAGICA User',
-      authorAvatar: "/images/aimagica-logo.png",
-      likes: image.likes_count || 0,
-      comments: 0, // 暂时设为0，避免额外查询
-      views: image.view_count || 0,
-      downloads: 0,
-      isPremium: false,
-      isFeatured: (image.likes_count || 0) > 10,
-      isLiked: false,
-      createdAt: new Date(image.created_at).toLocaleDateString(),
-      prompt: image.prompt || '',
-      style: image.style,
-      tags: extractTagsFromPrompt(image.prompt || ''),
-      size: getRandomSize(),
-      rotation: getRandomRotation()
-    }))
+    // 获取当前请求的域名来生成代理URL
+    const requestUrl = new URL(request.url)
+    const baseUrl = `${requestUrl.protocol}//${requestUrl.host}`
+    
+    // 转换为Gallery格式，提供多层备用方案
+    const galleryImages = images.map((image, index) => {
+      let imageUrl = '/images/placeholder.svg' // 默认备用
+      
+      if (image.generated_image_url) {
+        // 方案1: 尝试使用代理URL（如果Workers域名可访问）
+        const proxyUrl = `${baseUrl}/api/images/proxy/${encodeURIComponent(image.generated_image_url)}`
+        
+        // 方案2: 如果是本地开发或者特殊情况，提供原始URL作为备用
+        const originalUrl = image.generated_image_url
+        
+        // 方案3: 使用本地示例图片作为最终备用
+        const localExamples = [
+          '/images/examples/magic-forest.svg',
+          '/images/examples/cyber-city.svg', 
+          '/images/examples/space-art.svg',
+          '/images/examples/cat-wizard.svg'
+        ]
+        const fallbackExample = localExamples[index % localExamples.length]
+        
+        // 记录所有可用的URL选项
+        console.log(`🖼️ Image ${image.id} URL options:`, {
+          proxy: proxyUrl,
+          original: originalUrl,
+          fallback: fallbackExample
+        })
+        
+        // 优先使用代理URL，但在前端会有更多备用逻辑
+        imageUrl = proxyUrl
+      }
+      
+      return {
+        id: image.id,
+        url: imageUrl,
+        originalUrl: image.generated_image_url, // 保留原始URL供前端备用
+        title: (image.prompt?.substring(0, 50) + '...' || 'Untitled'),
+        author: 'AIMAGICA User',
+        authorAvatar: "/images/aimagica-logo.png",
+        likes: image.likes_count || 0,
+        comments: 0, // 暂时设为0，避免额外查询
+        views: image.view_count || 0,
+        downloads: 0,
+        isPremium: false,
+        isFeatured: (image.likes_count || 0) > 10,
+        isLiked: false,
+        createdAt: new Date(image.created_at).toLocaleDateString(),
+        prompt: image.prompt || '',
+        style: image.style,
+        tags: extractTagsFromPrompt(image.prompt || ''),
+        size: getRandomSize(),
+        rotation: getRandomRotation()
+      }
+    })
     
     console.log(`🎯 Returning ${galleryImages.length} processed gallery images`)
     
@@ -639,27 +673,48 @@ async function handleImageProxy(request, env) {
     const imageUrlParam = pathParts[pathParts.length - 1]
     const imageUrl = decodeURIComponent(imageUrlParam)
     
-    console.log('🖼️ Proxying image:', imageUrl)
+    console.log('🖼️ Image proxy request:', {
+      originalPath: url.pathname,
+      extractedUrl: imageUrl,
+      userAgent: request.headers.get('User-Agent'),
+      referer: request.headers.get('Referer')
+    })
     
     // 验证URL是否为有效的图片URL
     if (!imageUrl || (!imageUrl.startsWith('http') && !imageUrl.startsWith('https'))) {
+      console.error('❌ Invalid image URL:', imageUrl)
       return new Response('Invalid image URL', { status: 400 })
     }
     
     // 获取原始图片
     const imageResponse = await fetch(imageUrl, {
       headers: {
-        'User-Agent': 'AIMAGICA-Proxy/1.0'
-      }
+        'User-Agent': 'AIMAGICA-Proxy/1.0',
+        'Accept': 'image/*',
+        'Cache-Control': 'no-cache'
+      },
+      signal: AbortSignal.timeout(30000) // 30秒超时
+    })
+    
+    console.log('🖼️ Original image response:', {
+      status: imageResponse.status,
+      contentType: imageResponse.headers.get('content-type'),
+      contentLength: imageResponse.headers.get('content-length')
     })
     
     if (!imageResponse.ok) {
-      console.error('❌ Failed to fetch image:', imageResponse.status)
+      console.error('❌ Failed to fetch image:', {
+        url: imageUrl,
+        status: imageResponse.status,
+        statusText: imageResponse.statusText
+      })
       return new Response('Image not found', { status: 404 })
     }
     
     // 获取内容类型
     const contentType = imageResponse.headers.get('content-type') || 'image/jpeg'
+    
+    console.log('✅ Successfully proxied image:', imageUrl)
     
     // 返回代理的图片，添加适当的缓存头
     return new Response(imageResponse.body, {
@@ -668,12 +723,27 @@ async function handleImageProxy(request, env) {
         'Cache-Control': 'public, max-age=31536000', // 缓存1年
         'Access-Control-Allow-Origin': '*',
         'Access-Control-Allow-Methods': 'GET',
-        'Access-Control-Allow-Headers': 'Content-Type',
+        'Access-Control-Allow-Headers': 'Content-Type, User-Agent, Referer',
+        'X-Proxied-From': imageUrl,
+        'X-Proxy-Status': 'success'
       }
     })
     
   } catch (error) {
-    console.error('❌ Image proxy error:', error)
-    return new Response('Proxy error', { status: 500 })
+    console.error('❌ Image proxy error:', {
+      error: error.message,
+      stack: error.stack,
+      url: request.url
+    })
+    
+    // 返回备用图片或错误响应
+    return new Response('Proxy error: ' + error.message, { 
+      status: 500,
+      headers: {
+        'Access-Control-Allow-Origin': '*',
+        'X-Proxy-Status': 'error',
+        'X-Error-Message': error.message
+      }
+    })
   }
 } 
