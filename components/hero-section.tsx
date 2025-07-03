@@ -411,8 +411,8 @@ export default function HeroSection() {
               </div>
             </div>
             
-            {/* 照片夹子和图片 - 夹子直接定位在绳子位置 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 pt-4">
+            {/* 照片夹子和图片 - 移动端垂直挂照片，桌面端横向4张 */}
+            <div className="md:grid md:grid-cols-4 md:gap-4 md:pt-4 flex flex-col items-center gap-2 pt-4">
             {!isMounted ? (
               // 初始挂载前不显示任何内容，避免hydration mismatch
               console.log('🔍 Rendering path: Not mounted') || null
@@ -424,17 +424,21 @@ export default function HeroSection() {
                 const aspectRatios = ['aspect-[4/5]', 'aspect-[3/4]', 'aspect-[5/4]', 'aspect-[4/3]']
                 const aspectRatio = aspectRatios[index % aspectRatios.length]
                 
+                // 移动端特殊处理：垂直挂照片
+                const mobileTopOffset = index === 0 ? '-top-16' : '-top-8'
+                const mobileWidth = index === 0 ? 'w-48' : index === 1 ? 'w-44' : index === 2 ? 'w-40' : 'w-36'
+                
                 return (
                   <div
                     key={`loading-${index}`}
-                    className={`group cursor-pointer relative photo-sway-${index + 1}`}
+                    className={`group cursor-pointer relative photo-sway-${index + 1} ${mobileWidth} md:w-full`}
                     style={{ 
                       transform: `rotate(${imageRotations[index]}deg)`,
-                      marginTop: `${hangHeight * 0.5}rem`
+                      marginTop: isMobile && index === 0 ? `${hangHeight * 0.5}rem` : isMobile ? '0.5rem' : `${hangHeight * 0.5}rem`
                     }}
                   >
-                    {/* 夹子 - 定位在绳子上 */}
-                    <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-30">
+                    {/* 夹子 - 移动端第一张挂在绳子上，后续挂在上一张照片下方 */}
+                    <div className={`absolute ${mobileTopOffset} md:-top-16 left-1/2 transform -translate-x-1/2 z-30`}>
                       <div className="w-10 h-7 bg-gradient-to-b from-[#f5f1e8] to-[#d4a574] rounded-lg shadow-xl border-2 border-[#2d3e2d] flex items-center justify-center">
                         <div className="w-1.5 h-4 bg-[#8b7355] rounded-full shadow-inner"></div>
                       </div>
@@ -453,7 +457,10 @@ export default function HeroSection() {
                       </div>
                     </div>
                     
-                    {/* 移除标题占位符，仅显示图片 */}
+                    {/* 移动端垂直连接线 - 连接到下一张照片 */}
+                    {isMobile && index < 3 && (
+                      <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-0.5 h-6 bg-[#8b7355] opacity-60"></div>
+                    )}
                   </div>
                 )
               })
@@ -467,6 +474,10 @@ export default function HeroSection() {
                 const hangHeight = [2, 4, 3, 1][index] // 不同的悬挂高度
                 const aspectRatios = ['aspect-[4/5]', 'aspect-[3/4]', 'aspect-[5/4]', 'aspect-[4/3]']
                 const aspectRatio = aspectRatios[index % aspectRatios.length]
+                
+                // 移动端特殊处理：垂直挂照片
+                const mobileTopOffset = index === 0 ? '-top-16' : '-top-8'
+                const mobileWidth = index === 0 ? 'w-48' : index === 1 ? 'w-44' : index === 2 ? 'w-40' : 'w-36'
                 
                 // 确定图片源 - 智能降级策略
                 const isGalleryImage = galleryImages.length > 0
@@ -494,15 +505,15 @@ export default function HeroSection() {
                 return (
                   <div
                     key={imageId}
-                    className={`group cursor-pointer relative photo-sway-${index + 1}`}
+                    className={`group cursor-pointer relative photo-sway-${index + 1} ${mobileWidth} md:w-full`}
                     style={{ 
                       transform: `rotate(${isGalleryImage ? img.rotation || 0 : imageRotations[index]}deg)`,
-                      marginTop: `${hangHeight * 0.5}rem`
+                      marginTop: isMobile && index === 0 ? `${hangHeight * 0.5}rem` : isMobile ? '0.5rem' : `${hangHeight * 0.5}rem`
                     }}
                     onClick={() => router.push("/gallery")}
                   >
-                    {/* 夹子 - AIMAGICA 风格，定位在绳子上 */}
-                    <div className="absolute -top-16 left-1/2 transform -translate-x-1/2 z-30">
+                    {/* 夹子 - 移动端第一张挂在绳子上，后续挂在上一张照片下方 */}
+                    <div className={`absolute ${mobileTopOffset} md:-top-16 left-1/2 transform -translate-x-1/2 z-30`}>
                       <div className="w-10 h-7 bg-gradient-to-b from-[#f5f1e8] to-[#d4a574] rounded-lg shadow-xl border-2 border-[#2d3e2d] flex items-center justify-center transform hover:scale-110 transition-all">
                         <div className="w-1.5 h-4 bg-[#8b7355] rounded-full shadow-inner"></div>
                       </div>
@@ -559,7 +570,10 @@ export default function HeroSection() {
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                     </div>
                     
-                    {/* 移除照片标题显示，仅显示图片 */}
+                    {/* 移动端垂直连接线 - 连接到下一张照片 */}
+                    {isMobile && index < 3 && (
+                      <div className="absolute -bottom-3 left-1/2 transform -translate-x-1/2 w-0.5 h-6 bg-[#8b7355] opacity-60"></div>
+                    )}
                   </div>
                 )
               })
