@@ -1,7 +1,6 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import Image from "next/image"
 import MagicLoading from "./magic-loading"
 
 interface MagicImageProps {
@@ -43,11 +42,13 @@ export default function MagicImage({
   }, [src])
 
   const handleLoad = () => {
+    console.log(`✅ Image loaded successfully: ${src}`)
     setIsLoading(false)
     setImageLoaded(true)
   }
 
   const handleError = () => {
+    console.error(`❌ Image failed to load: ${src}`)
     setIsLoading(false)
     setHasError(true)
     if (onError) {
@@ -78,30 +79,29 @@ export default function MagicImage({
       {hasError && (
         <div className="absolute inset-0 flex flex-col items-center justify-center bg-gradient-to-br from-[#f5f1e8] to-[#d4a574]/20 text-[#8b7355]">
           <div className="text-2xl mb-2">🖼️</div>
-          <div className="text-sm font-bold text-center" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <div className="text-sm font-bold text-center font-accent">
             Image unavailable
           </div>
         </div>
       )}
 
-      {/* 实际图片 */}
+      {/* 实际图片 - 使用原生img标签解决兼容性问题 */}
       {!hasError && (
-        <Image
+        <img
           src={src}
           alt={alt}
-          width={width}
-          height={height}
-          sizes={sizes}
-          priority={priority}
           className={imageClassName}
           style={{
             objectFit,
+            width: '100%',
+            height: '100%',
             ...style
           }}
           onLoad={handleLoad}
           onError={handleError}
-          // 对于没有指定宽高的图片，使用fill模式
-          {...(!width && !height ? { fill: true } : {})}
+          loading={priority ? "eager" : "lazy"}
+          decoding="async"
+          crossOrigin="anonymous"
         />
       )}
     </div>

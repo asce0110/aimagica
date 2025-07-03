@@ -466,7 +466,7 @@ export default function HeroSection() {
               onClick={() => router.push("/gallery")}
               className="bg-[#8b7355] hover:bg-[#7a6449] text-[#f5f1e8] font-black px-8 py-3 rounded-xl shadow-lg transform hover:scale-110 transition-all"
               style={{ 
-                fontFamily: "Comic Sans MS, cursive",
+                fontFamily: "var(--font-accent)",
                 boxShadow: "3px 3px 0px #2d3e2d" 
               }}
             >
@@ -483,9 +483,8 @@ export default function HeroSection() {
           <div className="absolute -top-0.5 -right-0.5 w-3 h-3 bg-[#f5f1e8] rounded-full"></div>
           <div className="absolute -bottom-0.5 -left-0.5 w-2 h-2 bg-[#f5f1e8] rounded-full"></div>
           <h1
-            className="text-3xl md:text-6xl font-black text-[#f5f1e8] mb-8 transform -rotate-1 animate-pulse"
+            className="text-3xl md:text-6xl font-black text-[#f5f1e8] mb-8 transform -rotate-1 animate-pulse font-heading"
             style={{
-              fontFamily: "Comic Sans MS, cursive",
               textShadow: "3px 3px 0px #2d3e2d, 6px 6px 0px rgba(45,62,45,0.5)",
             }}
           >
@@ -516,7 +515,7 @@ export default function HeroSection() {
               }}
               className="relative bg-gradient-to-r from-[#f5f1e8] via-[#d4a574] to-[#f5f1e8] hover:from-[#d4a574] hover:via-[#f5f1e8] hover:to-[#d4a574] text-[#2d3e2d] font-black px-12 py-6 rounded-2xl shadow-2xl transform hover:scale-125 transition-all text-xl md:text-2xl animate-pulse hover:animate-none border-4 border-[#2d3e2d]"
               style={{ 
-                fontFamily: "Comic Sans MS, cursive",
+                fontFamily: "var(--font-accent)",
                 boxShadow: "8px 8px 0px #2d3e2d, 12px 12px 20px rgba(0,0,0,0.3)" 
               }}
             >
@@ -531,7 +530,7 @@ export default function HeroSection() {
             <p
               className="text-[#f5f1e8] font-bold text-lg md:text-xl animate-bounce"
               style={{ 
-                fontFamily: "Comic Sans MS, cursive",
+                fontFamily: "var(--font-accent)",
                 textShadow: "2px 2px 0px #2d3e2d" 
               }}
             >

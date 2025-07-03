@@ -663,7 +663,7 @@ export default function GalleryClient() {
                 <h1
                   className="text-lg md:text-xl font-black text-white transform -rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "var(--font-accent)",
                     textShadow: "2px 2px 0px #333",
                   }}
                 >
@@ -671,7 +671,7 @@ export default function GalleryClient() {
                 </h1>
                 <p
                   className="text-xs text-gray-400 transform rotate-1"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  className="font-accent"
                 >
                   Magic Gallery ✨
                 </p>
@@ -687,7 +687,7 @@ export default function GalleryClient() {
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   className="pl-10 w-64 bg-[#1a1a1a] border-2 border-[#444] text-white placeholder:text-gray-400 rounded-xl font-bold"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  className="font-accent"
                 />
               </div>
             </div>
@@ -703,28 +703,28 @@ export default function GalleryClient() {
               <TabsTrigger
                 value="all"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform rotate-1 hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                className="font-accent"
               >
                 All Magic
               </TabsTrigger>
               <TabsTrigger
                 value="fantasy"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform rotate-0.5 hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                className="font-accent"
               >
                 Fantasy 🧙‍♂️
               </TabsTrigger>
               <TabsTrigger
                 value="cyberpunk"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-0.5 hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                className="font-accent"
               >
                 Cyberpunk 🤖
               </TabsTrigger>
               <TabsTrigger
                 value="sci-fi"
                 className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-1 hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                className="font-accent"
               >
                 Sci-Fi 🚀
               </TabsTrigger>
@@ -844,7 +844,7 @@ export default function GalleryClient() {
 
                 {/* 图片下方的时间信息 */}
                 <div className="mt-2 flex justify-center">
-                  <span className="text-xs text-gray-500" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <span className="text-xs text-gray-500" className="font-accent">
                     {image.createdAt}
                   </span>
                 </div>
@@ -880,7 +880,7 @@ export default function GalleryClient() {
                     <h2
                       className="text-lg md:text-xl font-black text-white mb-1 transform -rotate-1"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         textShadow: "2px 2px 0px #333",
                       }}
                     >
@@ -895,7 +895,7 @@ export default function GalleryClient() {
                           e.currentTarget.src = getFallbackAvatarUrl(selectedImage.author);
                         }}
                       />
-                      <p className="text-[#d4a574] font-bold text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <p className="text-[#d4a574] font-bold text-sm" className="font-accent">
                         by {selectedImage.author}
                       </p>
                       {selectedImage.isPremium && <Crown className="w-4 h-4 text-[#d4a574]" />}
@@ -912,7 +912,7 @@ export default function GalleryClient() {
                   <DialogHeader className="border-b border-[#333] pb-4 mb-4">
                     <DialogTitle 
                       className="text-xl font-black text-white"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      className="font-accent"
                     >
                       {selectedImage.title}
                     </DialogTitle>
@@ -929,7 +929,7 @@ export default function GalleryClient() {
                           : "bg-[#1a1a1a] text-white hover:bg-[#2a2a2a]"
                       } font-bold rounded-lg border-2 border-[#444]`}
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -940,7 +940,7 @@ export default function GalleryClient() {
                     <span
                       className="flex items-center text-gray-300 font-bold transform -rotate-1 bg-[#1a1a1a] px-2 py-1 rounded-lg border-2 border-[#444]"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "1px 1px 0 #333",
                       }}
                     >
@@ -951,7 +951,7 @@ export default function GalleryClient() {
                     <span
                       className="flex items-center text-gray-300 font-bold transform rotate-0.5 bg-[#1a1a1a] px-2 py-1 rounded-lg border-2 border-[#444]"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "1px 1px 0 #333",
                       }}
                     >
@@ -961,7 +961,7 @@ export default function GalleryClient() {
 
                     <span
                       className="ml-auto text-gray-400 font-bold text-sm transform -rotate-1"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      className="font-accent"
                     >
                       {selectedImage.createdAt}
                     </span>
@@ -972,7 +972,7 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-3 transform -rotate-1"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
@@ -987,7 +987,7 @@ export default function GalleryClient() {
                     >
                       <p
                         className="text-gray-200 font-bold text-sm leading-relaxed"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        className="font-accent"
                       >
                         "{selectedImage.prompt}"
                       </p>
@@ -999,7 +999,7 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-3 transform rotate-0.5"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
@@ -1009,7 +1009,7 @@ export default function GalleryClient() {
                       <Badge
                         className="bg-[#d4a574] text-black font-black transform rotate-1"
                         style={{
-                          fontFamily: "Comic Sans MS, cursive",
+                          fontFamily: "var(--font-accent)",
                           boxShadow: "1px 1px 0 #333",
                         }}
                       >
@@ -1021,7 +1021,7 @@ export default function GalleryClient() {
                           variant="outline"
                           className="bg-[#1a1a1a] border-2 border-[#444] text-gray-300 font-bold hover:bg-[#2a2a2a]"
                           style={{
-                            fontFamily: "Comic Sans MS, cursive",
+                            fontFamily: "var(--font-accent)",
                             transform: `rotate(${(index % 3) - 1}deg)`,
                           }}
                         >
@@ -1036,7 +1036,7 @@ export default function GalleryClient() {
                     <Button
                       className="bg-[#4a5a4a] hover:bg-[#5a6a5a] text-white font-black rounded-xl flex-1 border-2 border-[#666] transform -rotate-0.5 hover:scale-105 transition-all"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -1046,7 +1046,7 @@ export default function GalleryClient() {
                     <Button
                       className="bg-[#d4a574] hover:bg-[#c19660] text-black font-black rounded-xl flex-1 transform rotate-0.5 hover:scale-105 transition-all"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         boxShadow: "2px 2px 0 #333",
                       }}
                     >
@@ -1060,7 +1060,7 @@ export default function GalleryClient() {
                     <h3
                       className="text-white font-black mb-4 transform -rotate-0.5"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "var(--font-accent)",
                         textShadow: "1px 1px 0px #333",
                       }}
                     >
@@ -1092,13 +1092,13 @@ export default function GalleryClient() {
                                 <div>
                                   <span
                                     className="text-white font-black text-sm"
-                                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                                    className="font-accent"
                                   >
                                     {comment.author}
                                   </span>
                                   <span
                                     className="text-gray-400 font-bold text-xs ml-2"
-                                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                                    className="font-accent"
                                   >
                                     {comment.createdAt}
                                   </span>
@@ -1106,14 +1106,14 @@ export default function GalleryClient() {
                               </div>
                               <p
                                 className="text-gray-200 font-bold text-sm mt-1"
-                                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                                className="font-accent"
                               >
                                 {comment.content}
                               </p>
                               <div className="flex items-center mt-2">
                                 <span
                                   className="text-gray-400 font-bold text-xs"
-                                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                                  className="font-accent"
                                 >
                                   {comment.likes} likes
                                 </span>
@@ -1127,7 +1127,7 @@ export default function GalleryClient() {
                     {comments.length === 0 && (
                       <p 
                         className="text-center text-gray-500 py-8"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        className="font-accent"
                       >
                         No comments yet. Be the first to share your thoughts!
                       </p>
