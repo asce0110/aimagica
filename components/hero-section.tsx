@@ -12,7 +12,7 @@ import OptimizedImage from "@/components/ui/optimized-image"
 import { imageCache } from "@/lib/image-cache"
 import useStaticUrl from "@/hooks/use-static-url"
 import { preloadImageMapping } from "@/lib/image-url-mapper"
-import SmartGalleryImage from "@/components/ui/smart-gallery-image"
+import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import { getApiEndpoint } from "@/lib/api-config"
 
 interface GalleryImage {
@@ -513,28 +513,22 @@ export default function HeroSection() {
                       {/* 内部容器确保一致的窄边框 - 左右边缘无边距 */}
                       <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
                         {isGalleryImage ? (
-                          <SmartGalleryImage
-                            originalUrl={img.url || placeholderUrl}
+                          <SimpleGalleryImage
+                            src={img.url || placeholderUrl}
                             alt={img.title}
                             className="w-full h-full object-cover transition-opacity duration-300"
                             loading={index < 2 ? "eager" : "lazy"}
-                            index={index}
                             onError={() => {
                               console.error(`🖼️ Hero Gallery图片加载失败:`, {
-                                originalUrl: img.url,
+                                url: img.url,
                                 title: img.title,
                                 index
                               });
                               handleImageError(imageId);
-                              
-                              // 通知全局错误处理器
-                              if ((window as any).heroImageFailureHandler) {
-                                (window as any).heroImageFailureHandler();
-                              }
                             }}
                             onLoad={() => {
                               console.log(`✅ Hero Gallery图片加载成功:`, {
-                                originalUrl: img.url,
+                                url: img.url,
                                 title: img.title,
                                 index
                               });

@@ -41,7 +41,7 @@ import {
 import { useSessionCompat as useSession } from "@/components/session-provider"
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
 import MagicImage from "@/components/ui/magic-image"
-import SmartGalleryImage from "@/components/ui/smart-gallery-image"
+import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
 
@@ -777,22 +777,21 @@ export default function GalleryClient() {
                     {/* 图片容器 - 白边框效果 */}
                     <div className="w-full h-full relative bg-white rounded-md p-1">
                       <div className="w-full h-full bg-white rounded-sm overflow-hidden relative">
-                        <SmartGalleryImage
-                          originalUrl={image.url || "/placeholder.svg"}
+                        <SimpleGalleryImage
+                          src={image.url || "/placeholder.svg"}
                           alt={image.title}
                           className="w-full h-full object-contain"
                           loading="lazy"
-                          index={index}
                           onError={() => {
                             console.error(`🖼️ Gallery图片加载失败:`, {
-                              originalUrl: image.url,
+                              url: image.url,
                               title: image.title,
                               index
                             });
                           }}
                           onLoad={() => {
                             console.log(`✅ Gallery图片加载成功:`, {
-                              originalUrl: image.url,
+                              url: image.url,
                               title: image.title,
                               index
                             });
@@ -865,20 +864,20 @@ export default function GalleryClient() {
             <div className="relative bg-black rounded-l-xl overflow-hidden">
               {selectedImage && (
                 <>
-                  <SmartGalleryImage
-                    originalUrl={selectedImage.url || "/placeholder.svg"}
+                  <SimpleGalleryImage
+                    src={selectedImage.url || "/placeholder.svg"}
                     alt={selectedImage.title}
                     className="w-full h-full object-contain"
                     loading="eager"
                     onError={() => {
                       console.error(`🖼️ 选中图片加载失败:`, {
-                        originalUrl: selectedImage.url,
+                        url: selectedImage.url,
                         title: selectedImage.title
                       });
                     }}
                     onLoad={() => {
                       console.log(`✅ 选中图片加载成功:`, {
-                        originalUrl: selectedImage.url,
+                        url: selectedImage.url,
                         title: selectedImage.title
                       });
                     }}
