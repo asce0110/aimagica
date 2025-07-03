@@ -46,7 +46,7 @@ import RobustGalleryImage from "@/components/ui/robust-gallery-image"
 import ReliableImage from "@/components/ui/reliable-image"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
-import { browserCacheManager } from "@/lib/browser-cache-manager"
+// import { browserCacheManager } from "@/lib/browser-cache-manager" // 临时禁用
 
 // 使用静态Gallery数据类型
 type GalleryImage = StaticGalleryImage
@@ -384,30 +384,30 @@ export default function GalleryClient() {
   const [searchQuery, setSearchQuery] = useState("")
   const [imageAspectRatios, setImageAspectRatios] = useState<{[key: string]: string}>({})
 
-  // 预加载关键图片，提升用户体验
-  useEffect(() => {
-    const preloadCriticalImages = async () => {
-      const currentImages = filteredImages.slice(0, 8) // 预加载前8张
-      const imageUrls = currentImages.map(img => img.url).filter(Boolean)
-      
-      if (imageUrls.length > 0) {
-        console.log('🚀 预加载Gallery关键图片:', imageUrls.length)
-        try {
-          await browserCacheManager.preloadImages(imageUrls, {
-            maxAge: 30 * 60 * 1000, // 30分钟缓存
-            preloadPriority: 'high',
-            retryCount: 3
-          })
-          console.log('✅ Gallery关键图片预加载完成')
-        } catch (error) {
-          console.warn('⚠️ 预加载部分失败:', error)
-        }
-      }
-    }
-    
-    // 延迟预加载，确保不影响初始渲染
-    setTimeout(preloadCriticalImages, 500)
-  }, [filteredImages])
+  // 预加载关键图片，提升用户体验 - 临时禁用
+  // useEffect(() => {
+  //   const preloadCriticalImages = async () => {
+  //     const currentImages = filteredImages.slice(0, 8) // 预加载前8张
+  //     const imageUrls = currentImages.map(img => img.url).filter(Boolean)
+  //     
+  //     if (imageUrls.length > 0) {
+  //       console.log('🚀 预加载Gallery关键图片:', imageUrls.length)
+  //       try {
+  //         await browserCacheManager.preloadImages(imageUrls, {
+  //           maxAge: 30 * 60 * 1000, // 30分钟缓存
+  //           preloadPriority: 'high',
+  //           retryCount: 3
+  //         })
+  //         console.log('✅ Gallery关键图片预加载完成')
+  //       } catch (error) {
+  //         console.warn('⚠️ 预加载部分失败:', error)
+  //       }
+  //     }
+  //   }
+  //   
+  //   // 延迟预加载，确保不影响初始渲染
+  //   setTimeout(preloadCriticalImages, 500)
+  // }, [filteredImages])
 
   // 在后台尝试加载API数据（不阻塞UI显示）
   useEffect(() => {
@@ -433,10 +433,10 @@ export default function GalleryClient() {
         console.log('📦 API Response:', result)
         
         if (result.success && result.data && Array.isArray(result.data) && result.data.length > 0) {
-          // 将API数据转换为GalleryImage格式，优先使用originalUrl跳过代理
+          // 将API数据转换为GalleryImage格式，使用代理URL避免CORS问题
           const transformedImages = result.data.map((item: any, index: number) => ({
             id: item.id || index,
-            url: item.originalUrl || item.url || item.image_url || "/placeholder.svg",
+            url: item.url || item.image_url || "/placeholder.svg",
             title: item.title || item.prompt?.substring(0, 50) + "..." || "Untitled",
             author: item.author || item.user_name || "Anonymous",
             authorAvatar: item.authorAvatar || item.user_avatar || "/placeholder.svg?height=50&width=50&text=A",
