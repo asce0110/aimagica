@@ -519,12 +519,13 @@ export default function GalleryClient() {
   const [images, setImages] = useState<GalleryImage[]>(() => {
     // 优先使用本地缓存图片 - 完全模仿Hero的成功策略
     console.log('📦 初始化本地缓存图片:', localCacheImages.length, '张图片')
+    console.log('🎯 Gallery图片URL列表:', localCacheImages.map(img => ({ id: img.id, url: img.url, title: img.title })))
     return localCacheImages
   })
   const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据
   const [error, setError] = useState<string | null>(null)
   const [apiAttempted, setApiAttempted] = useState(false)
-  const [emergencyMode, setEmergencyMode] = useState(false) // 紧急模式：完全跳过API
+  const [emergencyMode, setEmergencyMode] = useState(true) // 紧急模式：完全跳过API，只使用本地图片
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [comments, setComments] = useState<Comment[]>(sampleComments)
   const [newComment, setNewComment] = useState("")
