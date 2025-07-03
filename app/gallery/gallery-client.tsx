@@ -351,7 +351,7 @@ export default function GalleryClient() {
   const spaceArtUrl = useStaticUrl('/images/examples/space-art.svg')
   const catWizardUrl = useStaticUrl('/images/examples/cat-wizard.svg')
   
-  // 创建本地高质量缓存图片集合 - 完全模仿Hero区域的成功策略
+  // 创建本地高质量缓存图片集合 - 只使用真实存在的hero-cache图片
   const localCacheImages = useMemo(() => [
     {
       id: 'cache-1',
@@ -433,12 +433,12 @@ export default function GalleryClient() {
       size: 'small' as const,
       rotation: -2.1,
     },
-    // 添加更多本地缓存图片以填充Gallery
+    // 复用相同图片创建更多变体 - 不同的标题和描述
     {
       id: 'cache-5',
-      url: magicForestUrl,
-      title: 'Enchanted Forest',
-      author: 'AIMAGICA User',
+      url: '/images/hero-cache/hero-1-japanese-anime.png',
+      title: 'Anime Dreams',
+      author: 'AIMAGICA Pro',
       authorAvatar: placeholderUserUrl,
       likes: 2134,
       comments: 167,
@@ -448,17 +448,17 @@ export default function GalleryClient() {
       isFeatured: true,
       isLiked: false,
       createdAt: '1 day ago',
-      prompt: 'A magical forest with glowing mushrooms and fairy lights',
-      style: 'Fantasy',
-      tags: ['forest', 'magic', 'fantasy', 'glow'],
+      prompt: 'Dreamy anime character in a fantasy world setting',
+      style: 'Anime',
+      tags: ['anime', 'dreams', 'fantasy', 'character'],
       size: 'large' as const,
       rotation: 3,
     },
     {
       id: 'cache-6',
-      url: cyberCityUrl,
-      title: 'Neo Tokyo 2099',
-      author: 'AIMAGICA User',
+      url: '/images/hero-cache/hero-2-cyberpunk-city.jpeg',
+      title: 'Neon Metropolis',
+      author: 'AIMAGICA Pro',
       authorAvatar: placeholderUserUrl,
       likes: 1876,
       comments: 92,
@@ -468,17 +468,17 @@ export default function GalleryClient() {
       isFeatured: false,
       isLiked: true,
       createdAt: '2 weeks ago',
-      prompt: 'Futuristic cyberpunk cityscape with holographic ads',
+      prompt: 'Futuristic neon-lit metropolis with flying vehicles',
       style: 'Cyberpunk',
-      tags: ['cyberpunk', 'city', 'future', 'holo'],
+      tags: ['neon', 'metropolis', 'future', 'cyberpunk'],
       size: 'horizontal' as const,
       rotation: -1.5,
     },
     {
       id: 'cache-7',
-      url: spaceArtUrl,
-      title: 'Space Explorer',
-      author: 'AIMAGICA User',
+      url: '/images/hero-cache/hero-3-zen-garden.jpeg',
+      title: 'Peaceful Meditation',
+      author: 'AIMAGICA Pro',
       authorAvatar: placeholderUserUrl,
       likes: 1432,
       comments: 78,
@@ -488,17 +488,17 @@ export default function GalleryClient() {
       isFeatured: false,
       isLiked: false,
       createdAt: '4 days ago',
-      prompt: 'Astronaut exploring alien worlds among the stars',
-      style: 'Sci-Fi',
-      tags: ['space', 'astronaut', 'alien', 'exploration'],
+      prompt: 'Serene meditation garden with flowing water elements',
+      style: 'Photography',
+      tags: ['meditation', 'zen', 'peaceful', 'nature'],
       size: 'vertical' as const,
       rotation: 1,
     },
     {
       id: 'cache-8',
-      url: catWizardUrl,
-      title: 'Whisker Wizard',
-      author: 'AIMAGICA User',
+      url: '/images/hero-cache/hero-4-digital-art.png',
+      title: 'Digital Masterpiece',
+      author: 'AIMAGICA Pro',
       authorAvatar: placeholderUserUrl,
       likes: 2345,
       comments: 145,
@@ -508,13 +508,13 @@ export default function GalleryClient() {
       isFeatured: true,
       isLiked: false,
       createdAt: '1 week ago',
-      prompt: 'Cute cat wizard casting magical spells with a wand',
-      style: 'Cartoon',
-      tags: ['cat', 'wizard', 'cute', 'magic'],
+      prompt: 'Stunning digital artwork with vibrant color palette',
+      style: 'Digital Art',
+      tags: ['digital', 'masterpiece', 'vibrant', 'art'],
       size: 'medium' as const,
       rotation: -2.5,
     }
-  ], [magicForestUrl, cyberCityUrl, spaceArtUrl, catWizardUrl, placeholderUserUrl])
+  ], [placeholderUserUrl])
   
   const [images, setImages] = useState<GalleryImage[]>(() => {
     // 优先使用本地缓存图片 - 完全模仿Hero的成功策略
