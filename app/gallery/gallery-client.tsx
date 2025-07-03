@@ -47,7 +47,7 @@ import RobustGalleryImage from "@/components/ui/robust-gallery-image"
 import SimpleImage from "@/components/ui/simple-image"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
-import { getSmartImageUrl, preloadNewImages, getImageLoadingProps, preloadLocalMappedImages } from "@/lib/smart-image-url"
+// 移除智能加载，回到简单可靠的模式
 import { useRouter } from "next/navigation"
 // import { browserCacheManager } from "@/lib/browser-cache-manager" // 临时禁用
 
@@ -351,39 +351,175 @@ export default function GalleryClient() {
   const spaceArtUrl = useStaticUrl('/images/examples/space-art.svg')
   const catWizardUrl = useStaticUrl('/images/examples/cat-wizard.svg')
   
-  // 更新静态数据以使用正确的URL
-  const staticGalleryImages = useMemo(() => [
+  // 创建本地高质量缓存图片集合 - 完全模仿Hero区域的成功策略
+  const localCacheImages = useMemo(() => [
     {
-      ...galleryImages[0],
+      id: 'cache-1',
+      url: '/images/hero-cache/hero-1-japanese-anime.png',
+      title: 'Japanese Anime Style',
+      author: 'AIMAGICA User',
+      authorAvatar: placeholderUserUrl,
+      likes: 1243,
+      comments: 89,
+      views: 5678,
+      downloads: 432,
+      isPremium: false,
+      isFeatured: true,
+      isLiked: false,
+      createdAt: '2 days ago',
+      prompt: 'Beautiful anime character with glowing eyes and flowing hair',
+      style: 'Anime',
+      tags: ['anime', 'character', 'glow', 'beautiful'],
+      size: 'medium' as const,
+      rotation: 2.5,
+    },
+    {
+      id: 'cache-2',
+      url: '/images/hero-cache/hero-2-cyberpunk-city.jpeg',
+      title: 'Cyberpunk City',
+      author: 'AIMAGICA User',
+      authorAvatar: placeholderUserUrl,
+      likes: 982,
+      comments: 56,
+      views: 4321,
+      downloads: 321,
+      isPremium: true,
+      isFeatured: false,
+      isLiked: true,
+      createdAt: '1 week ago',
+      prompt: 'A cyberpunk city with neon lights and flying cars',
+      style: 'Cyberpunk',
+      tags: ['cyberpunk', 'city', 'neon', 'scifi'],
+      size: 'horizontal' as const,
+      rotation: -1.2,
+    },
+    {
+      id: 'cache-3',
+      url: '/images/hero-cache/hero-3-zen-garden.jpeg',
+      title: 'Zen Garden',
+      author: 'AIMAGICA User',
+      authorAvatar: placeholderUserUrl,
+      likes: 756,
+      comments: 42,
+      views: 3210,
+      downloads: 198,
+      isPremium: false,
+      isFeatured: false,
+      isLiked: false,
+      createdAt: '3 days ago',
+      prompt: 'Peaceful zen garden with stones and flowing water',
+      style: 'Photography',
+      tags: ['zen', 'garden', 'peace', 'nature'],
+      size: 'vertical' as const,
+      rotation: 1.8,
+    },
+    {
+      id: 'cache-4',
+      url: '/images/hero-cache/hero-4-digital-art.png',
+      title: 'Digital Art',
+      author: 'AIMAGICA User',
+      authorAvatar: placeholderUserUrl,
+      likes: 1567,
+      comments: 103,
+      views: 6789,
+      downloads: 543,
+      isPremium: true,
+      isFeatured: true,
+      isLiked: false,
+      createdAt: '5 days ago',
+      prompt: 'Beautiful digital artwork with vibrant colors',
+      style: 'Digital Art',
+      tags: ['digital', 'art', 'vibrant', 'colors'],
+      size: 'small' as const,
+      rotation: -2.1,
+    },
+    // 添加更多本地缓存图片以填充Gallery
+    {
+      id: 'cache-5',
       url: magicForestUrl,
+      title: 'Enchanted Forest',
+      author: 'AIMAGICA User',
       authorAvatar: placeholderUserUrl,
+      likes: 2134,
+      comments: 167,
+      views: 8765,
+      downloads: 876,
+      isPremium: true,
+      isFeatured: true,
+      isLiked: false,
+      createdAt: '1 day ago',
+      prompt: 'A magical forest with glowing mushrooms and fairy lights',
+      style: 'Fantasy',
+      tags: ['forest', 'magic', 'fantasy', 'glow'],
+      size: 'large' as const,
+      rotation: 3,
     },
     {
-      ...galleryImages[1],
+      id: 'cache-6',
       url: cyberCityUrl,
+      title: 'Neo Tokyo 2099',
+      author: 'AIMAGICA User',
       authorAvatar: placeholderUserUrl,
+      likes: 1876,
+      comments: 92,
+      views: 7654,
+      downloads: 654,
+      isPremium: false,
+      isFeatured: false,
+      isLiked: true,
+      createdAt: '2 weeks ago',
+      prompt: 'Futuristic cyberpunk cityscape with holographic ads',
+      style: 'Cyberpunk',
+      tags: ['cyberpunk', 'city', 'future', 'holo'],
+      size: 'horizontal' as const,
+      rotation: -1.5,
     },
     {
-      ...galleryImages[2],
+      id: 'cache-7',
       url: spaceArtUrl,
+      title: 'Space Explorer',
+      author: 'AIMAGICA User',
       authorAvatar: placeholderUserUrl,
+      likes: 1432,
+      comments: 78,
+      views: 5432,
+      downloads: 432,
+      isPremium: false,
+      isFeatured: false,
+      isLiked: false,
+      createdAt: '4 days ago',
+      prompt: 'Astronaut exploring alien worlds among the stars',
+      style: 'Sci-Fi',
+      tags: ['space', 'astronaut', 'alien', 'exploration'],
+      size: 'vertical' as const,
+      rotation: 1,
     },
     {
-      ...galleryImages[3],
+      id: 'cache-8',
       url: catWizardUrl,
+      title: 'Whisker Wizard',
+      author: 'AIMAGICA User',
       authorAvatar: placeholderUserUrl,
-    },
-    ...galleryImages.slice(4).map(img => ({
-      ...img,
-      url: magicForestUrl, // 使用第一个图片作为备用
-      authorAvatar: placeholderUserUrl,
-    }))
+      likes: 2345,
+      comments: 145,
+      views: 9876,
+      downloads: 765,
+      isPremium: true,
+      isFeatured: true,
+      isLiked: false,
+      createdAt: '1 week ago',
+      prompt: 'Cute cat wizard casting magical spells with a wand',
+      style: 'Cartoon',
+      tags: ['cat', 'wizard', 'cute', 'magic'],
+      size: 'medium' as const,
+      rotation: -2.5,
+    }
   ], [magicForestUrl, cyberCityUrl, spaceArtUrl, catWizardUrl, placeholderUserUrl])
   
   const [images, setImages] = useState<GalleryImage[]>(() => {
-    const staticData = getStaticGalleryData()
-    console.log('📦 初始化静态数据:', staticData.length, '张图片')
-    return staticData
+    // 优先使用本地缓存图片 - 完全模仿Hero的成功策略
+    console.log('📦 初始化本地缓存图片:', localCacheImages.length, '张图片')
+    return localCacheImages
   })
   const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据
   const [error, setError] = useState<string | null>(null)
@@ -397,30 +533,29 @@ export default function GalleryClient() {
   const [searchQuery, setSearchQuery] = useState("")
   const [imageAspectRatios, setImageAspectRatios] = useState<{[key: string]: string}>({})
 
-  // 预加载关键图片，提升用户体验 - 临时禁用
-  // useEffect(() => {
-  //   const preloadCriticalImages = async () => {
-  //     const currentImages = filteredImages.slice(0, 8) // 预加载前8张
-  //     const imageUrls = currentImages.map(img => img.url).filter(Boolean)
-  //     
-  //     if (imageUrls.length > 0) {
-  //       console.log('🚀 预加载Gallery关键图片:', imageUrls.length)
-  //       try {
-  //         await browserCacheManager.preloadImages(imageUrls, {
-  //           maxAge: 30 * 60 * 1000, // 30分钟缓存
-  //           preloadPriority: 'high',
-  //           retryCount: 3
-  //         })
-  //         console.log('✅ Gallery关键图片预加载完成')
-  //       } catch (error) {
-  //         console.warn('⚠️ 预加载部分失败:', error)
-  //       }
-  //     }
-  //   }
-  //   
-  //   // 延迟预加载，确保不影响初始渲染
-  //   setTimeout(preloadCriticalImages, 500)
-  // }, [filteredImages])
+  // 预加载本地缓存图片 - 完全模仿Hero区域的预加载策略
+  useEffect(() => {
+    const preloadLocalImages = () => {
+      console.log('🚀 开始预加载Gallery本地缓存图片...')
+      
+      // 预加载前4张最重要的图片
+      localCacheImages.slice(0, 4).forEach((img, index) => {
+        const preloadImg = new Image()
+        preloadImg.onload = () => {
+          console.log(`✅ 预加载成功: ${img.title} (${index + 1}/4)`)
+        }
+        preloadImg.onerror = () => {
+          console.warn(`⚠️ 预加载失败: ${img.title}`)
+        }
+        preloadImg.src = img.url
+      })
+    }
+
+    // 立即预加载，确保快速显示
+    if (typeof window !== 'undefined' && localCacheImages.length > 0) {
+      preloadLocalImages()
+    }
+  }, [localCacheImages])
 
   // 在后台尝试加载API数据（不阻塞UI显示）
   useEffect(() => {
@@ -473,9 +608,9 @@ export default function GalleryClient() {
         console.log('📦 API Response:', result)
         
         if (result.success && result.data && Array.isArray(result.data) && result.data.length > 0) {
-          // 将API数据转换为GalleryImage格式，使用代理URL避免CORS问题
-          const transformedImages = result.data.map((item: any, index: number) => ({
-            id: item.id || index,
+          // 将API数据转换为GalleryImage格式，但只作为增强内容
+          const transformedImages = result.data.slice(0, 12).map((item: any, index: number) => ({
+            id: `api-${item.id || index}`,
             url: item.url || item.image_url || "/placeholder.svg",
             title: item.title || item.prompt?.substring(0, 50) + "..." || "Untitled",
             author: item.author || item.user_name || "Anonymous",
@@ -495,20 +630,25 @@ export default function GalleryClient() {
             rotation: Math.random() * 4 - 2,
           }))
           
-          setImages(transformedImages)
-          console.log(`✅ Successfully loaded ${transformedImages.length} real gallery images from API`)
+          // 将本地缓存图片与API图片合并，保证本地图片优先显示
+          setImages(prev => {
+            const combinedImages = [...localCacheImages, ...transformedImages]
+            console.log(`✅ 合并显示: ${localCacheImages.length}张本地图片 + ${transformedImages.length}张API图片`)
+            return combinedImages
+          })
           
-          // 预加载新上传的图片
-          const newImageUrls = transformedImages.map(img => img.url).filter(Boolean)
-          preloadNewImages(newImageUrls)
+          // 只预加载前几张API图片，避免网络压力
+          const previewApiUrls = transformedImages.slice(0, 4).map(img => img.url).filter(Boolean)
+          if (previewApiUrls.length > 0) {
+            preloadNewImages(previewApiUrls)
+          }
         }
       } catch (error) {
         console.warn('⚠️ Error fetching gallery images (continuing with static data):', error)
         
-        // 如果API失败，确保使用静态数据
-        const fallbackData = getStaticGalleryData()
-        console.log('🔄 API失败，使用静态数据作为备用:', fallbackData.length, '张图片')
-        setImages(fallbackData)
+        // 如果API失败，确保使用本地缓存图片
+        console.log('🔄 API失败，继续使用本地缓存图片:', localCacheImages.length, '张图片')
+        // 不需要setImages，因为已经初始化为localCacheImages了
       }
     }
 
@@ -517,9 +657,6 @@ export default function GalleryClient() {
   }, [apiAttempted])
 
   useEffect(() => {
-    // 预加载本地映射的图片，提升静态图片加载速度
-    preloadLocalMappedImages()
-    
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
@@ -528,6 +665,22 @@ export default function GalleryClient() {
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
+
+  // 预加载新API图片的函数
+  const preloadNewImages = (imageUrls: string[]) => {
+    console.log('🚀 开始预加载API图片:', imageUrls.length, '张')
+    
+    imageUrls.forEach((url, index) => {
+      const img = new Image()
+      img.onload = () => {
+        console.log(`✅ API图片预加载成功: ${url.substring(url.lastIndexOf('/') + 1)} (${index + 1}/${imageUrls.length})`)
+      }
+      img.onerror = () => {
+        console.warn(`⚠️ API图片预加载失败: ${url}`)
+      }
+      img.src = url
+    })
+  }
 
   // 获取图片详细信息
   const fetchImageDetails = async (imageId: string | number) => {
@@ -1108,7 +1261,7 @@ export default function GalleryClient() {
                         src={image.url || "/placeholder.svg"}
                         alt={image.title}
                         className="w-full h-full object-cover"
-                        loading="lazy"
+                        loading={index < 4 ? "eager" : "lazy"}
                         onError={() => {
                           console.error(`🖼️ Gallery图片加载失败:`, {
                             url: image.url,

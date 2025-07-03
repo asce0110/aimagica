@@ -2,7 +2,6 @@
 
 import { useState } from "react"
 import useStaticUrl from "@/hooks/use-static-url"
-import { getImageLoadingProps } from "@/lib/smart-image-url"
 
 interface SimpleImageProps {
   src: string
@@ -14,13 +13,12 @@ interface SimpleImageProps {
 }
 
 /**
- * 超简单的图片组件 - 模仿Hero区域的成功模式
+ * 超简单的图片组件 - 完全模仿Hero区域的成功模式
  * 
  * 特点：
- * 1. 使用useStaticUrl自动处理URL
- * 2. 原生<img>标签，没有复杂逻辑
- * 3. 简单的错误状态显示
- * 4. 100%可靠的本地静态文件
+ * 1. 只使用useStaticUrl处理URL，没有复杂逻辑
+ * 2. 原生<img>标签，简单可靠
+ * 3. 与Hero区域完全相同的处理方式
  */
 export default function SimpleImage({
   src,
@@ -33,12 +31,8 @@ export default function SimpleImage({
   const [hasError, setHasError] = useState(false)
   const [isLoading, setIsLoading] = useState(true)
   
-  // 使用智能URL策略
-  const smartProps = getImageLoadingProps(src)
-  
-  // 优先使用智能策略的URL，fallback到useStaticUrl
-  const finalUrl = useStaticUrl(smartProps.src)
-  const finalLoading = loading || smartProps.loading
+  // 完全模仿Hero区域：只使用useStaticUrl处理URL
+  const staticUrl = useStaticUrl(src)
   
   const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     console.error(`❌ SimpleImage 加载失败: ${src}`)
@@ -75,15 +69,15 @@ export default function SimpleImage({
         </div>
       )}
       <img
-        src={finalUrl}
+        src={staticUrl}
         alt={alt}
         className={className}
-        loading={finalLoading}
+        loading={loading}
         onError={handleError}
         onLoad={handleLoad}
         style={{ display: isLoading ? 'none' : 'block' }}
-        // 使用智能策略的优化属性
-        fetchPriority={smartProps.fetchPriority}
+        // 完全模仿Hero区域的属性设置
+        fetchPriority={loading === 'eager' ? 'high' : 'auto'}
         decoding="async"
       />
     </>
