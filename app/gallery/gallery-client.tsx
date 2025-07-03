@@ -43,6 +43,7 @@ import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
 import MagicImage from "@/components/ui/magic-image"
 import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import RobustGalleryImage from "@/components/ui/robust-gallery-image"
+import ReliableImage from "@/components/ui/reliable-image"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
 import { browserCacheManager } from "@/lib/browser-cache-manager"
@@ -804,13 +805,11 @@ export default function GalleryClient() {
                     {/* 图片容器 - 白边框效果 */}
                     <div className="w-full h-full relative bg-white rounded-md p-1">
                       <div className="w-full h-full bg-white rounded-sm overflow-hidden relative">
-                        <RobustGalleryImage
+                        <ReliableImage
                           src={image.url || "/placeholder.svg"}
                           alt={image.title}
                           className="w-full h-full object-contain"
                           loading="lazy"
-                          fallbackSrc="/images/placeholder.svg"
-                          retryCount={3}
                           onError={() => {
                             console.error(`🖼️ Gallery图片加载失败:`, {
                               url: image.url,
@@ -893,13 +892,11 @@ export default function GalleryClient() {
             <div className="relative bg-black rounded-l-xl overflow-hidden">
               {selectedImage && (
                 <>
-                  <RobustGalleryImage
+                  <ReliableImage
                     src={selectedImage.url || "/placeholder.svg"}
                     alt={selectedImage.title}
                     className="w-full h-full object-contain"
                     loading="eager"
-                    fallbackSrc="/images/placeholder.svg"
-                    retryCount={5}
                     onError={() => {
                       console.error(`🖼️ 选中图片加载失败:`, {
                         url: selectedImage.url,

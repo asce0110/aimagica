@@ -91,20 +91,23 @@ class BrowserCacheManager {
       
       // 设置超时
       const timeout = setTimeout(() => {
+        img.onload = null
+        img.onerror = null
         reject(new Error('图片加载超时'))
-      }, 10000) // 10秒超时
+      }, 15000) // 15秒超时，给更多时间
       
       img.onload = () => {
         clearTimeout(timeout)
+        console.log(`✅ 图片预加载成功: ${src}`)
         
-        // 尝试缓存图片
-        this.cacheImageBlob(src, img)
-          .then(cachedUrl => resolve(cachedUrl))
-          .catch(() => resolve(src)) // 缓存失败也返回原URL
+        // 不进行复杂的blob缓存，直接返回原URL
+        // 浏览器自己会缓存已加载的图片
+        resolve(src)
       }
       
-      img.onerror = () => {
+      img.onerror = (e) => {
         clearTimeout(timeout)
+        console.warn(`❌ 图片预加载失败: ${src}`, e)
         reject(new Error(`图片加载失败: ${src}`))
       }
       
@@ -112,9 +115,16 @@ class BrowserCacheManager {
       const finalSrc = attempt > 0 ? `${src}${src.includes('?') ? '&' : '?'}retry=${attempt}&t=${Date.now()}` : src
       
       // 设置图片属性
-      img.crossOrigin = 'anonymous'
-      img.fetchPriority = 'high'
-      img.src = finalSrc
+      try {
+        img.crossOrigin = 'anonymous'
+        if ('fetchPriority' in img) {
+          (img as any).fetchPriority = 'low' // 预加载用低优先级
+        }
+        img.src = finalSrc
+      } catch (error) {
+        clearTimeout(timeout)
+        reject(error)
+      }
     })
   }
   

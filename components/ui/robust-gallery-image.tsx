@@ -172,14 +172,16 @@ export default function RobustGalleryImage({
 
   return (
     <div className="relative w-full h-full">
-      {/* 加载状态 */}
-      {isLoading && showPlaceholder && (
-        <div className={`absolute inset-0 ${className} bg-gray-50 flex items-center justify-center animate-pulse`}>
+      {/* 加载状态 - 始终显示占位符，避免白屏 */}
+      {isLoading && (
+        <div className={`absolute inset-0 ${className} bg-gradient-to-br from-gray-50 to-gray-100 flex items-center justify-center z-10`}>
           <div className="text-gray-400 text-xs flex flex-col items-center">
-            <div className="w-8 h-8 bg-gray-200 rounded-lg mb-2 animate-pulse"></div>
-            <div>加载中...</div>
+            <div className="w-8 h-8 bg-gray-200 rounded-lg mb-2 animate-pulse flex items-center justify-center">
+              📷
+            </div>
+            <div className="font-medium">加载中...</div>
             {retryAttempts > 0 && (
-              <div className="text-xs text-gray-300 mt-1">
+              <div className="text-xs text-gray-300 mt-1 animate-bounce">
                 重试 {retryAttempts}/{retryCount}
               </div>
             )}
@@ -187,7 +189,7 @@ export default function RobustGalleryImage({
         </div>
       )}
       
-      {/* 实际图片 */}
+      {/* 实际图片 - 始终渲染，用opacity控制显示 */}
       <img
         ref={imageRef}
         src={currentSrc}
@@ -197,7 +199,8 @@ export default function RobustGalleryImage({
         onError={handleError}
         onLoad={handleLoad}
         style={{ 
-          display: isLoading ? 'none' : 'block',
+          opacity: isLoading ? 0 : 1,
+          transition: 'opacity 0.3s ease-in-out',
           imageRendering: 'auto',
           backfaceVisibility: 'hidden',
           transform: 'translateZ(0)' // 启用硬件加速
