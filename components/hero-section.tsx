@@ -371,7 +371,7 @@ export default function HeroSection() {
                     
                     {/* 照片加载占位符 */}
                     <div className={`${aspectRatio} w-full rounded-lg overflow-hidden shadow-xl relative bg-white`}>
-                      <div className="absolute inset-1 bg-white rounded-md overflow-hidden">
+                      <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
                         <div className="w-full h-full bg-[#f5f1e8] flex items-center justify-center">
                           <MagicLoading 
                             size="small" 
@@ -429,12 +429,12 @@ export default function HeroSection() {
                     
                     {/* 照片 - 窄白边，固定宽高比 */}
                     <div className={`${aspectRatio} w-full rounded-lg overflow-hidden transform hover:scale-110 hover:rotate-0 transition-all shadow-xl relative bg-white`}>
-                      {/* 内部容器确保一致的窄边框 */}
-                      <div className="absolute inset-1 bg-white rounded-md overflow-hidden">
+                      {/* 内部容器确保一致的窄边框 - 左右边缘无边距 */}
+                      <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
                         <img
                           src={imageSrc}
                           alt={isGalleryImage ? img.title : img.title}
-                          className="w-full h-full object-contain transition-opacity duration-300"
+                          className="w-full h-full object-cover transition-opacity duration-300"
                           loading={index < 2 ? "eager" : "lazy"}
                           onError={(e) => {
                             console.error(`🖼️ Hero图片加载失败: ${imageSrc}`);
