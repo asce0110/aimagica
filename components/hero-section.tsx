@@ -455,7 +455,18 @@ export default function HeroSection() {
                           alt={isGalleryImage ? img.title : img.title}
                           className="w-full h-full object-cover transition-opacity duration-300"
                           loading={index < 2 ? "eager" : "lazy"}
-                          onError={() => handleImageError(imageId)}
+                          onError={(e) => {
+                            console.error(`🖼️ Hero图片加载失败: ${imageSrc}`);
+                            // 尝试降级到 placeholder
+                            const target = e.currentTarget as HTMLImageElement;
+                            if (!target.src.includes('placeholder')) {
+                              target.src = placeholderUrl;
+                            }
+                            handleImageError(imageId);
+                          }}
+                          onLoad={() => {
+                            console.log(`✅ Hero图片加载成功: ${imageSrc}`);
+                          }}
                         />
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>

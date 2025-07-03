@@ -4,9 +4,9 @@ const nextConfig = {
   output: 'export',
   
   // 基础配置
-  distDir: 'out',
-  trailingSlash: true,
-  skipTrailingSlashRedirect: true,
+  distDir: '.next',
+  trailingSlash: false,
+  assetPrefix: '',
   
   // Next.js 14 静态导出配置
   

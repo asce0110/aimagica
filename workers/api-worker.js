@@ -276,10 +276,141 @@ async function handleDashboardUsers(request, env) {
 }
 
 async function handleGalleryPublic(request, env) {
-  // 实现公共画廊逻辑
-  return new Response(JSON.stringify({ gallery: [] }), {
-    headers: { 'Content-Type': 'application/json' }
-  })
+  try {
+    console.log('🎨 Fetching real gallery images from Supabase...')
+    
+    // 解析查询参数
+    const url = new URL(request.url)
+    const limit = parseInt(url.searchParams.get('limit') || '20')
+    const offset = parseInt(url.searchParams.get('offset') || '0')
+    const styleFilter = url.searchParams.get('style')
+    
+    // 构建Supabase查询
+    const supabaseUrl = env.SUPABASE_URL || 'https://vvrkbpnnlxjqyhmmovro.supabase.co'
+    const supabaseKey = env.SUPABASE_SERVICE_KEY || env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (!supabaseKey) {
+      console.error('❌ Missing Supabase service key in environment')
+      throw new Error('Missing Supabase configuration')
+    }
+    
+    // 构建查询URL
+    let queryUrl = `${supabaseUrl}/rest/v1/generated_images?select=*&is_public=eq.true&status=eq.completed&order=created_at.desc&limit=${limit}&offset=${offset}`
+    
+    // 如果有样式过滤
+    if (styleFilter) {
+      queryUrl += `&style=ilike.%25${encodeURIComponent(styleFilter)}%25`
+    }
+    
+    console.log('🔍 Querying:', queryUrl)
+    
+    // 查询Supabase
+    const response = await fetch(queryUrl, {
+      headers: {
+        'Authorization': `Bearer ${supabaseKey}`,
+        'apikey': supabaseKey,
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    if (!response.ok) {
+      console.error('❌ Supabase query failed:', response.status, response.statusText)
+      throw new Error(`Supabase query failed: ${response.status}`)
+    }
+    
+    const images = await response.json()
+    console.log(`✅ Found ${images.length} real images from database`)
+    
+    // 转换为Gallery格式
+    const galleryImages = images.map(image => ({
+      id: image.id,
+      url: image.generated_image_url,
+      title: (image.prompt?.substring(0, 50) + '...' || 'Untitled'),
+      author: 'AIMAGICA User',
+      authorAvatar: "/images/aimagica-logo.png",
+      likes: image.likes_count || 0,
+      comments: 0, // 暂时设为0，避免额外查询
+      views: image.view_count || 0,
+      downloads: 0,
+      isPremium: false,
+      isFeatured: (image.likes_count || 0) > 10,
+      isLiked: false,
+      createdAt: new Date(image.created_at).toLocaleDateString(),
+      prompt: image.prompt || '',
+      style: image.style,
+      tags: extractTagsFromPrompt(image.prompt || ''),
+      size: getRandomSize(),
+      rotation: getRandomRotation()
+    }))
+    
+    console.log(`🎯 Returning ${galleryImages.length} processed gallery images`)
+    
+    return new Response(JSON.stringify({ 
+      success: true,
+      data: galleryImages,
+      total: galleryImages.length
+    }), {
+      headers: { 
+        'Content-Type': 'application/json',
+        ...corsHeaders
+      }
+    })
+    
+  } catch (error) {
+    console.error('❌ Error in handleGalleryPublic:', error)
+    
+    // Fallback: 如果数据库查询失败，返回示例数据
+    const fallbackData = [
+      {
+        id: 'fallback-1',
+        url: "/images/examples/magic-forest.svg",
+        title: "数据库连接中...",
+        author: "AIMAGICA",
+        authorAvatar: "/images/aimagica-logo.png",
+        likes: 0,
+        comments: 0,
+        views: 0,
+        downloads: 0,
+        isPremium: false,
+        isFeatured: false,
+        isLiked: false,
+        createdAt: "现在",
+        prompt: "正在从数据库加载真实的AI生成图片...",
+        style: "System",
+        tags: ["加载中"],
+        size: "medium",
+        rotation: 0,
+      }
+    ]
+    
+    return new Response(JSON.stringify({ 
+      success: true,
+      data: fallbackData,
+      error: 'Database connection failed, showing fallback data',
+      details: error.message
+    }), {
+      headers: { 
+        'Content-Type': 'application/json',
+        ...corsHeaders
+      }
+    })
+  }
+}
+
+// 辅助函数
+function extractTagsFromPrompt(prompt) {
+  const commonTags = ['art', 'fantasy', 'portrait', 'landscape', 'digital', 'anime', 'realistic', 'abstract']
+  const promptLower = prompt.toLowerCase()
+  return commonTags.filter(tag => promptLower.includes(tag)).slice(0, 5)
+}
+
+function getRandomSize() {
+  const sizes = ["small", "medium", "large", "vertical", "horizontal"]
+  return sizes[Math.floor(Math.random() * sizes.length)]
+}
+
+function getRandomRotation() {
+  return (Math.random() - 0.5) * 6 // -3 到 3 度的随机旋转
 }
 
 async function handleGalleryItem(request, env, context) {

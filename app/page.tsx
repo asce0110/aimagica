@@ -736,9 +736,17 @@ export default function AISketchPlatform() {
             <div className="flex items-center space-x-2 md:space-x-4">
               <div className="w-10 h-10 md:w-14 md:h-14 rounded-2xl flex items-center justify-center shadow-lg transform rotate-12 overflow-hidden">
                 <img 
-                  src={useStaticUrl('/images/aimagica-logo.png')} 
+                  src={logoUrl} 
                   alt="Aimagica Logo" 
                   className="w-full h-full object-contain"
+                  onError={(e) => {
+                    console.error('🖼️ 首页logo加载失败:', logoUrl);
+                    // 尝试使用备用logo
+                    const target = e.currentTarget as HTMLImageElement;
+                    if (!target.src.includes('placeholder-logo')) {
+                      target.src = '/placeholder-logo.png';
+                    }
+                  }}
                 />
               </div>
               <div className="hidden sm:block">

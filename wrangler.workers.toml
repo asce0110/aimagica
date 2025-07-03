@@ -3,13 +3,14 @@ main = "workers/api-worker.js"
 compatibility_date = "2024-01-01"
 compatibility_flags = ["nodejs_compat"]
 
-# Workers 环境变量配置
+# Workers 环境变量配置  
 [env.production]
 name = "aimagica-api"
+vars = { NODE_ENV = "production" }
 
-# 资源限制
-[limits]
-cpu_ms = 50000  # 50秒CPU时间
+# 资源限制（免费计划不支持自定义CPU限制）
+# [limits]
+# cpu_ms = 50000  # 50秒CPU时间（需要付费计划）
 
 # KV存储绑定（如需要）
 # [[kv_namespaces]]
@@ -24,6 +25,8 @@ cpu_ms = 50000  # 50秒CPU时间
 # 环境变量（生产环境中应该在Cloudflare Dashboard设置）
 [vars]
 NODE_ENV = "production"
+SUPABASE_URL = "https://vvrkbpnnlxjqyhmmovro.supabase.co"
+SUPABASE_SERVICE_ROLE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ2cmticG5ubHhqcXlobW1vdnJvIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc0OTI2NzI4OCwiZXhwIjoyMDY0ODQzMjg4fQ.wVIk6jCZoEZRBErHZXdTxgdZLSzfc_BdTIh74sgD7Ks"
 
 # 自定义域名（可选）
 # [[routes]]
@@ -31,5 +34,5 @@ NODE_ENV = "production"
 # zone_name = "aimagica.ai"
 
 # 触发器配置
-[[triggers]]
+[triggers]
 crons = ["0 0 * * *"]  # 每日统计任务 

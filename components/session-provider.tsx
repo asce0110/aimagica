@@ -1,6 +1,5 @@
 "use client"
 
-import { SessionProvider } from "next-auth/react"
 import React, { ReactNode, createContext, useContext } from "react"
 import { ThemeProvider } from "@/components/theme-provider"
 
@@ -9,10 +8,7 @@ interface ProvidersProps {
 }
 
 // 检测是否为静态导出环境
-const isStaticExport = typeof window !== 'undefined' 
-  ? false 
-  : process.env.NEXT_CONFIG_FILE?.includes('static') || 
-    (process.env.NODE_ENV === 'production' && !process.env.VERCEL && !process.env.NETLIFY)
+const isStaticExport = true // 强制使用静态导出模式
 
 // Mock Session Context for static export
 interface MockSession {
@@ -74,18 +70,7 @@ export function useSessionCompat(): MockSessionContextType {
     console.debug('MockSessionContext not available:', e)
   }
 
-  // 尝试使用 next-auth（仅在客户端）
-  if (!isStaticExport) {
-    try {
-      const { useSession } = require('next-auth/react')
-      const session = useSession()
-      if (session) {
-        return session
-      }
-    } catch (e) {
-      console.debug('next-auth not available:', e)
-    }
-  }
+  // 静态导出模式下不使用 next-auth
 
   // 返回默认状态
   return defaultSession
@@ -101,14 +86,9 @@ export async function signOutCompat(options?: any) {
     return
   }
   
-  try {
-    const { signOut } = require('next-auth/react')
-    return await signOut(options)
-  } catch {
-    // 如果 next-auth 不可用，做简单重定向
-    if (typeof window !== 'undefined') {
-      window.location.href = options?.callbackUrl || '/'
-    }
+  // 静态导出模式下，直接重定向
+  if (typeof window !== 'undefined') {
+    window.location.href = options?.callbackUrl || '/'
   }
 }
 
@@ -129,8 +109,9 @@ export default function Providers({ children }: ProvidersProps) {
     )
   }
 
+  // 在静态导出模式下，不应该到达这里，但提供备用实现
   return (
-    <SessionProvider>
+    <MockSessionProvider>
       <ThemeProvider
         attribute="class"
         defaultTheme="dark"
@@ -140,6 +121,6 @@ export default function Providers({ children }: ProvidersProps) {
       >
         {children}
       </ThemeProvider>
-    </SessionProvider>
+    </MockSessionProvider>
   )
 } 
