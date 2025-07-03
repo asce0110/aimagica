@@ -117,77 +117,21 @@ export default function HeroSection() {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // 获取画廊图片 - 使用workers API
+  // 优化：在静态模式下直接使用本地示例图片，不依赖API
   useEffect(() => {
-    const fetchGalleryImages = async () => {
-      try {
-        setImagesLoading(true)
-        
-        // 从lib/api-config.ts获取正确的API URL
-        const { getApiEndpoint } = await import('@/lib/api-config')
-        const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
-        
-        if (!apiUrl) {
-          console.log('📷 Gallery API not available, using example SVG images')
-          setImagesLoading(false)
-          return
-        }
-        
-        // 使用AbortController来处理请求取消
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 8000) // 8秒超时，给API更多时间
-        
-        const response = await fetch(`${apiUrl}?limit=4&optimize=true`, {
-          signal: controller.signal,
-          headers: {
-            'Cache-Control': 'public, max-age=300', // 5分钟缓存
-          }
-        })
-        
-        clearTimeout(timeoutId)
-        
-        if (response.ok) {
-          const result = await response.json()
-          if (result.success && result.data?.length > 0) {
-            // 转换API数据格式以匹配GalleryImage接口
-            const transformedImages = result.data.map((item: any, index: number) => ({
-              id: item.id || index.toString(),
-              url: item.url || item.image_url || placeholderUrl,
-              title: item.title || item.prompt?.substring(0, 50) + "..." || "Untitled",
-              author: item.author || item.user_name || "Anonymous",
-              createdAt: item.createdAt || item.created_at || "Unknown",
-              prompt: item.prompt || "No prompt available",
-              style: item.style || item.style_name || "Art",
-              rotation: Math.random() * 4 - 2,
-            }))
-            
-            setGalleryImages(transformedImages)
-            console.log(`✅ Loaded ${transformedImages.length} gallery images for hero section from workers API`)
-            
-            // 预加载画廊图片到缓存
-            const imageUrls = transformedImages.map((img: any) => img.url).filter(Boolean)
-            if (imageUrls.length > 0) {
-              console.log('🚀 开始预加载画廊图片到缓存')
-              imageCache.preloadImages(imageUrls).catch(error => {
-                console.warn('⚠️ 画廊图片预加载失败:', error)
-              })
-            }
-          } else {
-            console.log('📷 No gallery images available, using example SVG images')
-          }
-        }
-      } catch (error) {
-        if (error.name === 'AbortError') {
-          console.warn('⏱️ Gallery image loading timed out, using example SVG images')
-        } else {
-          console.warn('⚠️ Failed to load gallery images for hero section:', error)
-        }
-      } finally {
-        setImagesLoading(false)
-      }
+    const initializeHeroImages = async () => {
+      console.log('🎨 初始化Hero区域图片 - 使用本地示例图片')
+      setImagesLoading(true)
+      
+      // 短暂延迟以模拟加载过程，让用户看到加载动画
+      await new Promise(resolve => setTimeout(resolve, 500))
+      
+      // 直接设置为false，使用本地示例图片
+      setImagesLoading(false)
+      console.log('✅ Hero区域图片初始化完成 - 使用本地SVG示例图片')
     }
 
-    fetchGalleryImages()
+    initializeHeroImages()
   }, [])
 
   // 处理图片加载错误
