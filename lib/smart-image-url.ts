@@ -23,7 +23,16 @@ export interface ImageLoadingStrategy {
  * 智能选择图片URL策略
  */
 export function getSmartImageUrl(apiUrl: string): ImageLoadingStrategy {
-  // 1. 首先检查是否有本地版本
+  // 0. 如果已经是本地路径，直接返回本地策略
+  if (apiUrl.startsWith('/images/') || apiUrl.startsWith('./') || apiUrl.startsWith('../')) {
+    return {
+      primaryUrl: apiUrl,
+      isLocal: true,
+      strategy: 'local'
+    }
+  }
+  
+  // 1. 检查是否有本地版本映射
   const localPath = findLocalVersion(apiUrl)
   if (localPath) {
     return {
