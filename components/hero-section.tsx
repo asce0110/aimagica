@@ -14,6 +14,7 @@ import useStaticUrl from "@/hooks/use-static-url"
 import { preloadImageMapping } from "@/lib/image-url-mapper"
 import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import { getApiEndpoint } from "@/lib/api-config"
+import { useCachedHeroImages } from "@/hooks/use-cached-hero-images"
 
 interface GalleryImage {
   id: string
@@ -28,6 +29,9 @@ interface GalleryImage {
 
 export default function HeroSection() {
   const router = useRouter()
+  
+  // 使用缓存的Hero图片
+  const { images: cachedHeroImages, isLoading: heroImagesLoading, cacheStatus } = useCachedHeroImages()
   
   // 使用 useStaticUrl hook 获取CDN URL
   const catWizardUrl = useStaticUrl('/images/examples/cat-wizard.svg')
@@ -67,96 +71,7 @@ export default function HeroSection() {
   ], [catWizardUrl, cyberCityUrl, magicForestUrl, spaceArtUrl])
 
   const [isMobile, setIsMobile] = useState(false)
-  const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
   const [isMounted, setIsMounted] = useState(false)
-  const [imagesLoading, setImagesLoading] = useState(false) // 直接使用静态数据，不需要加载状态
-  
-  // 直接导入静态数据，确保立即可用
-  const staticGalleryImages = useMemo(() => {
-    // 模拟静态数据，使用我们确认可访问的R2 URL
-    return [
-      {
-        id: '386628e0-61b1-4966-8575-2c2f2f162e3a',
-        url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750949808349_Japanese_Anime_Style.png',
-        title: 'Japanese Anime Style',
-        author: 'AIMAGICA User',
-        authorAvatar: '/images/aimagica-logo.png',
-        likes: 1243,
-        comments: 89,
-        views: 5678,
-        downloads: 432,
-        isPremium: false,
-        isFeatured: true,
-        isLiked: false,
-        createdAt: '6/26/2025',
-        prompt: 'Japanese Anime Style',
-        style: 'Anime',
-        tags: ['anime', 'japanese', 'style'],
-        size: 'medium' as const,
-        rotation: 2.5
-      },
-      {
-        id: '48a8804f-9028-4132-85dd-d5c4d807c75e',
-        url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750862975446_A_cyberpunk_city_with_neon_lig.jpeg',
-        title: 'Cyberpunk City with Neon Lights',
-        author: 'AIMAGICA User',
-        authorAvatar: '/images/aimagica-logo.png',
-        likes: 982,
-        comments: 56,
-        views: 4321,
-        downloads: 321,
-        isPremium: true,
-        isFeatured: false,
-        isLiked: true,
-        createdAt: '6/25/2025',
-        prompt: 'A cyberpunk city with neon lights reflecting in the rain',
-        style: 'Chibi Diorama',
-        tags: ['cyberpunk', 'city', 'neon', 'rain'],
-        size: 'horizontal' as const,
-        rotation: -1.2
-      },
-      {
-        id: '9912c424-e6a2-4ac1-98de-77bac4200978',
-        url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750861881556_A_peaceful_zen_garden_with_che.jpeg',
-        title: 'Peaceful Zen Garden',
-        author: 'AIMAGICA User',
-        authorAvatar: '/images/aimagica-logo.png',
-        likes: 756,
-        comments: 42,
-        views: 3210,
-        downloads: 198,
-        isPremium: false,
-        isFeatured: false,
-        isLiked: false,
-        createdAt: '6/24/2025',
-        prompt: 'A peaceful zen garden with cherry blossoms',
-        style: 'Photography',
-        tags: ['zen', 'garden', 'peace', 'nature'],
-        size: 'vertical' as const,
-        rotation: 1.8
-      },
-      {
-        id: '294ff75d-8579-4d3d-87ee-811b69b15a99',
-        url: 'https://tempfile.aiquickdraw.com/v/68f5527672694583a3f90d9dbaec819f_0_1750696712.png',
-        title: 'Digital Art Creation',
-        author: 'AIMAGICA User',
-        authorAvatar: '/images/aimagica-logo.png',
-        likes: 1567,
-        comments: 103,
-        views: 6789,
-        downloads: 543,
-        isPremium: true,
-        isFeatured: true,
-        isLiked: false,
-        createdAt: '6/23/2025',
-        prompt: 'Beautiful digital artwork with vibrant colors',
-        style: 'Digital Art',
-        tags: ['digital', 'art', 'vibrant', 'colors'],
-        size: 'medium' as const,
-        rotation: -2.1
-      }
-    ]
-  }, [])
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set())
   const [networkConnectivity, setNetworkConnectivity] = useState<'unknown' | 'good' | 'limited' | 'poor'>('unknown')
   const [forceLocalImages, setForceLocalImages] = useState(false)
@@ -179,13 +94,6 @@ export default function HeroSection() {
   // 预加载关键图片
   useEffect(() => {
     const preloadImages = () => {
-      // 预加载前2张Hero图片（优先级最高）
-      staticGalleryImages.slice(0, 2).forEach((img) => {
-        const preloadImg = new window.Image()
-        preloadImg.src = img.url
-        console.log(`🚀 预加载Hero图片: ${img.title}`)
-      })
-      
       // 预加载示例图片
       exampleImages.forEach((img) => {
         if (img.preload) {
@@ -206,11 +114,15 @@ export default function HeroSection() {
   useEffect(() => {
     setIsMounted(true)
     
-    // 直接使用硬编码的静态数据，不依赖API或动态导入
-    setGalleryImages(staticGalleryImages)
-    setNetworkConnectivity('good')
-    console.log('✅ Hero区域已加载硬编码静态数据:', staticGalleryImages.length)
-    console.log('🔗 静态图片URLs:', staticGalleryImages.map(img => ({ title: img.title, url: img.url })))
+    // 打印缓存状态
+    if (!heroImagesLoading) {
+      console.log('🎯 Hero缓存状态:', cacheStatus)
+      console.log('📸 Hero图片数据:', cachedHeroImages.map(img => ({ 
+        title: img.title, 
+        isCached: img.isCached,
+        url: img.url
+      })))
+    }
 
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -219,7 +131,7 @@ export default function HeroSection() {
     checkMobile()
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
-  }, [])
+  }, [heroImagesLoading, cacheStatus, cachedHeroImages])
 
   // 网络连通性检测
   useEffect(() => {
@@ -429,7 +341,7 @@ export default function HeroSection() {
                 <div className="flex flex-col gap-8">
                   {/* 第一排 - 挂在绳子上 */}
                   <div className="grid grid-cols-2 gap-4 justify-items-center">
-                    {(galleryImages.length > 0 ? galleryImages : exampleImages).slice(0, 2).map((img, index) => {
+                    {(!heroImagesLoading && cachedHeroImages.length > 0 ? cachedHeroImages : exampleImages).slice(0, 2).map((img, index) => {
                       const hangHeight = [2, 4][index]
                       const aspectRatios = ['aspect-[4/5]', 'aspect-[3/4]']
                       const aspectRatio = aspectRatios[index % aspectRatios.length]
@@ -439,7 +351,7 @@ export default function HeroSection() {
                           key={`mobile-top-${index}`}
                           className={`group cursor-pointer relative photo-sway-${index + 1} w-36`}
                           style={{ 
-                            transform: `rotate(${galleryImages.length > 0 ? img.rotation || 0 : imageRotations[index]}deg)`,
+                            transform: `rotate(${!heroImagesLoading && cachedHeroImages.length > 0 ? img.rotation || 0 : imageRotations[index]}deg)`,
                             marginTop: `${hangHeight * 0.5}rem`
                           }}
                           onClick={() => router.push("/gallery")}
@@ -454,7 +366,7 @@ export default function HeroSection() {
                           {/* 照片 */}
                           <div className={`${aspectRatio} w-full rounded-lg overflow-hidden transform hover:scale-110 hover:rotate-0 transition-all shadow-xl relative bg-white`}>
                             <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
-                              {galleryImages.length > 0 ? (
+                              {!heroImagesLoading && cachedHeroImages.length > 0 ? (
                                 <SimpleGalleryImage
                                   src={img.url || placeholderUrl}
                                   alt={img.title}
@@ -481,7 +393,7 @@ export default function HeroSection() {
                   
                   {/* 第二排 - 挂在第一排下面 */}
                   <div className="grid grid-cols-2 gap-4 justify-items-center">
-                    {(galleryImages.length > 0 ? galleryImages : exampleImages).slice(2, 4).map((img, index) => {
+                    {(!heroImagesLoading && cachedHeroImages.length > 0 ? cachedHeroImages : exampleImages).slice(2, 4).map((img, index) => {
                       const realIndex = index + 2
                       const aspectRatios = ['aspect-[5/4]', 'aspect-[4/3]']
                       const aspectRatio = aspectRatios[index % aspectRatios.length]
@@ -491,7 +403,7 @@ export default function HeroSection() {
                           key={`mobile-bottom-${index}`}
                           className={`group cursor-pointer relative photo-sway-${realIndex + 1} w-32`}
                           style={{ 
-                            transform: `rotate(${galleryImages.length > 0 ? img.rotation || 0 : imageRotations[realIndex]}deg)`
+                            transform: `rotate(${!heroImagesLoading && cachedHeroImages.length > 0 ? img.rotation || 0 : imageRotations[realIndex]}deg)`
                           }}
                           onClick={() => router.push("/gallery")}
                         >
@@ -505,7 +417,7 @@ export default function HeroSection() {
                           {/* 照片 */}
                           <div className={`${aspectRatio} w-full rounded-lg overflow-hidden transform hover:scale-110 hover:rotate-0 transition-all shadow-xl relative bg-white`}>
                             <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
-                              {galleryImages.length > 0 ? (
+                              {!heroImagesLoading && cachedHeroImages.length > 0 ? (
                                 <SimpleGalleryImage
                                   src={img.url || placeholderUrl}
                                   alt={img.title}
@@ -532,7 +444,7 @@ export default function HeroSection() {
 
             {/* 桌面端：横向4张布局 */}
             <div className="hidden md:grid md:grid-cols-4 md:gap-4 md:pt-4">
-            {!isMounted ? null : (galleryImages.length > 0 ? galleryImages : exampleImages).slice(0, 4).map((img, index) => {
+            {!isMounted ? null : (!heroImagesLoading && cachedHeroImages.length > 0 ? cachedHeroImages : exampleImages).slice(0, 4).map((img, index) => {
               const hangHeight = [2, 4, 3, 1][index]
               const aspectRatios = ['aspect-[4/5]', 'aspect-[3/4]', 'aspect-[5/4]', 'aspect-[4/3]']
               const aspectRatio = aspectRatios[index % aspectRatios.length]
@@ -542,7 +454,7 @@ export default function HeroSection() {
                   key={`desktop-${index}`}
                   className={`group cursor-pointer relative photo-sway-${index + 1}`}
                   style={{ 
-                    transform: `rotate(${galleryImages.length > 0 ? img.rotation || 0 : imageRotations[index]}deg)`,
+                    transform: `rotate(${!heroImagesLoading && cachedHeroImages.length > 0 ? img.rotation || 0 : imageRotations[index]}deg)`,
                     marginTop: `${hangHeight * 0.5}rem`
                   }}
                   onClick={() => router.push("/gallery")}
@@ -557,7 +469,7 @@ export default function HeroSection() {
                   {/* 照片 */}
                   <div className={`${aspectRatio} w-full rounded-lg overflow-hidden transform hover:scale-110 hover:rotate-0 transition-all shadow-xl relative bg-white`}>
                     <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
-                      {galleryImages.length > 0 ? (
+                      {!heroImagesLoading && cachedHeroImages.length > 0 ? (
                         <SimpleGalleryImage
                           src={img.url || placeholderUrl}
                           alt={img.title}
