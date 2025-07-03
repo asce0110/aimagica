@@ -11,6 +11,8 @@ import { useRouter } from "next/navigation"
 import OptimizedImage from "@/components/ui/optimized-image"
 import { imageCache } from "@/lib/image-cache"
 import useStaticUrl from "@/hooks/use-static-url"
+import { preloadImageMapping } from "@/lib/image-url-mapper"
+import SmartGalleryImage from "@/components/ui/smart-gallery-image"
 import { getApiEndpoint } from "@/lib/api-config"
 
 interface GalleryImage {
@@ -69,6 +71,8 @@ export default function HeroSection() {
   const [isMounted, setIsMounted] = useState(false)
   const [imagesLoading, setImagesLoading] = useState(true)
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set())
+  const [networkConnectivity, setNetworkConnectivity] = useState<'unknown' | 'good' | 'limited' | 'poor'>('unknown')
+  const [forceLocalImages, setForceLocalImages] = useState(false)
 
   // 生成固定的随机旋转角度数组，避免hydration mismatch
   const imageRotations = useMemo(() => {
@@ -108,6 +112,9 @@ export default function HeroSection() {
 
   useEffect(() => {
     setIsMounted(true)
+    
+    // 预加载图片映射
+    preloadImageMapping()
 
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
@@ -118,50 +125,106 @@ export default function HeroSection() {
     return () => window.removeEventListener("resize", checkMobile)
   }, [])
 
-  // 获取Gallery图片显示在Hero区域
+  // 网络连通性检测
+  useEffect(() => {
+    let failureCount = 0
+    const maxFailures = 2
+    
+    const checkNetworkConnectivity = () => {
+      if (failureCount >= maxFailures) {
+        console.log('🚫 网络连通性差，强制使用本地图片')
+        setNetworkConnectivity('poor')
+        setForceLocalImages(true)
+      }
+    }
+    
+    // 监听图片加载错误
+    const handleGlobalImageError = () => {
+      failureCount++
+      console.log(`📊 图片加载失败计数: ${failureCount}/${maxFailures}`)
+      checkNetworkConnectivity()
+    }
+    
+    // 暴露给全局使用
+    (window as any).heroImageFailureHandler = handleGlobalImageError
+    
+    return () => {
+      delete (window as any).heroImageFailureHandler
+    }
+  }, [])
+
+  // 获取真实Gallery图片显示在Hero区域
   useEffect(() => {
     const fetchGalleryForHero = async () => {
-      console.log('🎨 Hero区域开始获取Gallery图片')
+      console.log('🎨 Hero区域开始获取真实Gallery图片')
       setImagesLoading(true)
       
       try {
-        // 尝试从Workers API获取Gallery图片  
+        // 尝试从Workers API获取真实Gallery图片  
         const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
         if (!apiUrl) {
           throw new Error('Gallery API endpoint not available')
         }
-        const response = await fetch(`${apiUrl}?limit=4&featured=true`)
+        
+        console.log('📞 Hero调用API:', `${apiUrl}?limit=4&featured=true`)
+        
+        // 添加超时控制
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 8000) // 8秒超时
+        
+        const response = await fetch(`${apiUrl}?limit=4&featured=true`, {
+          signal: controller.signal
+        })
+        clearTimeout(timeoutId)
+        
+        console.log('📦 Hero API响应:', {
+          ok: response.ok,
+          status: response.status,
+          statusText: response.statusText
+        })
         
         if (response.ok) {
           const result = await response.json()
+          console.log('📄 Hero API数据:', result)
+          
           if (result.success && result.data && result.data.length > 0) {
-            console.log('✅ Hero区域获取到Gallery图片:', result.data.length)
-            // 转换API数据为Hero需要的格式
+            console.log('✅ Hero区域获取到真实Gallery图片:', result.data.length)
+            setNetworkConnectivity('good')
+            
+            // 转换API数据为Hero需要的格式，优先使用originalUrl避免代理层
             const transformedImages = result.data.map((item: any, index: number) => ({
               id: item.id || index,
-              url: item.url || item.image_url,
+              url: item.originalUrl || item.url || item.image_url, // 优先使用originalUrl跳过代理
               title: item.title || item.prompt?.substring(0, 50) + "..." || "AI Creation",
               author: item.author || item.user_name || "AI Artist",
               createdAt: item.createdAt || item.created_at || "Recently",
               prompt: item.prompt || "Amazing AI artwork",
               style: item.style || "Digital Art",
-              rotation: Math.random() * 4 - 2 // 随机旋转角度
+              rotation: Math.random() * 4 - 2
             }))
             setGalleryImages(transformedImages)
             setImagesLoading(false)
             return
           }
+        } else {
+          setNetworkConnectivity('limited')
         }
         
         console.log('⚠️ 未获取到Gallery数据，使用示例图片')
         
       } catch (error) {
         console.log('⚠️ Gallery API调用失败，使用示例图片:', error)
+        setNetworkConnectivity('limited')
+        
+        if (error instanceof Error && error.name === 'AbortError') {
+          console.log('⏰ API请求超时')
+          setNetworkConnectivity('poor')
+        }
       }
       
       // 如果API调用失败，使用示例图片
       setImagesLoading(false)
-      console.log('✅ Hero区域图片初始化完成 - 使用本地示例图片')
+      console.log('✅ Hero区域图片初始化完成')
     }
 
     fetchGalleryForHero()
@@ -390,25 +453,35 @@ export default function HeroSection() {
               console.log('🔍 Rendering path: Actual images') ||
               console.log('🔍 galleryImages.length:', galleryImages.length) ||
               console.log('🔍 exampleImages.length:', exampleImages.length) ||
-              // 实际图片 - 优化版本
-              (galleryImages.length > 0 ? galleryImages : exampleImages).slice(0, 4).map((img, index) => {
+              // 实际图片 - 根据网络状态智能选择
+              (galleryImages.length > 0 && !forceLocalImages ? galleryImages : exampleImages).slice(0, 4).map((img, index) => {
                 // 为图片添加不同的悬挂高度和比例
                 const hangHeight = [2, 4, 3, 1][index] // 不同的悬挂高度
                 const aspectRatios = ['aspect-[4/5]', 'aspect-[3/4]', 'aspect-[5/4]', 'aspect-[4/3]']
                 const aspectRatio = aspectRatios[index % aspectRatios.length]
                 
-                // 确定图片源
+                // 确定图片源 - 智能降级策略
                 const isGalleryImage = galleryImages.length > 0
                 const imageId = isGalleryImage ? img.id || `gallery-${index}` : `example-${index}`
                 const hasError = imageLoadErrors.has(imageId)
                 
-                                 let imageSrc: string
-                 if (isGalleryImage) {
-                   imageSrc = hasError ? errorPlaceholderUrl : img.url || placeholderUrl
-                 } else {
-                   const exampleImg = img as typeof exampleImages[0]
-                   imageSrc = hasError ? exampleImg.fallback : (supportsWebP ? exampleImg.src : exampleImg.fallback)
-                 }
+                // 使用图片URL映射器智能处理URL
+                let imageSrc: string
+                if (isGalleryImage) {
+                  if (hasError) {
+                    // 如果映射后的图片仍然失败，降级到本地示例图片
+                    const localExamples = [magicForestUrl, cyberCityUrl, spaceArtUrl, catWizardUrl]
+                    imageSrc = localExamples[index % localExamples.length]
+                    console.log(`🔄 映射图片加载失败，降级到本地示例: ${imageSrc}`)
+                  } else {
+                    // 使用URL映射器转换真实图片URL (在Hook外部调用)
+                    imageSrc = img.url || placeholderUrl
+                    console.log(`🗺️ 将使用原始URL: ${imageSrc}`)
+                  }
+                } else {
+                  const exampleImg = img as typeof exampleImages[0]
+                  imageSrc = hasError ? exampleImg.fallback : (supportsWebP ? exampleImg.src : exampleImg.fallback)
+                }
               
                 return (
                   <div
@@ -431,24 +504,55 @@ export default function HeroSection() {
                     <div className={`${aspectRatio} w-full rounded-lg overflow-hidden transform hover:scale-110 hover:rotate-0 transition-all shadow-xl relative bg-white`}>
                       {/* 内部容器确保一致的窄边框 - 左右边缘无边距 */}
                       <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
-                        <img
-                          src={imageSrc}
-                          alt={isGalleryImage ? img.title : img.title}
-                          className="w-full h-full object-cover transition-opacity duration-300"
-                          loading={index < 2 ? "eager" : "lazy"}
-                          onError={(e) => {
-                            console.error(`🖼️ Hero图片加载失败: ${imageSrc}`);
-                            // 尝试降级到 placeholder
-                            const target = e.currentTarget as HTMLImageElement;
-                            if (!target.src.includes('placeholder')) {
-                              target.src = placeholderUrl;
-                            }
-                            handleImageError(imageId);
-                          }}
-                          onLoad={() => {
-                            console.log(`✅ Hero图片加载成功: ${imageSrc}`);
-                          }}
-                        />
+                        {isGalleryImage ? (
+                          <SmartGalleryImage
+                            originalUrl={img.url || placeholderUrl}
+                            alt={img.title}
+                            className="w-full h-full object-cover transition-opacity duration-300"
+                            loading={index < 2 ? "eager" : "lazy"}
+                            index={index}
+                            onError={() => {
+                              console.error(`🖼️ Hero Gallery图片加载失败:`, {
+                                originalUrl: img.url,
+                                title: img.title,
+                                index
+                              });
+                              handleImageError(imageId);
+                              
+                              // 通知全局错误处理器
+                              if ((window as any).heroImageFailureHandler) {
+                                (window as any).heroImageFailureHandler();
+                              }
+                            }}
+                            onLoad={() => {
+                              console.log(`✅ Hero Gallery图片加载成功:`, {
+                                originalUrl: img.url,
+                                title: img.title,
+                                index
+                              });
+                            }}
+                          />
+                        ) : (
+                          <img
+                            src={imageSrc}
+                            alt={img.title}
+                            className="w-full h-full object-cover transition-opacity duration-300"
+                            loading={index < 2 ? "eager" : "lazy"}
+                            onError={() => {
+                              console.error(`🖼️ Hero示例图片加载失败:`, {
+                                src: imageSrc,
+                                title: img.title
+                              });
+                              handleImageError(imageId);
+                            }}
+                            onLoad={() => {
+                              console.log(`✅ Hero示例图片加载成功:`, {
+                                src: imageSrc,
+                                title: img.title
+                              });
+                            }}
+                          />
+                        )}
                       </div>
                       <div className="absolute inset-0 bg-gradient-to-t from-black/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 z-10"></div>
                     </div>

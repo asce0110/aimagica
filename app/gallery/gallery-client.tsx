@@ -41,30 +41,12 @@ import {
 import { useSessionCompat as useSession } from "@/components/session-provider"
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
 import MagicImage from "@/components/ui/magic-image"
-import { getApiEndpoint } from "@/lib/api-config"
+import SmartGalleryImage from "@/components/ui/smart-gallery-image"
+import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
 
-// 接口定义
-interface GalleryImage {
-  id: string | number
-  url: string
-  title: string
-  author: string
-  authorAvatar: string
-  likes: number
-  comments: number
-  views: number
-  downloads: number
-  isPremium: boolean
-  isFeatured: boolean
-  isLiked: boolean
-  createdAt: string
-  prompt: string
-  style: string
-  tags: string[]
-  size: "small" | "medium" | "large" | "vertical" | "horizontal"
-  rotation?: number
-}
+// 使用静态Gallery数据类型
+type GalleryImage = StaticGalleryImage
 
 interface Comment {
   id: string | number
@@ -388,7 +370,7 @@ export default function GalleryClient() {
     }))
   ], [magicForestUrl, cyberCityUrl, spaceArtUrl, catWizardUrl, placeholderUserUrl])
   
-  const [images, setImages] = useState<GalleryImage[]>(staticGalleryImages)
+  const [images, setImages] = useState<GalleryImage[]>(getStaticGalleryData())
   const [loading, setLoading] = useState(false) // 开始时不显示加载状态
   const [error, setError] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
@@ -423,10 +405,10 @@ export default function GalleryClient() {
         console.log('📦 API Response:', result)
         
         if (result.success && result.data && Array.isArray(result.data) && result.data.length > 0) {
-          // 将API数据转换为GalleryImage格式
+          // 将API数据转换为GalleryImage格式，优先使用originalUrl跳过代理
           const transformedImages = result.data.map((item: any, index: number) => ({
             id: item.id || index,
-            url: item.url || item.image_url || "/placeholder.svg",
+            url: item.originalUrl || item.url || item.image_url || "/placeholder.svg",
             title: item.title || item.prompt?.substring(0, 50) + "..." || "Untitled",
             author: item.author || item.user_name || "Anonymous",
             authorAvatar: item.authorAvatar || item.user_avatar || "/placeholder.svg?height=50&width=50&text=A",
@@ -795,12 +777,26 @@ export default function GalleryClient() {
                     {/* 图片容器 - 白边框效果 */}
                     <div className="w-full h-full relative bg-white rounded-md p-1">
                       <div className="w-full h-full bg-white rounded-sm overflow-hidden relative">
-                        <MagicImage
-                          src={image.url || "/placeholder.svg"}
+                        <SmartGalleryImage
+                          originalUrl={image.url || "/placeholder.svg"}
                           alt={image.title}
-                          className="w-full h-full"
-                          objectFit="contain"
-                          loadingMessage="Loading artwork..."
+                          className="w-full h-full object-contain"
+                          loading="lazy"
+                          index={index}
+                          onError={() => {
+                            console.error(`🖼️ Gallery图片加载失败:`, {
+                              originalUrl: image.url,
+                              title: image.title,
+                              index
+                            });
+                          }}
+                          onLoad={() => {
+                            console.log(`✅ Gallery图片加载成功:`, {
+                              originalUrl: image.url,
+                              title: image.title,
+                              index
+                            });
+                          }}
                         />
                         
                         {/* 悬停覆盖层 */}
@@ -869,12 +865,23 @@ export default function GalleryClient() {
             <div className="relative bg-black rounded-l-xl overflow-hidden">
               {selectedImage && (
                 <>
-                  <MagicImage
-                    src={selectedImage.url || "/placeholder.svg"}
+                  <SmartGalleryImage
+                    originalUrl={selectedImage.url || "/placeholder.svg"}
                     alt={selectedImage.title}
-                    className="w-full h-full"
-                    objectFit="contain"
-                    loadingMessage="Loading masterpiece..."
+                    className="w-full h-full object-contain"
+                    loading="eager"
+                    onError={() => {
+                      console.error(`🖼️ 选中图片加载失败:`, {
+                        originalUrl: selectedImage.url,
+                        title: selectedImage.title
+                      });
+                    }}
+                    onLoad={() => {
+                      console.log(`✅ 选中图片加载成功:`, {
+                        originalUrl: selectedImage.url,
+                        title: selectedImage.title
+                      });
+                    }}
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black to-transparent p-4">
                     <h2
