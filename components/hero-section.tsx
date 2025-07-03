@@ -478,7 +478,7 @@ export default function HeroSection() {
                   {/* 照片 */}
                   <div className={`${aspectRatio} w-full rounded-lg overflow-hidden transform hover:scale-110 hover:rotate-0 transition-all shadow-xl relative bg-white`}>
                     <div className="absolute inset-y-1 inset-x-0 bg-white rounded-md overflow-hidden">
-                      {!heroImagesLoading && cachedHeroImages.length > 0 ? (
+                      {!heroImagesLoading && smartHeroImages.length > 0 ? (
                         <SimpleGalleryImage
                           src={img.url || placeholderUrl}
                           alt={img.title}

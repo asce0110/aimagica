@@ -3,6 +3,7 @@ import './globals.css'
 import Providers from '@/components/session-provider'
 import StagewiseWrapper from '@/components/stagewise-wrapper'
 import FloatingGenerationTips from '@/components/floating-generation-tips'
+import '@/lib/error-tracker' // 导入错误追踪器
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://aimagica.ai'),
