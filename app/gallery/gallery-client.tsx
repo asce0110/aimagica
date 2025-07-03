@@ -346,6 +346,7 @@ export default function GalleryClient() {
   const [images, setImages] = useState<GalleryImage[]>(() => {
     const staticData = getStaticGalleryData()
     console.log('📦 初始化静态数据:', staticData.length, '张图片')
+    console.log('📦 前3张图片URL:', staticData.slice(0, 3).map(img => ({ id: img.id, url: img.url })))
     return staticData
   })
   const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据

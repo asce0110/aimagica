@@ -29,8 +29,48 @@ export interface StaticGalleryImage {
  * 使用下载的真实Gallery图片，确保100%可用性
  */
 export function getStaticGalleryData(): StaticGalleryImage[] {
-  // 静态Gallery图片数据（使用本地下载的图片，避免CORS问题）
+  // 测试：临时使用已知有效的hero图片来排除文件问题
   const realGalleryImages: StaticGalleryImage[] = [
+    {
+      id: 'test-hero-1',
+      url: '/images/hero-cache/hero-1-japanese-anime.png',
+      title: 'Test Hero Image 1',
+      author: 'AIMAGICA User',
+      authorAvatar: '/images/aimagica-logo.png',
+      likes: 1243,
+      comments: 89,
+      views: 5678,
+      downloads: 432,
+      isPremium: false,
+      isFeatured: true,
+      isLiked: false,
+      createdAt: '6/26/2025',
+      prompt: 'Test Hero Image 1',
+      style: 'Anime',
+      tags: ['test', 'hero', 'anime'],
+      size: 'medium',
+      rotation: 2.5
+    },
+    {
+      id: 'test-hero-2',
+      url: '/images/hero-cache/hero-2-cyberpunk-city.jpeg',
+      title: 'Test Hero Image 2',
+      author: 'AIMAGICA User',
+      authorAvatar: '/images/aimagica-logo.png',
+      likes: 982,
+      comments: 56,
+      views: 4321,
+      downloads: 321,
+      isPremium: true,
+      isFeatured: false,
+      isLiked: true,
+      createdAt: '6/25/2025',
+      prompt: 'Test Hero Image 2',
+      style: 'Cyberpunk',
+      tags: ['test', 'hero', 'cyberpunk'],
+      size: 'horizontal',
+      rotation: -1.2
+    },
     {
       id: '386628e0-61b1-4966-8575-2c2f2f162e3a',
       url: '/images/gallery/386628e0-61b1-4966-8575-2c2f2f162e3a-f897c7ae.png',
