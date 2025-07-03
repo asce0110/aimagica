@@ -14,7 +14,7 @@ import useStaticUrl from "@/hooks/use-static-url"
 import { preloadImageMapping } from "@/lib/image-url-mapper"
 import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import { getApiEndpoint } from "@/lib/api-config"
-import { useSmartHeroImages } from "@/hooks/use-smart-hero-images"
+import { useSimpleHeroImages } from "@/hooks/use-simple-hero-images"
 
 interface GalleryImage {
   id: string
@@ -30,63 +30,15 @@ interface GalleryImage {
 export default function HeroSection() {
   const router = useRouter()
   
-  // 使用智能Hero图片管理
+  // 使用简化版Hero图片管理 - 避免复杂错误
   const { 
     images: smartHeroImages, 
     isLoading: heroImagesLoading, 
     isRefreshing,
     cacheStatus, 
     lastUpdate,
-    refreshImages 
-  } = useSmartHeroImages({
-    maxAge: 30, // 缓存30分钟
-    fallbackImages: [
-      {
-        id: 'fallback-1',
-        url: '/images/hero-cache/hero-1-japanese-anime.png',
-        title: 'Japanese Anime Style',
-        author: 'AIMAGICA User',
-        createdAt: '最近',
-        prompt: 'Japanese Anime Style',
-        style: 'Anime',
-        rotation: 2.5,
-        isCached: true
-      },
-      {
-        id: 'fallback-2', 
-        url: '/images/hero-cache/hero-2-cyberpunk-city.jpeg',
-        title: 'Cyberpunk City',
-        author: 'AIMAGICA User',
-        createdAt: '最近',
-        prompt: 'A cyberpunk city with neon lights',
-        style: 'Cyberpunk',
-        rotation: -1.2,
-        isCached: true
-      },
-      {
-        id: 'fallback-3',
-        url: '/images/hero-cache/hero-3-zen-garden.jpeg',
-        title: 'Zen Garden',
-        author: 'AIMAGICA User',
-        createdAt: '最近',
-        prompt: 'A peaceful zen garden',
-        style: 'Photography',
-        rotation: 1.8,
-        isCached: true
-      },
-      {
-        id: 'fallback-4',
-        url: '/images/hero-cache/hero-4-digital-art.png',
-        title: 'Digital Art',
-        author: 'AIMAGICA User',
-        createdAt: '最近',
-        prompt: 'Beautiful digital artwork',
-        style: 'Digital Art',
-        rotation: -2.1,
-        isCached: true
-      }
-    ]
-  })
+    error
+  } = useSimpleHeroImages()
   
   // 使用 useStaticUrl hook 获取CDN URL
   const catWizardUrl = useStaticUrl('/images/examples/cat-wizard.svg')
@@ -169,19 +121,16 @@ export default function HeroSection() {
   useEffect(() => {
     setIsMounted(true)
     
-    // 打印智能缓存状态
+    // 打印简化版状态
     if (!heroImagesLoading) {
-      console.log('🎯 Hero智能缓存状态:', {
+      console.log('🎯 Hero简化版状态:', {
         cacheStatus,
-        lastUpdate: lastUpdate?.toLocaleTimeString(),
-        isRefreshing,
+        error,
         imageCount: smartHeroImages.length
       })
-      console.log('📸 Hero图片数据:', smartHeroImages.map(img => ({ 
-        title: img.title, 
-        isCached: img.isCached,
-        url: img.url
-      })))
+      if (error) {
+        console.error('Hero错误:', error)
+      }
     }
 
     const checkMobile = () => {
@@ -191,7 +140,7 @@ export default function HeroSection() {
     checkMobile()
     window.addEventListener("resize", checkMobile)
     return () => window.removeEventListener("resize", checkMobile)
-  }, [heroImagesLoading, cacheStatus, smartHeroImages, lastUpdate, isRefreshing])
+  }, [heroImagesLoading, cacheStatus, smartHeroImages, error])
 
   // 网络连通性检测
   useEffect(() => {
@@ -554,25 +503,11 @@ export default function HeroSection() {
           </div>
 
           <div className="text-center mt-8">
-            {/* 智能缓存状态指示器 */}
-            {!heroImagesLoading && (
+            {/* 简化状态指示器 */}
+            {!heroImagesLoading && !error && (
               <div className="mb-4 flex items-center justify-center gap-2 text-sm">
-                <div className={`w-2 h-2 rounded-full ${
-                  cacheStatus === 'live' ? 'bg-green-500' :
-                  cacheStatus === 'cached' ? 'bg-yellow-500' : 'bg-gray-500'
-                }`} />
-                <span className="text-[#f5f1e8]/70">
-                  {cacheStatus === 'live' ? '🔄 最新内容' :
-                   cacheStatus === 'cached' ? '⚡ 缓存内容' : '📱 离线内容'}
-                </span>
-                {isRefreshing && (
-                  <span className="text-[#f5f1e8]/50 animate-pulse">正在更新...</span>
-                )}
-                {lastUpdate && (
-                  <span className="text-[#f5f1e8]/50 text-xs">
-                    {lastUpdate.toLocaleTimeString()}
-                  </span>
-                )}
+                <div className="w-2 h-2 rounded-full bg-green-500" />
+                <span className="text-[#f5f1e8]/70">📱 静态内容</span>
               </div>
             )}
             
