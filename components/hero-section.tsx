@@ -69,7 +69,7 @@ export default function HeroSection() {
   const [isMobile, setIsMobile] = useState(false)
   const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([])
   const [isMounted, setIsMounted] = useState(false)
-  const [imagesLoading, setImagesLoading] = useState(true)
+  const [imagesLoading, setImagesLoading] = useState(false) // 直接使用静态数据，不需要加载状态
   const [imageLoadErrors, setImageLoadErrors] = useState<Set<string>>(new Set())
   const [networkConnectivity, setNetworkConnectivity] = useState<'unknown' | 'good' | 'limited' | 'poor'>('unknown')
   const [forceLocalImages, setForceLocalImages] = useState(false)
@@ -115,6 +115,14 @@ export default function HeroSection() {
     
     // 预加载图片映射
     preloadImageMapping()
+
+    // 直接使用静态Gallery数据，确保图片能在任何环境下显示
+    import('@/lib/static-gallery-data').then(({ getStaticGalleryData }) => {
+      const staticData = getStaticGalleryData().slice(0, 4) // 只取前4张用于Hero
+      setGalleryImages(staticData)
+      setNetworkConnectivity('good')
+      console.log('✅ Hero区域已加载静态Gallery图片:', staticData.length)
+    })
 
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)

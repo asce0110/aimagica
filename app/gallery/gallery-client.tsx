@@ -371,7 +371,7 @@ export default function GalleryClient() {
   ], [magicForestUrl, cyberCityUrl, spaceArtUrl, catWizardUrl, placeholderUserUrl])
   
   const [images, setImages] = useState<GalleryImage[]>(getStaticGalleryData())
-  const [loading, setLoading] = useState(false) // 开始时不显示加载状态
+  const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据
   const [error, setError] = useState<string | null>(null)
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [comments, setComments] = useState<Comment[]>(sampleComments)
