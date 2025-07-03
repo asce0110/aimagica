@@ -43,7 +43,7 @@ import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
 import MagicImage from "@/components/ui/magic-image"
 import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import RobustGalleryImage from "@/components/ui/robust-gallery-image"
-import ReliableImage from "@/components/ui/reliable-image"
+import SimpleImage from "@/components/ui/simple-image"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
 // import { browserCacheManager } from "@/lib/browser-cache-manager" // 临时禁用
@@ -870,10 +870,10 @@ export default function GalleryClient() {
                     {/* 图片容器 - 白边框效果 */}
                     <div className="w-full h-full relative bg-white rounded-md p-1">
                       <div className="w-full h-full bg-white rounded-sm overflow-hidden relative">
-                        <ReliableImage
+                        <SimpleImage
                           src={image.url || "/placeholder.svg"}
                           alt={image.title}
-                          className="w-full h-full object-contain"
+                          className="w-full h-full object-cover"
                           loading="lazy"
                           onError={() => {
                             console.error(`🖼️ Gallery图片加载失败:`, {
@@ -957,7 +957,7 @@ export default function GalleryClient() {
             <div className="relative bg-black rounded-l-xl overflow-hidden">
               {selectedImage && (
                 <>
-                  <ReliableImage
+                  <SimpleImage
                     src={selectedImage.url || "/placeholder.svg"}
                     alt={selectedImage.title}
                     className="w-full h-full object-contain"
