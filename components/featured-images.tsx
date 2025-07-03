@@ -7,10 +7,12 @@ interface FeaturedImage {
   id: string
   title: string
   prompt: string
-  image_url: string
+  url: string
+  originalUrl?: string
+  image_url?: string
   style: string
   created_at: string
-  featured_at: string
+  featured_at?: string
 }
 
 export default function FeaturedImages() {
@@ -28,7 +30,12 @@ export default function FeaturedImages() {
       const result = await response.json()
       
       if (result.success) {
-        setFeaturedImages(result.data)
+        // 确保所有图片都优先使用originalUrl (R2直链)
+        const processedImages = result.data.map((item: any) => ({
+          ...item,
+          url: item.originalUrl || item.url || item.image_url || "/placeholder.svg"
+        }))
+        setFeaturedImages(processedImages)
       } else {
         console.error('Failed to load featured images:', result.error)
       }
@@ -111,7 +118,7 @@ export default function FeaturedImages() {
                 <div className={`${aspectRatios[imageIndex % aspectRatios.length]} w-full rounded-lg overflow-hidden shadow-xl relative bg-white border-4 border-[#2d3e2d]`}>
                   <div className="absolute inset-1 bg-white rounded-md overflow-hidden">
                     <img
-                      src={image.image_url}
+                      src={image.url}
                       alt={image.title}
                       className="w-full h-full object-cover transition-opacity duration-300"
                       onError={(e) => {

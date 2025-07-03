@@ -13,7 +13,7 @@ interface SimpleGalleryImageProps {
 
 /**
  * 简单的Gallery图片组件 - 直接显示图片，不做任何URL转换
- * 专门用于显示本地静态图片，确保100%可靠性
+ * 用于显示R2存储桶直链和本地静态图片，确保在任何网络环境下都能加载
  */
 export default function SimpleGalleryImage({
   src,
