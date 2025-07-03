@@ -34,6 +34,13 @@ export default function SimpleImage({
   // 完全模仿Hero区域：只使用useStaticUrl处理URL
   const staticUrl = useStaticUrl(src)
   
+  // 调试信息
+  console.log(`🔍 SimpleImage处理URL:`, {
+    originalSrc: src,
+    staticUrl: staticUrl,
+    alt: alt
+  })
+  
   const handleError = (e: React.SyntheticEvent<HTMLImageElement>) => {
     console.error(`❌ SimpleImage 加载失败: ${src}`)
     setHasError(true)
@@ -75,7 +82,12 @@ export default function SimpleImage({
         loading={loading}
         onError={handleError}
         onLoad={handleLoad}
-        style={{ display: isLoading ? 'none' : 'block' }}
+        style={{ 
+          display: isLoading ? 'none' : 'block',
+          // 调试：强制显示，避免CSS隐藏
+          opacity: hasError ? '0.3' : '1',
+          backgroundColor: hasError ? 'red' : 'transparent'
+        }}
         // 完全模仿Hero区域的属性设置
         fetchPriority={loading === 'eager' ? 'high' : 'auto'}
         decoding="async"

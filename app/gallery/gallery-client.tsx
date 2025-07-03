@@ -841,18 +841,21 @@ export default function GalleryClient() {
                           alt={image.title}
                           className="w-full h-full object-cover"
                           loading="lazy"
-                          onError={() => {
-                            console.error(`🖼️ Gallery图片加载失败:`, {
+                          onError={(e) => {
+                            console.error(`❌ Gallery图片加载失败:`, {
                               url: image.url,
                               title: image.title,
-                              index
+                              index,
+                              actualSrc: (e.target as HTMLImageElement)?.src,
+                              error: e
                             });
                           }}
-                          onLoad={() => {
+                          onLoad={(e) => {
                             console.log(`✅ Gallery图片加载成功:`, {
                               url: image.url,
                               title: image.title,
-                              index
+                              index,
+                              actualSrc: (e.target as HTMLImageElement)?.src
                             });
                           }}
                         />

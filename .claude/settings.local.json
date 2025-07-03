@@ -68,7 +68,8 @@
       "Bash(wrangler pages project:*)",
       "Bash(tar:*)",
       "WebFetch(domain:abaf5aef.aimagica.pages.dev)",
-      "Bash(node:*)"
+      "Bash(node:*)",
+      "WebFetch(domain:9974c0f1.aimagica.pages.dev)"
     ],
     "deny": []
   }
