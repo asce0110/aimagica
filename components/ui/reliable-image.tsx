@@ -108,7 +108,7 @@ export default function ReliableImage({
                 className="text-sm text-[#8b7355] font-bold mb-2"
                 style={{ fontFamily: "var(--font-accent)" }}
               >
-                ✨ 施展魔法中...
+                ✨ Casting Magic...
               </div>
               
               {/* 魔法进度条 */}
@@ -140,7 +140,7 @@ export default function ReliableImage({
                 className="text-sm text-[#8b7355]/80 font-bold mb-1"
                 style={{ fontFamily: "var(--font-accent)" }}
               >
-                🔮 魔法暂时失效
+                🔮 Magic Failed
               </div>
               
               <div 

@@ -90,7 +90,7 @@ export default function SimpleGalleryImage({
             className="text-xs text-[#8b7355]/80 font-bold"
             style={{ fontFamily: "var(--font-accent)" }}
           >
-            🔮 魔法失效
+            🔮 Magic Failed
           </div>
         </div>
       </div>
@@ -117,7 +117,7 @@ export default function SimpleGalleryImage({
               className="text-xs text-[#8b7355] font-bold"
               style={{ fontFamily: "var(--font-accent)" }}
             >
-              ✨ 施法中
+              ✨ Casting...
             </div>
           </div>
         </div>

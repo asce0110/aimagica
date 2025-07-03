@@ -29,11 +29,11 @@ export interface StaticGalleryImage {
  * 使用下载的真实Gallery图片，确保100%可用性
  */
 export function getStaticGalleryData(): StaticGalleryImage[] {
-  // 真实Gallery图片数据（直接使用R2存储桶URL）
+  // 静态Gallery图片数据（使用本地下载的图片，避免CORS问题）
   const realGalleryImages: StaticGalleryImage[] = [
     {
       id: '386628e0-61b1-4966-8575-2c2f2f162e3a',
-      url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750949808349_Japanese_Anime_Style.png',
+      url: '/images/gallery/386628e0-61b1-4966-8575-2c2f2f162e3a-f897c7ae.png',
       title: 'Japanese Anime Style',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -53,7 +53,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '48a8804f-9028-4132-85dd-d5c4d807c75e',
-      url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750862975446_A_cyberpunk_city_with_neon_lig.jpeg',
+      url: '/images/gallery/48a8804f-9028-4132-85dd-d5c4d807c75e-13630e73.jpeg',
       title: 'Cyberpunk City with Neon Lights',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -73,7 +73,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '9912c424-e6a2-4ac1-98de-77bac4200978',
-      url: 'https://images.aimagica.ai/gallery/105948948301872216168/1750861881556_A_peaceful_zen_garden_with_che.jpeg',
+      url: '/images/gallery/105948948301872216168/1750861881556_A_peaceful_zen_garden_with_che.jpeg',
       title: 'Peaceful Zen Garden',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -113,7 +113,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '5abb0316-b1d9-4c3a-ac97-76fcbe63f52b',
-      url: 'https://images.aimagica.ai/gallery/105948948301872216168/1749971728392_________.png',
+      url: '/images/gallery/105948948301872216168/1749971728392_________.png',
       title: 'Fantasy Landscape',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -133,7 +133,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '2afbdc00-d083-46bf-8167-28d81971226f',
-      url: 'https://images.aimagica.ai/gallery/105948948301872216168/1749919511990________________.png',
+      url: '/images/gallery/105948948301872216168/1749919511990________________.png',
       title: 'Abstract Composition',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -153,7 +153,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '04033a15-7dfc-4b96-8999-91e6915ac926',
-      url: 'https://images.aimagica.ai/gallery/105948948301872216168/1749916206895_____.png',
+      url: '/images/gallery/105948948301872216168/1749916206895_____.png',
       title: 'Portrait Study',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -173,7 +173,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: 'b3a47ac4-6386-41b1-8702-de4cf5ff03c1',
-      url: 'https://images.aimagica.ai/gallery/105948948301872216168/1749915657307______.png',
+      url: '/images/gallery/105948948301872216168/1749915657307______.png',
       title: 'Nature Scene',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -193,7 +193,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '82db65f1-d54e-4f7f-a9c3-c3f5e902643b',
-      url: 'https://images.aimagica.ai/gallery/115340097862236142261/1749913956478________.png',
+      url: '/images/gallery/115340097862236142261/1749913956478________.png',
       title: 'Character Design',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',
@@ -213,7 +213,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
     },
     {
       id: '22ab8354-87e8-4a74-a37b-c3f08f1ced20',
-      url: 'https://images.aimagica.ai/gallery/105948948301872216168/1749885738447_AI_Generated_Artwork.png',
+      url: '/images/gallery/105948948301872216168/1749885738447_AI_Generated_Artwork.png',
       title: 'AI Generated Artwork',
       author: 'AIMAGICA User',
       authorAvatar: '/images/aimagica-logo.png',

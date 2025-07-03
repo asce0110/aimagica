@@ -336,6 +336,9 @@ const sampleComments: Comment[] = [
 export default function GalleryClient() {
   const { data: session } = useSession()
   
+  // 添加调试信息
+  console.log('🎯 GalleryClient组件初始化')
+  
   // 使用 useStaticUrl 处理图片路径
   const logoUrl = useStaticUrl('/images/aimagica-logo.png')
   const placeholderUserUrl = useStaticUrl('/placeholder-user.jpg')
@@ -373,10 +376,15 @@ export default function GalleryClient() {
     }))
   ], [magicForestUrl, cyberCityUrl, spaceArtUrl, catWizardUrl, placeholderUserUrl])
   
-  const [images, setImages] = useState<GalleryImage[]>(getStaticGalleryData())
+  const [images, setImages] = useState<GalleryImage[]>(() => {
+    const staticData = getStaticGalleryData()
+    console.log('📦 初始化静态数据:', staticData.length, '张图片')
+    return staticData
+  })
   const [loading, setLoading] = useState(false) // 开始时不显示加载状态，直接使用静态数据
   const [error, setError] = useState<string | null>(null)
   const [apiAttempted, setApiAttempted] = useState(false)
+  const [emergencyMode, setEmergencyMode] = useState(false) // 紧急模式：完全跳过API
   const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null)
   const [comments, setComments] = useState<Comment[]>(sampleComments)
   const [newComment, setNewComment] = useState("")
@@ -412,11 +420,21 @@ export default function GalleryClient() {
 
   // 在后台尝试加载API数据（不阻塞UI显示）
   useEffect(() => {
-    if (apiAttempted) return // 避免重复请求
+    if (emergencyMode) {
+      console.log('🚨 紧急模式：完全跳过API，只使用静态数据')
+      return
+    }
+    
+    if (apiAttempted) {
+      console.log('⚠️ API已经尝试过，跳过重复请求')
+      return // 避免重复请求
+    }
     
     const fetchGalleryImages = async () => {
       try {
         setApiAttempted(true)
+        console.log('🚀 开始尝试加载API数据...')
+        
         const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
         console.log('🔗 API URL:', apiUrl)
         
@@ -426,12 +444,21 @@ export default function GalleryClient() {
         }
         
         console.log('📞 Calling API in background:', `${apiUrl}?limit=50`)
+        
+        // 添加超时控制
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 15000) // 15秒超时
+        
         const response = await fetch(`${apiUrl}?limit=50`, {
           headers: {
             'Cache-Control': 'no-cache',
-            'Pragma': 'no-cache'
-          }
+            'Pragma': 'no-cache',
+            'X-Request-Time': Date.now().toString()
+          },
+          signal: controller.signal
         })
+        
+        clearTimeout(timeoutId)
         
         if (!response.ok) {
           console.warn(`Failed to fetch gallery images: ${response.statusText}`)
@@ -469,6 +496,11 @@ export default function GalleryClient() {
         }
       } catch (error) {
         console.warn('⚠️ Error fetching gallery images (continuing with static data):', error)
+        
+        // 如果API失败，确保使用静态数据
+        const fallbackData = getStaticGalleryData()
+        console.log('🔄 API失败，使用静态数据作为备用:', fallbackData.length, '张图片')
+        setImages(fallbackData)
       }
     }
 
@@ -760,16 +792,30 @@ export default function GalleryClient() {
           >
             <p className="font-medium">⚠️ {error}</p>
             <p className="text-sm mt-1">Showing backup images instead.</p>
-            <button 
-              onClick={() => {
-                setError(null)
-                setApiAttempted(false)
-                setImages(getStaticGalleryData())
-              }}
-              className="text-sm mt-2 bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors"
-            >
-              🔄 重新加载
-            </button>
+            <div className="flex gap-2 mt-2">
+              <button 
+                onClick={() => {
+                  setError(null)
+                  setApiAttempted(false)
+                  setImages(getStaticGalleryData())
+                }}
+                className="text-sm bg-red-500 text-white px-3 py-1 rounded hover:bg-red-600 transition-colors"
+              >
+                🔄 重新加载
+              </button>
+              <button 
+                onClick={() => {
+                  setEmergencyMode(true)
+                  setError(null)
+                  setApiAttempted(true)
+                  setImages(getStaticGalleryData())
+                  console.log('🚨 切换到紧急模式：仅使用静态数据')
+                }}
+                className="text-sm bg-orange-500 text-white px-3 py-1 rounded hover:bg-orange-600 transition-colors"
+              >
+                🚨 静态模式
+              </button>
+            </div>
           </motion.div>
         )}
 
