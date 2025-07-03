@@ -107,6 +107,32 @@ Visit [**aimagica.ai**](https://aimagica.ai) to start creating amazing AI art:
 - **🌟 Regular Updates**: New features and styles added frequently
 - **🔒 Privacy Focused**: Your creations remain private unless you choose to share
 
+### 🎨 字体配置优化 (2025-01-30)
+
+**最新字体优化更新：**
+
+#### 桌面端 Hero 区域字体还原
+- **标题字体**：还原为 `Comic Sans MS, cursive` (原来的可爱风格)
+- **按钮字体**：还原为 `Comic Sans MS, cursive` (保持与标题一致)
+- **目的**：保持桌面端Hero区域的友好、轻松氛围
+
+#### 移动端字体全面优化
+- **标题字体**：`Helvetica Neue, Helvetica, Arial, sans-serif` (简洁现代)
+- **正文字体**：`SF Pro Text, Helvetica Neue, Helvetica, Arial, sans-serif` (高可读性)
+- **按钮字体**：`SF Pro Display, Helvetica Neue, Helvetica, Arial, sans-serif` (清晰界面)
+- **目的**：解决移动端字体过于花哨的问题，提供更好的可读性和用户体验
+
+#### 字体配置文件
+- **CSS变量定义**：`app/globals.css` - 新增移动端专用字体变量
+- **Hero组件**：`components/hero-section.tsx` - 响应式字体切换
+- **工具类**：`.font-hero-desktop`, `.font-mobile-*` 系列类
+
+#### 优化效果
+- ✅ **桌面端**：Hero区域恢复友好可爱的Comic Sans MS字体
+- ✅ **移动端**：全局使用系统默认的优质字体，提高可读性
+- ✅ **响应式**：不同设备自动切换最合适的字体
+- ✅ **性能**：移动端优先使用系统字体，无需额外加载
+
 ### R2 CDN 部署状态 ✅
 - **静态资源CDN**: 15个文件已上传到R2 (2.19MB)
 - **CDN域名**: https://images.aimagica.ai

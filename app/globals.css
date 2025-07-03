@@ -10,6 +10,14 @@
   --font-heading: 'Orbitron', 'Arial Black', sans-serif; /* 科技感标题字体 */
   --font-body: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif; /* 现代正文字体 */
   --font-accent: 'Exo 2', 'Impact', sans-serif; /* 强调字体 */
+  
+  /* 桌面端hero区域专用字体 - 还原到以前的配置 */
+  --font-hero-desktop: 'Comic Sans MS', cursive; /* 桌面端hero区域使用可爱字体 */
+  
+  /* 移动端优化字体 - 简洁好看的标准字体 */
+  --font-mobile-heading: 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; /* 移动端标题字体 */
+  --font-mobile-body: 'SF Pro Text', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; /* 移动端正文字体 */
+  --font-mobile-button: 'SF Pro Display', 'Helvetica Neue', 'Helvetica', 'Arial', sans-serif; /* 移动端按钮字体 */
 }
 
 @layer base {
@@ -161,20 +169,59 @@
   font-family: var(--font-accent);
 }
 
+/* 桌面端hero区域专用字体类 */
+.font-hero-desktop {
+  font-family: var(--font-hero-desktop);
+}
+
+/* 移动端字体优化类 */
+.font-mobile-heading {
+  font-family: var(--font-mobile-heading);
+}
+
+.font-mobile-body {
+  font-family: var(--font-mobile-body);
+}
+
+.font-mobile-button {
+  font-family: var(--font-mobile-button);
+}
+
 /* 移动端字体优化 */
 @media (max-width: 768px) {
-  .font-heading {
-    font-weight: 700;
-    letter-spacing: 0.025em;
+  /* 移动端全局字体重置 - 使用简洁好看的字体 */
+  body {
+    font-family: var(--font-mobile-body) !important;
   }
   
-  .font-accent {
+  /* 移动端标题字体 */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-mobile-heading) !important;
     font-weight: 600;
+    letter-spacing: -0.02em; /* 稍微收紧字间距，提高可读性 */
   }
   
-  /* 确保按钮文字在移动端清晰 */
+  /* 移动端按钮字体 */
   button, .btn {
-    font-family: var(--font-accent);
+    font-family: var(--font-mobile-button) !important;
+    font-weight: 500;
+    letter-spacing: -0.01em;
+  }
+  
+  /* 移动端强调文字字体 */
+  .font-accent {
+    font-family: var(--font-mobile-button) !important;
     font-weight: 600;
+  }
+  
+  /* 移动端其他文字元素 */
+  p, span, div {
+    font-family: var(--font-mobile-body) !important;
+  }
+  
+  /* 移动端输入框字体 */
+  input, textarea, select {
+    font-family: var(--font-mobile-body) !important;
+    font-weight: 400;
   }
 }
