@@ -277,13 +277,22 @@ class BrowserCacheManager {
 export const browserCacheManager = new BrowserCacheManager()
 
 // 定期清理过期缓存
-setInterval(() => {
-  browserCacheManager.cleanup()
-}, 5 * 60 * 1000) // 每5分钟清理一次
-
-// 页面卸载时清理
 if (typeof window !== 'undefined') {
+  const cleanupInterval = setInterval(() => {
+    try {
+      browserCacheManager.cleanup()
+    } catch (error) {
+      console.warn('清理缓存时出错:', error)
+    }
+  }, 5 * 60 * 1000) // 每5分钟清理一次
+
+  // 页面卸载时清理
   window.addEventListener('beforeunload', () => {
-    browserCacheManager.reset()
+    try {
+      clearInterval(cleanupInterval)
+      browserCacheManager.reset()
+    } catch (error) {
+      console.warn('页面卸载清理时出错:', error)
+    }
   })
 }

@@ -87,35 +87,64 @@ export function useSmartHeroImages(options: CacheOptions) {
 
   // 从API获取最新图片
   const fetchLatestImages = async (): Promise<HeroImage[]> => {
-    const apiUrl = process.env.NEXT_PUBLIC_WORKERS_URL || 'https://api-worker.aimagica.pages.dev'
+    // 尝试多个API端点
+    const apiUrls = [
+      process.env.NEXT_PUBLIC_WORKERS_URL,
+      'https://api-worker.aimagica.pages.dev',
+      'https://aimagica.com/api'
+    ].filter(Boolean)
     
-    const response = await fetch(`${apiUrl}/api/gallery/public?limit=4&featured=true&sort=latest`, {
-      headers: {
-        'Cache-Control': 'no-cache'
+    let lastError: Error | null = null
+    
+    for (const baseUrl of apiUrls) {
+      try {
+        const apiUrl = `${baseUrl}/api/gallery/public`
+        console.log('🔗 尝试API端点:', apiUrl)
+        
+        // 创建超时控制器
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 10000)
+        
+        const response = await fetch(`${apiUrl}?limit=4&featured=true&sort=latest`, {
+          headers: {
+            'Cache-Control': 'no-cache'
+          },
+          signal: controller.signal
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (!response.ok) {
+          throw new Error(`API调用失败: ${response.status} ${response.statusText}`)
+        }
+        
+        const result = await response.json()
+        
+        if (!result.success || !result.data || result.data.length === 0) {
+          throw new Error('API返回数据为空')
+        }
+        
+        console.log('✅ API调用成功:', result.data.length, '张图片')
+        
+        return result.data.map((item: any, index: number) => ({
+          id: item.id || `api-${index}`,
+          url: item.originalUrl || item.url || item.image_url,
+          title: item.title || item.prompt?.substring(0, 50) + "..." || "AI Creation",
+          author: item.author || item.user_name || "AI Artist",
+          createdAt: item.createdAt || item.created_at || "Recently",
+          prompt: item.prompt || "Amazing AI artwork",
+          style: item.style || "Digital Art",
+          rotation: Math.random() * 4 - 2,
+          originalUrl: item.originalUrl || item.url || item.image_url
+        }))
+      } catch (error) {
+        console.warn(`⚠️ API端点失败: ${baseUrl}`, error)
+        lastError = error as Error
+        continue
       }
-    })
-    
-    if (!response.ok) {
-      throw new Error(`API调用失败: ${response.status}`)
     }
     
-    const result = await response.json()
-    
-    if (!result.success || !result.data || result.data.length === 0) {
-      throw new Error('API返回数据为空')
-    }
-    
-    return result.data.map((item: any, index: number) => ({
-      id: item.id || `api-${index}`,
-      url: item.originalUrl || item.url || item.image_url,
-      title: item.title || item.prompt?.substring(0, 50) + "..." || "AI Creation",
-      author: item.author || item.user_name || "AI Artist",
-      createdAt: item.createdAt || item.created_at || "Recently",
-      prompt: item.prompt || "Amazing AI artwork",
-      style: item.style || "Digital Art",
-      rotation: Math.random() * 4 - 2,
-      originalUrl: item.originalUrl || item.url || item.image_url
-    }))
+    throw lastError || new Error('所有API端点都失败了')
   }
 
   // 比较图片是否有变化
@@ -135,58 +164,66 @@ export function useSmartHeroImages(options: CacheOptions) {
   // 初始化加载
   useEffect(() => {
     const initializeImages = async () => {
-      console.log('🚀 初始化Hero图片...')
-      
-      // 1. 立即显示缓存或备用图片
-      const cachedImages = getCachedImages()
-      if (cachedImages && cachedImages.length > 0) {
-        setImages(cachedImages)
-        setCacheStatus('cached')
-        setIsLoading(false)
-        setLastUpdate(new Date())
-        console.log('⚡ 立即显示缓存图片')
-      } else {
+      try {
+        console.log('🚀 初始化Hero图片...')
+        
+        // 1. 立即显示缓存或备用图片
+        const cachedImages = getCachedImages()
+        if (cachedImages && cachedImages.length > 0) {
+          setImages(cachedImages)
+          setCacheStatus('cached')
+          setIsLoading(false)
+          setLastUpdate(new Date())
+          console.log('⚡ 立即显示缓存图片')
+        } else {
+          setImages(options.fallbackImages)
+          setCacheStatus('fallback')
+          setIsLoading(false)
+          console.log('⚡ 立即显示备用图片')
+        }
+        
+        // 2. 后台获取最新数据（添加延迟避免阻塞初始渲染）
+        setTimeout(async () => {
+          try {
+            setIsRefreshing(true)
+            console.log('🔄 后台获取最新Hero图片...')
+            
+            const latestImages = await fetchLatestImages()
+            console.log('✅ 获取到最新图片:', latestImages.length)
+            
+            // 3. 智能更新策略
+            const currentImages = cachedImages || options.fallbackImages
+            const shouldUpdate = hasImagesChanged(currentImages, latestImages)
+            
+            if (shouldUpdate) {
+              console.log('🔄 检测到新图片，更新Hero区域')
+              setImages(latestImages)
+              setCacheStatus('live')
+              saveCachedImages(latestImages)
+            } else {
+              console.log('✅ 图片无变化，保持当前显示')
+              // 即使无变化也更新缓存时间
+              if (cachedImages) {
+                saveCachedImages(cachedImages)
+              }
+            }
+            
+            setLastUpdate(new Date())
+            
+          } catch (error) {
+            console.warn('⚠️ 获取最新Hero图片失败:', error)
+            // API失败时保持当前显示的图片，不做任何改变
+          } finally {
+            setIsRefreshing(false)
+          }
+        }, 1000) // 延迟1秒执行，确保页面已渲染
+        
+      } catch (error) {
+        console.error('❌ Hero图片初始化失败:', error)
+        // 确保总是有fallback图片
         setImages(options.fallbackImages)
         setCacheStatus('fallback')
         setIsLoading(false)
-        console.log('⚡ 立即显示备用图片')
-      }
-      
-      // 2. 后台获取最新数据
-      try {
-        setIsRefreshing(true)
-        console.log('🔄 后台获取最新Hero图片...')
-        
-        const latestImages = await fetchLatestImages()
-        console.log('✅ 获取到最新图片:', latestImages.length)
-        
-        // 3. 智能更新策略
-        const currentImages = cachedImages || options.fallbackImages
-        const shouldUpdate = hasImagesChanged(currentImages, latestImages)
-        
-        if (shouldUpdate) {
-          console.log('🔄 检测到新图片，更新Hero区域')
-          setImages(latestImages)
-          setCacheStatus('live')
-          saveCachedImages(latestImages)
-        } else {
-          console.log('✅ 图片无变化，保持当前显示')
-          // 即使无变化也更新缓存时间
-          if (cachedImages) {
-            saveCachedImages(cachedImages)
-          }
-        }
-        
-        setLastUpdate(new Date())
-        
-      } catch (error) {
-        console.warn('⚠️ 获取最新Hero图片失败:', error)
-        // API失败时保持当前显示的图片
-        if (images.length === 0) {
-          setImages(options.fallbackImages)
-          setCacheStatus('fallback')
-        }
-      } finally {
         setIsRefreshing(false)
       }
     }
