@@ -71,6 +71,7 @@ export default function NewGalleryClient() {
   const [filter, setFilter] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [isMobile, setIsMobile] = useState(false)
+  const [isOfflineMode, setIsOfflineMode] = useState(false)
   
   // 功能状态
   const [isSharing, setIsSharing] = useState(false)
@@ -81,67 +82,65 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 初始化：立即加载静态数据，数据库加载在后台进行
+  // 初始化：立即加载静态数据，完全跳过API调用
   useEffect(() => {
-    const loadData = () => {
-      console.log('🎯 开始快速加载Gallery数据...')
+    console.log('🎯 开始极速加载Gallery数据...')
+    
+    try {
+      const staticData = getStaticGalleryData()
+      console.log('📊 静态数据获取结果:', staticData?.length || 0, '张图片')
       
-      // 设置2秒超时，确保无论如何都会显示内容
-      const timeoutId = setTimeout(() => {
-        console.warn('⚠️ 加载超时，强制显示静态内容')
-        setIsInitialLoading(false)
-      }, 2000)
-      
-      try {
-        const staticData = getStaticGalleryData()
-        console.log('📊 静态数据获取结果:', staticData?.length || 0, '张图片')
+      if (staticData && staticData.length > 0) {
+        // 直接使用静态数据和本地缓存，不等待任何API
+        const enhancedData: EnhancedGalleryImage[] = staticData.map(image => {
+          // 从localStorage获取之前的交互数据
+          const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
+          const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
+          const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
+          const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
+          
+          return {
+            ...image,
+            dbLoaded: true, // 标记为已加载，使用本地数据
+            localLikes,
+            localViews,
+            localComments,
+            localIsLiked,
+          }
+        })
         
-        if (staticData && staticData.length > 0) {
-          // 先使用静态数据初始化，设置为本地缓存的统计或0
-          const enhancedData: EnhancedGalleryImage[] = staticData.map(image => {
-            // 从localStorage获取之前的交互数据
-            const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
-            const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
-            const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
-            const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
+        setAllImages(enhancedData)
+        console.log(`✅ 静态数据初始化成功: ${enhancedData.length}张图片`)
+        
+        // 立即停止加载状态
+        setIsInitialLoading(false)
+        
+        // 5秒后尝试在后台同步数据库（给网络更多时间）
+        setTimeout(async () => {
+          console.log('🔄 尝试后台同步数据库统计...')
+          try {
+            // 先检查网络状态
+            const networkAvailable = await galleryDB.quickNetworkCheck()
+            setIsOfflineMode(!networkAvailable)
             
-            return {
-              ...image,
-              dbLoaded: false,
-              localLikes,
-              localViews,
-              localComments,
-              localIsLiked,
+            if (networkAvailable) {
+              await loadDatabaseStatsInBackground(enhancedData)
+            } else {
+              console.log('📱 确认离线模式，跳过数据库同步')
             }
-          })
-          
-          setAllImages(enhancedData)
-          console.log(`✅ 静态数据初始化成功: ${enhancedData.length}张图片`)
-          
-          // 清除超时并立即停止加载状态
-          clearTimeout(timeoutId)
-          setIsInitialLoading(false)
-          
-          // 在下一个tick中异步加载数据库统计，不阻塞UI
-          setTimeout(() => {
-            loadDatabaseStatsInBackground(enhancedData).catch(error => {
-              console.warn('⚠️ 数据库统计加载失败，但不影响静态显示:', error)
-            })
-          }, 100)
-        } else {
-          console.warn('⚠️ 静态数据为空，使用备用数据')
-          clearTimeout(timeoutId)
-          setIsInitialLoading(false)
-        }
-      } catch (error) {
-        console.error('❌ 静态数据加载异常:', error)
-        clearTimeout(timeoutId)
+          } catch (error) {
+            console.warn('⚠️ 数据库同步失败，继续使用本地数据:', error)
+            setIsOfflineMode(true)
+          }
+        }, 5000)
+      } else {
+        console.warn('⚠️ 静态数据为空')
         setIsInitialLoading(false)
       }
+    } catch (error) {
+      console.error('❌ 静态数据加载异常:', error)
+      setIsInitialLoading(false)
     }
-
-    // 立即执行，不用async
-    loadData()
   }, [])
 
   // 加载数据库统计信息
@@ -646,9 +645,15 @@ export default function NewGalleryClient() {
               </span>
             </div>
             {/* 显示数据库连接状态 */}
-            <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
-              Database Connected
-            </Badge>
+            {isOfflineMode ? (
+              <Badge variant="outline" className="bg-orange-500/20 text-orange-300 border-orange-500">
+                Offline Mode
+              </Badge>
+            ) : (
+              <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
+                Database Connected
+              </Badge>
+            )}
             {searchQuery && (
               <Badge variant="outline" className="bg-[#2a2a2a] text-gray-300">
                 Search: "{searchQuery}"

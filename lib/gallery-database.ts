@@ -5,8 +5,47 @@
 
 // API基础配置
 const API_BASE_URL = 'https://aimagica-api.403153162.workers.dev'
-const REQUEST_TIMEOUT = 3000 // 3秒超时，快速回退到离线模式
+const REQUEST_TIMEOUT = 2000 // 2秒超时，极速回退到离线模式
 const MAX_RETRIES = 0 // 不重试，立即回退
+
+// 网络状态检测
+let isApiAvailable: boolean | null = null
+let lastCheckTime = 0
+const CHECK_INTERVAL = 30000 // 30秒检查一次
+
+// 快速网络连通性检查
+async function quickNetworkCheck(): Promise<boolean> {
+  const now = Date.now()
+  
+  // 如果最近检查过，直接返回缓存结果
+  if (isApiAvailable !== null && (now - lastCheckTime) < CHECK_INTERVAL) {
+    return isApiAvailable
+  }
+  
+  try {
+    // 尝试最简单的GET请求
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), 1000) // 1秒极速检查
+    
+    const response = await fetch(`${API_BASE_URL}/api/test`, {
+      method: 'GET',
+      signal: controller.signal,
+      cache: 'no-store'
+    })
+    
+    clearTimeout(timeoutId)
+    isApiAvailable = response.ok
+    lastCheckTime = now
+    
+    console.log(`🌐 网络检查结果: ${isApiAvailable ? '可用' : '不可用'}`)
+    return isApiAvailable
+  } catch (error) {
+    isApiAvailable = false
+    lastCheckTime = now
+    console.log(`🌐 网络检查失败，判定为不可用:`, error)
+    return false
+  }
+}
 
 // 数据类型定义
 export interface GalleryImageStats {
@@ -388,8 +427,35 @@ export async function toggleCommentLike(commentId: string): Promise<{ success: b
  * 批量获取多个图片的统计信息
  */
 export async function getBatchImageStats(imageIds: string[]): Promise<Record<string, GalleryImageStats>> {
+  // 首先快速检查网络
+  const networkAvailable = await quickNetworkCheck()
+  
+  if (!networkAvailable) {
+    console.log(`📱 网络不可用，直接使用离线模式统计: ${imageIds.length}张图片`)
+    
+    // 直接回退到本地存储
+    const fallbackStats: Record<string, GalleryImageStats> = {}
+    imageIds.forEach(id => {
+      const localLikes = parseInt(localStorage.getItem(`gallery_likes_${id}`) || '0')
+      const localViews = parseInt(localStorage.getItem(`gallery_views_${id}`) || '0') 
+      const localComments = parseInt(localStorage.getItem(`gallery_comments_${id}`) || '0')
+      const localIsLiked = localStorage.getItem(`gallery_liked_${id}`) === 'true'
+      
+      fallbackStats[id] = {
+        id,
+        likes: localLikes,
+        comments: localComments,
+        views: localViews,
+        isLiked: localIsLiked
+      }
+    })
+    
+    return fallbackStats
+  }
+  
+  // 网络可用时尝试API请求
   try {
-    console.log(`📊 尝试批量获取图片统计: ${imageIds.length}张图片`)
+    console.log(`📊 网络可用，尝试批量获取图片统计: ${imageIds.length}张图片`)
     
     const response = await apiRequest(`${API_BASE_URL}/api/gallery/batch-stats`, {
       method: 'POST',
@@ -401,12 +467,11 @@ export async function getBatchImageStats(imageIds: string[]): Promise<Record<str
     
     return data.stats || {}
   } catch (error) {
-    console.warn(`⚠️ API不可用，使用离线模式统计: ${imageIds.length}张图片`, error)
+    console.warn(`⚠️ API请求失败，使用离线模式统计: ${imageIds.length}张图片`, error)
     
     // 回退到本地存储的模拟数据
     const fallbackStats: Record<string, GalleryImageStats> = {}
     imageIds.forEach(id => {
-      // 从localStorage获取之前的交互数据，如果没有则使用默认值
       const localLikes = parseInt(localStorage.getItem(`gallery_likes_${id}`) || '0')
       const localViews = parseInt(localStorage.getItem(`gallery_views_${id}`) || '0') 
       const localComments = parseInt(localStorage.getItem(`gallery_comments_${id}`) || '0')
@@ -435,6 +500,7 @@ export const galleryDB = {
   addImageComment,
   toggleCommentLike,
   getBatchImageStats,
+  quickNetworkCheck,
 }
 
 export default galleryDB
