@@ -56,10 +56,18 @@ const routeHandlers = {
   'dashboard/stats': handleDashboardStats,
   'dashboard/users': handleDashboardUsers,
   
-  // Gallery routes
+  // Gallery routes - 保持原有的public端点
   'gallery/public': handleGalleryPublic,
   'gallery/:id': handleGalleryItem,
   'gallery/:id/comments': handleGalleryComments,
+  
+  // New Gallery database routes
+  'gallery/stats/:id': handleGalleryStats,
+  'gallery/like/:id': handleGalleryLike,
+  'gallery/view/:id': handleGalleryView,
+  'gallery/comments/:id': handleGalleryCommentsNew,
+  'gallery/comment-like/:id': handleGalleryCommentLike,
+  'gallery/batch-stats': handleGalleryBatchStats,
   
   // Image generation routes
   'generate/image': handleGenerateImage,
@@ -922,3 +930,363 @@ async function handleImageProxy(request, env) {
     })
   }
 } 
+
+// ===== 新的Gallery数据库功能 =====
+
+// 获取Supabase配置
+function getSupabaseConfig(env) {
+  const supabaseUrl = env.SUPABASE_URL || 'https://vvrkbpnnlxjqyhmmovro.supabase.co'
+  const supabaseKey = env.SUPABASE_SERVICE_KEY || env.SUPABASE_SERVICE_ROLE_KEY
+  
+  if (!supabaseKey) {
+    throw new Error('Missing Supabase configuration')
+  }
+  
+  return { supabaseUrl, supabaseKey }
+}
+
+// 执行Supabase查询
+async function supabaseQuery(url, options, config) {
+  const response = await fetch(url, {
+    ...options,
+    headers: {
+      'apikey': config.supabaseKey,
+      'Authorization': `Bearer ${config.supabaseKey}`,
+      'Content-Type': 'application/json',
+      ...options.headers
+    }
+  })
+  
+  if (!response.ok) {
+    throw new Error(`Supabase query failed: ${response.status}`)
+  }
+  
+  return response.json()
+}
+
+// 获取图片统计信息
+async function handleGalleryStats(request, env, context) {
+  try {
+    const { id: imageId } = context.params
+    console.log(`📊 获取图片统计: ${imageId}`)
+    
+    const config = getSupabaseConfig(env)
+    const ANONYMOUS_USER_ID = '00000000-0000-0000-0000-000000000000'
+    
+    // 获取图片基础信息
+    const imageUrl = `${config.supabaseUrl}/rest/v1/generated_images?id=eq.${imageId}&select=*`
+    const imageData = await supabaseQuery(imageUrl, {}, config)
+    
+    if (!imageData || imageData.length === 0) {
+      return new Response(JSON.stringify({ success: false, error: 'Image not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+    }
+    
+    const image = imageData[0]
+    
+    // 检查用户是否已点赞
+    const likeUrl = `${config.supabaseUrl}/rest/v1/image_likes?image_id=eq.${imageId}&user_id=eq.${ANONYMOUS_USER_ID}`
+    const likeData = await supabaseQuery(likeUrl, {}, config)
+    const isLiked = likeData.length > 0
+    
+    // 获取总点赞数
+    const likesCountUrl = `${config.supabaseUrl}/rest/v1/image_likes?image_id=eq.${imageId}&select=count`
+    const likesCount = await supabaseQuery(likesCountUrl, {}, config)
+    
+    // 获取评论数
+    const commentsCountUrl = `${config.supabaseUrl}/rest/v1/image_comments?image_id=eq.${imageId}&select=count`
+    const commentsCount = await supabaseQuery(commentsCountUrl, {}, config)
+    
+    return new Response(JSON.stringify({
+      success: true,
+      likes: likesCount.length || 0,
+      comments: commentsCount.length || 0,
+      views: image.view_count || 0,
+      isLiked: isLiked
+    }), {
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+    
+  } catch (error) {
+    console.error('❌ 获取图片统计失败:', error)
+    return new Response(JSON.stringify({ success: false, error: 'Failed to get image stats' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+  }
+}
+
+// 切换图片点赞状态
+async function handleGalleryLike(request, env, context) {
+  try {
+    const { id: imageId } = context.params
+    console.log(`❤️ 切换点赞状态: ${imageId}`)
+    
+    const config = getSupabaseConfig(env)
+    const ANONYMOUS_USER_ID = '00000000-0000-0000-0000-000000000000'
+    
+    // 检查现有点赞状态
+    const checkUrl = `${config.supabaseUrl}/rest/v1/image_likes?image_id=eq.${imageId}&user_id=eq.${ANONYMOUS_USER_ID}`
+    const existingLikes = await supabaseQuery(checkUrl, {}, config)
+    const hasLiked = existingLikes.length > 0
+    
+    if (hasLiked) {
+      // 取消点赞
+      const deleteUrl = `${config.supabaseUrl}/rest/v1/image_likes?image_id=eq.${imageId}&user_id=eq.${ANONYMOUS_USER_ID}`
+      await supabaseQuery(deleteUrl, { method: 'DELETE' }, config)
+    } else {
+      // 添加点赞
+      const insertUrl = `${config.supabaseUrl}/rest/v1/image_likes`
+      await supabaseQuery(insertUrl, {
+        method: 'POST',
+        body: JSON.stringify({
+          image_id: imageId,
+          user_id: ANONYMOUS_USER_ID,
+          created_at: new Date().toISOString()
+        })
+      }, config)
+    }
+    
+    // 获取新的点赞数量
+    const countUrl = `${config.supabaseUrl}/rest/v1/image_likes?image_id=eq.${imageId}&select=count`
+    const countData = await supabaseQuery(countUrl, {}, config)
+    
+    return new Response(JSON.stringify({
+      success: true,
+      liked: !hasLiked,
+      newCount: countData.length || 0
+    }), {
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+    
+  } catch (error) {
+    console.error('❌ 点赞操作失败:', error)
+    return new Response(JSON.stringify({ success: false, error: 'Failed to toggle like' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+  }
+}
+
+// 增加图片浏览量
+async function handleGalleryView(request, env, context) {
+  try {
+    const { id: imageId } = context.params
+    console.log(`👁️ 增加浏览量: ${imageId}`)
+    
+    const config = getSupabaseConfig(env)
+    
+    // 获取当前浏览量
+    const getUrl = `${config.supabaseUrl}/rest/v1/generated_images?id=eq.${imageId}&select=view_count`
+    const currentData = await supabaseQuery(getUrl, {}, config)
+    
+    if (!currentData || currentData.length === 0) {
+      return new Response(JSON.stringify({ success: false, error: 'Image not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+    }
+    
+    const currentViews = currentData[0].view_count || 0
+    const newViews = currentViews + 1
+    
+    // 更新浏览量
+    const updateUrl = `${config.supabaseUrl}/rest/v1/generated_images?id=eq.${imageId}`
+    await supabaseQuery(updateUrl, {
+      method: 'PATCH',
+      body: JSON.stringify({ view_count: newViews })
+    }, config)
+    
+    return new Response(JSON.stringify({
+      success: true,
+      views: newViews
+    }), {
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+    
+  } catch (error) {
+    console.error('❌ 浏览量更新失败:', error)
+    return new Response(JSON.stringify({ success: false, error: 'Failed to increment view' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+  }
+}
+
+// 获取/添加图片评论
+async function handleGalleryCommentsNew(request, env, context) {
+  const { id: imageId } = context.params
+  
+  if (request.method === 'GET') {
+    // 获取评论列表
+    try {
+      const config = getSupabaseConfig(env)
+      
+      const commentsUrl = `${config.supabaseUrl}/rest/v1/image_comments?image_id=eq.${imageId}&order=created_at.desc`
+      const comments = await supabaseQuery(commentsUrl, {}, config)
+      
+      return new Response(JSON.stringify({
+        success: true,
+        comments: comments.map(comment => ({
+          id: comment.id,
+          imageId: comment.image_id,
+          content: comment.content,
+          author: comment.author || 'AIMAGICA User',
+          authorAvatar: comment.author_avatar || '/images/aimagica-logo.png',
+          createdAt: comment.created_at,
+          likes: comment.likes_count || 0,
+          isLiked: false
+        }))
+      }), {
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+      
+    } catch (error) {
+      console.error('❌ 获取评论失败:', error)
+      return new Response(JSON.stringify({ success: false, error: 'Failed to get comments' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+    }
+  } else if (request.method === 'POST') {
+    // 添加新评论
+    try {
+      const config = getSupabaseConfig(env)
+      const body = await request.json()
+      
+      if (!body.content || body.content.trim().length === 0) {
+        return new Response(JSON.stringify({ success: false, error: 'Comment content is required' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        })
+      }
+      
+      const insertUrl = `${config.supabaseUrl}/rest/v1/image_comments`
+      const commentData = {
+        image_id: imageId,
+        content: body.content.trim(),
+        author: body.author || 'AIMAGICA User',
+        author_avatar: body.authorAvatar || '/images/aimagica-logo.png',
+        created_at: new Date().toISOString(),
+        likes_count: 0
+      }
+      
+      const result = await supabaseQuery(insertUrl, {
+        method: 'POST',
+        body: JSON.stringify(commentData),
+        headers: { 'Prefer': 'return=representation' }
+      }, config)
+      
+      if (!result || result.length === 0) {
+        throw new Error('Failed to create comment')
+      }
+      
+      const newComment = result[0]
+      return new Response(JSON.stringify({
+        success: true,
+        comment: {
+          id: newComment.id,
+          imageId: newComment.image_id,
+          content: newComment.content,
+          author: newComment.author,
+          authorAvatar: newComment.author_avatar,
+          createdAt: newComment.created_at,
+          likes: newComment.likes_count || 0,
+          isLiked: false
+        }
+      }), {
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+      
+    } catch (error) {
+      console.error('❌ 添加评论失败:', error)
+      return new Response(JSON.stringify({ success: false, error: 'Failed to add comment' }), {
+        status: 500,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+    }
+  }
+}
+
+// 评论点赞
+async function handleGalleryCommentLike(request, env, context) {
+  try {
+    const { id: commentId } = context.params
+    console.log(`👍 切换评论点赞: ${commentId}`)
+    
+    return new Response(JSON.stringify({ success: true }), {
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+    
+  } catch (error) {
+    console.error('❌ 评论点赞失败:', error)
+    return new Response(JSON.stringify({ success: false, error: 'Failed to toggle comment like' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+  }
+}
+
+// 批量获取图片统计
+async function handleGalleryBatchStats(request, env) {
+  try {
+    const body = await request.json()
+    
+    if (!Array.isArray(body.imageIds) || body.imageIds.length === 0) {
+      return new Response(JSON.stringify({ success: false, error: 'Invalid image IDs' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+    }
+    
+    const config = getSupabaseConfig(env)
+    const imageIds = body.imageIds.slice(0, 50) // 限制最多50个
+    const ANONYMOUS_USER_ID = '00000000-0000-0000-0000-000000000000'
+    
+    // 获取基础图片信息
+    const imagesUrl = `${config.supabaseUrl}/rest/v1/generated_images?id=in.(${imageIds.join(',')})&select=id,view_count`
+    const images = await supabaseQuery(imagesUrl, {}, config)
+    
+    // 获取点赞信息
+    const likesUrl = `${config.supabaseUrl}/rest/v1/image_likes?image_id=in.(${imageIds.join(',')})&select=image_id,user_id`
+    const likes = await supabaseQuery(likesUrl, {}, config)
+    
+    // 获取评论数量
+    const commentsUrl = `${config.supabaseUrl}/rest/v1/image_comments?image_id=in.(${imageIds.join(',')})&select=image_id`
+    const comments = await supabaseQuery(commentsUrl, {}, config)
+    
+    // 汇总统计数据
+    const stats = {}
+    
+    imageIds.forEach(imageId => {
+      const image = images.find(img => img.id === imageId)
+      const imageLikes = likes.filter(like => like.image_id === imageId)
+      const imageComments = comments.filter(comment => comment.image_id === imageId)
+      const isLiked = imageLikes.some(like => like.user_id === ANONYMOUS_USER_ID)
+      
+      stats[imageId] = {
+        id: imageId,
+        likes: imageLikes.length,
+        comments: imageComments.length,
+        views: image?.view_count || 0,
+        isLiked: isLiked
+      }
+    })
+    
+    return new Response(JSON.stringify({ 
+      success: true, 
+      stats 
+    }), {
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+    
+  } catch (error) {
+    console.error('❌ 批量获取统计失败:', error)
+    return new Response(JSON.stringify({ success: false, error: 'Failed to get batch stats' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json', ...corsHeaders }
+    })
+  }
+}

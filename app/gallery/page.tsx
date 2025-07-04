@@ -1,5 +1,5 @@
 import type { Metadata } from 'next'
-import OptimizedGalleryClient from './optimized-gallery-client'
+import NewGalleryClient from './new-gallery-client'
 
 export const metadata: Metadata = {
   title: 'AI Gallery - AIMAGICA | High-Performance AI Art Gallery',
@@ -49,5 +49,5 @@ export const metadata: Metadata = {
 }
 
 export default function GalleryPage() {
-  return <OptimizedGalleryClient />
+  return <NewGalleryClient />
 }
