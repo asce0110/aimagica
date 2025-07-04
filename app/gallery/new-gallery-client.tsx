@@ -64,6 +64,37 @@ export default function NewGalleryClient() {
   const [loading, setLoading] = useState(false)
   const [isInitialLoading, setIsInitialLoading] = useState(true)
   
+  // 立即设置一个200ms的保险机制
+  useEffect(() => {
+    const emergencyTimeout = setTimeout(() => {
+      console.log('🚨 紧急超时，强制显示Gallery界面')
+      setIsInitialLoading(false)
+      
+      // 如果还没有数据，提供默认数据
+      if (allImages.length === 0) {
+        console.log('📦 提供紧急备用数据')
+        try {
+          const staticData = getStaticGalleryData()
+          if (staticData && staticData.length > 0) {
+            const emergencyData: EnhancedGalleryImage[] = staticData.slice(0, 4).map(image => ({
+              ...image,
+              dbLoaded: true,
+              localLikes: 0,
+              localViews: 0,
+              localComments: 0,
+              localIsLiked: false,
+            }))
+            setAllImages(emergencyData)
+          }
+        } catch (e) {
+          console.error('紧急数据加载失败:', e)
+        }
+      }
+    }, 200)
+    
+    return () => clearTimeout(emergencyTimeout)
+  }, [allImages.length])
+  
   // UI状态
   const [selectedImage, setSelectedImage] = useState<EnhancedGalleryImage | null>(null)
   const [comments, setComments] = useState<Comment[]>([])
@@ -82,65 +113,82 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 初始化：立即加载静态数据，完全跳过API调用
+  // 初始化：极速加载，多重保险
   useEffect(() => {
     console.log('🎯 开始极速加载Gallery数据...')
     
-    try {
-      const staticData = getStaticGalleryData()
-      console.log('📊 静态数据获取结果:', staticData?.length || 0, '张图片')
-      
-      if (staticData && staticData.length > 0) {
-        // 直接使用静态数据和本地缓存，不等待任何API
-        const enhancedData: EnhancedGalleryImage[] = staticData.map(image => {
-          // 从localStorage获取之前的交互数据
-          const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
-          const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
-          const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
-          const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
-          
-          return {
-            ...image,
-            dbLoaded: true, // 标记为已加载，使用本地数据
-            localLikes,
-            localViews,
-            localComments,
-            localIsLiked,
-          }
-        })
+    // 设置500ms强制超时，无论如何都要显示内容
+    const forceTimeout = setTimeout(() => {
+      console.warn('⚠️ 强制超时，立即显示Gallery')
+      setIsInitialLoading(false)
+    }, 500)
+    
+    // 使用nextTick确保在下一个事件循环中执行
+    setTimeout(() => {
+      try {
+        const staticData = getStaticGalleryData()
+        console.log('📊 静态数据获取结果:', staticData?.length || 0, '张图片')
         
-        setAllImages(enhancedData)
-        console.log(`✅ 静态数据初始化成功: ${enhancedData.length}张图片`)
-        
-        // 立即停止加载状态
-        setIsInitialLoading(false)
-        
-        // 5秒后尝试在后台同步数据库（给网络更多时间）
-        setTimeout(async () => {
-          console.log('🔄 尝试后台同步数据库统计...')
-          try {
-            // 先检查网络状态
-            const networkAvailable = await galleryDB.quickNetworkCheck()
-            setIsOfflineMode(!networkAvailable)
-            
-            if (networkAvailable) {
-              await loadDatabaseStatsInBackground(enhancedData)
-            } else {
-              console.log('📱 确认离线模式，跳过数据库同步')
+        if (staticData && staticData.length > 0) {
+          // 直接使用静态数据和本地缓存，不等待任何API
+          const enhancedData: EnhancedGalleryImage[] = staticData.map(image => {
+            // 快速获取localStorage数据，有错误就用默认值
+            let localLikes = 0, localViews = 0, localComments = 0, localIsLiked = false
+            try {
+              localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
+              localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
+              localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
+              localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
+            } catch (e) {
+              console.warn('localStorage读取失败，使用默认值')
             }
-          } catch (error) {
-            console.warn('⚠️ 数据库同步失败，继续使用本地数据:', error)
-            setIsOfflineMode(true)
-          }
-        }, 5000)
-      } else {
-        console.warn('⚠️ 静态数据为空')
+            
+            return {
+              ...image,
+              dbLoaded: true, // 标记为已加载，使用本地数据
+              localLikes,
+              localViews,
+              localComments,
+              localIsLiked,
+            }
+          })
+          
+          setAllImages(enhancedData)
+          console.log(`✅ 静态数据初始化成功: ${enhancedData.length}张图片`)
+          
+          // 清除强制超时，立即停止加载状态
+          clearTimeout(forceTimeout)
+          setIsInitialLoading(false)
+          
+          // 5秒后尝试在后台同步数据库（给网络更多时间）
+          setTimeout(async () => {
+            console.log('🔄 尝试后台同步数据库统计...')
+            try {
+              // 先检查网络状态
+              const networkAvailable = await galleryDB.quickNetworkCheck()
+              setIsOfflineMode(!networkAvailable)
+              
+              if (networkAvailable) {
+                await loadDatabaseStatsInBackground(enhancedData)
+              } else {
+                console.log('📱 确认离线模式，跳过数据库同步')
+              }
+            } catch (error) {
+              console.warn('⚠️ 数据库同步失败，继续使用本地数据:', error)
+              setIsOfflineMode(true)
+            }
+          }, 5000)
+        } else {
+          console.warn('⚠️ 静态数据为空')
+          clearTimeout(forceTimeout)
+          setIsInitialLoading(false)
+        }
+      } catch (error) {
+        console.error('❌ 静态数据加载异常:', error)
+        clearTimeout(forceTimeout)
         setIsInitialLoading(false)
       }
-    } catch (error) {
-      console.error('❌ 静态数据加载异常:', error)
-      setIsInitialLoading(false)
-    }
+    }, 0) // 使用0ms的setTimeout确保在下一个事件循环执行
   }, [])
 
   // 加载数据库统计信息
