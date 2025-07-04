@@ -57,19 +57,11 @@ export default function NewGalleryClient() {
   const { data: session } = useSession()
   const logoUrl = useStaticUrl('/images/aimagica-logo.png')
 
-  // 数据状态 - 参考Midjourney策略：先显示缩略图，后加载高清图
-  const [allImages, setAllImages] = useState<EnhancedGalleryImage[]>(() => {
-    // 立即加载轻量级缩略图数据，确保用户立即看到内容
-    const thumbData = getStaticGalleryData()
-    return thumbData.map(image => ({
-      ...image,
-      dbLoaded: false, // 标记为缩略图，等待API替换
-      localLikes: image.likes,
-      localViews: image.views,
-      localComments: image.comments,
-      localIsLiked: image.isLiked,
-    }))
-  })
+  // 数据状态 - 完全依赖API数据，无任何假数据
+  const [allImages, setAllImages] = useState<EnhancedGalleryImage[]>([])
+  
+  // 加载状态 - 追踪API数据加载进度
+  const [isLoadingAPI, setIsLoadingAPI] = useState(true)
   
   // 初始化状态设为false，立即显示缩略图Gallery
   const [isInitialLoading, setIsInitialLoading] = useState(false)
@@ -154,28 +146,9 @@ export default function NewGalleryClient() {
             
             console.log(`🎯 真实Gallery数据转换完成: ${realImages.length}张图片`)
             
-            // 🎯 智能合并策略：如果API图片包含缩略图的ID，则替换URL；否则全部替换
-            setAllImages(prevThumbs => {
-              const thumbIds = new Set(prevThumbs.map(img => img.id))
-              const apiImageMap = new Map(realImages.map(img => [img.id, img]))
-              
-              // 优先替换匹配的缩略图，然后添加新图片
-              const mergedImages = prevThumbs.map(thumb => {
-                const apiImage = apiImageMap.get(thumb.id)
-                if (apiImage) {
-                  console.log(`🔄 替换缩略图: ${thumb.title} -> ${apiImage.url}`)
-                  return { ...apiImage, dbLoaded: true }
-                }
-                return thumb // 保留缩略图
-              })
-              
-              // 添加API中的新图片
-              const newImages = realImages.filter(img => !thumbIds.has(img.id))
-              console.log(`➕ 添加新图片: ${newImages.length}张`)
-              
-              return [...mergedImages, ...newImages]
-            })
-            
+            // 🎯 直接设置真实API数据
+            setAllImages(realImages)
+            setIsLoadingAPI(false)
             setIsOfflineMode(false)
             
             // 继续后台加载localStorage数据
@@ -183,11 +156,13 @@ export default function NewGalleryClient() {
           }
         } else {
           console.warn('⚠️ API响应不成功:', response.status, response.statusText)
+          setIsLoadingAPI(false)
           setIsOfflineMode(true)
         }
       } catch (error: any) {
         console.warn('⚠️ 真实Gallery数据加载失败:', error.message)
         if (isMounted) {
+          setIsLoadingAPI(false)
           setIsOfflineMode(true)
         }
       }
@@ -720,14 +695,18 @@ export default function NewGalleryClient() {
                 {displayedImages.length} of {filteredImages.length} artworks
               </span>
             </div>
-            {/* 显示加载状态 - 参考Midjourney的策略 */}
-            {isOfflineMode ? (
-              <Badge variant="outline" className="bg-orange-500/20 text-orange-300 border-orange-500">
-                Loading HD Images...
+            {/* 显示API加载状态 */}
+            {isLoadingAPI ? (
+              <Badge variant="outline" className="bg-blue-500/20 text-blue-300 border-blue-500">
+                Loading API Data...
+              </Badge>
+            ) : allImages.length > 0 ? (
+              <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
+                Real Gallery Loaded
               </Badge>
             ) : (
-              <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
-                HD Images Loaded
+              <Badge variant="outline" className="bg-red-500/20 text-red-300 border-red-500">
+                API Load Failed
               </Badge>
             )}
             {searchQuery && (
@@ -756,16 +735,46 @@ export default function NewGalleryClient() {
           className="mb-8"
         />
 
-        {/* 无内容提示 - 简化逻辑，因为现在有缩略图了 */}
+        {/* API数据加载状态 */}
         {filteredImages.length === 0 && (
           <motion.div 
             className="text-center py-16"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-bold text-white mb-2">No artworks found</h3>
-            <p className="text-gray-400">Try adjusting your search or filter criteria</p>
+            {isLoadingAPI ? (
+              // 正在加载API数据
+              <>
+                <div className="relative w-16 h-16 mx-auto mb-6">
+                  <div className="absolute inset-0 rounded-full border-4 border-[#d4a574]/40 animate-spin"></div>
+                  <div className="absolute inset-2 rounded-full border-4 border-[#8b7355]/60 animate-[spin_1.5s_linear_infinite_reverse]"></div>
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <Sparkles className="w-6 h-6 text-[#8b7355] animate-pulse" />
+                  </div>
+                  <div className="absolute -top-2 -right-2 w-3 h-3 bg-[#d4a574] rounded-full animate-ping"></div>
+                  <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-[#8b7355] rounded-full animate-ping delay-300"></div>
+                </div>
+                <h3 className="text-xl font-bold text-white mb-2">Loading AI Gallery...</h3>
+                <p className="text-gray-400">Fetching amazing artworks from our API</p>
+                {isOfflineMode && (
+                  <p className="text-orange-400 mt-2 text-sm">Network slow? Please wait for real images to load...</p>
+                )}
+              </>
+            ) : allImages.length === 0 ? (
+              // API加载完成但无数据
+              <>
+                <div className="text-6xl mb-4">❌</div>
+                <h3 className="text-xl font-bold text-white mb-2">Unable to load gallery</h3>
+                <p className="text-gray-400">Please check your internet connection and try again</p>
+              </>
+            ) : (
+              // 搜索/过滤后无结果
+              <>
+                <div className="text-6xl mb-4">🔍</div>
+                <h3 className="text-xl font-bold text-white mb-2">No artworks found</h3>
+                <p className="text-gray-400">Try adjusting your search or filter criteria</p>
+              </>
+            )}
           </motion.div>
         )}
       </div>
