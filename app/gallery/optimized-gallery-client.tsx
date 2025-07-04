@@ -18,7 +18,10 @@ import {
   Crown,
   Wand2,
   Sparkles,
-  TrendingUp
+  TrendingUp,
+  Copy,
+  Check,
+  ThumbsUp
 } from "lucide-react"
 import { useSessionCompat as useSession } from "@/components/session-provider"
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
@@ -38,6 +41,7 @@ interface Comment {
   content: string
   likes: number
   createdAt: string
+  isLiked?: boolean
 }
 
 const sampleComments: Comment[] = [
@@ -48,6 +52,7 @@ const sampleComments: Comment[] = [
     content: "This is absolutely stunning! The colors are magical! ✨",
     createdAt: "2 hours ago",
     likes: 24,
+    isLiked: false,
   },
   {
     id: 2,
@@ -56,6 +61,7 @@ const sampleComments: Comment[] = [
     content: "How did you create this masterpiece? The details are incredible!",
     createdAt: "1 day ago",
     likes: 18,
+    isLiked: true,
   },
   {
     id: 3,
@@ -64,6 +70,7 @@ const sampleComments: Comment[] = [
     content: "I'm inspired to create something similar. Thanks for sharing your art!",
     createdAt: "3 days ago",
     likes: 12,
+    isLiked: false,
   },
 ]
 
@@ -98,6 +105,11 @@ export default function OptimizedGalleryClient() {
   const [filter, setFilter] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [isMobile, setIsMobile] = useState(false)
+  
+  // 功能状态
+  const [isSharing, setIsSharing] = useState(false)
+  const [isDownloading, setIsDownloading] = useState(false)
+  const [shareStatus, setShareStatus] = useState<'idle' | 'copying' | 'copied'>('idle')
 
   // 检测移动设备
   useEffect(() => {
@@ -223,6 +235,104 @@ export default function OptimizedGalleryClient() {
       } : null)
     }
   }, [selectedImage])
+
+  // 分享功能
+  const handleShare = useCallback(async () => {
+    if (!selectedImage) return
+    
+    setIsSharing(true)
+    console.log(`🔗 分享图片: ${selectedImage.title}`)
+    
+    const shareData = {
+      title: `${selectedImage.title} - AIMAGICA Gallery`,
+      text: `Check out this amazing AI artwork: "${selectedImage.title}" by ${selectedImage.author}`,
+      url: `${window.location.origin}/gallery?image=${selectedImage.id}`
+    }
+
+    try {
+      // 优先使用原生分享 API (移动端)
+      if (navigator.share && isMobile) {
+        await navigator.share(shareData)
+        console.log('✅ 原生分享成功')
+      } else {
+        // 桌面端或不支持原生分享时，复制链接
+        await navigator.clipboard.writeText(shareData.url)
+        setShareStatus('copying')
+        setTimeout(() => setShareStatus('copied'), 100)
+        setTimeout(() => setShareStatus('idle'), 2000)
+        console.log('✅ 链接已复制到剪贴板')
+      }
+    } catch (error) {
+      console.error('❌ 分享失败:', error)
+      // 降级处理：手动复制链接
+      try {
+        await navigator.clipboard.writeText(shareData.url)
+        setShareStatus('copying')
+        setTimeout(() => setShareStatus('copied'), 100)
+        setTimeout(() => setShareStatus('idle'), 2000)
+      } catch (clipboardError) {
+        console.error('❌ 复制链接失败:', clipboardError)
+      }
+    }
+    
+    setIsSharing(false)
+  }, [selectedImage, isMobile])
+
+  // 下载功能
+  const handleDownload = useCallback(async () => {
+    if (!selectedImage) return
+    
+    setIsDownloading(true)
+    console.log(`💾 下载图片: ${selectedImage.title}`)
+    
+    try {
+      const response = await fetch(selectedImage.url)
+      const blob = await response.blob()
+      
+      // 创建下载链接
+      const url = window.URL.createObjectURL(blob)
+      const link = document.createElement('a')
+      link.href = url
+      
+      // 生成文件名
+      const fileName = `aimagica-${selectedImage.title.replace(/[^a-zA-Z0-9]/g, '-')}-${selectedImage.id}.png`
+      link.download = fileName
+      
+      // 触发下载
+      document.body.appendChild(link)
+      link.click()
+      
+      // 清理
+      document.body.removeChild(link)
+      window.URL.revokeObjectURL(url)
+      
+      console.log('✅ 图片下载成功:', fileName)
+    } catch (error) {
+      console.error('❌ 图片下载失败:', error)
+      
+      // 降级处理：在新窗口打开图片
+      window.open(selectedImage.url, '_blank')
+    }
+    
+    setIsDownloading(false)
+  }, [selectedImage])
+
+  // 评论点赞功能
+  const handleCommentLike = useCallback((commentId: string | number) => {
+    console.log(`👍 评论点赞: ${commentId}`)
+    
+    setComments(prev =>
+      prev.map(comment =>
+        comment.id === commentId
+          ? {
+              ...comment,
+              isLiked: !comment.isLiked,
+              likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
+            }
+          : comment
+      )
+    )
+  }, [])
 
   // 渲染单个图片项
   const renderItem = useCallback((item: WaterfallItem, index: number) => {
@@ -530,18 +640,28 @@ export default function OptimizedGalleryClient() {
                   {/* 操作按钮 */}
                   <div className="flex gap-3 mb-6">
                     <Button
-                      className="bg-[#4a5a4a] hover:bg-[#5a6a5a] text-white font-black rounded-xl flex-1 border-2 border-[#666] transform -rotate-0.5 hover:scale-105 transition-all"
+                      onClick={handleShare}
+                      disabled={isSharing}
+                      className="bg-[#4a5a4a] hover:bg-[#5a6a5a] text-white font-black rounded-xl flex-1 border-2 border-[#666] transform -rotate-0.5 hover:scale-105 transition-all disabled:opacity-50"
                       style={{ boxShadow: "2px 2px 0 #333" }}
                     >
-                      <Share2 className="w-4 h-4 mr-2" />
-                      Share
+                      {shareStatus === 'copying' ? (
+                        <Copy className="w-4 h-4 mr-2 animate-pulse" />
+                      ) : shareStatus === 'copied' ? (
+                        <Check className="w-4 h-4 mr-2 text-green-400" />
+                      ) : (
+                        <Share2 className="w-4 h-4 mr-2" />
+                      )}
+                      {shareStatus === 'copied' ? 'Copied!' : isSharing ? 'Sharing...' : 'Share'}
                     </Button>
                     <Button
-                      className="bg-[#d4a574] hover:bg-[#c19660] text-black font-black rounded-xl flex-1 transform rotate-0.5 hover:scale-105 transition-all"
+                      onClick={handleDownload}
+                      disabled={isDownloading}
+                      className="bg-[#d4a574] hover:bg-[#c19660] text-black font-black rounded-xl flex-1 transform rotate-0.5 hover:scale-105 transition-all disabled:opacity-50"
                       style={{ boxShadow: "2px 2px 0 #333" }}
                     >
-                      <Download className="w-4 h-4 mr-2" />
-                      Download
+                      <Download className={`w-4 h-4 mr-2 ${isDownloading ? 'animate-bounce' : ''}`} />
+                      {isDownloading ? 'Downloading...' : 'Download'}
                     </Button>
                   </div>
 
@@ -587,10 +707,32 @@ export default function OptimizedGalleryClient() {
                               <p className="text-gray-200 font-bold text-sm mt-1">
                                 {comment.content}
                               </p>
-                              <div className="flex items-center mt-2">
-                                <span className="text-gray-400 font-bold text-xs">
-                                  {comment.likes} likes
-                                </span>
+                              <div className="flex items-center justify-between mt-2">
+                                <div className="flex items-center space-x-3">
+                                  <Button
+                                    size="sm"
+                                    variant="ghost"
+                                    onClick={() => handleCommentLike(comment.id)}
+                                    className={`flex items-center space-x-1 p-1 hover:bg-[#2a2a2a] rounded transition-all ${
+                                      comment.isLiked
+                                        ? "text-red-400 hover:text-red-300"
+                                        : "text-gray-400 hover:text-white"
+                                    }`}
+                                  >
+                                    <ThumbsUp 
+                                      className={`w-3 h-3 transition-transform hover:scale-110 ${
+                                        comment.isLiked ? 'fill-current' : ''
+                                      }`} 
+                                    />
+                                    <span className="text-xs font-bold">
+                                      {comment.likes}
+                                    </span>
+                                  </Button>
+                                  <span className="text-gray-500 text-xs">•</span>
+                                  <span className="text-gray-400 font-bold text-xs">
+                                    Reply
+                                  </span>
+                                </div>
                               </div>
                             </div>
                           </div>
