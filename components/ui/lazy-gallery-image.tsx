@@ -4,7 +4,7 @@ import React, { useState, useRef, useEffect } from "react"
 import { motion } from "framer-motion"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
-import { Heart, Eye, Star, Crown } from "lucide-react"
+import { Heart, Eye, Star, Crown, Sparkles, Image } from "lucide-react"
 import useStaticUrl from "@/hooks/use-static-url"
 
 export interface LazyGalleryImageProps {
@@ -72,9 +72,20 @@ export default function LazyGalleryImage({
     return "4/5" // 默认
   }
 
-  // Intersection Observer懒加载
+  // 优化的Intersection Observer懒加载
   useEffect(() => {
     if (priority) return // 优先图片跳过懒加载
+
+    // 立即检查是否在首屏视口内
+    if (containerRef.current) {
+      const rect = containerRef.current.getBoundingClientRect()
+      const isInViewport = rect.top < window.innerHeight && rect.bottom > 0
+      
+      if (isInViewport) {
+        setIsInView(true)
+        return
+      }
+    }
 
     const observer = new IntersectionObserver(
       (entries) => {
@@ -85,8 +96,8 @@ export default function LazyGalleryImage({
         }
       },
       {
-        rootMargin: '50px', // 提前50px开始加载
-        threshold: 0.1
+        rootMargin: '100px', // 提前100px开始加载，更快响应
+        threshold: 0.05
       }
     )
 
@@ -189,26 +200,48 @@ export default function LazyGalleryImage({
                 )
               }}
             >
-              {/* 加载占位符 */}
+              {/* 魔法加载占位符 - 与Hero区域相同的效果 */}
               {!isLoaded && (
-                <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-200 flex items-center justify-center animate-pulse">
-                  <div className="text-center p-4">
-                    <div className="text-2xl mb-2">📷</div>
-                    <div className="text-xs text-gray-400 font-medium">
-                      {isInView ? 'Loading...' : 'Waiting to load...'}
+                <div className="absolute inset-0 bg-gradient-to-br from-[#f5f1e8] to-[#ebe5d6] flex items-center justify-center">
+                  <div className="text-center">
+                    {/* 迷你魔法光环 */}
+                    <div className="relative w-12 h-12 mx-auto mb-2">
+                      <div className="absolute inset-0 rounded-full border-2 border-[#d4a574]/40 animate-spin"></div>
+                      <div className="absolute inset-1 rounded-full border-2 border-[#8b7355]/60 animate-[spin_1.5s_linear_infinite_reverse]"></div>
+                      <div className="absolute inset-0 flex items-center justify-center">
+                        <Sparkles className="w-5 h-5 text-[#8b7355] animate-pulse" />
+                      </div>
+                      {/* 迷你魔法粒子 */}
+                      <div className="absolute -top-1 -right-1 w-2 h-2 bg-[#d4a574] rounded-full animate-ping"></div>
+                      <div className="absolute -bottom-1 -left-1 w-2 h-2 bg-[#8b7355] rounded-full animate-ping delay-300"></div>
+                      <div className="absolute top-1 -left-1 w-1.5 h-1.5 bg-[#d4a574]/80 rounded-full animate-ping delay-500"></div>
+                      <div className="absolute -bottom-1 right-1 w-1.5 h-1.5 bg-[#8b7355]/80 rounded-full animate-ping delay-700"></div>
+                    </div>
+                    <div 
+                      className="text-sm text-[#8b7355] font-bold"
+                      style={{ fontFamily: "var(--font-accent)" }}
+                    >
+                      {isInView ? '✨ Casting...' : '🔮 Waiting...'}
                     </div>
                   </div>
                 </div>
               )}
 
-              {/* 错误状态 */}
+              {/* 魔法错误状态 - 保持一致的设计风格 */}
               {hasError && (
-                <div className="absolute inset-0 bg-gradient-to-br from-red-50 to-red-100 flex items-center justify-center">
-                  <div className="text-center p-4">
-                    <div className="text-2xl mb-2">🖼️</div>
-                    <div className="text-xs text-red-500 font-medium">Failed to load</div>
+                <div className="absolute inset-0 bg-gradient-to-br from-[#f5f1e8] to-[#e1d4c0] flex items-center justify-center">
+                  <div className="text-center">
+                    <div className="w-12 h-12 mx-auto mb-2 bg-gradient-to-br from-[#d4a574]/30 to-[#8b7355]/30 rounded-lg border-2 border-dashed border-[#8b7355]/40 flex items-center justify-center transform rotate-12">
+                      <Image className="w-6 h-6 text-[#8b7355]/60" />
+                    </div>
+                    <div 
+                      className="text-sm text-[#8b7355]/80 font-bold mb-1"
+                      style={{ fontFamily: "var(--font-accent)" }}
+                    >
+                      🔮 Magic Failed
+                    </div>
                     <button 
-                      className="text-xs text-red-600 underline mt-1"
+                      className="text-xs text-[#8b7355] font-medium hover:text-[#6b5d3f] transition-colors px-2 py-1 rounded bg-[#d4a574]/20 hover:bg-[#d4a574]/30"
                       onClick={(e) => {
                         e.stopPropagation()
                         setHasError(false)
@@ -216,7 +249,7 @@ export default function LazyGalleryImage({
                         setIsInView(true)
                       }}
                     >
-                      Retry
+                      Try Again ✨
                     </button>
                   </div>
                 </div>

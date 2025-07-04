@@ -536,7 +536,7 @@ export default function NewGalleryClient() {
     setIsDownloading(false)
   }, [selectedImage])
 
-  // 渲染单个图片项 - 保持原有渲染逻辑
+  // 渲染单个图片项 - 优化首屏加载
   const renderItem = useCallback((item: WaterfallItem, index: number) => {
     const image = item as EnhancedGalleryImage & { height?: number }
     return (
@@ -555,7 +555,7 @@ export default function NewGalleryClient() {
         size={image.size}
         rotation={image.rotation}
         onClick={() => handleImageClick(image)}
-        priority={index < 4}
+        priority={index < 8} // 增加优先加载的图片数量，确保首屏快速显示
         waterfallHeight={image.height}
       />
     )
@@ -563,10 +563,38 @@ export default function NewGalleryClient() {
 
   if (isInitialLoading) {
     return (
-      <div className="min-h-screen bg-gradient-to-br from-background to-secondary flex items-center justify-center">
-        <div className="text-center space-y-4">
-          <div className="w-12 h-12 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto"></div>
-          <p className="text-muted-foreground">Loading magical gallery...</p>
+      <div className="min-h-screen bg-black flex items-center justify-center">
+        <div className="text-center space-y-6">
+          {/* 大型魔法光环 - 与首页一致的风格 */}
+          <div className="relative w-24 h-24 mx-auto">
+            <div className="absolute inset-0 rounded-full border-4 border-[#d4a574]/40 animate-spin"></div>
+            <div className="absolute inset-2 rounded-full border-4 border-[#8b7355]/60 animate-[spin_1.5s_linear_infinite_reverse]"></div>
+            <div className="absolute inset-4 rounded-full border-2 border-[#d4a574]/80 animate-[spin_2s_linear_infinite]"></div>
+            <div className="absolute inset-0 flex items-center justify-center">
+              <Sparkles className="w-8 h-8 text-[#d4a574] animate-pulse" />
+            </div>
+            {/* 魔法粒子效果 */}
+            <div className="absolute -top-2 -right-2 w-3 h-3 bg-[#d4a574] rounded-full animate-ping"></div>
+            <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-[#8b7355] rounded-full animate-ping delay-300"></div>
+            <div className="absolute top-2 -left-2 w-2 h-2 bg-[#d4a574]/80 rounded-full animate-ping delay-500"></div>
+            <div className="absolute -bottom-2 right-2 w-2 h-2 bg-[#8b7355]/80 rounded-full animate-ping delay-700"></div>
+            <div className="absolute -top-1 left-1/2 w-1.5 h-1.5 bg-white/60 rounded-full animate-ping delay-900"></div>
+            <div className="absolute bottom-1 -right-1 w-1.5 h-1.5 bg-white/60 rounded-full animate-ping delay-1100"></div>
+          </div>
+          <div className="space-y-2">
+            <h2 
+              className="text-2xl font-black text-white transform -rotate-1" 
+              style={{ 
+                textShadow: "2px 2px 0px #333",
+                fontFamily: "var(--font-accent)" 
+              }}
+            >
+              ✨ Loading Magical Gallery...
+            </h2>
+            <p className="text-[#d4a574] font-bold transform rotate-0.5">
+              Preparing your artistic adventure
+            </p>
+          </div>
         </div>
       </div>
     )
