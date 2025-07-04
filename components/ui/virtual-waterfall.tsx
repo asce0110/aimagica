@@ -162,12 +162,18 @@ export default function VirtualWaterfall({
     return () => window.removeEventListener('scroll', handleScroll)
   }, [])
 
-  // 项目高度更新回调
+  // 项目高度更新回调 - 实时更新布局
   const updateItemHeight = useCallback((itemId: string | number, height: number) => {
     setItemHeights(prev => {
       const newMap = new Map(prev)
-      newMap.set(itemId, height)
-      return newMap
+      const oldHeight = prev.get(itemId)
+      
+      // 只有高度真正变化时才更新
+      if (oldHeight !== height && height > 0) {
+        newMap.set(itemId, height)
+        return newMap
+      }
+      return prev
     })
   }, [])
 
@@ -284,11 +290,30 @@ function ItemWrapper({ item, index, onHeightChange, renderItem }: ItemWrapperPro
   const ref = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    if (ref.current) {
-      const height = ref.current.offsetHeight
-      if (height > 0) {
-        onHeightChange(item.id, height)
+    const element = ref.current
+    if (!element) return
+
+    // 使用ResizeObserver检测高度变化
+    const resizeObserver = new ResizeObserver((entries) => {
+      const entry = entries[0]
+      if (entry) {
+        const height = entry.contentRect.height
+        if (height > 0) {
+          onHeightChange(item.id, height)
+        }
       }
+    })
+
+    resizeObserver.observe(element)
+
+    // 初始高度检测
+    const initialHeight = element.offsetHeight
+    if (initialHeight > 0) {
+      onHeightChange(item.id, initialHeight)
+    }
+
+    return () => {
+      resizeObserver.disconnect()
     }
   }, [item.id, onHeightChange])
 

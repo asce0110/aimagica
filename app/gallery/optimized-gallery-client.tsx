@@ -169,21 +169,23 @@ export default function OptimizedGalleryClient() {
   // 是否还有更多数据
   const hasMore = displayedImages.length < filteredImages.length
 
-  // 转换为瀑布流数据格式 - 统一移动端高度避免间距不一致
+  // 转换为瀑布流数据格式 - 移动端和桌面端都按原始尺寸显示
   const waterfallItems: WaterfallItem[] = useMemo(() => {
     return displayedImages.map(image => {
-      // 移动端使用固定高度避免间距不一致，桌面端使用多样化高度
-      const mobileHeight = 280 // 统一的移动端高度
-      const desktopHeight = image.size === 'vertical' ? 400 : 
-                           image.size === 'horizontal' ? 225 :
-                           image.size === 'large' ? 450 :
-                           image.size === 'small' ? 300 : 375
+      // 根据size计算合适的高度，移动端和桌面端都保持原始比例
+      const getItemHeight = () => {
+        if (image.size === 'vertical') return isMobile ? 350 : 400
+        if (image.size === 'horizontal') return isMobile ? 200 : 225
+        if (image.size === 'large') return isMobile ? 380 : 450
+        if (image.size === 'small') return isMobile ? 250 : 300
+        return isMobile ? 300 : 375 // medium默认
+      }
       
       return {
         id: image.id,
         url: image.url,
         title: image.title,
-        height: isMobile ? mobileHeight : desktopHeight,
+        height: getItemHeight(),
         ...image
       }
     })
@@ -388,13 +390,13 @@ export default function OptimizedGalleryClient() {
       <Dialog open={!!selectedImage} onOpenChange={(open) => {
         if (!open) setSelectedImage(null)
       }}>
-        <DialogContent className="max-w-4xl w-[95vw] h-[90vh] bg-black p-0 rounded-2xl border-4 border-[#333] shadow-2xl">
+        <DialogContent className="max-w-4xl w-[95vw] max-h-[90vh] bg-black p-0 rounded-2xl border-4 border-[#333] shadow-2xl overflow-hidden flex flex-col">
           <DialogTitle style={{ position: 'absolute', width: '1px', height: '1px', padding: 0, margin: '-1px', overflow: 'hidden', clip: 'rect(0, 0, 0, 0)', whiteSpace: 'nowrap', border: 0 }}>
             {selectedImage?.title || "Image Details"}
           </DialogTitle>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 h-full">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-0 flex-1 min-h-0">
             {/* 图片侧 */}
-            <div className="relative bg-black rounded-l-xl overflow-hidden">
+            <div className="relative bg-black rounded-l-xl md:rounded-r-none overflow-hidden flex-shrink-0 h-64 md:h-auto">
               {selectedImage && (
                 <>
                   <img
@@ -430,7 +432,7 @@ export default function OptimizedGalleryClient() {
             </div>
 
             {/* 详情侧 */}
-            <div className="p-6 overflow-y-auto bg-[#0a0a0a]">
+            <div className="p-4 md:p-6 overflow-y-auto bg-[#0a0a0a] flex-1 min-h-0">
               {selectedImage && (
                 <>
                   <DialogHeader className="border-b border-[#333] pb-4 mb-4">
