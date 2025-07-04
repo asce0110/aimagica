@@ -29,7 +29,6 @@ import useStaticUrl from "@/hooks/use-static-url"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import VirtualWaterfall, { type WaterfallItem } from "@/components/ui/virtual-waterfall"
 import LazyGalleryImage from "@/components/ui/lazy-gallery-image"
-import { callApi, getApiEndpoint } from "@/lib/api-config"
 
 // 分页配置
 const ITEMS_PER_PAGE = 12
@@ -119,7 +118,12 @@ export default function OptimizedGalleryClient() {
         setGalleryError(null)
         
         console.log('🎯 开始加载Gallery数据库数据...')
-        const response = await callApi('GALLERY_PUBLIC')
+        const response = await fetch('https://aimagica-api.403153162.workers.dev/api/gallery/public', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        })
         
         if (!response.ok) {
           throw new Error(`API请求失败: ${response.status}`)
@@ -129,8 +133,8 @@ export default function OptimizedGalleryClient() {
         console.log('✅ Gallery数据库数据加载成功:', data)
         
         // 转换API数据格式为组件需要的格式
-        if (data.success && Array.isArray(data.images)) {
-          const transformedImages: StaticGalleryImage[] = data.images.map((img: any) => ({
+        if (data.success && Array.isArray(data.data)) {
+          const transformedImages: StaticGalleryImage[] = data.data.map((img: any) => ({
             id: img.id,
             url: img.url,
             title: img.title || 'Untitled',
@@ -322,12 +326,13 @@ export default function OptimizedGalleryClient() {
     try {
       console.log(`👁️ 增加预览量: ${imageId}`)
       
-      const response = await callApi('GALLERY_ITEM', {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'view',
-          imageId: imageId
-        })
+      // 直接访问图片详情API来增加预览量
+      const imageDetailUrl = `https://aimagica-api.403153162.workers.dev/api/gallery/${imageId}`
+      const response = await fetch(imageDetailUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
       })
       
       if (response.ok) {
@@ -335,21 +340,23 @@ export default function OptimizedGalleryClient() {
         console.log('✅ 预览量API调用成功:', result)
         
         // 更新本地状态
-        setDisplayedImages(prev =>
-          prev.map(img =>
-            img.id === imageId 
-              ? { ...img, views: result.views }
-              : img
+        if (result.views) {
+          setDisplayedImages(prev =>
+            prev.map(img =>
+              img.id === imageId 
+                ? { ...img, views: result.views }
+                : img
+            )
           )
-        )
-        
-        setAllImages(prev =>
-          prev.map(img =>
-            img.id === imageId 
-              ? { ...img, views: result.views }
-              : img
+          
+          setAllImages(prev =>
+            prev.map(img =>
+              img.id === imageId 
+                ? { ...img, views: result.views }
+                : img
+            )
           )
-        )
+        }
       }
     } catch (error) {
       console.error('❌ 预览量请求失败:', error)
@@ -380,19 +387,22 @@ export default function OptimizedGalleryClient() {
     loadComments(image.id)
     // 增加预览量
     incrementViews(image.id)
-  }, [loadComments, incrementViews])
+  }, [incrementViews])
 
   // 点赞处理 - 真实数据库操作
   const handleLike = useCallback(async (id: string | number) => {
     console.log(`❤️ 点赞图片: ${id}`)
     
     try {
-      // 发送API请求到数据库
-      const response = await callApi('GALLERY_ITEM', {
+      // 发送API请求到数据库 - 使用正确的action名称
+      const galleryItemUrl = `https://aimagica-api.403153162.workers.dev/api/gallery/${id}`
+      const response = await fetch(galleryItemUrl, {
         method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
         body: JSON.stringify({
-          action: 'like',
-          imageId: id
+          action: 'toggle_like'
         })
       })
       
@@ -401,13 +411,14 @@ export default function OptimizedGalleryClient() {
         console.log('✅ 点赞API调用成功:', result)
         
         // 更新本地状态
+        const isNowLiked = result.liked
         setDisplayedImages(prev =>
           prev.map(img =>
             img.id === id 
               ? { 
                   ...img, 
-                  isLiked: result.isLiked,
-                  likes: result.likes 
+                  isLiked: isNowLiked,
+                  likes: isNowLiked ? img.likes + 1 : Math.max(0, img.likes - 1)
                 } 
               : img
           )
@@ -419,8 +430,8 @@ export default function OptimizedGalleryClient() {
             img.id === id 
               ? { 
                   ...img, 
-                  isLiked: result.isLiked,
-                  likes: result.likes 
+                  isLiked: isNowLiked,
+                  likes: isNowLiked ? img.likes + 1 : Math.max(0, img.likes - 1)
                 } 
               : img
           )
@@ -430,8 +441,8 @@ export default function OptimizedGalleryClient() {
         if (selectedImage && selectedImage.id === id) {
           setSelectedImage(prev => prev ? {
             ...prev,
-            isLiked: result.isLiked,
-            likes: result.likes
+            isLiked: isNowLiked,
+            likes: isNowLiked ? prev.likes + 1 : Math.max(0, prev.likes - 1)
           } : null)
         }
       } else {
@@ -481,6 +492,87 @@ export default function OptimizedGalleryClient() {
       }
     }
   }, [selectedImage])
+
+  // 加载评论数据
+  const loadComments = useCallback(async (imageId: string | number) => {
+    try {
+      setIsLoadingComments(true)
+      console.log(`💬 加载评论: ${imageId}`)
+      
+      // 直接从BACKEND API获取详细数据（包括评论）
+      const imageDetailUrl = `https://aimagica-api.403153162.workers.dev/api/gallery/${imageId}`
+      const response = await fetch(imageDetailUrl, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        if (data.commentsData && Array.isArray(data.commentsData)) {
+          const transformedComments: Comment[] = data.commentsData.map((comment: any) => ({
+            id: comment.id,
+            author: comment.author || 'Anonymous',
+            authorAvatar: comment.authorAvatar || '/images/aimagica-logo.png',
+            content: comment.content,
+            likes: comment.likes || 0,
+            createdAt: comment.createdAt || new Date().toLocaleDateString(),
+            isLiked: comment.isLiked || false
+          }))
+          setComments(transformedComments)
+          console.log(`✅ 评论加载成功: ${transformedComments.length}条`)
+        } else {
+          setComments(sampleComments) // 降级到示例数据
+        }
+      } else {
+        console.warn('⚠️ 评论加载失败，使用示例数据')
+        setComments(sampleComments)
+      }
+    } catch (error) {
+      console.error('❌ 评论加载失败:', error)
+      setComments(sampleComments) // 降级到示例数据
+    } finally {
+      setIsLoadingComments(false)
+    }
+  }, [])
+
+  // 评论点赞功能 - 暂时使用本地状态
+  const handleCommentLike = useCallback(async (commentId: string | number) => {
+    console.log(`👍 评论点赞: ${commentId}`)
+    
+    try {
+      // 暂时使用本地状态更新，因为评论点赞API还未实现
+      console.log('⚠️ 评论点赞API未实现，使用本地状态更新')
+      
+      // 直接更新本地状态
+      setComments(prev =>
+        prev.map(comment =>
+          comment.id === commentId
+            ? {
+                ...comment,
+                isLiked: !comment.isLiked,
+                likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
+              }
+            : comment
+        )
+      )
+    } catch (error) {
+      console.error('❌ 评论点赞请求失败:', error)
+      // 降级到本地状态更新
+      setComments(prev =>
+        prev.map(comment =>
+          comment.id === commentId
+            ? {
+                ...comment,
+                isLiked: !comment.isLiked,
+                likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
+              }
+            : comment
+        )
+      )
+    }
+  }, [])
 
   // 分享功能
   const handleShare = useCallback(async () => {
@@ -602,107 +694,6 @@ export default function OptimizedGalleryClient() {
     
     setIsDownloading(false)
   }, [selectedImage])
-
-  // 加载评论数据
-  const loadComments = useCallback(async (imageId: string | number) => {
-    try {
-      setIsLoadingComments(true)
-      console.log(`💬 加载评论: ${imageId}`)
-      
-      const response = await callApi('GALLERY_ITEM', {
-        method: 'GET',
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      })
-      
-      if (response.ok) {
-        const data = await response.json()
-        if (data.success && Array.isArray(data.comments)) {
-          const transformedComments: Comment[] = data.comments.map((comment: any) => ({
-            id: comment.id,
-            author: comment.author || 'Anonymous',
-            authorAvatar: comment.authorAvatar || '/images/aimagica-logo.png',
-            content: comment.content,
-            likes: comment.likes || 0,
-            createdAt: comment.createdAt || new Date().toLocaleDateString(),
-            isLiked: comment.isLiked || false
-          }))
-          setComments(transformedComments)
-          console.log(`✅ 评论加载成功: ${transformedComments.length}条`)
-        } else {
-          setComments(sampleComments) // 降级到示例数据
-        }
-      } else {
-        console.warn('⚠️ 评论加载失败，使用示例数据')
-        setComments(sampleComments)
-      }
-    } catch (error) {
-      console.error('❌ 评论加载失败:', error)
-      setComments(sampleComments) // 降级到示例数据
-    } finally {
-      setIsLoadingComments(false)
-    }
-  }, [])
-
-  // 评论点赞功能 - 真实数据库操作
-  const handleCommentLike = useCallback(async (commentId: string | number) => {
-    console.log(`👍 评论点赞: ${commentId}`)
-    
-    try {
-      const response = await callApi('GALLERY_ITEM', {
-        method: 'POST',
-        body: JSON.stringify({
-          action: 'like_comment',
-          commentId: commentId
-        })
-      })
-      
-      if (response.ok) {
-        const result = await response.json()
-        console.log('✅ 评论点赞API调用成功:', result)
-        
-        setComments(prev =>
-          prev.map(comment =>
-            comment.id === commentId
-              ? {
-                  ...comment,
-                  isLiked: result.isLiked,
-                  likes: result.likes
-                }
-              : comment
-          )
-        )
-      } else {
-        // 降级到本地状态更新
-        setComments(prev =>
-          prev.map(comment =>
-            comment.id === commentId
-              ? {
-                  ...comment,
-                  isLiked: !comment.isLiked,
-                  likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
-                }
-              : comment
-          )
-        )
-      }
-    } catch (error) {
-      console.error('❌ 评论点赞请求失败:', error)
-      // 降级到本地状态更新
-      setComments(prev =>
-        prev.map(comment =>
-          comment.id === commentId
-            ? {
-                ...comment,
-                isLiked: !comment.isLiked,
-                likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
-              }
-            : comment
-        )
-      )
-    }
-  }, [])
 
   // 渲染单个图片项
   const renderItem = useCallback((item: WaterfallItem, index: number) => {

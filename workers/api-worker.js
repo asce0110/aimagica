@@ -511,11 +511,186 @@ function getRandomRotation() {
 }
 
 async function handleGalleryItem(request, env, context) {
-  // 实现画廊项目逻辑
-  const { id } = context.params
-  return new Response(JSON.stringify({ id, item: {} }), {
-    headers: { 'Content-Type': 'application/json' }
-  })
+  try {
+    const { id } = context.params
+    const method = request.method
+    
+    if (method === 'GET') {
+      // 获取图片详情并增加浏览量
+      return handleGetImageDetails(id, env)
+    } else if (method === 'POST') {
+      // 处理点赞等操作
+      const body = await request.json()
+      const { action } = body
+      
+      if (action === 'toggle_like') {
+        return handleToggleLike(id, env)
+      }
+      
+      return new Response(JSON.stringify({ error: 'Invalid action' }), {
+        status: 400,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+    
+    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
+      status: 405,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  } catch (error) {
+    console.error('❌ Error in handleGalleryItem:', error)
+    return new Response(JSON.stringify({ error: 'Internal server error' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
+}
+
+// 处理点赞功能
+async function handleToggleLike(imageId, env) {
+  try {
+    const supabaseUrl = env.SUPABASE_URL || 'https://vvrkbpnnlxjqyhmmovro.supabase.co'
+    const supabaseKey = env.SUPABASE_SERVICE_KEY || env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (!supabaseKey) {
+      throw new Error('Missing Supabase configuration')
+    }
+    
+    // 匿名用户ID
+    const ANONYMOUS_USER_ID = '00000000-0000-0000-0000-000000000000'
+    const userId = ANONYMOUS_USER_ID
+    
+    // 检查现有点赞
+    const checkUrl = `${supabaseUrl}/rest/v1/image_likes?image_id=eq.${imageId}&user_id=eq.${userId}`
+    const checkResponse = await fetch(checkUrl, {
+      headers: {
+        'apikey': supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    const existingLikes = await checkResponse.json()
+    const hasLiked = existingLikes.length > 0
+    
+    if (hasLiked) {
+      // 取消点赞
+      const deleteUrl = `${supabaseUrl}/rest/v1/image_likes?image_id=eq.${imageId}&user_id=eq.${userId}`
+      await fetch(deleteUrl, {
+        method: 'DELETE',
+        headers: {
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      console.log(`✅ 取消点赞成功: ${imageId}`)
+      return new Response(JSON.stringify({ liked: false }), {
+        headers: { 'Content-Type': 'application/json' }
+      })
+    } else {
+      // 添加点赞
+      const insertUrl = `${supabaseUrl}/rest/v1/image_likes`
+      await fetch(insertUrl, {
+        method: 'POST',
+        headers: {
+          'apikey': supabaseKey,
+          'Authorization': `Bearer ${supabaseKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          image_id: imageId,
+          user_id: userId
+        })
+      })
+      
+      console.log(`✅ 添加点赞成功: ${imageId}`)
+      return new Response(JSON.stringify({ liked: true }), {
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+  } catch (error) {
+    console.error('❌ 点赞操作失败:', error)
+    return new Response(JSON.stringify({ error: 'Failed to toggle like' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
+}
+
+// 获取图片详情
+async function handleGetImageDetails(imageId, env) {
+  try {
+    const supabaseUrl = env.SUPABASE_URL || 'https://vvrkbpnnlxjqyhmmovro.supabase.co'
+    const supabaseKey = env.SUPABASE_SERVICE_KEY || env.SUPABASE_SERVICE_ROLE_KEY
+    
+    if (!supabaseKey) {
+      throw new Error('Missing Supabase configuration')
+    }
+    
+    // 获取图片基本信息
+    const imageUrl = `${supabaseUrl}/rest/v1/generated_images?id=eq.${imageId}&is_public=eq.true&status=eq.completed`
+    const imageResponse = await fetch(imageUrl, {
+      headers: {
+        'apikey': supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`,
+        'Content-Type': 'application/json'
+      }
+    })
+    
+    const images = await imageResponse.json()
+    if (!images || images.length === 0) {
+      return new Response(JSON.stringify({ error: 'Image not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json' }
+      })
+    }
+    
+    const image = images[0]
+    
+    // 更新浏览量
+    const newViewCount = (image.view_count || 0) + 1
+    const updateUrl = `${supabaseUrl}/rest/v1/generated_images?id=eq.${imageId}`
+    fetch(updateUrl, {
+      method: 'PATCH',
+      headers: {
+        'apikey': supabaseKey,
+        'Authorization': `Bearer ${supabaseKey}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ view_count: newViewCount })
+    }).catch(console.error) // 异步更新，不等待
+    
+    // 构建返回数据
+    const imageDetails = {
+      id: image.id,
+      title: image.prompt?.substring(0, 50) + '...' || 'Untitled',
+      url: image.generated_image_url,
+      prompt: image.prompt || 'No prompt available',
+      style: image.style,
+      author: 'AIMAGICA User',
+      authorAvatar: '/images/aimagica-logo.png',
+      likes: image.likes_count || 0,
+      views: newViewCount,
+      comments: 0, // 暂时为0
+      createdAt: new Date(image.created_at).toLocaleDateString(),
+      isLiked: false, // 需要登录状态才能判断
+      tags: extractTagsFromPrompt(image.prompt || ''),
+      commentsData: [] // 暂时为空数组
+    }
+    
+    return new Response(JSON.stringify(imageDetails), {
+      headers: { 'Content-Type': 'application/json' }
+    })
+    
+  } catch (error) {
+    console.error('❌ 获取图片详情失败:', error)
+    return new Response(JSON.stringify({ error: 'Failed to fetch image details' }), {
+      status: 500,
+      headers: { 'Content-Type': 'application/json' }
+    })
+  }
 }
 
 async function handleGalleryComments(request, env, context) {
