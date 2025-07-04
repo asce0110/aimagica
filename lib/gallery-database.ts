@@ -5,7 +5,7 @@
 
 // API基础配置
 const API_BASE_URL = 'https://aimagica-api.403153162.workers.dev'
-const REQUEST_TIMEOUT = 5000 // 5秒超时
+const REQUEST_TIMEOUT = 15000 // 15秒超时，给评论更多时间
 
 // 数据类型定义
 export interface GalleryImageStats {
@@ -40,25 +40,45 @@ export interface CommentsResponse {
 
 // 通用的fetch包装器，带超时和错误处理
 async function apiRequest(url: string, options: RequestInit = {}): Promise<Response> {
-  const controller = new AbortController()
-  const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT)
+  // 增加重试机制
+  const maxRetries = 2
+  let lastError: any = null
   
-  try {
-    const response = await fetch(url, {
-      ...options,
-      signal: controller.signal,
-      headers: {
-        'Content-Type': 'application/json',
-        ...options.headers,
-      },
-    })
-    
-    clearTimeout(timeoutId)
-    return response
-  } catch (error) {
-    clearTimeout(timeoutId)
-    throw error
+  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+    try {
+      console.log(`🔄 API请求 (尝试 ${attempt + 1}/${maxRetries + 1}): ${url}`)
+      
+      // 使用更兼容的超时方式
+      const timeoutPromise = new Promise<never>((_, reject) => {
+        setTimeout(() => reject(new Error('Request timeout')), REQUEST_TIMEOUT)
+      })
+      
+      const fetchPromise = fetch(url, {
+        ...options,
+        headers: {
+          'Content-Type': 'application/json',
+          ...options.headers,
+        },
+      })
+      
+      const response = await Promise.race([fetchPromise, timeoutPromise])
+      console.log(`✅ API请求成功: ${url} (状态: ${response.status})`)
+      return response
+    } catch (error: any) {
+      lastError = error
+      console.warn(`⚠️ API请求失败 (尝试 ${attempt + 1}): ${url}`, error.message)
+      
+      // 如果不是最后一次尝试，等待一下再重试
+      if (attempt < maxRetries) {
+        const waitTime = (attempt + 1) * 1000 // 1秒、2秒递增
+        console.log(`⏳ ${waitTime}ms后重试...`)
+        await new Promise(resolve => setTimeout(resolve, waitTime))
+      }
+    }
   }
+  
+  console.error(`❌ API请求最终失败: ${url}`, lastError)
+  throw lastError
 }
 
 /**
@@ -185,18 +205,31 @@ export async function getImageComments(imageId: string): Promise<Comment[]> {
  */
 export async function addImageComment(imageId: string, content: string): Promise<Comment | null> {
   try {
-    console.log(`💬 添加评论: ${imageId}`)
+    console.log(`💬 开始添加评论: ${imageId}, 内容长度: ${content.length}`)
+    
+    // 验证输入
+    if (!content || content.trim().length === 0) {
+      console.warn('⚠️ 评论内容为空')
+      return null
+    }
+    
+    if (content.length > 500) {
+      console.warn('⚠️ 评论内容过长')
+      throw new Error('评论内容不能超过500字符')
+    }
     
     const response = await apiRequest(`${API_BASE_URL}/api/gallery/comments/${imageId}`, {
       method: 'POST',
       body: JSON.stringify({
         content: content.trim(),
-        author: 'AIMAGICA User', // 暂时使用固定用户名
+        author: 'AIMAGICA User', // 匿名用户名
       }),
     })
     
     if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
+      const errorText = await response.text()
+      console.error(`❌ API响应错误: ${response.status} ${response.statusText}`, errorText)
+      throw new Error(`服务器错误: ${response.status}`)
     }
     
     const data = await response.json()

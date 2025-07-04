@@ -382,9 +382,15 @@ export default function NewGalleryClient() {
     const content = newComment.trim()
     const imageId = selectedImage.id.toString()
     
+    // 验证评论长度
+    if (content.length > 500) {
+      alert('评论内容不能超过500字符')
+      return
+    }
+    
     setIsAddingComment(true)
     try {
-      console.log(`💬 添加评论: ${imageId}`)
+      console.log(`💬 提交评论: ${imageId}, 内容: "${content.substring(0, 50)}..."`)
       const comment = await galleryDB.addImageComment(imageId, content)
       
       if (comment) {
@@ -402,12 +408,15 @@ export default function NewGalleryClient() {
         setDisplayedImages(prev => prev.map(updateCommentCount))
         setAllImages(prev => prev.map(updateCommentCount))
         
-        console.log('✅ 评论添加成功')
+        console.log('✅ 评论提交成功')
       } else {
-        console.warn('⚠️ 评论添加失败')
+        console.warn('⚠️ 评论提交失败：服务器返回空结果')
+        alert('评论提交失败，请稍后重试')
       }
-    } catch (error) {
-      console.warn('⚠️ 评论添加异常:', error)
+    } catch (error: any) {
+      console.error('❌ 评论提交异常:', error)
+      const errorMessage = error?.message || '网络错误'
+      alert(`评论提交失败: ${errorMessage}`)
     } finally {
       setIsAddingComment(false)
     }
