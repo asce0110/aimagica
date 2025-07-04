@@ -47,6 +47,7 @@ import SimpleImage from "@/components/ui/simple-image"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
 import { getSmartImageUrl, preloadNewImages, getImageLoadingProps, preloadLocalMappedImages } from "@/lib/smart-image-url"
+import { getApiEndpoint } from "@/lib/api-config"
 // import { browserCacheManager } from "@/lib/browser-cache-manager" // 临时禁用
 
 // 使用静态Gallery数据类型
