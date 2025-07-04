@@ -29,6 +29,7 @@ import useStaticUrl from "@/hooks/use-static-url"
 import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import VirtualWaterfall, { type WaterfallItem } from "@/components/ui/virtual-waterfall"
 import LazyGalleryImage from "@/components/ui/lazy-gallery-image"
+import { callApi, getApiEndpoint } from "@/lib/api-config"
 
 // 分页配置
 const ITEMS_PER_PAGE = 12
@@ -89,11 +90,9 @@ export default function OptimizedGalleryClient() {
   const logoUrl = useStaticUrl('/images/aimagica-logo.png')
 
   // 数据状态
-  const [allImages] = useState<StaticGalleryImage[]>(() => {
-    const staticData = getStaticGalleryData()
-    console.log('🎯 OptimizedGallery初始化:', staticData.length, '张图片')
-    return staticData
-  })
+  const [allImages, setAllImages] = useState<StaticGalleryImage[]>([])
+  const [isLoadingGallery, setIsLoadingGallery] = useState(true)
+  const [galleryError, setGalleryError] = useState<string | null>(null)
   
   const [displayedImages, setDisplayedImages] = useState<StaticGalleryImage[]>([])
   const [currentPage, setCurrentPage] = useState(1)
@@ -101,7 +100,8 @@ export default function OptimizedGalleryClient() {
   
   // UI状态
   const [selectedImage, setSelectedImage] = useState<StaticGalleryImage | null>(null)
-  const [comments, setComments] = useState<Comment[]>(sampleComments)
+  const [comments, setComments] = useState<Comment[]>([])
+  const [isLoadingComments, setIsLoadingComments] = useState(false)
   const [filter, setFilter] = useState<string>("all")
   const [searchQuery, setSearchQuery] = useState("")
   const [isMobile, setIsMobile] = useState(false)
@@ -110,6 +110,68 @@ export default function OptimizedGalleryClient() {
   const [isSharing, setIsSharing] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
   const [shareStatus, setShareStatus] = useState<'idle' | 'copying' | 'copied' | 'shared'>('idle')
+
+  // 加载Gallery数据
+  useEffect(() => {
+    const loadGalleryData = async () => {
+      try {
+        setIsLoadingGallery(true)
+        setGalleryError(null)
+        
+        console.log('🎯 开始加载Gallery数据库数据...')
+        const response = await callApi('GALLERY_PUBLIC')
+        
+        if (!response.ok) {
+          throw new Error(`API请求失败: ${response.status}`)
+        }
+        
+        const data = await response.json()
+        console.log('✅ Gallery数据库数据加载成功:', data)
+        
+        // 转换API数据格式为组件需要的格式
+        if (data.success && Array.isArray(data.images)) {
+          const transformedImages: StaticGalleryImage[] = data.images.map((img: any) => ({
+            id: img.id,
+            url: img.url,
+            title: img.title || 'Untitled',
+            author: img.author || 'Anonymous',
+            authorAvatar: img.authorAvatar || '/images/aimagica-logo.png',
+            likes: img.likes || 0,
+            comments: img.comments || 0,
+            views: img.views || 0,
+            downloads: img.downloads || 0,
+            isPremium: img.isPremium || false,
+            isFeatured: img.isFeatured || false,
+            isLiked: img.isLiked || false,
+            createdAt: img.createdAt || new Date().toLocaleDateString(),
+            prompt: img.prompt || 'No prompt available',
+            style: img.style || 'AI Art',
+            tags: Array.isArray(img.tags) ? img.tags : [],
+            size: img.size || 'medium',
+            rotation: img.rotation || 0
+          }))
+          
+          setAllImages(transformedImages)
+          console.log(`🎯 Gallery数据库数据处理完成: ${transformedImages.length}张图片`)
+        } else {
+          console.warn('⚠️ API返回数据格式异常，降级到静态数据')
+          throw new Error('API数据格式异常')
+        }
+      } catch (error) {
+        console.error('❌ Gallery数据库加载失败，降级到静态数据:', error)
+        setGalleryError(error instanceof Error ? error.message : '加载失败')
+        
+        // 降级到静态数据
+        const staticData = getStaticGalleryData()
+        setAllImages(staticData)
+        console.log('📦 降级使用静态数据:', staticData.length, '张图片')
+      } finally {
+        setIsLoadingGallery(false)
+      }
+    }
+    
+    loadGalleryData()
+  }, [])
 
   // 检测移动设备
   useEffect(() => {
@@ -255,36 +317,168 @@ export default function OptimizedGalleryClient() {
     })
   }, [displayedImages, isMobile])
 
+  // 增加预览量
+  const incrementViews = useCallback(async (imageId: string | number) => {
+    try {
+      console.log(`👁️ 增加预览量: ${imageId}`)
+      
+      const response = await callApi('GALLERY_ITEM', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'view',
+          imageId: imageId
+        })
+      })
+      
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ 预览量API调用成功:', result)
+        
+        // 更新本地状态
+        setDisplayedImages(prev =>
+          prev.map(img =>
+            img.id === imageId 
+              ? { ...img, views: result.views }
+              : img
+          )
+        )
+        
+        setAllImages(prev =>
+          prev.map(img =>
+            img.id === imageId 
+              ? { ...img, views: result.views }
+              : img
+          )
+        )
+      }
+    } catch (error) {
+      console.error('❌ 预览量请求失败:', error)
+      // 降级到本地状态更新
+      setDisplayedImages(prev =>
+        prev.map(img =>
+          img.id === imageId 
+            ? { ...img, views: img.views + 1 }
+            : img
+        )
+      )
+      
+      setAllImages(prev =>
+        prev.map(img =>
+          img.id === imageId 
+            ? { ...img, views: img.views + 1 }
+            : img
+        )
+      )
+    }
+  }, [])
+
   // 图片点击处理
   const handleImageClick = useCallback((image: StaticGalleryImage) => {
     setSelectedImage(image)
     console.log(`🖼️ 打开图片详情: ${image.title}`)
-  }, [])
+    // 加载该图片的评论
+    loadComments(image.id)
+    // 增加预览量
+    incrementViews(image.id)
+  }, [loadComments, incrementViews])
 
-  // 点赞处理
+  // 点赞处理 - 真实数据库操作
   const handleLike = useCallback(async (id: string | number) => {
     console.log(`❤️ 点赞图片: ${id}`)
     
-    // 更新本地状态
-    setDisplayedImages(prev =>
-      prev.map(img =>
-        img.id === id 
-          ? { 
-              ...img, 
-              isLiked: !img.isLiked, 
-              likes: img.isLiked ? img.likes - 1 : img.likes + 1 
-            } 
-          : img
-      )
-    )
+    try {
+      // 发送API请求到数据库
+      const response = await callApi('GALLERY_ITEM', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'like',
+          imageId: id
+        })
+      })
+      
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ 点赞API调用成功:', result)
+        
+        // 更新本地状态
+        setDisplayedImages(prev =>
+          prev.map(img =>
+            img.id === id 
+              ? { 
+                  ...img, 
+                  isLiked: result.isLiked,
+                  likes: result.likes 
+                } 
+              : img
+          )
+        )
+        
+        // 同时更新allImages
+        setAllImages(prev =>
+          prev.map(img =>
+            img.id === id 
+              ? { 
+                  ...img, 
+                  isLiked: result.isLiked,
+                  likes: result.likes 
+                } 
+              : img
+          )
+        )
 
-    // 如果是当前选中的图片，也更新详情页面
-    if (selectedImage && selectedImage.id === id) {
-      setSelectedImage(prev => prev ? {
-        ...prev,
-        isLiked: !prev.isLiked,
-        likes: prev.isLiked ? prev.likes - 1 : prev.likes + 1
-      } : null)
+        // 如果是当前选中的图片，也更新详情页面
+        if (selectedImage && selectedImage.id === id) {
+          setSelectedImage(prev => prev ? {
+            ...prev,
+            isLiked: result.isLiked,
+            likes: result.likes
+          } : null)
+        }
+      } else {
+        console.error('❌ 点赞API调用失败:', response.status)
+        // 降级到本地状态更新
+        setDisplayedImages(prev =>
+          prev.map(img =>
+            img.id === id 
+              ? { 
+                  ...img, 
+                  isLiked: !img.isLiked, 
+                  likes: img.isLiked ? img.likes - 1 : img.likes + 1 
+                } 
+              : img
+          )
+        )
+
+        if (selectedImage && selectedImage.id === id) {
+          setSelectedImage(prev => prev ? {
+            ...prev,
+            isLiked: !prev.isLiked,
+            likes: prev.isLiked ? prev.likes - 1 : prev.likes + 1
+          } : null)
+        }
+      }
+    } catch (error) {
+      console.error('❌ 点赞请求失败:', error)
+      // 降级到本地状态更新
+      setDisplayedImages(prev =>
+        prev.map(img =>
+          img.id === id 
+            ? { 
+                ...img, 
+                isLiked: !img.isLiked, 
+                likes: img.isLiked ? img.likes - 1 : img.likes + 1 
+              } 
+            : img
+        )
+      )
+
+      if (selectedImage && selectedImage.id === id) {
+        setSelectedImage(prev => prev ? {
+          ...prev,
+          isLiked: !prev.isLiked,
+          likes: prev.isLiked ? prev.likes - 1 : prev.likes + 1
+        } : null)
+      }
     }
   }, [selectedImage])
 
@@ -409,21 +603,105 @@ export default function OptimizedGalleryClient() {
     setIsDownloading(false)
   }, [selectedImage])
 
-  // 评论点赞功能
-  const handleCommentLike = useCallback((commentId: string | number) => {
+  // 加载评论数据
+  const loadComments = useCallback(async (imageId: string | number) => {
+    try {
+      setIsLoadingComments(true)
+      console.log(`💬 加载评论: ${imageId}`)
+      
+      const response = await callApi('GALLERY_ITEM', {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      })
+      
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && Array.isArray(data.comments)) {
+          const transformedComments: Comment[] = data.comments.map((comment: any) => ({
+            id: comment.id,
+            author: comment.author || 'Anonymous',
+            authorAvatar: comment.authorAvatar || '/images/aimagica-logo.png',
+            content: comment.content,
+            likes: comment.likes || 0,
+            createdAt: comment.createdAt || new Date().toLocaleDateString(),
+            isLiked: comment.isLiked || false
+          }))
+          setComments(transformedComments)
+          console.log(`✅ 评论加载成功: ${transformedComments.length}条`)
+        } else {
+          setComments(sampleComments) // 降级到示例数据
+        }
+      } else {
+        console.warn('⚠️ 评论加载失败，使用示例数据')
+        setComments(sampleComments)
+      }
+    } catch (error) {
+      console.error('❌ 评论加载失败:', error)
+      setComments(sampleComments) // 降级到示例数据
+    } finally {
+      setIsLoadingComments(false)
+    }
+  }, [])
+
+  // 评论点赞功能 - 真实数据库操作
+  const handleCommentLike = useCallback(async (commentId: string | number) => {
     console.log(`👍 评论点赞: ${commentId}`)
     
-    setComments(prev =>
-      prev.map(comment =>
-        comment.id === commentId
-          ? {
-              ...comment,
-              isLiked: !comment.isLiked,
-              likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
-            }
-          : comment
+    try {
+      const response = await callApi('GALLERY_ITEM', {
+        method: 'POST',
+        body: JSON.stringify({
+          action: 'like_comment',
+          commentId: commentId
+        })
+      })
+      
+      if (response.ok) {
+        const result = await response.json()
+        console.log('✅ 评论点赞API调用成功:', result)
+        
+        setComments(prev =>
+          prev.map(comment =>
+            comment.id === commentId
+              ? {
+                  ...comment,
+                  isLiked: result.isLiked,
+                  likes: result.likes
+                }
+              : comment
+          )
+        )
+      } else {
+        // 降级到本地状态更新
+        setComments(prev =>
+          prev.map(comment =>
+            comment.id === commentId
+              ? {
+                  ...comment,
+                  isLiked: !comment.isLiked,
+                  likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
+                }
+              : comment
+          )
+        )
+      }
+    } catch (error) {
+      console.error('❌ 评论点赞请求失败:', error)
+      // 降级到本地状态更新
+      setComments(prev =>
+        prev.map(comment =>
+          comment.id === commentId
+            ? {
+                ...comment,
+                isLiked: !comment.isLiked,
+                likes: comment.isLiked ? comment.likes - 1 : comment.likes + 1
+              }
+            : comment
+        )
       )
-    )
+    }
   }, [])
 
   // 渲染单个图片项
@@ -546,9 +824,14 @@ export default function OptimizedGalleryClient() {
             <div className="flex items-center space-x-2">
               <Sparkles className="w-5 h-5 text-[#d4a574]" />
               <span className="text-white font-bold">
-                {displayedImages.length} of {filteredImages.length} artworks
+                {isLoadingGallery ? 'Loading...' : `${displayedImages.length} of ${filteredImages.length} artworks`}
               </span>
             </div>
+            {galleryError && (
+              <Badge variant="outline" className="bg-red-500/20 text-red-300 border-red-500">
+                Database fallback
+              </Badge>
+            )}
             {searchQuery && (
               <Badge variant="outline" className="bg-[#2a2a2a] text-gray-300">
                 Search: "{searchQuery}"
@@ -557,7 +840,7 @@ export default function OptimizedGalleryClient() {
           </div>
           <div className="flex items-center space-x-2 text-gray-400 text-sm">
             <TrendingUp className="w-4 h-4" />
-            <span>High-performance gallery</span>
+            <span>{galleryError ? 'Static gallery' : 'Database gallery'}</span>
           </div>
         </motion.div>
 
@@ -767,10 +1050,19 @@ export default function OptimizedGalleryClient() {
                       style={{ textShadow: "1px 1px 0px #333" }}
                     >
                       Magic Comments 💬
+                      {isLoadingComments && (
+                        <span className="text-sm text-gray-400 ml-2">Loading...</span>
+                      )}
                     </h3>
 
                     <div className="space-y-4 max-h-60 overflow-y-auto">
-                      {comments.map((comment, index) => (
+                      {isLoadingComments ? (
+                        <div className="text-center py-8">
+                          <div className="text-4xl mb-2">💬</div>
+                          <p className="text-gray-400">Loading comments...</p>
+                        </div>
+                      ) : comments.length > 0 ? (
+                        comments.map((comment, index) => (
                         <div
                           key={comment.id}
                           className="bg-[#1a1a1a] rounded-xl p-4 border-2 border-[#444] shadow-md"
@@ -832,14 +1124,13 @@ export default function OptimizedGalleryClient() {
                             </div>
                           </div>
                         </div>
-                      ))}
+                        ))
+                      ) : (
+                        <p className="text-center text-gray-500 py-8">
+                          No comments yet. Be the first to share your thoughts!
+                        </p>
+                      )}
                     </div>
-
-                    {comments.length === 0 && (
-                      <p className="text-center text-gray-500 py-8">
-                        No comments yet. Be the first to share your thoughts!
-                      </p>
-                    )}
                   </div>
                 </>
               )}
