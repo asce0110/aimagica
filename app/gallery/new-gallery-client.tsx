@@ -61,10 +61,16 @@ export default function NewGalleryClient() {
   const [allImages, setAllImages] = useState<EnhancedGalleryImage[]>(() => {
     // 立即同步加载静态数据，不使用异步
     try {
-      console.log('🚀 立即同步加载静态数据')
+      console.log('🚀 Gallery初始化: 立即同步加载静态数据')
       const staticData = getStaticGalleryData()
-      if (staticData && staticData.length > 0) {
-        return staticData.map(image => ({
+      console.log('📊 静态数据加载结果:', { 
+        数据长度: staticData?.length || 0, 
+        数据类型: typeof staticData,
+        前3项: staticData?.slice(0, 3)?.map(img => ({ id: img.id, title: img.title }))
+      })
+      
+      if (staticData && Array.isArray(staticData) && staticData.length > 0) {
+        const enhancedData = staticData.map(image => ({
           ...image,
           dbLoaded: true,
           localLikes: 0,
@@ -72,11 +78,42 @@ export default function NewGalleryClient() {
           localComments: 0,
           localIsLiked: false,
         }))
+        console.log('✅ Gallery初始化成功:', enhancedData.length, '张图片')
+        return enhancedData
+      } else {
+        console.error('❌ Gallery初始化失败: 静态数据为空或无效')
       }
     } catch (e) {
-      console.error('同步数据加载失败:', e)
+      console.error('❌ Gallery初始化异常:', e)
     }
-    return []
+    
+    // 如果出错，返回紧急备用数据
+    console.warn('⚠️ 使用紧急备用数据')
+    return [{
+      id: 'emergency-cat',
+      url: '/images/examples/cat-wizard.svg',
+      title: '紧急备用 - 魔法师小猫',
+      author: 'AIMAGICA',
+      authorAvatar: '/images/aimagica-logo.png',
+      likes: 0,
+      comments: 0,
+      views: 0,
+      downloads: 0,
+      isPremium: false,
+      isFeatured: false,
+      isLiked: false,
+      createdAt: 'now',
+      prompt: 'Emergency fallback image',
+      style: 'Fantasy',
+      tags: ['emergency'],
+      size: 'medium' as const,
+      rotation: 0,
+      dbLoaded: true,
+      localLikes: 0,
+      localViews: 0,
+      localComments: 0,
+      localIsLiked: false,
+    }]
   })
   
   const [displayedImages, setDisplayedImages] = useState<EnhancedGalleryImage[]>([])
