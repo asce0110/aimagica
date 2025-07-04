@@ -355,8 +355,8 @@ export default function OptimizedGalleryClient() {
         <VirtualWaterfall
           items={waterfallItems}
           columns={isMobile ? 2 : 4}
-          gap={16}
-          itemMinWidth={250}
+          gap={isMobile ? 12 : 16}
+          itemMinWidth={isMobile ? 150 : 250}
           renderItem={renderItem}
           onLoadMore={loadMore}
           hasMore={hasMore}

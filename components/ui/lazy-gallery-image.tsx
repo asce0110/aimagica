@@ -121,16 +121,28 @@ export default function LazyGalleryImage({
     setIsLoaded(true) // 确保加载状态结束
   }
 
-  // 生成占位符尺寸
+  // 生成占位符尺寸 - 移动端优化
   const getPlaceholderHeight = () => {
-    const aspectRatios = {
+    const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768
+    
+    const mobileAspectRatios = {
+      "vertical": 280,
+      "horizontal": 160,
+      "small": 200,
+      "medium": 240,
+      "large": 300
+    }
+    
+    const desktopAspectRatios = {
       "vertical": 400,
       "horizontal": 225,
       "small": 300,
       "medium": 375,
       "large": 400
     }
-    return aspectRatios[size] || 375
+    
+    const ratios = isMobileView ? mobileAspectRatios : desktopAspectRatios
+    return ratios[size] || (isMobileView ? 240 : 375)
   }
 
   return (
@@ -213,8 +225,8 @@ export default function LazyGalleryImage({
               )}
               
               {/* 悬停覆盖层 */}
-              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-3 z-10">
-                <h3 className="text-white font-bold text-sm mb-1 line-clamp-2">
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-col justify-end p-2 md:p-3 z-10">
+                <h3 className="text-white font-bold text-xs md:text-sm mb-1 line-clamp-2">
                   {title}
                 </h3>
                 <p className="text-gray-300 text-xs line-clamp-1">
@@ -237,14 +249,18 @@ export default function LazyGalleryImage({
               </div>
 
               {/* 统计信息 */}
-              <div className="absolute bottom-2 right-2 flex items-center gap-2 text-white text-xs z-20">
-                <div className="flex items-center gap-1 bg-black/50 rounded px-2 py-1 backdrop-blur-sm">
-                  <Heart className="h-3 w-3" />
-                  {likes > 1000 ? `${(likes / 1000).toFixed(1)}k` : likes}
+              <div className="absolute bottom-1 md:bottom-2 right-1 md:right-2 flex items-center gap-1 md:gap-2 text-white text-xs z-20">
+                <div className="flex items-center gap-1 bg-black/50 rounded px-1.5 md:px-2 py-0.5 md:py-1 backdrop-blur-sm">
+                  <Heart className="h-2.5 w-2.5 md:h-3 md:w-3" />
+                  <span className="text-xs md:text-xs">
+                    {likes > 1000 ? `${(likes / 1000).toFixed(1)}k` : likes}
+                  </span>
                 </div>
-                <div className="flex items-center gap-1 bg-black/50 rounded px-2 py-1 backdrop-blur-sm">
-                  <Eye className="h-3 w-3" />
-                  {views > 1000 ? `${(views / 1000).toFixed(1)}k` : views}
+                <div className="flex items-center gap-1 bg-black/50 rounded px-1.5 md:px-2 py-0.5 md:py-1 backdrop-blur-sm">
+                  <Eye className="h-2.5 w-2.5 md:h-3 md:w-3" />
+                  <span className="text-xs md:text-xs">
+                    {views > 1000 ? `${(views / 1000).toFixed(1)}k` : views}
+                  </span>
                 </div>
               </div>
 

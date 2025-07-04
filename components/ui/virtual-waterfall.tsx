@@ -61,9 +61,14 @@ export default function VirtualWaterfall({
   const [visibleRange, setVisibleRange] = useState({ start: 0, end: initialRenderCount })
   const [isInitialRender, setIsInitialRender] = useState(true)
 
-  // 响应式列数计算
+  // 响应式列数计算 - 优先使用传入的columns设置
   const actualColumns = useMemo(() => {
     if (!containerWidth) return columns
+    
+    // 如果是明确的移动端设置（2列），直接使用
+    if (columns <= 2) return columns
+    
+    // 桌面端才进行动态计算
     const maxColumns = Math.floor(containerWidth / (itemMinWidth + gap))
     return Math.max(1, Math.min(columns, maxColumns))
   }, [containerWidth, columns, itemMinWidth, gap])
