@@ -60,7 +60,8 @@ export default function LazyGalleryImage({
   const containerRef = useRef<HTMLDivElement>(null)
   const imgRef = useRef<HTMLImageElement>(null)
   
-  const staticUrl = useStaticUrl(url)
+  // 智能URL处理：如果是完整URL则直接使用，否则使用useStaticUrl处理
+  const staticUrl = url.startsWith('http') ? url : useStaticUrl(url)
 
   // 获取图片宽高比 - 移动端和桌面端都按原始比例
   const getAspectRatio = () => {
@@ -96,7 +97,7 @@ export default function LazyGalleryImage({
         }
       },
       {
-        rootMargin: '100px', // 提前100px开始加载，更快响应
+        rootMargin: '300px', // 提前300px开始加载，更强的预加载
         threshold: 0.05
       }
     )
@@ -124,10 +125,16 @@ export default function LazyGalleryImage({
   }
 
   const handleImageError = (e: React.SyntheticEvent<HTMLImageElement>) => {
+    const imgElement = e.currentTarget
     console.error(`❌ Gallery图片加载失败:`, {
       id,
       title,
       url: staticUrl,
+      naturalWidth: imgElement.naturalWidth,
+      naturalHeight: imgElement.naturalHeight,
+      complete: imgElement.complete,
+      errorType: e.type,
+      currentSrc: imgElement.currentSrc,
       error: e
     })
     setHasError(true)

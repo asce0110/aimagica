@@ -94,6 +94,7 @@ export default function NewGalleryClient() {
     
     const loadAPIData = async () => {
       console.log('🚀 立即开始加载真实Gallery数据...')
+      console.log('📋 当前allImages状态:', allImages.length, '张图片')
       
       try {
         // 设置15秒API超时，给不翻墙用户更多时间
@@ -147,6 +148,11 @@ export default function NewGalleryClient() {
             console.log(`🎯 真实Gallery数据转换完成: ${realImages.length}张图片`)
             
             // 🎯 直接设置真实API数据
+            console.log('🔥 设置真实API数据:', realImages.map(img => ({ 
+              id: img.id, 
+              title: img.title,
+              url: img.url.substring(0, 100) + '...' 
+            })))
             setAllImages(realImages)
             setIsLoadingAPI(false)
             setIsOfflineMode(false)
