@@ -22,6 +22,7 @@ export interface LazyGalleryImageProps {
   rotation?: number
   onClick?: () => void
   priority?: boolean  // 是否优先加载（首屏图片）
+  waterfallHeight?: number  // 瀑布流指定高度（覆盖size计算）
 }
 
 /**
@@ -48,7 +49,8 @@ export default function LazyGalleryImage({
   size = 'medium',
   rotation = 0,
   onClick,
-  priority = false
+  priority = false,
+  waterfallHeight
 }: LazyGalleryImageProps) {
   const [isLoaded, setIsLoaded] = useState(false)
   const [isInView, setIsInView] = useState(priority) // 优先图片立即视为可见
@@ -121,8 +123,14 @@ export default function LazyGalleryImage({
     setIsLoaded(true) // 确保加载状态结束
   }
 
-  // 生成占位符尺寸 - 移动端和桌面端都按原始比例
+  // 生成占位符尺寸 - 优先使用瀑布流指定高度
   const getPlaceholderHeight = () => {
+    // 如果有瀑布流指定高度，直接使用
+    if (waterfallHeight) {
+      return waterfallHeight
+    }
+    
+    // 否则按原有逻辑计算
     const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768
     
     if (isMobileView) {
@@ -174,8 +182,11 @@ export default function LazyGalleryImage({
             <div 
               className="w-full bg-white rounded-sm overflow-hidden relative"
               style={{
-                aspectRatio: getAspectRatio(),
-                minHeight: getPlaceholderHeight()
+                // 瀑布流模式：使用指定高度，非瀑布流模式：使用aspectRatio
+                ...(waterfallHeight 
+                  ? { height: getPlaceholderHeight() }
+                  : { aspectRatio: getAspectRatio(), minHeight: getPlaceholderHeight() }
+                )
               }}
             >
               {/* 加载占位符 */}

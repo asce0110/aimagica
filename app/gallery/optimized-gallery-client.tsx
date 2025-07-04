@@ -212,16 +212,37 @@ export default function OptimizedGalleryClient() {
   // 是否还有更多数据
   const hasMore = displayedImages.length < filteredImages.length
 
-  // 转换为瀑布流数据格式 - 移动端和桌面端都按原始尺寸显示
+  // 转换为瀑布流数据格式 - 桌面端真正的瀑布流效果
   const waterfallItems: WaterfallItem[] = useMemo(() => {
-    return displayedImages.map(image => {
-      // 根据size计算合适的高度，移动端和桌面端都保持原始比例
+    return displayedImages.map((image, index) => {
+      // 桌面端：创造更大的高度差异以形成真正的瀑布流效果
+      // 移动端：保持适中的差异便于浏览
       const getItemHeight = () => {
-        if (image.size === 'vertical') return isMobile ? 350 : 400
-        if (image.size === 'horizontal') return isMobile ? 200 : 225
-        if (image.size === 'large') return isMobile ? 380 : 450
-        if (image.size === 'small') return isMobile ? 250 : 300
-        return isMobile ? 300 : 375 // medium默认
+        if (isMobile) {
+          // 移动端保持较小的差异
+          if (image.size === 'vertical') return 350
+          if (image.size === 'horizontal') return 200
+          if (image.size === 'large') return 380
+          if (image.size === 'small') return 250
+          return 300 // medium默认
+        } else {
+          // 桌面端：创造明显的高度差异形成瀑布流
+          const baseHeights = {
+            'vertical': 550,    // 高图片
+            'horizontal': 300,  // 宽图片(矮)
+            'large': 600,      // 大图片
+            'small': 350,      // 小图片
+            'medium': 450      // medium默认
+          }
+          
+          const baseHeight = baseHeights[image.size] || 450
+          
+          // 添加一些随机变化，让每张图片高度都略有不同
+          const variation = (index % 5) * 25 - 50 // -50 到 +50 的变化
+          const finalHeight = Math.max(280, baseHeight + variation) // 最小高度280
+          
+          return finalHeight
+        }
       }
       
       return {
@@ -407,7 +428,7 @@ export default function OptimizedGalleryClient() {
 
   // 渲染单个图片项
   const renderItem = useCallback((item: WaterfallItem, index: number) => {
-    const image = item as StaticGalleryImage
+    const image = item as StaticGalleryImage & { height?: number }
     return (
       <LazyGalleryImage
         key={image.id}
@@ -425,6 +446,7 @@ export default function OptimizedGalleryClient() {
         rotation={image.rotation}
         onClick={() => handleImageClick(image)}
         priority={index < 4} // 前4张图片优先加载
+        waterfallHeight={image.height} // 传递瀑布流高度
       />
     )
   }, [handleImageClick])
