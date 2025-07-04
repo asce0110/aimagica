@@ -57,43 +57,32 @@ export default function NewGalleryClient() {
   const { data: session } = useSession()
   const logoUrl = useStaticUrl('/images/aimagica-logo.png')
 
-  // 数据状态 - 保持原有图片显示逻辑
-  const [allImages, setAllImages] = useState<EnhancedGalleryImage[]>([])
+  // 数据状态 - 立即初始化，不等待任何东西
+  const [allImages, setAllImages] = useState<EnhancedGalleryImage[]>(() => {
+    // 立即同步加载静态数据，不使用异步
+    try {
+      console.log('🚀 立即同步加载静态数据')
+      const staticData = getStaticGalleryData()
+      if (staticData && staticData.length > 0) {
+        return staticData.map(image => ({
+          ...image,
+          dbLoaded: true,
+          localLikes: 0,
+          localViews: 0, 
+          localComments: 0,
+          localIsLiked: false,
+        }))
+      }
+    } catch (e) {
+      console.error('同步数据加载失败:', e)
+    }
+    return []
+  })
+  
   const [displayedImages, setDisplayedImages] = useState<EnhancedGalleryImage[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(false)
-  const [isInitialLoading, setIsInitialLoading] = useState(true)
-  
-  // 立即设置一个200ms的保险机制
-  useEffect(() => {
-    const emergencyTimeout = setTimeout(() => {
-      console.log('🚨 紧急超时，强制显示Gallery界面')
-      setIsInitialLoading(false)
-      
-      // 如果还没有数据，提供默认数据
-      if (allImages.length === 0) {
-        console.log('📦 提供紧急备用数据')
-        try {
-          const staticData = getStaticGalleryData()
-          if (staticData && staticData.length > 0) {
-            const emergencyData: EnhancedGalleryImage[] = staticData.slice(0, 4).map(image => ({
-              ...image,
-              dbLoaded: true,
-              localLikes: 0,
-              localViews: 0,
-              localComments: 0,
-              localIsLiked: false,
-            }))
-            setAllImages(emergencyData)
-          }
-        } catch (e) {
-          console.error('紧急数据加载失败:', e)
-        }
-      }
-    }, 200)
-    
-    return () => clearTimeout(emergencyTimeout)
-  }, [allImages.length])
+  const [isInitialLoading, setIsInitialLoading] = useState(false) // 直接设为false，立即显示
   
   // UI状态
   const [selectedImage, setSelectedImage] = useState<EnhancedGalleryImage | null>(null)
@@ -113,83 +102,47 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 初始化：极速加载，多重保险
+  // 简化的后台数据同步 - 不阻塞UI
   useEffect(() => {
-    console.log('🎯 开始极速加载Gallery数据...')
-    
-    // 设置500ms强制超时，无论如何都要显示内容
-    const forceTimeout = setTimeout(() => {
-      console.warn('⚠️ 强制超时，立即显示Gallery')
-      setIsInitialLoading(false)
-    }, 500)
-    
-    // 使用nextTick确保在下一个事件循环中执行
-    setTimeout(() => {
+    // 延迟5秒后尝试同步localStorage和数据库，完全不阻塞UI显示
+    const backgroundSync = setTimeout(async () => {
+      console.log('🔄 后台同步localStorage和数据库...')
       try {
-        const staticData = getStaticGalleryData()
-        console.log('📊 静态数据获取结果:', staticData?.length || 0, '张图片')
-        
-        if (staticData && staticData.length > 0) {
-          // 直接使用静态数据和本地缓存，不等待任何API
-          const enhancedData: EnhancedGalleryImage[] = staticData.map(image => {
-            // 快速获取localStorage数据，有错误就用默认值
-            let localLikes = 0, localViews = 0, localComments = 0, localIsLiked = false
-            try {
-              localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
-              localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
-              localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
-              localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
-            } catch (e) {
-              console.warn('localStorage读取失败，使用默认值')
-            }
+        // 从localStorage更新数据
+        setAllImages(prevImages => prevImages.map(image => {
+          try {
+            const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
+            const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
+            const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
+            const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
             
             return {
               ...image,
-              dbLoaded: true, // 标记为已加载，使用本地数据
               localLikes,
               localViews,
               localComments,
               localIsLiked,
             }
-          })
-          
-          setAllImages(enhancedData)
-          console.log(`✅ 静态数据初始化成功: ${enhancedData.length}张图片`)
-          
-          // 清除强制超时，立即停止加载状态
-          clearTimeout(forceTimeout)
-          setIsInitialLoading(false)
-          
-          // 5秒后尝试在后台同步数据库（给网络更多时间）
-          setTimeout(async () => {
-            console.log('🔄 尝试后台同步数据库统计...')
-            try {
-              // 先检查网络状态
-              const networkAvailable = await galleryDB.quickNetworkCheck()
-              setIsOfflineMode(!networkAvailable)
-              
-              if (networkAvailable) {
-                await loadDatabaseStatsInBackground(enhancedData)
-              } else {
-                console.log('📱 确认离线模式，跳过数据库同步')
-              }
-            } catch (error) {
-              console.warn('⚠️ 数据库同步失败，继续使用本地数据:', error)
-              setIsOfflineMode(true)
-            }
-          }, 5000)
-        } else {
-          console.warn('⚠️ 静态数据为空')
-          clearTimeout(forceTimeout)
-          setIsInitialLoading(false)
+          } catch (e) {
+            return image // 如果localStorage读取失败，保持原状
+          }
+        }))
+        
+        // 检查网络并同步数据库
+        const networkAvailable = await galleryDB.quickNetworkCheck()
+        setIsOfflineMode(!networkAvailable)
+        
+        if (networkAvailable && allImages.length > 0) {
+          await loadDatabaseStatsInBackground(allImages)
         }
       } catch (error) {
-        console.error('❌ 静态数据加载异常:', error)
-        clearTimeout(forceTimeout)
-        setIsInitialLoading(false)
+        console.warn('⚠️ 后台同步失败:', error)
+        setIsOfflineMode(true)
       }
-    }, 0) // 使用0ms的setTimeout确保在下一个事件循环执行
-  }, [])
+    }, 5000)
+    
+    return () => clearTimeout(backgroundSync)
+  }, []) // 移除allImages依赖，避免重复执行
 
   // 加载数据库统计信息
   const loadDatabaseStatsInBackground = useCallback(async (images: EnhancedGalleryImage[]) => {
@@ -609,44 +562,7 @@ export default function NewGalleryClient() {
     )
   }, [handleImageClick])
 
-  if (isInitialLoading) {
-    return (
-      <div className="min-h-screen bg-black flex items-center justify-center">
-        <div className="text-center space-y-6">
-          {/* 大型魔法光环 - 与首页一致的风格 */}
-          <div className="relative w-24 h-24 mx-auto">
-            <div className="absolute inset-0 rounded-full border-4 border-[#d4a574]/40 animate-spin"></div>
-            <div className="absolute inset-2 rounded-full border-4 border-[#8b7355]/60 animate-[spin_1.5s_linear_infinite_reverse]"></div>
-            <div className="absolute inset-4 rounded-full border-2 border-[#d4a574]/80 animate-[spin_2s_linear_infinite]"></div>
-            <div className="absolute inset-0 flex items-center justify-center">
-              <Sparkles className="w-8 h-8 text-[#d4a574] animate-pulse" />
-            </div>
-            {/* 魔法粒子效果 */}
-            <div className="absolute -top-2 -right-2 w-3 h-3 bg-[#d4a574] rounded-full animate-ping"></div>
-            <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-[#8b7355] rounded-full animate-ping delay-300"></div>
-            <div className="absolute top-2 -left-2 w-2 h-2 bg-[#d4a574]/80 rounded-full animate-ping delay-500"></div>
-            <div className="absolute -bottom-2 right-2 w-2 h-2 bg-[#8b7355]/80 rounded-full animate-ping delay-700"></div>
-            <div className="absolute -top-1 left-1/2 w-1.5 h-1.5 bg-white/60 rounded-full animate-ping delay-900"></div>
-            <div className="absolute bottom-1 -right-1 w-1.5 h-1.5 bg-white/60 rounded-full animate-ping delay-1100"></div>
-          </div>
-          <div className="space-y-2">
-            <h2 
-              className="text-2xl font-black text-white transform -rotate-1" 
-              style={{ 
-                textShadow: "2px 2px 0px #333",
-                fontFamily: "var(--font-accent)" 
-              }}
-            >
-              ✨ Loading Magical Gallery...
-            </h2>
-            <p className="text-[#d4a574] font-bold transform rotate-0.5">
-              Preparing your artistic adventure
-            </p>
-          </div>
-        </div>
-      </div>
-    )
-  }
+  // 移除加载屏幕，直接显示Gallery内容
 
   return (
     <div className="min-h-screen bg-black">
