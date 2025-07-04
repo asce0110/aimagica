@@ -81,31 +81,31 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 初始化：立即加载静态数据，保持原有显示逻辑
+  // 初始化：立即加载静态数据，同时加载数据库数据以避免显示假数据
   useEffect(() => {
-    const loadData = () => {
-      console.log('🎯 立即加载静态Gallery数据（保持原有显示逻辑）...')
+    const loadData = async () => {
+      console.log('🎯 同时加载静态和数据库数据...')
       try {
         const staticData = getStaticGalleryData()
         if (staticData && staticData.length > 0) {
-          // 转换为增强型数据，保留原有的likes/views等字段用于显示
+          // 先使用静态数据初始化，但设置为空的统计
           const enhancedData: EnhancedGalleryImage[] = staticData.map(image => ({
             ...image,
             dbLoaded: false,
-            localLikes: image.likes,
-            localViews: image.views, 
-            localComments: image.comments,
-            localIsLiked: image.isLiked,
+            localLikes: 0, // 初始化为0，等待数据库数据
+            localViews: 0,
+            localComments: 0,
+            localIsLiked: false,
           }))
           
           setAllImages(enhancedData)
           console.log(`✅ 静态数据加载成功: ${enhancedData.length}张图片`)
           
-          // 后台加载数据库统计，不影响图片显示
-          loadDatabaseStatsInBackground(enhancedData)
+          // 立即加载数据库统计，避免显示假数据
+          await loadDatabaseStatsInBackground(enhancedData)
         }
       } catch (error) {
-        console.error('❌ 静态数据加载失败:', error)
+        console.error('❌ 数据加载失败:', error)
       } finally {
         setIsInitialLoading(false)
       }
@@ -114,38 +114,45 @@ export default function NewGalleryClient() {
     loadData()
   }, [])
 
-  // 后台加载数据库统计信息
+  // 加载数据库统计信息
   const loadDatabaseStatsInBackground = useCallback(async (images: EnhancedGalleryImage[]) => {
     try {
-      console.log('🔄 后台加载数据库统计信息...')
+      console.log('🔄 加载数据库统计信息...')
       
       const imageIds = images.map(img => img.id.toString())
       const batchStats = await galleryDB.getBatchImageStats(imageIds)
       
       console.log(`✅ 数据库统计加载成功: ${Object.keys(batchStats).length}张图片`)
       
-      // 只更新有数据库数据的图片，保持原有显示不变
+      // 更新所有图片的数据库状态
       setAllImages(prevImages => 
         prevImages.map(image => {
           const dbStat = batchStats[image.id.toString()]
-          if (dbStat) {
-            return {
-              ...image,
-              dbStats: dbStat,
-              dbLoaded: true,
-              // 如果数据库有更新的数据，优先使用数据库数据
-              localLikes: dbStat.likes,
-              localIsLiked: dbStat.isLiked,
-              localViews: dbStat.views,
-              localComments: dbStat.comments,
-            }
+          return {
+            ...image,
+            dbStats: dbStat || { id: image.id.toString(), likes: 0, comments: 0, views: 0, isLiked: false },
+            dbLoaded: true,
+            // 使用数据库数据，如果没有数据库数据则使用0
+            localLikes: dbStat?.likes || 0,
+            localIsLiked: dbStat?.isLiked || false,
+            localViews: dbStat?.views || 0,
+            localComments: dbStat?.comments || 0,
           }
-          return image
         })
       )
     } catch (error) {
-      console.warn('⚠️ 数据库统计加载失败，继续使用静态数据:', error)
-      // 不影响用户体验，静态数据仍然可用
+      console.warn('⚠️ 数据库统计加载失败，显示默认数值:', error)
+      // 设置默认的数据库状态
+      setAllImages(prevImages => 
+        prevImages.map(image => ({
+          ...image,
+          dbLoaded: true,
+          localLikes: 0,
+          localIsLiked: false,
+          localViews: 0,
+          localComments: 0,
+        }))
+      )
     }
   }, [])
 

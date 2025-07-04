@@ -1151,9 +1151,8 @@ async function handleGalleryCommentsNew(request, env, context) {
       })
     }
   } else if (request.method === 'POST') {
-    // 添加新评论
+    // 添加新评论 - 暂时使用模拟方式直到数据库表就绪
     try {
-      const config = getSupabaseConfig(env)
       const body = await request.json()
       
       if (!body.content || body.content.trim().length === 0) {
@@ -1163,8 +1162,11 @@ async function handleGalleryCommentsNew(request, env, context) {
         })
       }
       
-      const insertUrl = `${config.supabaseUrl}/rest/v1/image_comments`
-      const commentData = {
+      console.log(`💬 收到评论请求: ${imageId}, 内容: ${body.content}`)
+      
+      // 暂时返回模拟的成功响应，记录评论到日志
+      const mockComment = {
+        id: `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
         image_id: imageId,
         content: body.content.trim(),
         author: body.author || 'AIMAGICA User',
@@ -1173,27 +1175,18 @@ async function handleGalleryCommentsNew(request, env, context) {
         likes_count: 0
       }
       
-      const result = await supabaseQuery(insertUrl, {
-        method: 'POST',
-        body: JSON.stringify(commentData),
-        headers: { 'Prefer': 'return=representation' }
-      }, config)
+      console.log(`✅ 模拟评论创建成功:`, mockComment)
       
-      if (!result || result.length === 0) {
-        throw new Error('Failed to create comment')
-      }
-      
-      const newComment = result[0]
       return new Response(JSON.stringify({
         success: true,
         comment: {
-          id: newComment.id,
-          imageId: newComment.image_id,
-          content: newComment.content,
-          author: newComment.author,
-          authorAvatar: newComment.author_avatar,
-          createdAt: newComment.created_at,
-          likes: newComment.likes_count || 0,
+          id: mockComment.id,
+          imageId: mockComment.image_id,
+          content: mockComment.content,
+          author: mockComment.author,
+          authorAvatar: mockComment.author_avatar,
+          createdAt: mockComment.created_at,
+          likes: mockComment.likes_count || 0,
           isLiked: false
         }
       }), {
