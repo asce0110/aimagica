@@ -5,7 +5,8 @@
 
 // API基础配置
 const API_BASE_URL = 'https://aimagica-api.403153162.workers.dev'
-const REQUEST_TIMEOUT = 15000 // 15秒超时，给评论更多时间
+const REQUEST_TIMEOUT = 8000 // 8秒超时，避免长时间等待
+const MAX_RETRIES = 1 // 减少重试次数，快速回退
 
 // 数据类型定义
 export interface GalleryImageStats {
@@ -38,19 +39,17 @@ export interface CommentsResponse {
   comments: Comment[]
 }
 
-// 通用的fetch包装器，带超时和错误处理
+// 通用的fetch包装器，带超时和快速失败回退
 async function apiRequest(url: string, options: RequestInit = {}): Promise<Response> {
-  // 增加重试机制
-  const maxRetries = 2
   let lastError: any = null
   
-  for (let attempt = 0; attempt <= maxRetries; attempt++) {
+  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
-      console.log(`🔄 API请求 (尝试 ${attempt + 1}/${maxRetries + 1}): ${url}`)
+      console.log(`🔄 API请求 (尝试 ${attempt + 1}/${MAX_RETRIES + 1}): ${url}`)
       
-      // 使用更兼容的超时方式
+      // 快速超时检测，避免长时间等待
       const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('Request timeout')), REQUEST_TIMEOUT)
+        setTimeout(() => reject(new Error('API_TIMEOUT')), REQUEST_TIMEOUT)
       })
       
       const fetchPromise = fetch(url, {
@@ -62,23 +61,32 @@ async function apiRequest(url: string, options: RequestInit = {}): Promise<Respo
       })
       
       const response = await Promise.race([fetchPromise, timeoutPromise])
-      console.log(`✅ API请求成功: ${url} (状态: ${response.status})`)
+      
+      if (!response.ok) {
+        throw new Error(`HTTP_${response.status}`)
+      }
+      
+      console.log(`✅ API请求成功: ${url}`)
       return response
     } catch (error: any) {
       lastError = error
-      console.warn(`⚠️ API请求失败 (尝试 ${attempt + 1}): ${url}`, error.message)
+      console.warn(`⚠️ API请求失败 (尝试 ${attempt + 1}): ${error.message}`)
       
-      // 如果不是最后一次尝试，等待一下再重试
-      if (attempt < maxRetries) {
-        const waitTime = (attempt + 1) * 1000 // 1秒、2秒递增
-        console.log(`⏳ ${waitTime}ms后重试...`)
-        await new Promise(resolve => setTimeout(resolve, waitTime))
+      // 如果是网络问题或超时，不重试，直接失败回退
+      if (error.message === 'API_TIMEOUT' || error.message.includes('fetch')) {
+        console.log('🚫 检测到网络问题，停止重试，启用回退模式')
+        break
+      }
+      
+      // 只对HTTP错误重试
+      if (attempt < MAX_RETRIES && error.message.startsWith('HTTP_')) {
+        await new Promise(resolve => setTimeout(resolve, 500))
       }
     }
   }
   
-  console.error(`❌ API请求最终失败: ${url}`, lastError)
-  throw lastError
+  console.error(`❌ API不可用，启用离线模式: ${url}`)
+  throw new Error('API_UNAVAILABLE')
 }
 
 /**
@@ -115,30 +123,43 @@ export async function getImageStats(imageId: string): Promise<GalleryImageStats 
  */
 export async function toggleImageLike(imageId: string): Promise<LikeResponse> {
   try {
-    console.log(`❤️ 切换点赞状态: ${imageId}`)
+    console.log(`❤️ 尝试切换点赞状态: ${imageId}`)
     
     const response = await apiRequest(`${API_BASE_URL}/api/gallery/like/${imageId}`, {
       method: 'POST',
     })
     
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
-    }
-    
     const data = await response.json()
     console.log(`✅ 点赞操作成功:`, data)
+    
+    // 同步到本地缓存
+    localStorage.setItem(`gallery_likes_${imageId}`, data.newCount?.toString() || '0')
+    localStorage.setItem(`gallery_liked_${imageId}`, data.liked?.toString() || 'false')
     
     return {
       success: true,
       liked: data.liked,
-      newCount: data.count || 0,
+      newCount: data.newCount || 0,
     }
   } catch (error) {
-    console.warn(`⚠️ 点赞操作失败: ${imageId}`, error)
+    console.warn(`⚠️ API不可用，使用离线模式点赞: ${imageId}`, error)
+    
+    // 离线模式：使用本地存储模拟点赞
+    const currentLiked = localStorage.getItem(`gallery_liked_${imageId}`) === 'true'
+    const currentLikes = parseInt(localStorage.getItem(`gallery_likes_${imageId}`) || '0')
+    
+    const newLiked = !currentLiked
+    const newCount = newLiked ? currentLikes + 1 : Math.max(0, currentLikes - 1)
+    
+    localStorage.setItem(`gallery_liked_${imageId}`, newLiked.toString())
+    localStorage.setItem(`gallery_likes_${imageId}`, newCount.toString())
+    
+    console.log(`📱 离线点赞成功: ${newLiked}, 新数量: ${newCount}`)
+    
     return {
-      success: false,
-      liked: false,
-      newCount: 0,
+      success: true,
+      liked: newLiked,
+      newCount: newCount,
     }
   }
 }
@@ -169,33 +190,64 @@ export async function incrementImageView(imageId: string): Promise<boolean> {
  */
 export async function getImageComments(imageId: string): Promise<Comment[]> {
   try {
-    console.log(`💬 获取图片评论: ${imageId}`)
+    console.log(`💬 尝试获取图片评论: ${imageId}`)
     
     const response = await apiRequest(`${API_BASE_URL}/api/gallery/comments/${imageId}`)
-    
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
-    }
     
     const data = await response.json()
     console.log(`✅ 评论获取成功:`, data)
     
     if (data.success && Array.isArray(data.comments)) {
-      return data.comments.map((comment: any) => ({
-        id: comment.id,
-        imageId: comment.imageId || imageId,
-        content: comment.content,
-        author: comment.author || 'Anonymous',
-        authorAvatar: comment.authorAvatar || '/images/aimagica-logo.png',
-        createdAt: comment.createdAt || new Date().toISOString(),
-        likes: comment.likes || 0,
-        isLiked: comment.isLiked || false,
-      }))
+      const comments = data.comments.map((comment: any) => {
+        // 从localStorage获取评论的点赞状态
+        const localLiked = localStorage.getItem(`comment_liked_${comment.id}`) === 'true'
+        const localLikes = parseInt(localStorage.getItem(`comment_likes_${comment.id}`) || '0')
+        
+        return {
+          id: comment.id,
+          imageId: comment.imageId || imageId,
+          content: comment.content,
+          author: comment.author || 'AIMAGICA User',
+          authorAvatar: comment.authorAvatar || '/images/aimagica-logo.png',
+          createdAt: comment.createdAt || new Date().toISOString(),
+          likes: Math.max(comment.likes || 0, localLikes), // 使用更大的值
+          isLiked: comment.isLiked || localLiked,
+        }
+      })
+      
+      // 缓存到本地存储
+      localStorage.setItem(`gallery_comments_data_${imageId}`, JSON.stringify(comments))
+      localStorage.setItem(`gallery_comments_${imageId}`, comments.length.toString())
+      
+      return comments
     }
     
     return []
   } catch (error) {
-    console.warn(`⚠️ 获取评论失败: ${imageId}`, error)
+    console.warn(`⚠️ API不可用，使用离线模式评论: ${imageId}`, error)
+    
+    // 从本地存储获取缓存的评论
+    try {
+      const cachedComments = localStorage.getItem(`gallery_comments_data_${imageId}`)
+      if (cachedComments) {
+        const comments = JSON.parse(cachedComments).map((comment: any) => {
+          // 确保离线模式下也能获取最新的点赞状态
+          const localLiked = localStorage.getItem(`comment_liked_${comment.id}`) === 'true'
+          const localLikes = parseInt(localStorage.getItem(`comment_likes_${comment.id}`) || comment.likes?.toString() || '0')
+          
+          return {
+            ...comment,
+            likes: localLikes,
+            isLiked: localLiked,
+          }
+        })
+        console.log(`📱 使用缓存评论: ${comments.length}条`)
+        return comments
+      }
+    } catch (e) {
+      console.warn('缓存评论解析失败:', e)
+    }
+    
     return []
   }
 }
@@ -236,7 +288,7 @@ export async function addImageComment(imageId: string, content: string): Promise
     console.log(`✅ 评论添加成功:`, data)
     
     if (data.success && data.comment) {
-      return {
+      const newComment = {
         id: data.comment.id,
         imageId: imageId,
         content: data.comment.content,
@@ -246,19 +298,63 @@ export async function addImageComment(imageId: string, content: string): Promise
         likes: data.comment.likes || 0,
         isLiked: false,
       }
+      
+      // 同步到本地缓存
+      const currentCount = parseInt(localStorage.getItem(`gallery_comments_${imageId}`) || '0')
+      localStorage.setItem(`gallery_comments_${imageId}`, (currentCount + 1).toString())
+      
+      // 缓存评论数据
+      try {
+        const cachedComments = localStorage.getItem(`gallery_comments_data_${imageId}`)
+        const comments = cachedComments ? JSON.parse(cachedComments) : []
+        comments.unshift(newComment)
+        localStorage.setItem(`gallery_comments_data_${imageId}`, JSON.stringify(comments))
+      } catch (e) {
+        console.warn('缓存评论数据失败:', e)
+      }
+      
+      return newComment
     }
     
     return null
   } catch (error) {
-    console.warn(`⚠️ 添加评论失败: ${imageId}`, error)
-    return null
+    console.warn(`⚠️ API不可用，使用离线模式添加评论: ${imageId}`, error)
+    
+    // 离线模式：生成本地评论
+    const offlineComment: Comment = {
+      id: `offline_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
+      imageId: imageId,
+      content: content.trim(),
+      author: 'AIMAGICA User',
+      authorAvatar: '/images/aimagica-logo.png',
+      createdAt: new Date().toISOString(),
+      likes: 0,
+      isLiked: false,
+    }
+    
+    // 存储到本地缓存
+    try {
+      const currentCount = parseInt(localStorage.getItem(`gallery_comments_${imageId}`) || '0')
+      localStorage.setItem(`gallery_comments_${imageId}`, (currentCount + 1).toString())
+      
+      const cachedComments = localStorage.getItem(`gallery_comments_data_${imageId}`)
+      const comments = cachedComments ? JSON.parse(cachedComments) : []
+      comments.unshift(offlineComment)
+      localStorage.setItem(`gallery_comments_data_${imageId}`, JSON.stringify(comments))
+      
+      console.log(`📱 离线评论添加成功: ${offlineComment.id}`)
+      return offlineComment
+    } catch (e) {
+      console.error('离线评论存储失败:', e)
+      return null
+    }
   }
 }
 
 /**
  * 切换评论点赞状态
  */
-export async function toggleCommentLike(commentId: string): Promise<boolean> {
+export async function toggleCommentLike(commentId: string): Promise<{ success: boolean; liked: boolean; newCount: number }> {
   try {
     console.log(`👍 切换评论点赞: ${commentId}`)
     
@@ -266,13 +362,42 @@ export async function toggleCommentLike(commentId: string): Promise<boolean> {
       method: 'POST',
     })
     
-    const success = response.ok
-    console.log(`${success ? '✅' : '⚠️'} 评论点赞${success ? '成功' : '失败'}: ${commentId}`)
-    
-    return success
+    if (response.ok) {
+      const data = await response.json()
+      console.log(`✅ 评论点赞成功: ${commentId}`)
+      
+      // 同步到本地缓存
+      localStorage.setItem(`comment_liked_${commentId}`, data.liked?.toString() || 'false')
+      localStorage.setItem(`comment_likes_${commentId}`, data.newCount?.toString() || '0')
+      
+      return {
+        success: true,
+        liked: data.liked || false,
+        newCount: data.newCount || 0,
+      }
+    } else {
+      throw new Error(`HTTP ${response.status}`)
+    }
   } catch (error) {
-    console.warn(`⚠️ 评论点赞失败: ${commentId}`, error)
-    return false
+    console.warn(`⚠️ API不可用，使用离线模式评论点赞: ${commentId}`, error)
+    
+    // 离线模式：使用本地存储模拟评论点赞
+    const currentLiked = localStorage.getItem(`comment_liked_${commentId}`) === 'true'
+    const currentLikes = parseInt(localStorage.getItem(`comment_likes_${commentId}`) || '0')
+    
+    const newLiked = !currentLiked
+    const newCount = newLiked ? currentLikes + 1 : Math.max(0, currentLikes - 1)
+    
+    localStorage.setItem(`comment_liked_${commentId}`, newLiked.toString())
+    localStorage.setItem(`comment_likes_${commentId}`, newCount.toString())
+    
+    console.log(`📱 离线评论点赞成功: ${newLiked}, 新数量: ${newCount}`)
+    
+    return {
+      success: true,
+      liked: newLiked,
+      newCount: newCount,
+    }
   }
 }
 
@@ -281,24 +406,40 @@ export async function toggleCommentLike(commentId: string): Promise<boolean> {
  */
 export async function getBatchImageStats(imageIds: string[]): Promise<Record<string, GalleryImageStats>> {
   try {
-    console.log(`📊 批量获取图片统计: ${imageIds.length}张图片`)
+    console.log(`📊 尝试批量获取图片统计: ${imageIds.length}张图片`)
     
     const response = await apiRequest(`${API_BASE_URL}/api/gallery/batch-stats`, {
       method: 'POST',
       body: JSON.stringify({ imageIds }),
     })
     
-    if (!response.ok) {
-      throw new Error(`HTTP ${response.status}`)
-    }
-    
     const data = await response.json()
     console.log(`✅ 批量统计获取成功:`, Object.keys(data.stats || {}).length)
     
     return data.stats || {}
   } catch (error) {
-    console.warn(`⚠️ 批量获取统计失败:`, error)
-    return {}
+    console.warn(`⚠️ API不可用，使用离线模式统计: ${imageIds.length}张图片`, error)
+    
+    // 回退到本地存储的模拟数据
+    const fallbackStats: Record<string, GalleryImageStats> = {}
+    imageIds.forEach(id => {
+      // 从localStorage获取之前的交互数据，如果没有则使用默认值
+      const localLikes = parseInt(localStorage.getItem(`gallery_likes_${id}`) || '0')
+      const localViews = parseInt(localStorage.getItem(`gallery_views_${id}`) || '0') 
+      const localComments = parseInt(localStorage.getItem(`gallery_comments_${id}`) || '0')
+      const localIsLiked = localStorage.getItem(`gallery_liked_${id}`) === 'true'
+      
+      fallbackStats[id] = {
+        id,
+        likes: localLikes,
+        comments: localComments,
+        views: localViews,
+        isLiked: localIsLiked
+      }
+    })
+    
+    console.log('📱 使用本地缓存数据作为回退')
+    return fallbackStats
   }
 }
 

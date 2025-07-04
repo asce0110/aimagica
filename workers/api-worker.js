@@ -1133,8 +1133,8 @@ async function handleGalleryCommentsNew(request, env, context) {
           id: comment.id,
           imageId: comment.image_id,
           content: comment.content,
-          author: comment.author || 'AIMAGICA User',
-          authorAvatar: comment.author_avatar || '/images/aimagica-logo.png',
+          author: 'AIMAGICA User', // 使用默认用户名
+          authorAvatar: '/images/aimagica-logo.png', // 使用默认头像
           createdAt: comment.created_at,
           likes: comment.likes_count || 0,
           isLiked: false
@@ -1151,8 +1151,9 @@ async function handleGalleryCommentsNew(request, env, context) {
       })
     }
   } else if (request.method === 'POST') {
-    // 添加新评论 - 暂时使用模拟方式直到数据库表就绪
+    // 添加新评论 - 真实数据库操作
     try {
+      const config = getSupabaseConfig(env)
       const body = await request.json()
       
       if (!body.content || body.content.trim().length === 0) {
@@ -1162,31 +1163,48 @@ async function handleGalleryCommentsNew(request, env, context) {
         })
       }
       
-      console.log(`💬 收到评论请求: ${imageId}, 内容: ${body.content}`)
-      
-      // 暂时返回模拟的成功响应，记录评论到日志
-      const mockComment = {
-        id: `comment_${Date.now()}_${Math.random().toString(36).substr(2, 9)}`,
-        image_id: imageId,
-        content: body.content.trim(),
-        author: body.author || 'AIMAGICA User',
-        author_avatar: body.authorAvatar || '/images/aimagica-logo.png',
-        created_at: new Date().toISOString(),
-        likes_count: 0
+      if (body.content.length > 500) {
+        return new Response(JSON.stringify({ success: false, error: 'Comment too long' }), {
+          status: 400,
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        })
       }
       
-      console.log(`✅ 模拟评论创建成功:`, mockComment)
+      console.log(`💬 添加评论到数据库: ${imageId}, 内容: ${body.content.substring(0, 50)}...`)
+      
+      // 插入评论到数据库 - 根据实际表结构
+      const insertUrl = `${config.supabaseUrl}/rest/v1/image_comments`
+      const commentData = {
+        image_id: imageId,
+        content: body.content.trim(),
+        user_id: '00000000-0000-0000-0000-000000000000', // 匿名用户ID
+        likes_count: 0
+        // 注意：不包含author和author_avatar字段，因为表中没有这些字段
+      }
+      
+      const result = await supabaseQuery(insertUrl, {
+        method: 'POST',
+        body: JSON.stringify(commentData),
+        headers: { 'Prefer': 'return=representation' }
+      }, config)
+      
+      if (!result || result.length === 0) {
+        throw new Error('Failed to create comment in database')
+      }
+      
+      const newComment = result[0]
+      console.log(`✅ 评论成功存储到数据库:`, newComment.id)
       
       return new Response(JSON.stringify({
         success: true,
         comment: {
-          id: mockComment.id,
-          imageId: mockComment.image_id,
-          content: mockComment.content,
-          author: mockComment.author,
-          authorAvatar: mockComment.author_avatar,
-          createdAt: mockComment.created_at,
-          likes: mockComment.likes_count || 0,
+          id: newComment.id,
+          imageId: newComment.image_id,
+          content: newComment.content,
+          author: 'AIMAGICA User', // 使用默认用户名
+          authorAvatar: '/images/aimagica-logo.png', // 使用默认头像
+          createdAt: newComment.created_at,
+          likes: newComment.likes_count || 0,
           isLiked: false
         }
       }), {
@@ -1194,8 +1212,8 @@ async function handleGalleryCommentsNew(request, env, context) {
       })
       
     } catch (error) {
-      console.error('❌ 添加评论失败:', error)
-      return new Response(JSON.stringify({ success: false, error: 'Failed to add comment' }), {
+      console.error('❌ 数据库评论操作失败:', error)
+      return new Response(JSON.stringify({ success: false, error: 'Failed to add comment to database' }), {
         status: 500,
         headers: { 'Content-Type': 'application/json', ...corsHeaders }
       })
@@ -1209,9 +1227,96 @@ async function handleGalleryCommentLike(request, env, context) {
     const { id: commentId } = context.params
     console.log(`👍 切换评论点赞: ${commentId}`)
     
-    return new Response(JSON.stringify({ success: true }), {
-      headers: { 'Content-Type': 'application/json', ...corsHeaders }
-    })
+    const config = getSupabaseConfig(env)
+    const ANONYMOUS_USER_ID = '00000000-0000-0000-0000-000000000000'
+    
+    // 检查评论是否存在
+    const commentUrl = `${config.supabaseUrl}/rest/v1/image_comments?id=eq.${commentId}`
+    const commentData = await supabaseQuery(commentUrl, {}, config)
+    
+    if (!commentData || commentData.length === 0) {
+      return new Response(JSON.stringify({ success: false, error: 'Comment not found' }), {
+        status: 404,
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+    }
+    
+    const comment = commentData[0]
+    const currentLikes = comment.likes_count || 0
+    
+    // 尝试创建comment_likes表的逻辑，如果不存在则使用简化逻辑
+    try {
+      // 检查是否已经点赞过
+      const likeCheckUrl = `${config.supabaseUrl}/rest/v1/comment_likes?comment_id=eq.${commentId}&user_id=eq.${ANONYMOUS_USER_ID}`
+      const existingLikes = await supabaseQuery(likeCheckUrl, {}, config)
+      const hasLiked = existingLikes.length > 0
+      
+      if (hasLiked) {
+        // 取消点赞
+        const deleteLikeUrl = `${config.supabaseUrl}/rest/v1/comment_likes?comment_id=eq.${commentId}&user_id=eq.${ANONYMOUS_USER_ID}`
+        await supabaseQuery(deleteLikeUrl, { method: 'DELETE' }, config)
+        
+        const newCount = Math.max(0, currentLikes - 1)
+        const updateUrl = `${config.supabaseUrl}/rest/v1/image_comments?id=eq.${commentId}`
+        await supabaseQuery(updateUrl, {
+          method: 'PATCH',
+          body: JSON.stringify({ likes_count: newCount })
+        }, config)
+        
+        return new Response(JSON.stringify({ 
+          success: true,
+          liked: false,
+          newCount: newCount
+        }), {
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        })
+      } else {
+        // 添加点赞
+        const insertLikeUrl = `${config.supabaseUrl}/rest/v1/comment_likes`
+        await supabaseQuery(insertLikeUrl, {
+          method: 'POST',
+          body: JSON.stringify({
+            comment_id: commentId,
+            user_id: ANONYMOUS_USER_ID,
+            created_at: new Date().toISOString()
+          })
+        }, config)
+        
+        const newCount = currentLikes + 1
+        const updateUrl = `${config.supabaseUrl}/rest/v1/image_comments?id=eq.${commentId}`
+        await supabaseQuery(updateUrl, {
+          method: 'PATCH',
+          body: JSON.stringify({ likes_count: newCount })
+        }, config)
+        
+        return new Response(JSON.stringify({ 
+          success: true,
+          liked: true,
+          newCount: newCount
+        }), {
+          headers: { 'Content-Type': 'application/json', ...corsHeaders }
+        })
+      }
+    } catch (tableError) {
+      // 如果comment_likes表不存在，使用简化的点赞逻辑
+      console.warn('comment_likes表不存在，使用简化点赞逻辑')
+      
+      // 简单的切换逻辑：每次点击都增加1个赞
+      const newCount = currentLikes + 1
+      const updateUrl = `${config.supabaseUrl}/rest/v1/image_comments?id=eq.${commentId}`
+      await supabaseQuery(updateUrl, {
+        method: 'PATCH',
+        body: JSON.stringify({ likes_count: newCount })
+      }, config)
+      
+      return new Response(JSON.stringify({ 
+        success: true,
+        liked: true,
+        newCount: newCount
+      }), {
+        headers: { 'Content-Type': 'application/json', ...corsHeaders }
+      })
+    }
     
   } catch (error) {
     console.error('❌ 评论点赞失败:', error)

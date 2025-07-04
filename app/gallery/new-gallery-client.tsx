@@ -426,20 +426,34 @@ export default function NewGalleryClient() {
   const handleCommentLike = useCallback(async (commentId: string) => {
     try {
       // 立即更新UI
-      setComments(prev => prev.map(comment => {
+      const updateCommentLike = (comment: Comment) => {
         if (comment.id === commentId) {
           const newLikedState = !comment.isLiked
           const newLikesCount = newLikedState ? comment.likes + 1 : Math.max(0, comment.likes - 1)
           return { ...comment, isLiked: newLikedState, likes: newLikesCount }
         }
         return comment
-      }))
+      }
+      
+      setComments(prev => prev.map(updateCommentLike))
       
       // 后台同步
-      await galleryDB.toggleCommentLike(commentId)
-      console.log('✅ 评论点赞成功')
+      const result = await galleryDB.toggleCommentLike(commentId)
+      if (result.success) {
+        console.log('✅ 评论点赞成功')
+        
+        // 使用服务器返回的准确数据更新UI
+        setComments(prev => prev.map(comment => {
+          if (comment.id === commentId) {
+            return { ...comment, isLiked: result.liked, likes: result.newCount }
+          }
+          return comment
+        }))
+      } else {
+        console.warn('⚠️ 评论点赞同步失败，但UI已更新')
+      }
     } catch (error) {
-      console.warn('⚠️ 评论点赞失败:', error)
+      console.warn('⚠️ 评论点赞异常，但UI已更新:', error)
     }
   }, [])
 
