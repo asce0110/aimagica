@@ -139,68 +139,104 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 完全静默的后台数据同步 - 绝对不阻塞UI
+  // 后台加载真实API数据 - 不阻塞UI显示
   useEffect(() => {
-    // 延迟10秒后才尝试数据库操作，确保UI已经完全渲染
-    const backgroundSync = setTimeout(async () => {
-      console.log('🔄 后台静默同步（10秒后）...')
-      
-      // 仅在不翻墙环境下跳过数据库操作
-      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
-        console.log('⚠️ 离线环境，跳过数据库同步')
-        setIsOfflineMode(true)
-        return
-      }
+    // 延迟3秒后尝试加载真实Gallery数据
+    const backgroundAPILoad = setTimeout(async () => {
+      console.log('🔄 后台尝试加载真实Gallery数据...')
       
       try {
-        // 先快速同步localStorage数据（不涉及网络）
-        setAllImages(prevImages => prevImages.map(image => {
-          try {
-            const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
-            const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
-            const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
-            const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
+        // 设置5秒API超时
+        const controller = new AbortController()
+        const timeoutId = setTimeout(() => controller.abort(), 5000)
+        
+        const response = await fetch('https://aimagica-api.403153162.workers.dev/api/gallery/public', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json'
+          },
+          signal: controller.signal
+        })
+        
+        clearTimeout(timeoutId)
+        
+        if (response.ok) {
+          const data = await response.json()
+          console.log('✅ 真实Gallery数据加载成功:', data)
+          
+          if (data.success && Array.isArray(data.data) && data.data.length > 0) {
+            const realImages: EnhancedGalleryImage[] = data.data.map((img: any) => ({
+              id: img.id,
+              url: img.url,
+              title: img.title || 'Untitled',
+              author: img.author || 'Anonymous',
+              authorAvatar: img.authorAvatar || '/images/aimagica-logo.png',
+              likes: img.likes || 0,
+              comments: img.comments || 0,
+              views: img.views || 0,
+              downloads: img.downloads || 0,
+              isPremium: img.isPremium || false,
+              isFeatured: img.isFeatured || false,
+              isLiked: img.isLiked || false,
+              createdAt: img.createdAt || new Date().toLocaleDateString(),
+              prompt: img.prompt || 'No prompt available',
+              style: img.style || 'AI Art',
+              tags: Array.isArray(img.tags) ? img.tags : [],
+              size: img.size || 'medium',
+              rotation: img.rotation || 0,
+              dbLoaded: true,
+              localLikes: img.likes || 0,
+              localViews: img.views || 0,
+              localComments: img.comments || 0,
+              localIsLiked: img.isLiked || false,
+            }))
             
-            return {
-              ...image,
-              localLikes,
-              localViews,
-              localComments,
-              localIsLiked,
-            }
-          } catch (e) {
-            return image
+            console.log(`🎯 真实Gallery数据转换完成: ${realImages.length}张图片`)
+            setAllImages(realImages) // 用真实数据替换示例数据
+            setIsOfflineMode(false)
+            
+            // 继续后台加载localStorage数据
+            loadLocalStorageData(realImages)
           }
-        }))
-        
-        // 设置较短的网络检查超时（2秒）
-        const timeoutPromise = new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('网络检查超时')), 2000)
-        )
-        
-        const networkCheckPromise = galleryDB.quickNetworkCheck()
-        
-        const networkAvailable = await Promise.race([networkCheckPromise, timeoutPromise])
-        
-        setIsOfflineMode(!networkAvailable)
-        
-        if (networkAvailable && allImages.length > 0) {
-          // 数据库操作也设置超时
-          const dbTimeout = new Promise((_, reject) => 
-            setTimeout(() => reject(new Error('数据库操作超时')), 3000)
-          )
-          
-          const dbPromise = loadDatabaseStatsInBackground(allImages)
-          
-          await Promise.race([dbPromise, dbTimeout])
         }
       } catch (error) {
-        console.warn('⚠️ 后台同步失败（预期行为）:', error.message)
+        console.warn('⚠️ 真实Gallery数据加载失败，继续使用示例数据:', error.message)
         setIsOfflineMode(true)
+        
+        // 如果API失败，至少同步localStorage数据
+        loadLocalStorageData(allImages)
       }
-    }, 10000) // 延迟到10秒，确保UI优先渲染
+    }, 3000) // 3秒后开始加载真实数据
     
-    return () => clearTimeout(backgroundSync)
+    return () => clearTimeout(backgroundAPILoad)
+  }, [])
+  
+  // 加载localStorage数据的辅助函数
+  const loadLocalStorageData = useCallback((images: EnhancedGalleryImage[]) => {
+    try {
+      console.log('🔄 同步localStorage数据...')
+      setAllImages(prevImages => prevImages.map(image => {
+        try {
+          const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
+          const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
+          const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
+          const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
+          
+          return {
+            ...image,
+            localLikes: Math.max(localLikes, image.localLikes || 0),
+            localViews: Math.max(localViews, image.localViews || 0),
+            localComments: Math.max(localComments, image.localComments || 0),
+            localIsLiked: localIsLiked || image.localIsLiked,
+          }
+        } catch (e) {
+          return image
+        }
+      }))
+    } catch (error) {
+      console.warn('⚠️ localStorage同步失败:', error)
+    }
   }, [])
 
   // 加载数据库统计信息
