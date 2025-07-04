@@ -57,69 +57,26 @@ export default function NewGalleryClient() {
   const { data: session } = useSession()
   const logoUrl = useStaticUrl('/images/aimagica-logo.png')
 
-  // 数据状态 - 立即初始化，不等待任何东西
+  // 数据状态 - 参考Midjourney策略：先显示缩略图，后加载高清图
   const [allImages, setAllImages] = useState<EnhancedGalleryImage[]>(() => {
-    // 立即同步加载静态数据，不使用异步
-    try {
-      console.log('🚀 Gallery初始化: 立即同步加载静态数据')
-      const staticData = getStaticGalleryData()
-      console.log('📊 静态数据加载结果:', { 
-        数据长度: staticData?.length || 0, 
-        数据类型: typeof staticData,
-        前3项: staticData?.slice(0, 3)?.map(img => ({ id: img.id, title: img.title }))
-      })
-      
-      if (staticData && Array.isArray(staticData) && staticData.length > 0) {
-        const enhancedData = staticData.map(image => ({
-          ...image,
-          dbLoaded: true,
-          localLikes: 0,
-          localViews: 0, 
-          localComments: 0,
-          localIsLiked: false,
-        }))
-        console.log('✅ Gallery初始化成功:', enhancedData.length, '张图片')
-        return enhancedData
-      } else {
-        console.error('❌ Gallery初始化失败: 静态数据为空或无效')
-      }
-    } catch (e) {
-      console.error('❌ Gallery初始化异常:', e)
-    }
-    
-    // 如果出错，返回紧急备用数据
-    console.warn('⚠️ 使用紧急备用数据')
-    return [{
-      id: 'emergency-cat',
-      url: '/images/examples/cat-wizard.svg',
-      title: '紧急备用 - 魔法师小猫',
-      author: 'AIMAGICA',
-      authorAvatar: '/images/aimagica-logo.png',
-      likes: 0,
-      comments: 0,
-      views: 0,
-      downloads: 0,
-      isPremium: false,
-      isFeatured: false,
-      isLiked: false,
-      createdAt: 'now',
-      prompt: 'Emergency fallback image',
-      style: 'Fantasy',
-      tags: ['emergency'],
-      size: 'medium' as const,
-      rotation: 0,
-      dbLoaded: true,
-      localLikes: 0,
-      localViews: 0,
-      localComments: 0,
-      localIsLiked: false,
-    }]
+    // 立即加载轻量级缩略图数据，确保用户立即看到内容
+    const thumbData = getStaticGalleryData()
+    return thumbData.map(image => ({
+      ...image,
+      dbLoaded: false, // 标记为缩略图，等待API替换
+      localLikes: image.likes,
+      localViews: image.views,
+      localComments: image.comments,
+      localIsLiked: image.isLiked,
+    }))
   })
+  
+  // 初始化状态设为false，立即显示缩略图Gallery
+  const [isInitialLoading, setIsInitialLoading] = useState(false)
   
   const [displayedImages, setDisplayedImages] = useState<EnhancedGalleryImage[]>([])
   const [currentPage, setCurrentPage] = useState(1)
   const [loading, setLoading] = useState(false)
-  const [isInitialLoading, setIsInitialLoading] = useState(false) // 直接设为false，立即显示
   
   // UI状态
   const [selectedImage, setSelectedImage] = useState<EnhancedGalleryImage | null>(null)
@@ -139,16 +96,17 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 后台加载真实API数据 - 不阻塞UI显示
+  // 立即加载真实API数据 - 不阻塞UI显示
   useEffect(() => {
-    // 延迟3秒后尝试加载真实Gallery数据
-    const backgroundAPILoad = setTimeout(async () => {
-      console.log('🔄 后台尝试加载真实Gallery数据...')
+    let isMounted = true
+    
+    const loadAPIData = async () => {
+      console.log('🚀 立即开始加载真实Gallery数据...')
       
       try {
-        // 设置5秒API超时
+        // 设置15秒API超时，给不翻墙用户更多时间
         const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 5000)
+        const timeoutId = setTimeout(() => controller.abort(), 15000)
         
         const response = await fetch('https://aimagica-api.403153162.workers.dev/api/gallery/public', {
           method: 'GET',
@@ -160,6 +118,8 @@ export default function NewGalleryClient() {
         })
         
         clearTimeout(timeoutId)
+        
+        if (!isMounted) return // 组件已卸载，不更新状态
         
         if (response.ok) {
           const data = await response.json()
@@ -193,23 +153,52 @@ export default function NewGalleryClient() {
             }))
             
             console.log(`🎯 真实Gallery数据转换完成: ${realImages.length}张图片`)
-            setAllImages(realImages) // 用真实数据替换示例数据
+            
+            // 🎯 智能合并策略：如果API图片包含缩略图的ID，则替换URL；否则全部替换
+            setAllImages(prevThumbs => {
+              const thumbIds = new Set(prevThumbs.map(img => img.id))
+              const apiImageMap = new Map(realImages.map(img => [img.id, img]))
+              
+              // 优先替换匹配的缩略图，然后添加新图片
+              const mergedImages = prevThumbs.map(thumb => {
+                const apiImage = apiImageMap.get(thumb.id)
+                if (apiImage) {
+                  console.log(`🔄 替换缩略图: ${thumb.title} -> ${apiImage.url}`)
+                  return { ...apiImage, dbLoaded: true }
+                }
+                return thumb // 保留缩略图
+              })
+              
+              // 添加API中的新图片
+              const newImages = realImages.filter(img => !thumbIds.has(img.id))
+              console.log(`➕ 添加新图片: ${newImages.length}张`)
+              
+              return [...mergedImages, ...newImages]
+            })
+            
             setIsOfflineMode(false)
             
             // 继续后台加载localStorage数据
             loadLocalStorageData(realImages)
           }
+        } else {
+          console.warn('⚠️ API响应不成功:', response.status, response.statusText)
+          setIsOfflineMode(true)
         }
-      } catch (error) {
-        console.warn('⚠️ 真实Gallery数据加载失败，继续使用示例数据:', error.message)
-        setIsOfflineMode(true)
-        
-        // 如果API失败，至少同步localStorage数据
-        loadLocalStorageData(allImages)
+      } catch (error: any) {
+        console.warn('⚠️ 真实Gallery数据加载失败:', error.message)
+        if (isMounted) {
+          setIsOfflineMode(true)
+        }
       }
-    }, 3000) // 3秒后开始加载真实数据
+    }
     
-    return () => clearTimeout(backgroundAPILoad)
+    // 立即开始加载
+    loadAPIData()
+    
+    return () => {
+      isMounted = false
+    }
   }, [])
   
   // 加载localStorage数据的辅助函数
@@ -731,14 +720,14 @@ export default function NewGalleryClient() {
                 {displayedImages.length} of {filteredImages.length} artworks
               </span>
             </div>
-            {/* 显示数据库连接状态 */}
+            {/* 显示加载状态 - 参考Midjourney的策略 */}
             {isOfflineMode ? (
               <Badge variant="outline" className="bg-orange-500/20 text-orange-300 border-orange-500">
-                Offline Mode
+                Loading HD Images...
               </Badge>
             ) : (
               <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
-                Database Connected
+                HD Images Loaded
               </Badge>
             )}
             {searchQuery && (
@@ -749,7 +738,7 @@ export default function NewGalleryClient() {
           </div>
           <div className="flex items-center space-x-2 text-gray-400 text-sm">
             <TrendingUp className="w-4 h-4" />
-            <span>Enhanced gallery</span>
+            <span>Smart gallery loading</span>
           </div>
         </motion.div>
 
@@ -767,14 +756,14 @@ export default function NewGalleryClient() {
           className="mb-8"
         />
 
-        {/* 无内容提示 */}
+        {/* 无内容提示 - 简化逻辑，因为现在有缩略图了 */}
         {filteredImages.length === 0 && (
           <motion.div 
             className="text-center py-16"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            <div className="text-6xl mb-4">🎨</div>
+            <div className="text-6xl mb-4">🔍</div>
             <h3 className="text-xl font-bold text-white mb-2">No artworks found</h3>
             <p className="text-gray-400">Try adjusting your search or filter criteria</p>
           </motion.div>
