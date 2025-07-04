@@ -5,8 +5,8 @@
 
 // API基础配置
 const API_BASE_URL = 'https://aimagica-api.403153162.workers.dev'
-const REQUEST_TIMEOUT = 8000 // 8秒超时，避免长时间等待
-const MAX_RETRIES = 1 // 减少重试次数，快速回退
+const REQUEST_TIMEOUT = 3000 // 3秒超时，快速回退到离线模式
+const MAX_RETRIES = 0 // 不重试，立即回退
 
 // 数据类型定义
 export interface GalleryImageStats {
@@ -39,54 +39,37 @@ export interface CommentsResponse {
   comments: Comment[]
 }
 
-// 通用的fetch包装器，带超时和快速失败回退
+// 通用的fetch包装器，快速失败回退
 async function apiRequest(url: string, options: RequestInit = {}): Promise<Response> {
-  let lastError: any = null
-  
-  for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
-    try {
-      console.log(`🔄 API请求 (尝试 ${attempt + 1}/${MAX_RETRIES + 1}): ${url}`)
-      
-      // 快速超时检测，避免长时间等待
-      const timeoutPromise = new Promise<never>((_, reject) => {
-        setTimeout(() => reject(new Error('API_TIMEOUT')), REQUEST_TIMEOUT)
-      })
-      
-      const fetchPromise = fetch(url, {
-        ...options,
-        headers: {
-          'Content-Type': 'application/json',
-          ...options.headers,
-        },
-      })
-      
-      const response = await Promise.race([fetchPromise, timeoutPromise])
-      
-      if (!response.ok) {
-        throw new Error(`HTTP_${response.status}`)
-      }
-      
-      console.log(`✅ API请求成功: ${url}`)
-      return response
-    } catch (error: any) {
-      lastError = error
-      console.warn(`⚠️ API请求失败 (尝试 ${attempt + 1}): ${error.message}`)
-      
-      // 如果是网络问题或超时，不重试，直接失败回退
-      if (error.message === 'API_TIMEOUT' || error.message.includes('fetch')) {
-        console.log('🚫 检测到网络问题，停止重试，启用回退模式')
-        break
-      }
-      
-      // 只对HTTP错误重试
-      if (attempt < MAX_RETRIES && error.message.startsWith('HTTP_')) {
-        await new Promise(resolve => setTimeout(resolve, 500))
-      }
+  try {
+    console.log(`🔄 API请求: ${url}`)
+    
+    // 创建带超时的fetch请求
+    const controller = new AbortController()
+    const timeoutId = setTimeout(() => controller.abort(), REQUEST_TIMEOUT)
+    
+    const response = await fetch(url, {
+      ...options,
+      signal: controller.signal,
+      headers: {
+        'Content-Type': 'application/json',
+        ...options.headers,
+      },
+    })
+    
+    clearTimeout(timeoutId)
+    
+    if (!response.ok) {
+      throw new Error(`HTTP_${response.status}`)
     }
+    
+    console.log(`✅ API请求成功: ${url}`)
+    return response
+  } catch (error: any) {
+    console.warn(`⚠️ API请求失败: ${error.message}`)
+    console.error(`❌ API不可用，启用离线模式: ${url}`)
+    throw new Error('API_UNAVAILABLE')
   }
-  
-  console.error(`❌ API不可用，启用离线模式: ${url}`)
-  throw new Error('API_UNAVAILABLE')
 }
 
 /**

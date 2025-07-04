@@ -81,36 +81,66 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 初始化：立即加载静态数据，同时加载数据库数据以避免显示假数据
+  // 初始化：立即加载静态数据，数据库加载在后台进行
   useEffect(() => {
-    const loadData = async () => {
-      console.log('🎯 同时加载静态和数据库数据...')
+    const loadData = () => {
+      console.log('🎯 开始快速加载Gallery数据...')
+      
+      // 设置2秒超时，确保无论如何都会显示内容
+      const timeoutId = setTimeout(() => {
+        console.warn('⚠️ 加载超时，强制显示静态内容')
+        setIsInitialLoading(false)
+      }, 2000)
+      
       try {
         const staticData = getStaticGalleryData()
+        console.log('📊 静态数据获取结果:', staticData?.length || 0, '张图片')
+        
         if (staticData && staticData.length > 0) {
-          // 先使用静态数据初始化，但设置为空的统计
-          const enhancedData: EnhancedGalleryImage[] = staticData.map(image => ({
-            ...image,
-            dbLoaded: false,
-            localLikes: 0, // 初始化为0，等待数据库数据
-            localViews: 0,
-            localComments: 0,
-            localIsLiked: false,
-          }))
+          // 先使用静态数据初始化，设置为本地缓存的统计或0
+          const enhancedData: EnhancedGalleryImage[] = staticData.map(image => {
+            // 从localStorage获取之前的交互数据
+            const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
+            const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
+            const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
+            const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
+            
+            return {
+              ...image,
+              dbLoaded: false,
+              localLikes,
+              localViews,
+              localComments,
+              localIsLiked,
+            }
+          })
           
           setAllImages(enhancedData)
-          console.log(`✅ 静态数据加载成功: ${enhancedData.length}张图片`)
+          console.log(`✅ 静态数据初始化成功: ${enhancedData.length}张图片`)
           
-          // 立即加载数据库统计，避免显示假数据
-          await loadDatabaseStatsInBackground(enhancedData)
+          // 清除超时并立即停止加载状态
+          clearTimeout(timeoutId)
+          setIsInitialLoading(false)
+          
+          // 在下一个tick中异步加载数据库统计，不阻塞UI
+          setTimeout(() => {
+            loadDatabaseStatsInBackground(enhancedData).catch(error => {
+              console.warn('⚠️ 数据库统计加载失败，但不影响静态显示:', error)
+            })
+          }, 100)
+        } else {
+          console.warn('⚠️ 静态数据为空，使用备用数据')
+          clearTimeout(timeoutId)
+          setIsInitialLoading(false)
         }
       } catch (error) {
-        console.error('❌ 数据加载失败:', error)
-      } finally {
+        console.error('❌ 静态数据加载异常:', error)
+        clearTimeout(timeoutId)
         setIsInitialLoading(false)
       }
     }
 
+    // 立即执行，不用async
     loadData()
   }, [])
 
