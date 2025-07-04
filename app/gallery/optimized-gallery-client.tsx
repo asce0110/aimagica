@@ -109,7 +109,7 @@ export default function OptimizedGalleryClient() {
   // 功能状态
   const [isSharing, setIsSharing] = useState(false)
   const [isDownloading, setIsDownloading] = useState(false)
-  const [shareStatus, setShareStatus] = useState<'idle' | 'copying' | 'copied'>('idle')
+  const [shareStatus, setShareStatus] = useState<'idle' | 'copying' | 'copied' | 'shared'>('idle')
 
   // 检测移动设备
   useEffect(() => {
@@ -151,6 +151,37 @@ export default function OptimizedGalleryClient() {
     setCurrentPage(1)
     console.log(`📦 初始化显示: ${initialImages.length}张图片`)
   }, [filteredImages])
+
+  // 处理分享链接中的图片ID hash，自动打开对应图片详情
+  useEffect(() => {
+    const handleHashChange = () => {
+      const hash = window.location.hash
+      if (hash.startsWith('#image-')) {
+        const imageId = hash.replace('#image-', '')
+        console.log(`🔗 检测到分享链接，尝试打开图片: ${imageId}`)
+        
+        // 在所有图片中查找对应ID的图片
+        const targetImage = allImages.find(img => img.id === imageId)
+        if (targetImage) {
+          setSelectedImage(targetImage)
+          console.log(`✅ 成功打开分享的图片: ${targetImage.title}`)
+          // 清除hash以保持URL整洁
+          setTimeout(() => {
+            window.history.replaceState(null, '', window.location.pathname + window.location.search)
+          }, 1000)
+        } else {
+          console.log(`❌ 未找到ID为 ${imageId} 的图片`)
+        }
+      }
+    }
+
+    // 页面加载时检查hash
+    handleHashChange()
+    
+    // 监听hash变化
+    window.addEventListener('hashchange', handleHashChange)
+    return () => window.removeEventListener('hashchange', handleHashChange)
+  }, [allImages])
 
   // 加载更多图片
   const loadMore = useCallback(() => {
@@ -243,36 +274,76 @@ export default function OptimizedGalleryClient() {
     setIsSharing(true)
     console.log(`🔗 分享图片: ${selectedImage.title}`)
     
+    // 生成有效的分享链接 - 包含图片ID参数，支持直接打开特定图片
+    const shareUrl = `${window.location.origin}/gallery#image-${selectedImage.id}`
     const shareData = {
       title: `${selectedImage.title} - AIMAGICA Gallery`,
-      text: `Check out this amazing AI artwork: "${selectedImage.title}" by ${selectedImage.author}`,
-      url: `${window.location.origin}/gallery?image=${selectedImage.id}`
+      text: `🎨 Amazing AI artwork: "${selectedImage.title}" by ${selectedImage.author}\n✨ Created with AI magic - check it out in our gallery!`,
+      url: shareUrl
+    }
+
+    // 复制链接的通用函数
+    const copyToClipboard = async (url: string) => {
+      try {
+        await navigator.clipboard.writeText(url)
+        setShareStatus('copying')
+        setTimeout(() => setShareStatus('copied'), 100)
+        setTimeout(() => setShareStatus('idle'), 2000)
+        console.log('✅ 链接已复制到剪贴板:', url)
+        return true
+      } catch (clipboardError) {
+        console.error('❌ 复制链接失败:', clipboardError)
+        // 最后的降级方案：创建临时input元素
+        try {
+          const textArea = document.createElement('textarea')
+          textArea.value = url
+          textArea.style.position = 'fixed'
+          textArea.style.left = '-999999px'
+          textArea.style.top = '-999999px'
+          document.body.appendChild(textArea)
+          textArea.focus()
+          textArea.select()
+          document.execCommand('copy')
+          document.body.removeChild(textArea)
+          
+          setShareStatus('copying')
+          setTimeout(() => setShareStatus('copied'), 100)
+          setTimeout(() => setShareStatus('idle'), 2000)
+          console.log('✅ 使用降级方法复制链接成功:', url)
+          return true
+        } catch (fallbackError) {
+          console.error('❌ 所有复制方法都失败了:', fallbackError)
+          return false
+        }
+      }
     }
 
     try {
-      // 优先使用原生分享 API (移动端)
+      // 优先使用原生分享 API (移动端且支持的情况)
       if (navigator.share && isMobile) {
-        await navigator.share(shareData)
-        console.log('✅ 原生分享成功')
-      } else {
-        // 桌面端或不支持原生分享时，复制链接
-        await navigator.clipboard.writeText(shareData.url)
-        setShareStatus('copying')
-        setTimeout(() => setShareStatus('copied'), 100)
-        setTimeout(() => setShareStatus('idle'), 2000)
-        console.log('✅ 链接已复制到剪贴板')
+        try {
+          await navigator.share(shareData)
+          console.log('✅ 原生分享成功')
+          setShareStatus('shared')
+          setTimeout(() => setShareStatus('idle'), 2000)
+          setIsSharing(false)
+          return
+        } catch (shareError) {
+          console.log('📱 原生分享失败，降级到复制链接:', shareError)
+          // 原生分享失败，降级到复制链接
+        }
+      }
+      
+      // 桌面端或原生分享失败时，复制链接
+      const copySuccess = await copyToClipboard(shareUrl)
+      if (!copySuccess) {
+        // 如果复制也失败了，至少显示链接给用户
+        alert(`Please copy this link to share: ${shareUrl}`)
       }
     } catch (error) {
-      console.error('❌ 分享失败:', error)
-      // 降级处理：手动复制链接
-      try {
-        await navigator.clipboard.writeText(shareData.url)
-        setShareStatus('copying')
-        setTimeout(() => setShareStatus('copied'), 100)
-        setTimeout(() => setShareStatus('idle'), 2000)
-      } catch (clipboardError) {
-        console.error('❌ 复制链接失败:', clipboardError)
-      }
+      console.error('❌ 分享功能完全失败:', error)
+      // 最后的降级：显示链接
+      alert(`Please copy this link to share: ${shareUrl}`)
     }
     
     setIsSharing(false)
@@ -649,10 +720,12 @@ export default function OptimizedGalleryClient() {
                         <Copy className="w-4 h-4 mr-2 animate-pulse" />
                       ) : shareStatus === 'copied' ? (
                         <Check className="w-4 h-4 mr-2 text-green-400" />
+                      ) : shareStatus === 'shared' ? (
+                        <Check className="w-4 h-4 mr-2 text-blue-400" />
                       ) : (
                         <Share2 className="w-4 h-4 mr-2" />
                       )}
-                      {shareStatus === 'copied' ? 'Copied!' : isSharing ? 'Sharing...' : 'Share'}
+                      {shareStatus === 'copied' ? 'Copied!' : shareStatus === 'shared' ? 'Shared!' : isSharing ? 'Sharing...' : 'Share'}
                     </Button>
                     <Button
                       onClick={handleDownload}
