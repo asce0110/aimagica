@@ -1,5 +1,6 @@
 import type { Metadata } from 'next'
 import StaticGalleryClient from './static-gallery-client'
+import DebugGallery from './debug-gallery'
 
 export const metadata: Metadata = {
   title: 'AI Gallery - AIMAGICA | High-Performance AI Art Gallery',
