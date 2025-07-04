@@ -139,13 +139,21 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 简化的后台数据同步 - 不阻塞UI
+  // 完全静默的后台数据同步 - 绝对不阻塞UI
   useEffect(() => {
-    // 延迟5秒后尝试同步localStorage和数据库，完全不阻塞UI显示
+    // 延迟10秒后才尝试数据库操作，确保UI已经完全渲染
     const backgroundSync = setTimeout(async () => {
-      console.log('🔄 后台同步localStorage和数据库...')
+      console.log('🔄 后台静默同步（10秒后）...')
+      
+      // 仅在不翻墙环境下跳过数据库操作
+      if (typeof navigator !== 'undefined' && navigator.onLine === false) {
+        console.log('⚠️ 离线环境，跳过数据库同步')
+        setIsOfflineMode(true)
+        return
+      }
+      
       try {
-        // 从localStorage更新数据
+        // 先快速同步localStorage数据（不涉及网络）
         setAllImages(prevImages => prevImages.map(image => {
           try {
             const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
@@ -161,25 +169,39 @@ export default function NewGalleryClient() {
               localIsLiked,
             }
           } catch (e) {
-            return image // 如果localStorage读取失败，保持原状
+            return image
           }
         }))
         
-        // 检查网络并同步数据库
-        const networkAvailable = await galleryDB.quickNetworkCheck()
+        // 设置较短的网络检查超时（2秒）
+        const timeoutPromise = new Promise((_, reject) => 
+          setTimeout(() => reject(new Error('网络检查超时')), 2000)
+        )
+        
+        const networkCheckPromise = galleryDB.quickNetworkCheck()
+        
+        const networkAvailable = await Promise.race([networkCheckPromise, timeoutPromise])
+        
         setIsOfflineMode(!networkAvailable)
         
         if (networkAvailable && allImages.length > 0) {
-          await loadDatabaseStatsInBackground(allImages)
+          // 数据库操作也设置超时
+          const dbTimeout = new Promise((_, reject) => 
+            setTimeout(() => reject(new Error('数据库操作超时')), 3000)
+          )
+          
+          const dbPromise = loadDatabaseStatsInBackground(allImages)
+          
+          await Promise.race([dbPromise, dbTimeout])
         }
       } catch (error) {
-        console.warn('⚠️ 后台同步失败:', error)
+        console.warn('⚠️ 后台同步失败（预期行为）:', error.message)
         setIsOfflineMode(true)
       }
-    }, 5000)
+    }, 10000) // 延迟到10秒，确保UI优先渲染
     
     return () => clearTimeout(backgroundSync)
-  }, []) // 移除allImages依赖，避免重复执行
+  }, [])
 
   // 加载数据库统计信息
   const loadDatabaseStatsInBackground = useCallback(async (images: EnhancedGalleryImage[]) => {
