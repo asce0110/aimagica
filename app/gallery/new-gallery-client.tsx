@@ -33,8 +33,17 @@ import { getStaticGalleryData, type StaticGalleryImage } from "@/lib/static-gall
 import VirtualWaterfall, { type WaterfallItem } from "@/components/ui/virtual-waterfall"
 import LazyGalleryImage from "@/components/ui/lazy-gallery-image"
 
-// 导入新的数据库操作
-import galleryDB, { type Comment, type GalleryImageStats } from "@/lib/gallery-database"
+// 类型定义 - 无需数据库依赖
+type Comment = {
+  id: string
+  imageId: string
+  content: string
+  author: string
+  authorAvatar: string
+  likes: number
+  isLiked: boolean
+  createdAt: string
+}
 
 // 分页配置
 const ITEMS_PER_PAGE = 12
@@ -57,13 +66,24 @@ export default function NewGalleryClient() {
   const { data: session } = useSession()
   const logoUrl = useStaticUrl('/images/aimagica-logo.png')
 
-  // 数据状态 - 完全依赖API数据，无任何假数据
-  const [allImages, setAllImages] = useState<EnhancedGalleryImage[]>([])
+  // 数据状态 - 静态优先，立即可用
+  const [allImages, setAllImages] = useState<EnhancedGalleryImage[]>(() => {
+    // 立即从静态数据初始化，无需等待API
+    const staticImages = getStaticGalleryData()
+    return staticImages.map(img => ({
+      ...img,
+      dbLoaded: false, // 标记为静态数据
+      localLikes: img.likes,
+      localViews: img.views,
+      localComments: img.comments,
+      localIsLiked: false // 初始未点赞
+    }))
+  })
   
-  // 加载状态 - 追踪API数据加载进度
-  const [isLoadingAPI, setIsLoadingAPI] = useState(true)
+  // 加载状态 - 静态数据立即可用，不需要loading
+  const [isLoadingAPI, setIsLoadingAPI] = useState(false)
   
-  // 初始化状态设为false，立即显示缩略图Gallery
+  // 初始化状态设为false，立即显示Gallery
   const [isInitialLoading, setIsInitialLoading] = useState(false)
   
   const [displayedImages, setDisplayedImages] = useState<EnhancedGalleryImage[]>([])
@@ -88,166 +108,95 @@ export default function NewGalleryClient() {
   const [newComment, setNewComment] = useState("")
   const [isAddingComment, setIsAddingComment] = useState(false)
 
-  // 立即加载真实API数据 - 不阻塞UI显示
+  // 从localStorage加载用户交互数据 - 渐进增强
   useEffect(() => {
-    let isMounted = true
+    console.log('🎯 静态Gallery已就绪，加载本地用户交互数据...')
     
-    const loadAPIData = async () => {
-      console.log('🚀 立即开始加载真实Gallery数据...')
-      console.log('📋 当前allImages状态:', allImages.length, '张图片')
-      
-      try {
-        // 设置15秒API超时，给不翻墙用户更多时间
-        const controller = new AbortController()
-        const timeoutId = setTimeout(() => controller.abort(), 15000)
-        
-        const response = await fetch('https://aimagica-api.403153162.workers.dev/api/gallery/public', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json'
-          },
-          signal: controller.signal
-        })
-        
-        clearTimeout(timeoutId)
-        
-        if (!isMounted) return // 组件已卸载，不更新状态
-        
-        if (response.ok) {
-          const data = await response.json()
-          console.log('✅ 真实Gallery数据加载成功:', data)
-          
-          if (data.success && Array.isArray(data.data) && data.data.length > 0) {
-            const realImages: EnhancedGalleryImage[] = data.data.map((img: any) => ({
-              id: img.id,
-              url: img.url,
-              title: img.title || 'Untitled',
-              author: img.author || 'Anonymous',
-              authorAvatar: img.authorAvatar || '/images/aimagica-logo.png',
-              likes: img.likes || 0,
-              comments: img.comments || 0,
-              views: img.views || 0,
-              downloads: img.downloads || 0,
-              isPremium: img.isPremium || false,
-              isFeatured: img.isFeatured || false,
-              isLiked: img.isLiked || false,
-              createdAt: img.createdAt || new Date().toLocaleDateString(),
-              prompt: img.prompt || 'No prompt available',
-              style: img.style || 'AI Art',
-              tags: Array.isArray(img.tags) ? img.tags : [],
-              size: img.size || 'medium',
-              rotation: img.rotation || 0,
-              dbLoaded: true,
-              localLikes: img.likes || 0,
-              localViews: img.views || 0,
-              localComments: img.comments || 0,
-              localIsLiked: img.isLiked || false,
-            }))
+    const loadLocalInteractions = () => {
+      setAllImages(prevImages => 
+        prevImages.map(image => {
+          try {
+            // 从localStorage获取用户的点赞、浏览等数据
+            const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || image.likes.toString())
+            const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || image.views.toString()) 
+            const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || image.comments.toString())
+            const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
             
-            console.log(`🎯 真实Gallery数据转换完成: ${realImages.length}张图片`)
-            
-            // 🎯 直接设置真实API数据
-            console.log('🔥 设置真实API数据:', realImages.map(img => ({ 
-              id: img.id, 
-              title: img.title,
-              url: img.url.substring(0, 100) + '...' 
-            })))
-            setAllImages(realImages)
-            setIsLoadingAPI(false)
-            setIsOfflineMode(false)
-            
-            // 继续后台加载localStorage数据
-            loadLocalStorageData(realImages)
+            return {
+              ...image,
+              localLikes: Math.max(localLikes, image.likes), // 本地数据优先，但不能低于基础数据
+              localViews: Math.max(localViews, image.views),
+              localComments: Math.max(localComments, image.comments),
+              localIsLiked: localIsLiked,
+            }
+          } catch (e) {
+            console.warn('⚠️ localStorage读取失败:', e)
+            return image
           }
-        } else {
-          console.warn('⚠️ API响应不成功:', response.status, response.statusText)
-          setIsLoadingAPI(false)
-          setIsOfflineMode(true)
-        }
-      } catch (error: any) {
-        console.warn('⚠️ 真实Gallery数据加载失败:', error.message)
-        if (isMounted) {
-          setIsLoadingAPI(false)
-          setIsOfflineMode(true)
-        }
-      }
+        })
+      )
     }
     
-    // 立即开始加载
-    loadAPIData()
-    
-    return () => {
-      isMounted = false
-    }
+    // 延迟加载本地数据，确保UI优先渲染
+    setTimeout(loadLocalInteractions, 100)
   }, [])
   
-  // 加载localStorage数据的辅助函数
-  const loadLocalStorageData = useCallback((images: EnhancedGalleryImage[]) => {
+  // 可选：尝试在后台获取最新数据，但不阻塞用户体验
+  const tryLoadLatestData = useCallback(async () => {
+    // 只在用户主动刷新或有网络时才尝试
+    if (typeof window === 'undefined' || !navigator.onLine) {
+      console.log('📱 离线模式或SSR，使用静态Gallery数据')
+      return
+    }
+    
     try {
-      console.log('🔄 同步localStorage数据...')
-      setAllImages(prevImages => prevImages.map(image => {
-        try {
-          const localLikes = parseInt(localStorage.getItem(`gallery_likes_${image.id}`) || '0')
-          const localViews = parseInt(localStorage.getItem(`gallery_views_${image.id}`) || '0') 
-          const localComments = parseInt(localStorage.getItem(`gallery_comments_${image.id}`) || '0')
-          const localIsLiked = localStorage.getItem(`gallery_liked_${image.id}`) === 'true'
-          
-          return {
-            ...image,
-            localLikes: Math.max(localLikes, image.localLikes || 0),
-            localViews: Math.max(localViews, image.localViews || 0),
-            localComments: Math.max(localComments, image.localComments || 0),
-            localIsLiked: localIsLiked || image.localIsLiked,
-          }
-        } catch (e) {
-          return image
+      // 短超时，不影响用户体验
+      const controller = new AbortController()
+      const timeoutId = setTimeout(() => controller.abort(), 3000)
+      
+      const response = await fetch('https://aimagica-api.403153162.workers.dev/api/gallery/public', {
+        method: 'GET',
+        headers: { 'Content-Type': 'application/json' },
+        signal: controller.signal
+      })
+      
+      clearTimeout(timeoutId)
+      
+      if (response.ok) {
+        const data = await response.json()
+        if (data.success && Array.isArray(data.data)) {
+          console.log('✨ 获取到最新Gallery数据，静默更新统计信息')
+          // 只更新统计数据，不替换整个列表
+          setAllImages(prevImages => 
+            prevImages.map(staticImage => {
+              const apiImage = data.data.find((api: any) => api.id === staticImage.id)
+              if (apiImage) {
+                return {
+                  ...staticImage,
+                  likes: Math.max(staticImage.localLikes, apiImage.likes || 0),
+                  views: Math.max(staticImage.localViews, apiImage.views || 0),
+                  comments: Math.max(staticImage.localComments, apiImage.comments || 0)
+                }
+              }
+              return staticImage
+            })
+          )
         }
-      }))
+      }
     } catch (error) {
-      console.warn('⚠️ localStorage同步失败:', error)
+      // 静默失败，不影响用户体验
+      console.log('📡 后台数据更新失败，继续使用静态数据')
     }
   }, [])
 
-  // 加载数据库统计信息
-  const loadDatabaseStatsInBackground = useCallback(async (images: EnhancedGalleryImage[]) => {
+  // 保存用户交互到localStorage - 无需API
+  const saveInteractionToLocal = useCallback((imageId: string | number, type: 'like' | 'view' | 'comment', value: any) => {
     try {
-      console.log('🔄 加载数据库统计信息...')
-      
-      const imageIds = images.map(img => img.id.toString())
-      const batchStats = await galleryDB.getBatchImageStats(imageIds)
-      
-      console.log(`✅ 数据库统计加载成功: ${Object.keys(batchStats).length}张图片`)
-      
-      // 更新所有图片的数据库状态
-      setAllImages(prevImages => 
-        prevImages.map(image => {
-          const dbStat = batchStats[image.id.toString()]
-          return {
-            ...image,
-            dbStats: dbStat || { id: image.id.toString(), likes: 0, comments: 0, views: 0, isLiked: false },
-            dbLoaded: true,
-            // 使用数据库数据，如果没有数据库数据则使用0
-            localLikes: dbStat?.likes || 0,
-            localIsLiked: dbStat?.isLiked || false,
-            localViews: dbStat?.views || 0,
-            localComments: dbStat?.comments || 0,
-          }
-        })
-      )
+      const key = `gallery_${type === 'like' ? 'liked' : type + 's'}_${imageId}`
+      localStorage.setItem(key, value.toString())
+      console.log(`💾 保存用户交互: ${type} for ${imageId}`)
     } catch (error) {
-      console.warn('⚠️ 数据库统计加载失败，显示默认数值:', error)
-      // 设置默认的数据库状态
-      setAllImages(prevImages => 
-        prevImages.map(image => ({
-          ...image,
-          dbLoaded: true,
-          localLikes: 0,
-          localIsLiked: false,
-          localViews: 0,
-          localComments: 0,
-        }))
-      )
+      console.warn('⚠️ localStorage保存失败:', error)
     }
   }, [])
 
@@ -701,18 +650,17 @@ export default function NewGalleryClient() {
                 {displayedImages.length} of {filteredImages.length} artworks
               </span>
             </div>
-            {/* 显示API加载状态 */}
-            {isLoadingAPI ? (
+            {/* 显示静态Gallery状态 */}
+            <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
+              Static Gallery Ready
+            </Badge>
+            {navigator.onLine ? (
               <Badge variant="outline" className="bg-blue-500/20 text-blue-300 border-blue-500">
-                Loading API Data...
-              </Badge>
-            ) : allImages.length > 0 ? (
-              <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
-                Real Gallery Loaded
+                Online Enhanced
               </Badge>
             ) : (
-              <Badge variant="outline" className="bg-red-500/20 text-red-300 border-red-500">
-                API Load Failed
+              <Badge variant="outline" className="bg-orange-500/20 text-orange-300 border-orange-500">
+                Offline Mode
               </Badge>
             )}
             {searchQuery && (
@@ -741,46 +689,26 @@ export default function NewGalleryClient() {
           className="mb-8"
         />
 
-        {/* API数据加载状态 */}
+        {/* 静态数据空状态 */}
         {filteredImages.length === 0 && (
           <motion.div 
             className="text-center py-16"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            {isLoadingAPI ? (
-              // 正在加载API数据
-              <>
-                <div className="relative w-16 h-16 mx-auto mb-6">
-                  <div className="absolute inset-0 rounded-full border-4 border-[#d4a574]/40 animate-spin"></div>
-                  <div className="absolute inset-2 rounded-full border-4 border-[#8b7355]/60 animate-[spin_1.5s_linear_infinite_reverse]"></div>
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <Sparkles className="w-6 h-6 text-[#8b7355] animate-pulse" />
-                  </div>
-                  <div className="absolute -top-2 -right-2 w-3 h-3 bg-[#d4a574] rounded-full animate-ping"></div>
-                  <div className="absolute -bottom-2 -left-2 w-3 h-3 bg-[#8b7355] rounded-full animate-ping delay-300"></div>
-                </div>
-                <h3 className="text-xl font-bold text-white mb-2">Loading AI Gallery...</h3>
-                <p className="text-gray-400">Fetching amazing artworks from our API</p>
-                {isOfflineMode && (
-                  <p className="text-orange-400 mt-2 text-sm">Network slow? Please wait for real images to load...</p>
-                )}
-              </>
-            ) : allImages.length === 0 ? (
-              // API加载完成但无数据
-              <>
-                <div className="text-6xl mb-4">❌</div>
-                <h3 className="text-xl font-bold text-white mb-2">Unable to load gallery</h3>
-                <p className="text-gray-400">Please check your internet connection and try again</p>
-              </>
-            ) : (
-              // 搜索/过滤后无结果
-              <>
-                <div className="text-6xl mb-4">🔍</div>
-                <h3 className="text-xl font-bold text-white mb-2">No artworks found</h3>
-                <p className="text-gray-400">Try adjusting your search or filter criteria</p>
-              </>
-            )}
+            {/* 搜索/过滤后无结果 */}
+            <div className="text-6xl mb-4">🔍</div>
+            <h3 className="text-xl font-bold text-white mb-2">No artworks found</h3>
+            <p className="text-gray-400">Try adjusting your search or filter criteria</p>
+            <button 
+              onClick={() => {
+                setFilter('all')
+                setSearchQuery('')
+              }}
+              className="mt-4 px-4 py-2 bg-[#d4a574] text-black font-bold rounded-lg hover:bg-[#c19660] transition-colors"
+            >
+              Show All Artworks
+            </button>
           </motion.div>
         )}
       </div>
