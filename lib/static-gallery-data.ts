@@ -29,48 +29,8 @@ export interface StaticGalleryImage {
  * 使用下载的真实Gallery图片，确保100%可用性
  */
 export function getStaticGalleryData(): StaticGalleryImage[] {
-  // 测试：临时使用已知有效的hero图片来排除文件问题
+  // 去重并优化间距的Gallery图片数据
   const realGalleryImages: StaticGalleryImage[] = [
-    {
-      id: 'test-hero-1',
-      url: '/images/hero-cache/hero-1-japanese-anime.png',
-      title: 'Test Hero Image 1',
-      author: 'AIMAGICA User',
-      authorAvatar: '/images/aimagica-logo.png',
-      likes: 1243,
-      comments: 89,
-      views: 5678,
-      downloads: 432,
-      isPremium: false,
-      isFeatured: true,
-      isLiked: false,
-      createdAt: '6/26/2025',
-      prompt: 'Test Hero Image 1',
-      style: 'Anime',
-      tags: ['test', 'hero', 'anime'],
-      size: 'medium',
-      rotation: 2.5
-    },
-    {
-      id: 'test-hero-2',
-      url: '/images/hero-cache/hero-2-cyberpunk-city.jpeg',
-      title: 'Test Hero Image 2',
-      author: 'AIMAGICA User',
-      authorAvatar: '/images/aimagica-logo.png',
-      likes: 982,
-      comments: 56,
-      views: 4321,
-      downloads: 321,
-      isPremium: true,
-      isFeatured: false,
-      isLiked: true,
-      createdAt: '6/25/2025',
-      prompt: 'Test Hero Image 2',
-      style: 'Cyberpunk',
-      tags: ['test', 'hero', 'cyberpunk'],
-      size: 'horizontal',
-      rotation: -1.2
-    },
     {
       id: '386628e0-61b1-4966-8575-2c2f2f162e3a',
       url: '/images/gallery/386628e0-61b1-4966-8575-2c2f2f162e3a-f897c7ae.png',
@@ -85,11 +45,11 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       isFeatured: true,
       isLiked: false,
       createdAt: '6/26/2025',
-      prompt: 'Japanese Anime Style',
+      prompt: 'Beautiful anime-style artwork with vibrant colors and detailed character design',
       style: 'Anime',
-      tags: ['anime', 'japanese', 'style'],
+      tags: ['anime', 'japanese', 'style', 'vibrant'],
       size: 'medium',
-      rotation: 2.5
+      rotation: 1.5
     },
     {
       id: '48a8804f-9028-4132-85dd-d5c4d807c75e',
@@ -108,8 +68,8 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       prompt: 'A cyberpunk city with neon lights reflecting in the rain',
       style: 'Cyberpunk',
       tags: ['cyberpunk', 'city', 'neon', 'rain'],
-      size: 'horizontal',
-      rotation: -1.2
+      size: 'medium',
+      rotation: -0.8
     },
     {
       id: '9912c424-e6a2-4ac1-98de-77bac4200978',
@@ -128,8 +88,8 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       prompt: 'A peaceful zen garden with cherry blossoms',
       style: 'Photography',
       tags: ['zen', 'garden', 'peace', 'nature'],
-      size: 'vertical',
-      rotation: 1.8
+      size: 'medium',
+      rotation: 1.2
     },
     {
       id: '294ff75d-8579-4d3d-87ee-811b69b15a99',
@@ -149,7 +109,7 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       style: 'Digital Art',
       tags: ['digital', 'art', 'vibrant', 'colors'],
       size: 'medium',
-      rotation: -2.1
+      rotation: -1.5
     },
     {
       id: '5abb0316-b1d9-4c3a-ac97-76fcbe63f52b',
@@ -168,8 +128,8 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       prompt: 'Mystical fantasy landscape with mountains',
       style: 'Fantasy',
       tags: ['fantasy', 'landscape', 'mountains', 'mystical'],
-      size: 'large',
-      rotation: 0.8
+      size: 'medium',
+      rotation: 0.5
     },
     {
       id: '2afbdc00-d083-46bf-8167-28d81971226f',
@@ -185,11 +145,11 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       isFeatured: false,
       isLiked: true,
       createdAt: '6/21/2025',
-      prompt: 'Modern abstract art composition',
+      prompt: 'Modern abstract art composition with bold geometric shapes',
       style: 'Abstract',
-      tags: ['abstract', 'modern', 'composition'],
-      size: 'small',
-      rotation: -1.5
+      tags: ['abstract', 'modern', 'composition', 'geometric'],
+      size: 'medium',
+      rotation: -1.0
     },
     {
       id: '04033a15-7dfc-4b96-8999-91e6915ac926',
@@ -205,11 +165,11 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       isFeatured: false,
       isLiked: false,
       createdAt: '6/20/2025',
-      prompt: 'Detailed portrait artwork',
+      prompt: 'Detailed portrait artwork with expressive features',
       style: 'Portrait',
-      tags: ['portrait', 'study', 'detailed'],
-      size: 'vertical',
-      rotation: 1.2
+      tags: ['portrait', 'study', 'detailed', 'expressive'],
+      size: 'medium',
+      rotation: 0.8
     },
     {
       id: 'b3a47ac4-6386-41b1-8702-de4cf5ff03c1',
@@ -225,11 +185,11 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       isFeatured: true,
       isLiked: false,
       createdAt: '6/19/2025',
-      prompt: 'Beautiful nature landscape scene',
+      prompt: 'Beautiful nature landscape scene with rolling hills',
       style: 'Nature',
-      tags: ['nature', 'landscape', 'beautiful'],
-      size: 'horizontal',
-      rotation: -0.9
+      tags: ['nature', 'landscape', 'beautiful', 'serene'],
+      size: 'medium',
+      rotation: -0.5
     },
     {
       id: '82db65f1-d54e-4f7f-a9c3-c3f5e902643b',
@@ -245,11 +205,11 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       isFeatured: false,
       isLiked: false,
       createdAt: '6/18/2025',
-      prompt: 'Creative character design artwork',
+      prompt: 'Creative character design artwork with unique style',
       style: 'Character',
-      tags: ['character', 'design', 'creative'],
+      tags: ['character', 'design', 'creative', 'unique'],
       size: 'medium',
-      rotation: 2.3
+      rotation: 1.8
     },
     {
       id: '22ab8354-87e8-4a74-a37b-c3f08f1ced20',
@@ -265,11 +225,11 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       isFeatured: false,
       isLiked: true,
       createdAt: '6/17/2025',
-      prompt: 'AI Generated Artwork',
+      prompt: 'Stunning AI-generated artwork with surreal elements',
       style: 'AI Art',
-      tags: ['ai', 'generated', 'artwork'],
-      size: 'large',
-      rotation: -1.7
+      tags: ['ai', 'generated', 'artwork', 'surreal'],
+      size: 'medium',
+      rotation: -1.2
     },
     {
       id: '341851d0-7c3b-4119-b503-102c0aee0d8f',
@@ -285,11 +245,11 @@ export function getStaticGalleryData(): StaticGalleryImage[] {
       isFeatured: true,
       isLiked: false,
       createdAt: '6/16/2025',
-      prompt: 'Innovative creative design piece',
+      prompt: 'Innovative creative design piece with modern aesthetics',
       style: 'Design',
-      tags: ['creative', 'design', 'innovative'],
-      size: 'small',
-      rotation: 1.6
+      tags: ['creative', 'design', 'innovative', 'modern'],
+      size: 'medium',
+      rotation: 1.0
     }
   ]
 

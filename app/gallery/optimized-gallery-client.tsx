@@ -169,20 +169,25 @@ export default function OptimizedGalleryClient() {
   // 是否还有更多数据
   const hasMore = displayedImages.length < filteredImages.length
 
-  // 转换为瀑布流数据格式
+  // 转换为瀑布流数据格式 - 统一移动端高度避免间距不一致
   const waterfallItems: WaterfallItem[] = useMemo(() => {
-    return displayedImages.map(image => ({
-      id: image.id,
-      url: image.url,
-      title: image.title,
-      // 根据size计算合适的高度
-      height: image.size === 'vertical' ? 400 : 
-              image.size === 'horizontal' ? 225 :
-              image.size === 'large' ? 450 :
-              image.size === 'small' ? 300 : 375,
-      ...image
-    }))
-  }, [displayedImages])
+    return displayedImages.map(image => {
+      // 移动端使用固定高度避免间距不一致，桌面端使用多样化高度
+      const mobileHeight = 280 // 统一的移动端高度
+      const desktopHeight = image.size === 'vertical' ? 400 : 
+                           image.size === 'horizontal' ? 225 :
+                           image.size === 'large' ? 450 :
+                           image.size === 'small' ? 300 : 375
+      
+      return {
+        id: image.id,
+        url: image.url,
+        title: image.title,
+        height: isMobile ? mobileHeight : desktopHeight,
+        ...image
+      }
+    })
+  }, [displayedImages, isMobile])
 
   // 图片点击处理
   const handleImageClick = useCallback((image: StaticGalleryImage) => {

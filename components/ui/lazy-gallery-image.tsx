@@ -60,8 +60,16 @@ export default function LazyGalleryImage({
   
   const staticUrl = useStaticUrl(url)
 
-  // 获取图片宽高比
+  // 获取图片宽高比 - 移动端统一比例
   const getAspectRatio = () => {
+    const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768
+    
+    if (isMobileView) {
+      // 移动端统一宽高比，避免间距不一致
+      return "3/4"
+    }
+    
+    // 桌面端保持多样化宽高比
     if (size === "vertical") return "3/4"
     if (size === "horizontal") return "4/3"
     if (size === "small") return "1/1"
@@ -121,28 +129,25 @@ export default function LazyGalleryImage({
     setIsLoaded(true) // 确保加载状态结束
   }
 
-  // 生成占位符尺寸 - 移动端优化
+  // 生成占位符尺寸 - 移动端统一高度避免间距不一致
   const getPlaceholderHeight = () => {
     const isMobileView = typeof window !== 'undefined' && window.innerWidth < 768
     
-    const mobileAspectRatios = {
-      "vertical": 280,
-      "horizontal": 160,
-      "small": 200,
-      "medium": 240,
-      "large": 300
+    if (isMobileView) {
+      // 移动端统一高度，避免间距不一致
+      return 280
     }
     
+    // 桌面端保持多样化高度
     const desktopAspectRatios = {
       "vertical": 400,
       "horizontal": 225,
       "small": 300,
       "medium": 375,
-      "large": 400
+      "large": 450
     }
     
-    const ratios = isMobileView ? mobileAspectRatios : desktopAspectRatios
-    return ratios[size] || (isMobileView ? 240 : 375)
+    return desktopAspectRatios[size] || 375
   }
 
   return (
