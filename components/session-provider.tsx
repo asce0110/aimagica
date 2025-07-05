@@ -1,7 +1,7 @@
 "use client"
 
 import React, { ReactNode, createContext, useContext } from "react"
-import { SessionProvider, useSession, signOut } from "next-auth/react"
+import { SessionProvider, useSession, signOut, signIn } from "next-auth/react"
 import { ThemeProvider } from "@/components/theme-provider"
 
 interface ProvidersProps {
@@ -91,6 +91,24 @@ export async function signOutCompat(options?: any) {
   } else {
     // 服务器模式，使用真正的NextAuth signOut
     return await signOut(options)
+  }
+}
+
+// 导出兼容的 signIn function
+export async function signInCompat(provider?: string, options?: any) {
+  if (isStaticExport) {
+    // 静态导出模式下，重定向到登录页面
+    if (typeof window !== 'undefined') {
+      window.location.href = '/admin/login'
+    }
+    return
+  } else {
+    // 服务器模式，使用真正的NextAuth signIn
+    if (provider) {
+      return await signIn(provider, options)
+    } else {
+      return await signIn(undefined, options)
+    }
   }
 }
 
