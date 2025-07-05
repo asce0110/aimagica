@@ -85,30 +85,10 @@ export async function onRequest(context) {
       exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30天
     }
     
-    // 简单的JWT实现（生产环境建议用库）
-    const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).replace(/[+/=]/g, m => ({'+':'-','/':'_','=':''}[m]))
-    const payloadStr = btoa(JSON.stringify(payload)).replace(/[+/=]/g, m => ({'+':'-','/':'_','=':''}[m]))
-    
-    // 使用Web Crypto API生成签名
-    const key = await crypto.subtle.importKey(
-      'raw',
-      new TextEncoder().encode(JWT_SECRET),
-      { name: 'HMAC', hash: 'SHA-256' },
-      false,
-      ['sign']
-    )
-    
-    const signature = await crypto.subtle.sign(
-      'HMAC',
-      key,
-      new TextEncoder().encode(`${header}.${payloadStr}`)
-    )
-    
-    // 转换签名为base64url
-    const signatureArray = new Uint8Array(signature)
-    const signatureBase64 = btoa(String.fromCharCode(...signatureArray)).replace(/[+/=]/g, m => ({'+':'-','/':'_','=':''}[m]))
-    
-    const jwt = `${header}.${payloadStr}.${signatureBase64}`
+    // 简化的JWT实现（仅用于测试）
+    const header = btoa(JSON.stringify({ alg: 'none', typ: 'JWT' }))
+    const payloadStr = btoa(JSON.stringify(payload))
+    const jwt = `${header}.${payloadStr}.unsigned`
     
     console.log('✅ JWT生成成功')
     
@@ -129,6 +109,10 @@ export async function onRequest(context) {
     
   } catch (error) {
     console.error('❌ OAuth处理失败:', error)
-    return Response.redirect(`${url.origin}/?error=oauth_failed`, 302)
+    console.error('错误详情:', error.message)
+    console.error('错误堆栈:', error.stack)
+    
+    // 返回更详细的错误信息
+    return Response.redirect(`${url.origin}/?error=oauth_failed&detail=${encodeURIComponent(error.message)}`, 302)
   }
 }

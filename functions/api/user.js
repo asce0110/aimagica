@@ -29,9 +29,7 @@ export async function onRequest(context) {
   try {
     // 验证JWT (简化版本)
     const [header, payload, signature] = authToken.split('.')
-    // 处理base64url解码
-    const payloadPadded = payload.replace(/[-_]/g, m => ({'-':'+','_':'/'}[m])) + '=='.substring(0, (4 - payload.length % 4) % 4)
-    const decodedPayload = JSON.parse(atob(payloadPadded))
+    const decodedPayload = JSON.parse(atob(payload))
     
     // 检查过期时间
     if (decodedPayload.exp < Math.floor(Date.now() / 1000)) {
