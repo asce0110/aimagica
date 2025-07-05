@@ -753,7 +753,7 @@ export default function AISketchPlatform() {
                 <h1
                   className="text-2xl md:text-5xl font-black text-[#2d3e2d] transform -rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "2px 2px 0px #8b7355, 1px 1px 0px #d4a574",
                   }}
                 >
@@ -762,7 +762,7 @@ export default function AISketchPlatform() {
                 <p
                   className="text-sm md:text-lg font-bold text-[#8b7355] transform rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #f5f1e8",
                   }}
                 >
@@ -774,7 +774,7 @@ export default function AISketchPlatform() {
                 <h1
                   className="text-lg font-black text-[#2d3e2d] transform -rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #8b7355",
                   }}
                 >
@@ -789,7 +789,7 @@ export default function AISketchPlatform() {
                 onClick={handleViewPromptsCommunity}
                 variant="ghost"
                 className="text-[#2d3e2d] hover:bg-[#d4a574] hover:text-[#2d3e2d] font-black rounded-2xl transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Sparkles className="w-4 h-4 mr-2" />
                 MAGIC PROMPTS ✨
@@ -798,7 +798,7 @@ export default function AISketchPlatform() {
                 onClick={() => window.location.href = '/admin/login'}
                 variant="ghost"
                 className="text-[#2d3e2d] hover:bg-[#d4a574] hover:text-[#2d3e2d] font-black rounded-2xl transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Shield className="w-4 h-4 mr-2" />
                 ADMIN 🛡️
@@ -807,7 +807,7 @@ export default function AISketchPlatform() {
                 onClick={() => window.location.href = '/pricing'}
                 variant="ghost"
                 className="text-[#2d3e2d] hover:bg-[#d4a574] hover:text-[#2d3e2d] font-black rounded-2xl transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <CreditCard className="w-4 h-4 mr-2" />
                 PRICING 💰
@@ -819,7 +819,7 @@ export default function AISketchPlatform() {
           <div className="flex items-center space-x-2 md:space-x-4">
             <Button
               className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-3 py-2 md:px-6 md:py-3 rounded-2xl shadow-lg transform hover:scale-105 transition-all text-xs md:text-sm"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <Crown className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
               {isMobile ? "PRO" : "UPGRADE PRO!"} 🚀
@@ -849,7 +849,7 @@ export default function AISketchPlatform() {
                     <div className="w-full h-full rounded-full bg-gradient-to-br from-[#d4a574] to-[#8b7355] flex items-center justify-center">
                       <span
                         className="text-[#2d3e2d] font-black text-sm md:text-lg"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         {session?.user?.name?.charAt(0) || session?.user?.email?.charAt(0) || 'U'}
                       </span>
@@ -866,7 +866,7 @@ export default function AISketchPlatform() {
               >
                 <DropdownMenuLabel
                   className="font-black text-[#2d3e2d] border-b-2 border-[#8b7355] pb-2"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   <div className="flex flex-col space-y-1">
                     {session ? (
@@ -905,7 +905,7 @@ export default function AISketchPlatform() {
                     <DropdownMenuItem
                       onClick={() => router.push('/admin/dashboard')}
                       className="font-bold text-[#2d3e2d] hover:bg-[#f5f1e8] rounded-xl m-1 cursor-pointer text-sm"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       <User className="mr-2 h-3 w-3 md:h-4 md:w-4" />
                       <span>My Dashboard 📊</span>
@@ -913,7 +913,7 @@ export default function AISketchPlatform() {
                     <DropdownMenuItem
                       onClick={() => router.push('/favorites')}
                       className="font-bold text-[#2d3e2d] hover:bg-[#f5f1e8] rounded-xl m-1 cursor-pointer text-sm"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       <Heart className="mr-2 h-3 w-3 md:h-4 md:w-4" />
                       <span>My Favorites ❤️</span>
@@ -923,7 +923,7 @@ export default function AISketchPlatform() {
                     <DropdownMenuItem
                       onClick={handleLogout}
                       className="font-bold text-red-600 hover:bg-red-50 rounded-xl m-1 cursor-pointer text-sm"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       <LogOut className="mr-2 h-3 w-3 md:h-4 md:w-4" />
                       <span>Log out 👋</span>
@@ -932,10 +932,10 @@ export default function AISketchPlatform() {
                 ) : (
                   <>
                     <div className="px-3 py-2 m-1">
-                      <p className="text-xs text-[#8b7355] font-bold mb-2" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <p className="text-xs text-[#8b7355] font-bold mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         After login you can:
                       </p>
-                      <div className="space-y-1 text-xs text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <div className="space-y-1 text-xs text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         <div className="flex items-center gap-2">
                           <div className="w-1.5 h-1.5 bg-[#d4a574] rounded-full"></div>
                           <span>Save artworks to cloud</span>
@@ -954,7 +954,7 @@ export default function AISketchPlatform() {
                     <DropdownMenuItem
                       onClick={() => signIn('google')}
                       className="font-bold text-[#2d3e2d] hover:bg-[#f5f1e8] rounded-xl m-1 cursor-pointer text-sm bg-gradient-to-r from-blue-50 to-green-50"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       <svg className="mr-2 h-3 w-3 md:h-4 md:w-4" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -965,7 +965,7 @@ export default function AISketchPlatform() {
                       <span>Login with Google 🚀</span>
                     </DropdownMenuItem>
                     <div className="px-3 py-2 m-1">
-                      <p className="text-xs text-[#8b7355] text-center" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <p className="text-xs text-[#8b7355] text-center" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         Secure • Fast • Convenient
                       </p>
                     </div>
@@ -985,7 +985,7 @@ export default function AISketchPlatform() {
             <h2
               className="text-3xl md:text-4xl font-black text-[#2d3e2d] mb-4 transform -rotate-1"
               style={{
-                fontFamily: "Comic Sans MS, cursive",
+                fontFamily: "Righteous, Arial Black, sans-serif",
                 textShadow: "3px 3px 0px #d4a574",
               }}
             >
@@ -993,7 +993,7 @@ export default function AISketchPlatform() {
             </h2>
             <p
               className="text-lg md:text-xl font-bold text-[#8b7355] max-w-3xl mx-auto"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               Choose your perfect AI creation tool - each optimized for amazing results!
             </p>
@@ -1006,13 +1006,13 @@ export default function AISketchPlatform() {
                 <div className="text-5xl mb-3">🖼️</div>
                 <h3
                   className="text-xl font-black text-[#2d3e2d] mb-2"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   Image to Image
                 </h3>
                 <p
                   className="text-[#2d3e2d] font-bold text-sm mb-4"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   Transform photos into stunning AI artworks
                 </p>
@@ -1029,13 +1029,13 @@ export default function AISketchPlatform() {
                   <div className="text-5xl mb-3">📝</div>
                   <h3
                     className="text-xl font-black text-[#2d3e2d] mb-2"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Text to Image
                   </h3>
                   <p
                     className="text-[#8b7355] font-bold text-sm mb-4"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Create amazing art from text descriptions
                   </p>
@@ -1053,13 +1053,13 @@ export default function AISketchPlatform() {
                   <div className="text-5xl mb-3">🎬</div>
                   <h3
                     className="text-xl font-black text-[#2d3e2d] mb-2"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Text to Video
                   </h3>
                   <p
                     className="text-[#8b7355] font-bold text-sm mb-4"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Generate stunning videos from text
                   </p>
@@ -1077,13 +1077,13 @@ export default function AISketchPlatform() {
                   <div className="text-5xl mb-3">🎥</div>
                   <h3
                     className="text-xl font-black text-[#2d3e2d] mb-2"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Image to Video
                   </h3>
                   <p
                     className="text-[#8b7355] font-bold text-sm mb-4"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Transform images into dynamic videos
                   </p>
@@ -1103,7 +1103,7 @@ export default function AISketchPlatform() {
               <TabsTrigger
                 value="create"
                 className="rounded-xl md:rounded-2xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Sparkles className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                 CREATE! 🎨
@@ -1112,7 +1112,7 @@ export default function AISketchPlatform() {
                 value="rendering"
                 className="rounded-xl md:rounded-2xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm"
                 disabled={!isRendering}
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Wand2 className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                 MAGIC! ✨
@@ -1121,7 +1121,7 @@ export default function AISketchPlatform() {
                 value="result"
                 className="rounded-xl md:rounded-2xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm"
                 disabled={!generatedImage}
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Star className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                 DONE! 🎉
@@ -1185,7 +1185,7 @@ export default function AISketchPlatform() {
                       <h2
                         className="text-xl md:text-3xl font-black text-[#2d3e2d] mb-2 transform -rotate-1"
                         style={{
-                          fontFamily: "Comic Sans MS, cursive",
+                          fontFamily: "Righteous, Arial Black, sans-serif",
                           textShadow: "2px 2px 0px #f5f1e8",
                         }}
                       >
@@ -1193,7 +1193,7 @@ export default function AISketchPlatform() {
                       </h2>
                       <p
                         className="text-sm md:text-base text-[#2d3e2d] font-bold"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         The magic worked! Share your amazing creation! 🚀
                       </p>
@@ -1226,7 +1226,7 @@ export default function AISketchPlatform() {
                                         <Button
                                           onClick={() => handleViewImage(image.url)}
                                           className="flex-1 bg-white/90 backdrop-blur-sm border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] hover:border-[#d4a574] font-black rounded-xl transform hover:scale-105 transition-all text-sm py-2"
-                                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                                         >
                                           🔍 View & Share
                                         </Button>
@@ -1241,7 +1241,7 @@ export default function AISketchPlatform() {
                             }, 100)
                           }}
                           className="flex-1 bg-white/90 backdrop-blur-sm border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] hover:border-[#d4a574] font-black rounded-xl transform hover:scale-105 transition-all text-sm py-2"
-                                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                                         >
                                           🔄 Retry
                                         </Button>
@@ -1258,7 +1258,7 @@ export default function AISketchPlatform() {
                                               : "bg-gradient-to-r from-[#ffd700]/90 to-[#ff8c00]/90 hover:from-[#ffed4a] hover:to-[#f59e0b] text-[#2d3e2d] border-[#ffd700] shadow-[0_0_15px_rgba(255,215,0,0.5)]"
                                           }`}
                                           style={{ 
-                                            fontFamily: "Comic Sans MS, cursive",
+                                            fontFamily: "Righteous, Arial Black, sans-serif",
                                             textShadow: "1px 1px 0px rgba(255,255,255,0.5)"
                                           }}
                                         >
@@ -1311,7 +1311,7 @@ export default function AISketchPlatform() {
                                           }}
                                           className="flex-1 bg-white/90 backdrop-blur-sm border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] hover:border-[#d4a574] font-black rounded-xl transform hover:scale-105 transition-all text-xs py-3"
                                           style={{ 
-                                            fontFamily: "Comic Sans MS, cursive",
+                                            fontFamily: "Righteous, Arial Black, sans-serif",
                                             textShadow: "1px 1px 0px rgba(255,255,255,0.3)"
                                           }}
                                         >
@@ -1349,7 +1349,7 @@ export default function AISketchPlatform() {
                                   ? "bg-[#ff6b6b] border-[#ff6b6b] text-white hover:bg-[#ff5252] hover:border-[#ff5252]" 
                                   : "bg-[#f5f1e8] border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8]"
                               } font-black rounded-xl md:rounded-2xl transform hover:rotate-1 hover:scale-105 transition-all text-xs md:text-sm px-3 py-2`}
-                              style={{ fontFamily: "Comic Sans MS, cursive" }}
+                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                               disabled={!currentImageId || !session?.user}
                             >
                               <Heart className={`w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2 ${isFavorited ? 'fill-current' : ''}`} />
@@ -1367,7 +1367,7 @@ export default function AISketchPlatform() {
                               }}
                               className="bg-gradient-to-r from-[#d4a574] to-[#c19660] border-2 md:border-4 border-[#2d3e2d] text-[#2d3e2d] hover:from-[#c19660] hover:to-[#b8935a] font-black rounded-xl md:rounded-2xl transform hover:rotate-1 hover:scale-110 transition-all text-xs md:text-sm px-4 py-2 shadow-xl animate-pulse"
                               style={{ 
-                                fontFamily: "Comic Sans MS, cursive",
+                                fontFamily: "Righteous, Arial Black, sans-serif",
                                 textShadow: "1px 1px 0px rgba(255,255,255,0.3)"
                               }}
                             >
@@ -1378,7 +1378,7 @@ export default function AISketchPlatform() {
                           <div className="flex flex-wrap gap-2 md:gap-3">
                             <Button
                               className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-xl md:rounded-2xl shadow-lg transform hover:scale-105 transition-all text-xs md:text-sm px-3 py-2"
-                              style={{ fontFamily: "Comic Sans MS, cursive" }}
+                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                             >
                               <Sparkles className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                               HD 💎
@@ -1414,7 +1414,7 @@ export default function AISketchPlatform() {
                       <h3
                         className="text-lg md:text-xl font-black text-[#f5f1e8] transform rotate-1"
                         style={{
-                          fontFamily: "Comic Sans MS, cursive",
+                          fontFamily: "Righteous, Arial Black, sans-serif",
                           textShadow: "1px 1px 0px #2d3e2d",
                         }}
                       >
@@ -1454,7 +1454,7 @@ export default function AISketchPlatform() {
                         <h3
                           className="text-lg md:text-xl font-black text-[#f5f1e8] transform rotate-1"
                           style={{
-                            fontFamily: "Comic Sans MS, cursive",
+                            fontFamily: "Righteous, Arial Black, sans-serif",
                             textShadow: "1px 1px 0px #2d3e2d",
                           }}
                         >
@@ -1464,7 +1464,7 @@ export default function AISketchPlatform() {
                       <div className="p-3 md:p-4">
                         <div
                           className="text-[#2d3e2d] font-bold space-y-1 text-sm md:text-base"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         >
                           {box.content.map((item, itemIndex) => (
                             <p key={itemIndex}>{item}</p>
@@ -1487,7 +1487,7 @@ export default function AISketchPlatform() {
                     <h3
                       className="text-lg md:text-2xl font-black text-[#f5f1e8] mb-2 md:mb-3 transform rotate-1"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "Righteous, Arial Black, sans-serif",
                         textShadow: "2px 2px 0px #8b7355",
                       }}
                     >
@@ -1495,7 +1495,7 @@ export default function AISketchPlatform() {
                     </h3>
                     <div
                       className="text-[#f5f1e8] font-bold space-y-1 md:space-y-2 mb-3 md:mb-4 text-sm md:text-base"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       {creationMode.includes("video") ? (
                         <>
@@ -1513,7 +1513,7 @@ export default function AISketchPlatform() {
                     </div>
                     <Button
                       className="w-full bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black py-2 md:py-3 rounded-xl md:rounded-2xl shadow-lg transform hover:scale-105 transition-all text-sm md:text-base"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       {creationMode.includes("video") ? "GET VIDEO PRO! 🎬" : "GET AIMAGICA PRO! 🚀"}
                     </Button>
@@ -1538,7 +1538,7 @@ export default function AISketchPlatform() {
               <h2
                 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#2d3e2d] mb-4 transform -rotate-1"
                 style={{
-                  fontFamily: "Comic Sans MS, cursive",
+                  fontFamily: "Righteous, Arial Black, sans-serif",
                   textShadow: "3px 3px 0px #d4a574",
                 }}
               >
@@ -1546,7 +1546,7 @@ export default function AISketchPlatform() {
               </h2>
               <p
                 className="text-lg md:text-xl font-bold text-[#8b7355] max-w-3xl mx-auto"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Turn your simple sketches into stunning art in seconds!
               </p>
@@ -1564,13 +1564,13 @@ export default function AISketchPlatform() {
                 <h3
                   className="text-xl font-black text-[#2d3e2d] mb-2"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
                   Simple Drawing 🖌️
                 </h3>
-                <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                   No art skills needed! Just doodle, and AI magic will do the rest. Perfect for all ages and skill
                   levels!
                 </p>
@@ -1587,13 +1587,13 @@ export default function AISketchPlatform() {
                 <h3
                   className="text-xl font-black text-[#2d3e2d] mb-2"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
                   50+ Art Styles 🎭
                 </h3>
-                <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                   From anime to oil painting, from cyberpunk to watercolor, choose your favorite style and let AI add
                   magic to your creation!
                 </p>
@@ -1610,13 +1610,13 @@ export default function AISketchPlatform() {
                 <h3
                   className="text-xl font-black text-[#2d3e2d] mb-2"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
                   Lightning Speed ⚡
                 </h3>
-                <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                   Witness your creation turn into an art masterpiece in just 30 seconds! No waiting, enjoy the fun of
                   creating instantly!
                 </p>
@@ -1633,13 +1633,13 @@ export default function AISketchPlatform() {
                 <h3
                   className="text-xl font-black text-[#2d3e2d] mb-2"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
                   HD Download 💎
                 </h3>
-                <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                   Get standard resolution images for free, upgrade to PRO for ultra HD downloads, perfect for printing
                   and sharing!
                 </p>
@@ -1659,7 +1659,7 @@ export default function AISketchPlatform() {
               <h2
                 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#f5f1e8] mb-4 transform rotate-1"
                 style={{
-                  fontFamily: "Comic Sans MS, cursive",
+                  fontFamily: "Righteous, Arial Black, sans-serif",
                   textShadow: "3px 3px 0px #8b7355",
                 }}
               >
@@ -1667,7 +1667,7 @@ export default function AISketchPlatform() {
               </h2>
               <p
                 className="text-lg md:text-xl font-bold text-[#d4a574] max-w-3xl mx-auto"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Just four simple steps, witness the magic power of AI!
               </p>
@@ -1683,7 +1683,7 @@ export default function AISketchPlatform() {
                   <div className="absolute -top-4 -left-4 w-10 h-10 bg-[#d4a574] rounded-full flex items-center justify-center border-2 border-[#2d3e2d] shadow-lg">
                     <span
                       className="text-[#2d3e2d] font-black text-xl"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       1
                     </span>
@@ -1692,13 +1692,13 @@ export default function AISketchPlatform() {
                   <h3
                     className="text-xl font-black text-[#2d3e2d] mb-2"
                     style={{
-                      fontFamily: "Comic Sans MS, cursive",
+                      fontFamily: "Righteous, Arial Black, sans-serif",
                       textShadow: "1px 1px 0px #d4a574",
                     }}
                   >
                     Draw Your Idea
                   </h3>
-                  <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     Use our simple drawing tools to draw your ideas, no complex details needed, just simple lines!
                   </p>
                 </div>
@@ -1716,7 +1716,7 @@ export default function AISketchPlatform() {
                   <div className="absolute -top-4 -left-4 w-10 h-10 bg-[#d4a574] rounded-full flex items-center justify-center border-2 border-[#2d3e2d] shadow-lg">
                     <span
                       className="text-[#2d3e2d] font-black text-xl"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       2
                     </span>
@@ -1725,13 +1725,13 @@ export default function AISketchPlatform() {
                   <h3
                     className="text-xl font-black text-[#2d3e2d] mb-2"
                     style={{
-                      fontFamily: "Comic Sans MS, cursive",
+                      fontFamily: "Righteous, Arial Black, sans-serif",
                       textShadow: "1px 1px 0px #d4a574",
                     }}
                   >
                     Choose Magic Style
                   </h3>
-                  <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     Choose from over 50 art styles, from anime to oil painting, from cyberpunk to watercolor, we have it
                     all!
                   </p>
@@ -1750,7 +1750,7 @@ export default function AISketchPlatform() {
                   <div className="absolute -top-4 -left-4 w-10 h-10 bg-[#d4a574] rounded-full flex items-center justify-center border-2 border-[#2d3e2d] shadow-lg">
                     <span
                       className="text-[#2d3e2d] font-black text-xl"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       3
                     </span>
@@ -1759,13 +1759,13 @@ export default function AISketchPlatform() {
                   <h3
                     className="text-xl font-black text-[#2d3e2d] mb-2"
                     style={{
-                      fontFamily: "Comic Sans MS, cursive",
+                      fontFamily: "Righteous, Arial Black, sans-serif",
                       textShadow: "1px 1px 0px #d4a574",
                     }}
                   >
                     AI Magic Processing
                   </h3>
-                  <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     Our AI magician will turn your simple sketch into a beautiful work of art in 30 seconds!
                   </p>
                 </div>
@@ -1783,7 +1783,7 @@ export default function AISketchPlatform() {
                   <div className="absolute -top-4 -left-4 w-10 h-10 bg-[#d4a574] rounded-full flex items-center justify-center border-2 border-[#2d3e2d] shadow-lg">
                     <span
                       className="text-[#2d3e2d] font-black text-xl"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       4
                     </span>
@@ -1792,13 +1792,13 @@ export default function AISketchPlatform() {
                   <h3
                     className="text-xl font-black text-[#2d3e2d] mb-2"
                     style={{
-                      fontFamily: "Comic Sans MS, cursive",
+                      fontFamily: "Righteous, Arial Black, sans-serif",
                       textShadow: "1px 1px 0px #d4a574",
                     }}
                   >
                     Share Your Masterpiece
                   </h3>
-                  <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     Download, share your creation, or continue editing to improve it! Let the world see your magic
                     ideas!
                   </p>
@@ -1809,7 +1809,7 @@ export default function AISketchPlatform() {
             <div className="text-center mt-12">
               <Button
                 className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-8 py-4 rounded-2xl shadow-xl transform hover:scale-110 transition-all text-lg"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Sparkles className="w-5 h-5 mr-2" />
                 Start Creating Now!
@@ -1832,7 +1832,7 @@ export default function AISketchPlatform() {
               <h2
                 className="text-3xl md:text-4xl lg:text-5xl font-black text-[#f5f1e8] mb-4 transform rotate-1"
                 style={{
-                  fontFamily: "Comic Sans MS, cursive",
+                  fontFamily: "Righteous, Arial Black, sans-serif",
                   textShadow: "3px 3px 0px #8b7355",
                 }}
               >
@@ -1840,7 +1840,7 @@ export default function AISketchPlatform() {
               </h2>
               <p
                 className="text-lg md:text-xl font-bold text-[#d4a574] max-w-3xl mx-auto"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Everything you want to know about AIMAGICA is here!
               </p>
@@ -1854,14 +1854,14 @@ export default function AISketchPlatform() {
                 >
                   <AccordionTrigger
                     className="px-6 py-4 hover:no-underline"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <span className="font-black text-[#2d3e2d] text-left">
                       Do I need drawing skills to use AIMAGICA?
                     </span>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pb-4">
-                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                       Absolutely not! AIMAGICA is designed for users of all ages and skill levels. Just doodle, and AI
                       magic will do the rest.
                     </p>
@@ -1873,14 +1873,14 @@ export default function AISketchPlatform() {
                 >
                   <AccordionTrigger
                     className="px-6 py-4 hover:no-underline"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <span className="font-black text-[#2d3e2d] text-left">
                       How long does it take to generate an image?
                     </span>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pb-4">
-                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                       AIMAGICA generates stunning artwork in approximately 30 seconds, allowing you to quickly bring
                       your ideas to life.
                     </p>
@@ -1892,14 +1892,14 @@ export default function AISketchPlatform() {
                 >
                   <AccordionTrigger
                     className="px-6 py-4 hover:no-underline"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <span className="font-black text-[#2d3e2d] text-left">
                       Can I use AIMAGICA for commercial purposes?
                     </span>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pb-4">
-                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                       Yes, images generated with AIMAGICA can be used for both personal and commercial purposes, giving
                       you the freedom to create and monetize your art.
                     </p>
@@ -1911,14 +1911,14 @@ export default function AISketchPlatform() {
                 >
                   <AccordionTrigger
                     className="px-6 py-4 hover:no-underline"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <span className="font-black text-[#2d3e2d] text-left">
                       What art styles are available in AIMAGICA?
                     </span>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pb-4">
-                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                       AIMAGICA offers a wide range of art styles, including anime, oil painting, cyberpunk, watercolor,
                       and many more, allowing you to explore and create diverse artistic expressions.
                     </p>
@@ -1930,14 +1930,14 @@ export default function AISketchPlatform() {
                 >
                   <AccordionTrigger
                     className="px-6 py-4 hover:no-underline"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <span className="font-black text-[#2d3e2d] text-left">
                       What's the difference between free and PRO versions?
                     </span>
                   </AccordionTrigger>
                   <AccordionContent className="px-6 pb-4">
-                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                    <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                       The free version allows you to create standard resolution images with limited daily uses. The PRO
                       version offers unlimited daily uses, ultra HD downloads, exclusive art styles, and priority
                       processing.
@@ -1968,7 +1968,7 @@ export default function AISketchPlatform() {
                     <h3
                       className="text-2xl font-black text-[#f5f1e8] transform -rotate-1"
                       style={{
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "Righteous, Arial Black, sans-serif",
                         textShadow: "2px 2px 0px #8b7355",
                       }}
                     >
@@ -1978,7 +1978,7 @@ export default function AISketchPlatform() {
                 </div>
                 <p
                   className="text-[#d4a574] font-bold text-sm leading-relaxed"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   Turn your simple sketches into stunning art with AI magic! Join millions of creators worldwide and
                   unlock your creative potential.
@@ -2020,7 +2020,7 @@ export default function AISketchPlatform() {
                 <h4
                   className="text-lg font-black text-[#f5f1e8] mb-4"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #8b7355",
                   }}
                 >
@@ -2030,21 +2030,21 @@ export default function AISketchPlatform() {
                   <Link
                     href="/"
                     className="block text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     AI Drawing Tool
                   </Link>
                   <Link
                     href="/gallery"
                     className="block text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Art Gallery
                   </Link>
                   <Link
                     href="/mobile-glass"
                     className="block text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Mobile App
                   </Link>
@@ -2057,7 +2057,7 @@ export default function AISketchPlatform() {
                 <h4
                   className="text-lg font-black text-[#f5f1e8] mb-4"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #8b7355",
                   }}
                 >
@@ -2067,14 +2067,14 @@ export default function AISketchPlatform() {
                   <Link
                     href="/about"
                     className="block text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     About Us
                   </Link>
                   <Link
                     href="/blog"
                     className="block text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Blog
                   </Link>
@@ -2087,7 +2087,7 @@ export default function AISketchPlatform() {
                 <h4
                   className="text-lg font-black text-[#f5f1e8] mb-4"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #8b7355",
                   }}
                 >
@@ -2097,7 +2097,7 @@ export default function AISketchPlatform() {
                   <Link
                     href="/help"
                     className="flex items-center text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <HelpCircle className="w-4 h-4 mr-2" />
                     Help Center
@@ -2105,7 +2105,7 @@ export default function AISketchPlatform() {
                   <Link
                     href="/contact"
                     className="flex items-center text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <Mail className="w-4 h-4 mr-2" />
                     Contact Us
@@ -2121,13 +2121,13 @@ export default function AISketchPlatform() {
                 <h4
                   className="text-xl font-black text-[#f5f1e8] mb-4"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #8b7355",
                   }}
                 >
                   Stay Updated! 📧
                 </h4>
-                <p className="text-[#d4a574] font-bold mb-4 text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                <p className="text-[#d4a574] font-bold mb-4 text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                   Get the latest updates, tips, and exclusive content delivered to your inbox!
                 </p>
                 <div className="flex gap-2">
@@ -2135,11 +2135,11 @@ export default function AISketchPlatform() {
                     type="email"
                     placeholder="Enter your magic email..."
                     className="flex-1 bg-[#f5f1e8] border-2 border-[#8b7355] rounded-xl text-[#2d3e2d] placeholder:text-[#8b7355] font-bold"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   />
                   <Button
                     className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-xl px-4 transform hover:scale-105 transition-all"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <Send className="w-4 h-4" />
                   </Button>
@@ -2154,7 +2154,7 @@ export default function AISketchPlatform() {
                   <Link
                     href="/privacy"
                     className="flex items-center text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <Shield className="w-4 h-4 mr-1" />
                     Privacy Policy
@@ -2162,7 +2162,7 @@ export default function AISketchPlatform() {
                   <Link
                     href="/terms"
                     className="flex items-center text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <FileText className="w-4 h-4 mr-1" />
                     Terms of Service
@@ -2170,13 +2170,13 @@ export default function AISketchPlatform() {
                   <Link
                     href="/cookies"
                     className="text-[#d4a574] hover:text-[#f5f1e8] font-bold transition-colors text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Cookie Policy
                   </Link>
                 </div>
                 <div className="text-center md:text-right">
-                  <p className="text-[#d4a574] font-bold text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-[#d4a574] font-bold text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     © 2024 AIMAGICA. All rights reserved. Made with ❤️ and AI magic!
                   </p>
                 </div>

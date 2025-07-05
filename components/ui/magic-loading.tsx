@@ -73,7 +73,7 @@ export default function MagicLoading({
       {showMessage && (
         <div 
           className={`${currentSize.text} text-[#8b7355] font-bold text-center`}
-          style={{ fontFamily: "Comic Sans MS, cursive" }}
+          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
         >
           {message}{dots}
         </div>

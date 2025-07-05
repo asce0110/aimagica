@@ -340,7 +340,7 @@ export default function ApiConfigForm({ config, onSave, onCancel, isLoading }: A
           <div>
             <CardTitle 
               className="text-2xl font-black text-[#2d3e2d] flex items-center"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <Plus className="w-6 h-6 mr-2" />
               {config ? 'Edit API Configuration 🔧' : 'Add New API Configuration ⚡'}

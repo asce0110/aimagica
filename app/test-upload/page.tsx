@@ -33,13 +33,13 @@ export default function TestUploadPage() {
         <div className="text-center">
           <h1 
             className="text-4xl font-black text-[#2d3e2d] mb-2"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             Test Image Upload 📤
           </h1>
           <p 
             className="text-[#8b7355] font-bold"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             Test Cloudflare R2 image upload functionality
           </p>
@@ -50,7 +50,7 @@ export default function TestUploadPage() {
           <CardHeader>
             <CardTitle 
               className="text-2xl font-black text-[#2d3e2d]"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               Upload Images 🖼️
             </CardTitle>
@@ -66,7 +66,7 @@ export default function TestUploadPage() {
             {/* 错误信息 */}
             {error && (
               <div className="p-4 bg-red-50 border-2 border-red-200 rounded-xl">
-                <p className="text-red-600 font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                <p className="text-red-600 font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                   ❌ {error}
                 </p>
               </div>
@@ -80,7 +80,7 @@ export default function TestUploadPage() {
             <CardHeader>
               <CardTitle 
                 className="text-2xl font-black text-[#2d3e2d]"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Uploaded Images ✅ ({uploadedImages.length})
               </CardTitle>
@@ -105,19 +105,19 @@ export default function TestUploadPage() {
                     <div className="space-y-1">
                       <p 
                         className="text-[#2d3e2d] font-bold text-sm truncate"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         📁 {image.fileName}
                       </p>
                       <p 
                         className="text-[#8b7355] text-xs"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         📏 Size: {Math.round(image.size / 1024)}KB
                       </p>
                       <p 
                         className="text-[#8b7355] text-xs"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         🎨 Type: {image.type}
                       </p>
@@ -129,7 +129,7 @@ export default function TestUploadPage() {
                           target="_blank"
                           rel="noopener noreferrer"
                           className="inline-block bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-bold px-3 py-1 rounded-lg text-xs transition-all"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         >
                           🔗 View Full Size
                         </a>
@@ -148,11 +148,11 @@ export default function TestUploadPage() {
             <div className="space-y-3">
               <h3 
                 className="text-lg font-black text-[#2d3e2d]"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 📋 Test Instructions:
               </h3>
-              <ul className="space-y-2 text-[#8b7355]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+              <ul className="space-y-2 text-[#8b7355]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                 <li>✅ Upload images by clicking or dragging & dropping</li>
                 <li>✅ Supported formats: JPEG, PNG, WebP, GIF</li>
                 <li>✅ Maximum file size: 10MB</li>

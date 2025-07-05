@@ -40,7 +40,7 @@ export default function MobileOptimizedCard({
               )}
             >
               {icon && <div className="flex-shrink-0">{icon}</div>}
-              <h3 className="font-black text-lg transform -rotate-1" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+              <h3 className="font-black text-lg transform -rotate-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                 {title}
               </h3>
             </div>
@@ -68,7 +68,7 @@ export default function MobileOptimizedCard({
               )}
             >
               {icon && <div className="flex-shrink-0">{icon}</div>}
-              <h3 className="font-black text-lg transform -rotate-1" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+              <h3 className="font-black text-lg transform -rotate-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                 {title}
               </h3>
             </div>

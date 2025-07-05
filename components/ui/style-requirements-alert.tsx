@@ -49,7 +49,7 @@ export default function StyleRequirementsAlert({
           
           <DialogTitle 
             className="text-[#2d3e2d] font-black text-xl mb-2"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             {title}
           </DialogTitle>
@@ -59,7 +59,7 @@ export default function StyleRequirementsAlert({
               <span className="text-2xl">{styleEmoji}</span>
               <span 
                 className="text-[#8b7355] font-bold"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 {styleName}
               </span>
@@ -75,7 +75,7 @@ export default function StyleRequirementsAlert({
                 <AlertTriangle className="w-5 h-5 text-red-500" />
                 <h4 
                   className="text-red-700 font-bold"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   Requirements not met:
                 </h4>
@@ -85,7 +85,7 @@ export default function StyleRequirementsAlert({
                   <li 
                     key={index}
                     className="text-red-600 text-sm font-bold flex items-start gap-2"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <span className="text-red-500 mt-0.5">•</span>
                     {error}
@@ -102,7 +102,7 @@ export default function StyleRequirementsAlert({
                 <Info className="w-5 h-5 text-yellow-500" />
                 <h4 
                   className="text-yellow-700 font-bold"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   Tips:
                 </h4>
@@ -112,7 +112,7 @@ export default function StyleRequirementsAlert({
                   <li 
                     key={index}
                     className="text-yellow-600 text-sm font-bold flex items-start gap-2"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <span className="text-yellow-500 mt-0.5">•</span>
                     {warning}
@@ -127,7 +127,7 @@ export default function StyleRequirementsAlert({
             <Button
               onClick={onClose}
               className="bg-[#8b7355] hover:bg-[#6d5a44] text-white font-bold px-6 py-2 rounded-xl transform transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <X className="w-4 h-4 mr-2" />
               Got it!

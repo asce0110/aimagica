@@ -119,7 +119,7 @@ export default function ModelSelector({
         <CardContent className="p-4">
           <div className="flex items-center justify-center space-x-2">
             <Loader2 className="w-4 h-4 animate-spin text-[#8b7355]" />
-            <span className="text-[#8b7355] font-medium" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+            <span className="text-[#8b7355] font-medium" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
               Loading AI Models...
             </span>
           </div>
@@ -133,7 +133,7 @@ export default function ModelSelector({
     return (
       <Card className={`bg-white border-2 border-red-300 rounded-xl ${className}`}>
         <CardContent className="p-4">
-          <div className="text-red-600 text-sm font-medium" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <div className="text-red-600 text-sm font-medium" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             ❌ {error}
           </div>
         </CardContent>
@@ -154,7 +154,7 @@ export default function ModelSelector({
               <Cpu className="w-5 h-5 text-[#8b7355]" />
               <Label 
                 className="text-[#2d3e2d] font-black text-base transform hover:rotate-1 hover:scale-105 transition-all duration-300 cursor-pointer inline-block"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Choose AI Model 🤖
               </Label>
@@ -165,7 +165,7 @@ export default function ModelSelector({
               <div className="p-3 bg-gradient-to-r from-[#d4a574]/20 to-[#8b7355]/20 border-2 border-[#d4a574] rounded-xl">
                 <div className="flex items-center space-x-2">
                   <Zap className="w-5 h-5 text-[#d4a574]" />
-                  <span className="font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <span className="font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     Auto Selection (Smart)
                   </span>
                   <Badge className="bg-[#d4a574] text-[#2d3e2d] text-xs">Active</Badge>
@@ -181,7 +181,7 @@ export default function ModelSelector({
                   <div className="flex items-start space-x-2">
                     <div className="text-lg">🔐</div>
                     <div>
-                      <p className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <p className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         Login for More Options
                       </p>
                       <p className="text-xs text-[#8b7355] mt-1">
@@ -207,7 +207,7 @@ export default function ModelSelector({
             <Cpu className="w-5 h-5 text-[#8b7355]" />
             <Label 
               className="text-[#2d3e2d] font-black text-base transform hover:rotate-1 hover:scale-105 transition-all duration-300 cursor-pointer inline-block"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               Choose AI Model 🤖
             </Label>
@@ -235,7 +235,7 @@ export default function ModelSelector({
                          selectedModel.provider.includes('Max') ? 'Max' : 
                          selectedModel.shortName}
                       </Badge>
-                      <span className="font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <span className="font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         {selectedModel.provider.toLowerCase().includes('kie') 
                           ? `Kie.ai ${selectedModel.provider.includes('Pro') ? 'Pro' : selectedModel.provider.includes('Max') ? 'Max' : 'Flux'}`
                           : selectedModel.name}
@@ -250,7 +250,7 @@ export default function ModelSelector({
                   ) : (
                     <div className="flex items-center space-x-2">
                       <Zap className="w-4 h-4 text-[#d4a574]" />
-                      <span className="font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <span className="font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         Auto (Smart Selection)
                       </span>
                     </div>
@@ -309,7 +309,7 @@ export default function ModelSelector({
                 <div className="flex items-center justify-between">
                   <div>
                     <div className="flex items-center space-x-2">
-                      <span className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <span className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         {getDisplayProvider(selectedModel)}
                       </span>
                       {selectedModel.isDefault && (
@@ -337,7 +337,7 @@ export default function ModelSelector({
                 <div className="flex items-start space-x-2">
                   <Zap className="w-4 h-4 text-[#d4a574] mt-0.5" />
                   <div>
-                    <p className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                    <p className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                       Smart Auto Selection
                     </p>
                     <p className="text-xs text-[#8b7355]">

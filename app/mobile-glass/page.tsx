@@ -28,7 +28,7 @@ export default function MobileGlassPage() {
             onClick={() => router.push("/")}
             variant="outline"
             className="bg-white/70 backdrop-blur-md border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355]/70 hover:text-[#f5f1e8] font-black rounded-2xl mr-4"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             <ArrowLeft className="w-4 h-4 mr-2" />
             返回主页

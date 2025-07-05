@@ -425,7 +425,7 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
                   ? "bg-[#2d3e2d] text-[#f5f1e8] shadow-lg"
                   : "bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8]"
               }`}
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <Brush className="w-3 h-3 md:w-4 md:h-4" />
             </Button>
@@ -438,7 +438,7 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
                   ? "bg-[#ff69b4] text-[#2d3e2d] shadow-lg border-2 border-[#e91e63]"
                   : "bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#ff69b4] hover:text-[#2d3e2d] hover:border-[#e91e63]"
               }`}
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <Eraser className="w-3 h-3 md:w-4 md:h-4" />
             </Button>
@@ -447,7 +447,7 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
           <div className="flex items-center gap-1 md:gap-2 flex-1 min-w-0">
             <span
               className="text-[#2d3e2d] font-black text-xs md:text-sm whitespace-nowrap"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               SIZE:
             </span>
@@ -456,7 +456,7 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
             </div>
             <span
               className="text-[#2d3e2d] font-black text-xs md:text-sm whitespace-nowrap"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               {brushSize[0]}
             </span>
@@ -467,14 +467,14 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
           <Button
             size="sm"
             className="bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8] font-black rounded-lg md:rounded-xl transform hover:rotate-1 transition-all text-xs px-2 py-1"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             <Undo className="w-3 h-3 md:w-4 md:h-4" />
           </Button>
           <Button
             size="sm"
             className="bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8] font-black rounded-lg md:rounded-xl transform hover:rotate-1 transition-all text-xs px-2 py-1"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             <Redo className="w-3 h-3 md:w-4 md:h-4" />
           </Button>
@@ -482,7 +482,7 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
             size="sm"
             onClick={clearCanvas}
             className="bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8] font-black rounded-lg md:rounded-xl transform hover:rotate-1 transition-all text-xs px-2 py-1"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             {mode === 'edit' ? 'RESET' : 'CLEAR'}
           </Button>
@@ -534,7 +534,7 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
             {sketchQuality === "good" ? (
               <div
                 className="bg-[#d4a574] border-2 md:border-4 border-[#2d3e2d] text-[#2d3e2d] font-black px-2 py-1 md:px-3 md:py-2 rounded-xl md:rounded-2xl shadow-lg transform rotate-1 text-xs md:text-sm"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <CheckCircle className="w-3 h-3 md:w-4 md:h-4 mr-1 inline" />
                 PERFECT! ✨
@@ -542,7 +542,7 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
             ) : (
               <div
                 className="bg-[#8b7355] border-2 md:border-4 border-[#2d3e2d] text-[#f5f1e8] font-black px-2 py-1 md:px-3 md:py-2 rounded-xl md:rounded-2xl shadow-lg transform -rotate-1 text-xs md:text-sm"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <AlertCircle className="w-3 h-3 md:w-4 md:h-4 mr-1 inline" />
                 MAKE IT BOLDER! 💪
@@ -557,7 +557,7 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
             <Button
               onClick={submitDrawing}
               className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-3 py-2 md:px-4 md:py-2 rounded-xl md:rounded-2xl shadow-lg transform hover:scale-105 transition-all animate-pulse text-xs md:text-sm"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <CheckCircle className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
               {mode === 'edit' ? 'Apply Changes! ✨' : 'Use This Drawing! ✨'}
@@ -572,10 +572,10 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
           <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-1 md:mb-2 bg-[#d4a574] rounded-xl md:rounded-2xl flex items-center justify-center border-2 md:border-4 border-[#2d3e2d] transform rotate-3">
             <CheckCircle className="w-6 h-6 md:w-8 md:h-8 text-[#2d3e2d]" />
           </div>
-          <p className="text-[#2d3e2d] font-black text-xs md:text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <p className="text-[#2d3e2d] font-black text-xs md:text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             DO THIS! ✅
           </p>
-          <p className="text-[#8b7355] font-bold text-xs" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <p className="text-[#8b7355] font-bold text-xs" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             Bold & clear lines!
           </p>
         </div>
@@ -583,10 +583,10 @@ export default function SketchCanvas({ onSubmitDrawing, baseImage, mode = 'draw'
           <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-1 md:mb-2 bg-[#8b7355] rounded-xl md:rounded-2xl flex items-center justify-center border-2 md:border-4 border-[#2d3e2d] transform -rotate-3">
             <AlertCircle className="w-6 h-6 md:w-8 md:h-8 text-[#f5f1e8]" />
           </div>
-          <p className="text-[#2d3e2d] font-black text-xs md:text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <p className="text-[#2d3e2d] font-black text-xs md:text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             AVOID THIS! ❌
           </p>
-          <p className="text-[#8b7355] font-bold text-xs" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <p className="text-[#8b7355] font-bold text-xs" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             Too thin & messy!
           </p>
         </div>

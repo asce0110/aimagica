@@ -80,7 +80,7 @@ export default function KieModelSelector({
         <CardContent className="p-4">
           <div className="flex items-center justify-center space-x-2">
             <Loader2 className="w-4 h-4 animate-spin text-[#8b7355]" />
-            <span className="text-[#8b7355] font-medium" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+            <span className="text-[#8b7355] font-medium" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
               Loading Kie.ai Models...
             </span>
           </div>
@@ -93,7 +93,7 @@ export default function KieModelSelector({
     return (
       <Card className={`bg-white border-2 border-gray-300 rounded-xl ${className}`}>
         <CardContent className="p-4">
-          <div className="text-gray-600 text-sm font-medium" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <div className="text-gray-600 text-sm font-medium" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             ℹ️ Kie.ai not configured or not active
           </div>
         </CardContent>
@@ -112,7 +112,7 @@ export default function KieModelSelector({
             <div className="text-2xl">🎨</div>
             <Label 
               className="text-[#2d3e2d] font-black text-base"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               Kie.ai Flux Kontext Model
             </Label>
@@ -134,7 +134,7 @@ export default function KieModelSelector({
                     >
                       {selectedModel.toUpperCase()}
                     </Badge>
-                    <span className="font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                    <span className="font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                       {selectedModelData.displayName}
                     </span>
                     <div className="text-xs text-purple-600">
@@ -169,7 +169,7 @@ export default function KieModelSelector({
               <div className="flex items-start space-x-2">
                 <div className="text-lg">{selectedModelData.icon}</div>
                 <div>
-                  <p className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     {selectedModelData.displayName}
                   </p>
                   <p className="text-xs text-purple-700 mt-1">

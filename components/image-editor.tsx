@@ -155,7 +155,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
       <div className="bg-white rounded-2xl max-w-2xl w-full overflow-hidden shadow-2xl">
         {/* 头部 */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <h2 className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             🔘 Shape Editor
           </h2>
           <Button
@@ -184,7 +184,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
               <div className="text-3xl mb-2">
                 {borderRadius >= 50 ? '●' : borderRadius === 0 ? '■' : '▢'}
               </div>
-              <div className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+              <div className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                 {borderRadius >= 50 ? 'Circle' : borderRadius === 0 ? 'Square' : 'Rounded'}
               </div>
             </div>
@@ -211,7 +211,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
               onClick={resetFilters}
               variant="outline"
               className="flex-1 border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574]"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <RotateCcw className="w-4 h-4 mr-2" />
               Reset
@@ -220,7 +220,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
               onClick={downloadImage}
               variant="outline"
               className="flex-1 border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574]"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <Download className="w-4 h-4 mr-2" />
               Download
@@ -228,7 +228,7 @@ export default function ImageEditor({ imageUrl, onClose, onSave }: ImageEditorPr
             <Button
               onClick={saveImage}
               className="flex-1 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               Save
             </Button>

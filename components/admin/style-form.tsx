@@ -266,7 +266,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
         <CardHeader className="bg-[#d4a574] border-b-4 border-[#8b7355]">
           <CardTitle 
             className="text-2xl font-black text-[#2d3e2d] flex items-center gap-2"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             <Sparkles className="w-6 h-6" />
             {style ? '编辑样式' : '创建新样式'} ✨
@@ -281,7 +281,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <Label 
                     htmlFor="name" 
                     className="text-[#2d3e2d] font-bold text-sm flex items-center gap-1"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     样式名称 <span className="text-red-500">*</span>
                   </Label>
@@ -299,7 +299,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <Label 
                     htmlFor="emoji" 
                     className="text-[#2d3e2d] font-bold text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     表情符号
                   </Label>
@@ -317,7 +317,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <Label 
                     htmlFor="type" 
                     className="text-[#2d3e2d] font-bold text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     类型
                   </Label>
@@ -337,7 +337,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <Label 
                     htmlFor="category" 
                     className="text-[#2d3e2d] font-bold text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     分类
                   </Label>
@@ -359,7 +359,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
               <div className="space-y-4">
                 <Label 
                   className="text-[#2d3e2d] font-bold text-sm"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   样式预览图片
                 </Label>
@@ -405,7 +405,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                         <Upload className="w-8 h-8 text-[#8b7355]" />
                         <p 
                           className="text-[#8b7355] font-bold text-sm"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         >
                           点击上传并裁剪图片 ✂️
                         </p>
@@ -415,7 +415,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                         <Button
                           type="button"
                           className="bg-[#8b7355] hover:bg-[#6d5a44] text-white font-bold rounded-xl transform transition-all duration-200 hover:scale-105 active:scale-95 shadow-lg hover:shadow-xl"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                           onClick={() => setShowImageCropper(true)}
                         >
                           <Crop className="w-4 h-4 mr-2 transition-transform duration-200 group-active:rotate-12" />
@@ -434,7 +434,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
               <Label 
                 htmlFor="description" 
                 className="text-[#2d3e2d] font-bold text-sm flex items-center gap-1"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 描述 <span className="text-red-500">*</span>
               </Label>
@@ -452,7 +452,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
               <Label 
                 htmlFor="prompt_template" 
                 className="text-[#2d3e2d] font-bold text-sm flex items-center gap-1"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 提示词模板 <span className="text-red-500">*</span>
               </Label>
@@ -487,7 +487,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
               <Label 
                 htmlFor="default_prompt" 
                 className="text-[#2d3e2d] font-bold text-sm flex items-center gap-1"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 默认提示词 <span className="text-blue-500">(可选)</span>
               </Label>
@@ -517,7 +517,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                 <span className="text-xl">⚙️</span>
                 <Label 
                   className="text-[#2d3e2d] font-bold text-lg"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   使用限制条件
                 </Label>
@@ -528,7 +528,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <div>
                     <Label 
                       className="text-[#2d3e2d] font-bold text-sm"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       📸 必须上传图片
                     </Label>
@@ -545,7 +545,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <div>
                     <Label 
                       className="text-[#2d3e2d] font-bold text-sm"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       ✍️ 必须输入描述
                     </Label>
@@ -563,7 +563,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <div>
                     <Label 
                       className="text-red-700 font-bold text-sm"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       🚫 禁止图片上传
                     </Label>
@@ -587,7 +587,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <Label 
                     htmlFor="min_prompt_length" 
                     className="text-[#2d3e2d] font-bold text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     📝 最小描述长度
                   </Label>
@@ -608,7 +608,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   <Label 
                     htmlFor="max_prompt_length" 
                     className="text-[#2d3e2d] font-bold text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     📏 最大描述长度
                   </Label>
@@ -630,7 +630,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                 <Label 
                   htmlFor="allowed_image_formats" 
                   className="text-[#2d3e2d] font-bold text-sm"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   🖼️ 允许的图片格式
                 </Label>
@@ -650,7 +650,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                         }}
                         className="rounded border-[#8b7355]"
                       />
-                      <span className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <span className="text-sm font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         {format.toUpperCase()}
                       </span>
                     </label>
@@ -663,7 +663,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                 <Label 
                   htmlFor="requirements_description" 
                   className="text-[#2d3e2d] font-bold text-sm"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   📋 使用要求说明
                 </Label>
@@ -683,7 +683,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                 <div>
                   <Label 
                     className="text-[#2d3e2d] font-bold text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     高级样式
                   </Label>
@@ -699,7 +699,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                 <div>
                   <Label 
                     className="text-[#2d3e2d] font-bold text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     启用
                   </Label>
@@ -715,7 +715,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                 <Label 
                   htmlFor="sort_order" 
                   className="text-[#2d3e2d] font-bold text-sm"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   排序顺序
                 </Label>
@@ -735,7 +735,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                 <Eye className="w-5 h-5 text-[#8b7355]" />
                 <Label 
                   className="text-[#2d3e2d] font-bold"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   样式预览
                 </Label>
@@ -745,7 +745,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                 <div>
                   <h4 
                     className="font-bold text-[#2d3e2d] text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     {formData.name || '样式名称'}
                   </h4>
@@ -777,7 +777,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                     variant="outline"
                     onClick={handleSaveDraft}
                     className="border-2 border-blue-500 text-blue-500 hover:bg-blue-50 font-bold rounded-xl transform transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     💾 保存草稿
                   </Button>
@@ -789,7 +789,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   variant="outline"
                   onClick={onCancel}
                   className="border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-white font-bold rounded-xl transform transition-all duration-200 hover:scale-105 active:scale-95 shadow-md hover:shadow-lg"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   取消
                 </Button>
@@ -797,7 +797,7 @@ export default function StyleForm({ style, onSave, onCancel, isLoading }: StyleF
                   type="submit"
                   disabled={isLoading || isUploading}
                   className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-bold rounded-xl transform transition-all duration-200 hover:scale-105 active:scale-95 active:bg-[#b8935a] shadow-lg hover:shadow-xl"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   {isLoading ? (
                     <>

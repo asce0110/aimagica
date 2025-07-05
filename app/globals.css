@@ -171,55 +171,55 @@
   font-family: var(--font-hero);
 }
 
-/* 全站统一字体样式 - 俏皮魔法风格 */
+/* 全站统一字体样式 - 圆润魔法风格 */
 .hero-title, .magic-title {
-  font-family: var(--font-magic);
+  font-family: 'Righteous', 'Arial Black', sans-serif;
   font-weight: 400;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
 .hero-subtitle, .magic-subtitle {
-  font-family: var(--font-magic);
+  font-family: 'Righteous', 'Arial Black', sans-serif;
   font-weight: 400;
   letter-spacing: 0.01em;
 }
 
 .hero-button, .magic-button {
-  font-family: var(--font-magic);
+  font-family: 'Righteous', 'Arial Black', sans-serif;
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-/* 全站魔法字体应用 - 桌面端也使用俏皮字体 */
+/* 全站圆润字体应用 - 统一使用Righteous */
 body, 
 h1, h2, h3, h4, h5, h6,
 p, span, div, button, input, textarea, label,
 .font-heading, .font-body, .font-accent, .font-magic,
 [style*="Comic Sans MS"], 
 [style*="font-family: Comic Sans MS"] {
-  font-family: var(--font-magic) !important;
+  font-family: 'Righteous', 'Arial Black', sans-serif !important;
 }
 
-/* 确保按钮和交互元素使用俏皮字体 */
+/* 确保按钮和交互元素使用圆润字体 */
 button, .btn, 
 .bg-gradient-to-r, 
 .rounded-xl,
 [class*="Button"] {
-  font-family: var(--font-magic) !important;
+  font-family: 'Righteous', 'Arial Black', sans-serif !important;
 }
 
-/* 移动端字体优化 - 全站统一俏皮字体 */
+/* 移动端字体优化 - 全站统一圆润字体 */
 @media (max-width: 768px) {
   
-  /* 移动端所有元素统一使用俏皮字体 */
+  /* 移动端所有元素统一使用圆润字体 */
   body, 
   h1, h2, h3, h4, h5, h6,
   p, span, div, button, input, textarea, label,
   .font-heading, .font-body, .font-accent, .font-magic,
   * {
-    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
+    font-family: 'Righteous', 'Arial Black', 'Helvetica', sans-serif !important;
     font-style: normal !important;
   }
   
@@ -245,12 +245,12 @@ button, .btn,
     font-weight: 400 !important;
   }
   
-  /* 确保按钮和交互元素在移动端使用俏皮字体 */
+  /* 确保按钮和交互元素在移动端使用圆润字体 */
   button, .btn, 
   .bg-gradient-to-r, 
   .rounded-xl,
   [class*="Button"] {
-    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
+    font-family: 'Righteous', 'Arial Black', 'Helvetica', sans-serif !important;
     font-weight: 400 !important;
   }
 }

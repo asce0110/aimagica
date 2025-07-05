@@ -104,7 +104,7 @@ export default function TestimonialsCarousel() {
           <h2
             className="text-3xl md:text-4xl lg:text-5xl font-black text-[#2d3e2d] mb-4 transform -rotate-1"
             style={{
-              fontFamily: "Comic Sans MS, cursive",
+              fontFamily: "Righteous, Arial Black, sans-serif",
               textShadow: "3px 3px 0px #d4a574",
             }}
           >
@@ -112,7 +112,7 @@ export default function TestimonialsCarousel() {
           </h2>
           <p
             className="text-lg md:text-xl font-bold text-[#8b7355] max-w-3xl mx-auto"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             See how other creators are using AIMAGICA to unlock their creative potential!
           </p>
@@ -182,7 +182,7 @@ export default function TestimonialsCarousel() {
                           />
                         </div>
                         <div>
-                          <h4 className="text-lg font-black text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                          <h4 className="text-lg font-black text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                             {testimonial.name}
                           </h4>
                           <div className="flex text-yellow-500">
@@ -194,7 +194,7 @@ export default function TestimonialsCarousel() {
                       </div>
                       <p
                         className="text-[#2d3e2d] text-sm leading-relaxed font-medium"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         "{testimonial.content}"
                       </p>
@@ -202,7 +202,7 @@ export default function TestimonialsCarousel() {
                     <div className="mt-4 pt-4 border-t border-[#d4a574]">
                       <p
                         className="text-xs font-bold text-[#8b7355]"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         {testimonial.role}
                       </p>
@@ -220,13 +220,13 @@ export default function TestimonialsCarousel() {
             <div className="text-center">
               <p
                 className="text-3xl md:text-4xl font-black"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 500K+
               </p>
               <p
                 className="text-sm font-bold"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Happy Creators
               </p>
@@ -234,13 +234,13 @@ export default function TestimonialsCarousel() {
             <div className="text-center">
               <p
                 className="text-3xl md:text-4xl font-black"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 10M+
               </p>
               <p
                 className="text-sm font-bold"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Images Generated
               </p>
@@ -248,13 +248,13 @@ export default function TestimonialsCarousel() {
             <div className="text-center">
               <p
                 className="text-3xl md:text-4xl font-black"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 4.9★
               </p>
               <p
                 className="text-sm font-bold"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Average Rating
               </p>

@@ -292,7 +292,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
         {/* 错误标题 */}
         <div className="text-center space-y-4">
           <div className="text-6xl animate-pulse">❌</div>
-          <h2 className="text-3xl font-bold text-red-600" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <h2 className="text-3xl font-bold text-red-600" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             Oops! Generation Failed
           </h2>
           <p className="text-lg text-gray-600">Something went wrong during the creation process</p>
@@ -308,7 +308,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
               🚨
             </div>
             <div className="flex-1">
-              <h3 className="text-xl font-bold text-red-700 mb-2" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+              <h3 className="text-xl font-bold text-red-700 mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                 Error Details
               </h3>
               <div className="bg-white rounded-lg p-4 border border-red-200">
@@ -330,7 +330,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
           <div className="absolute -top-2 -left-2 w-4 h-4 bg-blue-400 rounded-full border-2 border-white shadow-sm"></div>
           <div className="absolute -bottom-2 -right-2 w-4 h-4 bg-blue-600 rounded-full border-2 border-white shadow-sm"></div>
           
-          <h3 className="text-xl font-bold text-blue-700 mb-4 text-center" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <h3 className="text-xl font-bold text-blue-700 mb-4 text-center" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             💡 What you can try:
           </h3>
           <div className="grid md:grid-cols-2 gap-4">
@@ -358,7 +358,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
           <button
             onClick={onClearError}
             className="group relative inline-flex items-center justify-center w-32 h-32 bg-gradient-to-br from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 border-4 border-white"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             {/* 装饰圆环 */}
             <div className="absolute inset-2 rounded-full border-2 border-white/30 animate-pulse"></div>
@@ -380,7 +380,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
         
         {/* 底部提示 */}
         <div className="text-center p-4 bg-gradient-to-r from-gray-100 to-gray-200 rounded-xl border border-gray-300">
-          <p className="text-gray-700 font-medium" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <p className="text-gray-700 font-medium" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             Don't worry! Even the best AI artists have creative blocks sometimes. 
             <br />
             <span className="text-blue-600 font-bold">Click the X above to return and try again! 🎨</span>
@@ -422,7 +422,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
     <div className="w-full max-w-3xl mx-auto p-8 space-y-8">
       {/* 主标题 */}
       <div className="text-center space-y-3">
-        <h2 className="text-3xl font-bold text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+        <h2 className="text-3xl font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
           🎨 AI is Creating Your Artwork
         </h2>
         <p className="text-lg text-gray-600">Please wait, magic is happening...</p>
@@ -434,7 +434,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
           <span className="text-xl font-semibold text-[#2d3e2d]">
             Progress: {Math.round(progress)}%
           </span>
-          <span className="text-sm text-[#8b7355] font-bold flex items-center gap-1" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <span className="text-sm text-[#8b7355] font-bold flex items-center gap-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             <Clock className="w-4 h-4" />
             Est. {estimatedTimeLeft}s remaining
           </span>
@@ -464,7 +464,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
             <h3 className="text-xl font-bold text-[#2d3e2d] mb-1">
               {currentStage.name}
             </h3>
-            <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+            <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
               {currentStage.tip}
             </p>
           </div>
@@ -475,7 +475,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
         
         {/* 阶段进度条 */}
         <div className="space-y-2">
-          <div className="text-sm text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>Current Stage Progress</div>
+          <div className="text-sm text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>Current Stage Progress</div>
           <div className="transform rotate-0.5 hover:-rotate-0.5 transition-all duration-300">
             <Progress 
               value={stageProgress} 
@@ -510,7 +510,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
               <div className="text-center">
                 <div className={`text-sm font-bold ${
                   isCurrent ? 'text-[#2d3e2d]' : 'text-[#8b7355]'
-                }`} style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                }`} style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                   {stage.name}
                 </div>
                 {isCurrent && (
@@ -548,7 +548,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
             <button
               onClick={() => setShowGameModal(false)}
               className="absolute top-2 right-2 z-10 w-8 h-8 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center font-bold transition-all duration-200 shadow-lg transform hover:scale-110"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               ✕
             </button>
@@ -572,10 +572,10 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
           <div className="absolute -top-3 left-4 w-5 h-5 bg-[#d4a574] rounded-full border-2 border-white shadow-sm"></div>
           <div className="absolute -bottom-3 right-4 w-5 h-5 bg-[#8b7355] rounded-full border-2 border-white shadow-sm"></div>
           <div className="text-center mb-4">
-            <h3 className="text-xl font-bold text-[#2d3e2d] mb-2" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+            <h3 className="text-xl font-bold text-[#2d3e2d] mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
               ✨ You're getting 【{selectedStyleData.name}】 style!
             </h3>
-            <div className="text-[#8b7355] font-medium" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+            <div className="text-[#8b7355] font-medium" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
               {progress < 30 ? "🎯 AI is understanding your vision, preparing to paint..." :
                progress < 60 ? "🎨 Artist is mixing perfect colors on the palette..." :
                progress < 90 ? "✨ Adding details to bring your artwork to life..." :
@@ -626,10 +626,10 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
                   </div>
                 </div>
                 <div className="text-center">
-                  <p className="text-xs font-bold text-[#2d3e2d] mb-1" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-xs font-bold text-[#2d3e2d] mb-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     {image.style}
                   </p>
-                  <p className="text-xs text-[#8b7355]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-xs text-[#8b7355]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     Click to explore
                   </p>
                 </div>
@@ -638,7 +638,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
           </div>
           
           <div className="text-center mt-4 p-3 bg-white/80 rounded-xl border border-[#8b7355]/20">
-            <p className="text-sm text-[#2d3e2d] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+            <p className="text-sm text-[#2d3e2d] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
               💡 <strong>Tip</strong>: Your artwork will feature 【{selectedStyleData.name}】 style, {selectedStyleData.description || 'showcasing unique charm'}!
             </p>
           </div>
@@ -687,10 +687,10 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
               
               <div className="p-3">
                 <div className="text-center">
-                  <p className="text-sm font-bold text-[#2d3e2d] mb-1" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-sm font-bold text-[#2d3e2d] mb-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     Image {index + 1}
                   </p>
-                  <p className="text-xs text-[#8b7355]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-xs text-[#8b7355]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     Click to view
                   </p>
                 </div>
@@ -727,7 +727,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
                 setGameReminderDismissed(true)
               }}
               className="absolute top-2 right-2 w-6 h-6 bg-[#8b7355] hover:bg-[#2d3e2d] text-white rounded-full flex items-center justify-center text-xs font-black transition-all duration-200 transform hover:scale-110"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               ✕
             </button>
@@ -735,12 +735,12 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
             <div className="text-center pr-6">
               <div className="text-3xl animate-bounce mb-3">🧠</div>
               <h4 className="text-lg font-black text-[#2d3e2d] mb-2 transform -rotate-1" style={{ 
-                fontFamily: "Comic Sans MS, cursive",
+                fontFamily: "Righteous, Arial Black, sans-serif",
                 textShadow: "1px 1px 0px #d4a574"
               }}>
                 Feeling Bored While Waiting?
               </h4>
-              <p className="text-sm text-[#8b7355] font-bold mb-4" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+              <p className="text-sm text-[#8b7355] font-bold mb-4" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                 Try our fun brain training game to pass the time! 🎮✨
               </p>
               
@@ -751,7 +751,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
                     setShowGameReminder(false)
                   }}
                   className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-4 py-3 rounded-xl text-sm transition-all transform hover:scale-105 shadow-lg border-2 border-[#2d3e2d] flex-1"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   🎯 Play Now!
                 </button>
@@ -761,7 +761,7 @@ export default function RenderProgress({ progress, generatedImages, selectedStyl
                     setGameReminderDismissed(true)
                   }}
                   className="bg-white hover:bg-[#f5f1e8] text-[#8b7355] font-black px-4 py-3 rounded-xl text-sm transition-all transform hover:scale-105 border-2 border-[#8b7355] flex-1"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   No Thanks
                 </button>

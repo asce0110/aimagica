@@ -91,12 +91,12 @@ export default function CommunityGallery({ onUsePrompt, onViewMore, creationMode
 
               <div className="flex-1 min-w-0">
                 <div className="flex justify-between items-start">
-                  <p className="text-[#8b7355] font-bold text-xs" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <p className="text-[#8b7355] font-bold text-xs" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     by {prompt.author}
                   </p>
                   <div
                     className="bg-[#f5f1e8] border-2 border-[#8b7355] text-[#2d3e2d] font-black px-2 py-0.5 rounded-xl text-xs transform rotate-1"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     {prompt.category}
                   </div>
@@ -104,7 +104,7 @@ export default function CommunityGallery({ onUsePrompt, onViewMore, creationMode
 
                 <div
                   className="mt-1 p-2 bg-[#f5f1e8] rounded-xl border-2 border-dashed border-[#8b7355] text-[#2d3e2d] text-sm line-clamp-2 overflow-hidden"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   title={prompt.prompt}
                 >
                   "{prompt.prompt}"
@@ -113,7 +113,7 @@ export default function CommunityGallery({ onUsePrompt, onViewMore, creationMode
                 <div className="flex items-center justify-between mt-2">
                   <div
                     className="flex items-center space-x-2 text-xs text-[#8b7355] font-bold"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <span className="flex items-center">
                       <Heart className="w-3 h-3 mr-1 text-red-500" />
@@ -129,14 +129,14 @@ export default function CommunityGallery({ onUsePrompt, onViewMore, creationMode
                     <Button
                       size="sm"
                       className="h-6 w-6 p-0 bg-[#f5f1e8] border-2 border-[#8b7355] text-[#2d3e2d] font-black rounded-xl hover:bg-[#8b7355] hover:text-[#f5f1e8] transform hover:rotate-3 transition-all"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       <Bookmark className="w-3 h-3" />
                     </Button>
                     <Button
                       size="sm"
                       className="h-6 px-2 text-xs bg-[#d4a574] border-2 border-[#2d3e2d] text-[#2d3e2d] font-black rounded-xl hover:bg-[#c19660] transform hover:rotate-1 transition-all"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       onClick={() => onUsePrompt && onUsePrompt(prompt.prompt)}
                     >
                       <Copy className="w-3 h-3 mr-1" />
@@ -153,7 +153,7 @@ export default function CommunityGallery({ onUsePrompt, onViewMore, creationMode
       <Button
         onClick={onViewMore}
                     className="w-full bg-[#4a5a4a] hover:bg-[#5a6a5a] text-[#f5f1e8] font-black py-3 rounded-2xl shadow-lg transform hover:scale-105 transition-all"
-        style={{ fontFamily: "Comic Sans MS, cursive" }}
+        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
       >
         Discover More Magic Prompts! ✨
       </Button>

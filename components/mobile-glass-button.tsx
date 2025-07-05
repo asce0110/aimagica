@@ -83,7 +83,7 @@ const MobileGlassButton = forwardRef<HTMLButtonElement, MobileGlassButtonProps>(
           glassEffect && "backdrop-blur-md",
           className,
         )}
-        style={{ fontFamily: "Comic Sans MS, cursive" }}
+        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
         {...props}
       >
         <div className="flex items-center justify-center space-x-2">

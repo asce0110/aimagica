@@ -128,13 +128,13 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
           <h2
             className="text-xl md:text-3xl font-black text-[#f5f1e8] mb-2 transform -rotate-1"
             style={{
-              fontFamily: "Comic Sans MS, cursive",
+              fontFamily: "Righteous, Arial Black, sans-serif",
               textShadow: "2px 2px 0px #8b7355",
             }}
           >
             CREATE YOUR AIMAGICA! 🎨
           </h2>
-          <p className="text-[#f5f1e8] font-bold text-sm md:text-base" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+          <p className="text-[#f5f1e8] font-bold text-sm md:text-base" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
             Choose your magic creation mode and let AIMAGICA work its wonders! ✨
           </p>
         </div>
@@ -149,7 +149,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
               <TabsTrigger
                 value="text2img"
                 className="rounded-lg md:rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm py-2"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Type className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                 TEXT TO IMAGE 📝
@@ -157,7 +157,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
               <TabsTrigger
                 value="img2img"
                 className="rounded-lg md:rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm py-2"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <ImageIcon className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                 IMAGE TO IMAGE 🖼️
@@ -165,7 +165,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
               <TabsTrigger
                 value="text2video"
                 className="rounded-lg md:rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm py-2"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Film className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                 TEXT TO VIDEO 🎬
@@ -173,7 +173,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
               <TabsTrigger
                 value="img2video"
                 className="rounded-lg md:rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm py-2"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Video className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                 IMAGE TO VIDEO 🎥
@@ -187,7 +187,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   htmlFor="text-prompt"
                   className="text-[#2d3e2d] font-black text-base md:text-lg mb-2 md:mb-3 block transform rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -199,7 +199,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   value={textPrompt}
                   onChange={(e) => setTextPrompt(e.target.value)}
                   className="bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] placeholder:text-[#8b7355] rounded-xl md:rounded-2xl font-bold shadow-lg min-h-[100px] md:min-h-[120px] text-sm md:text-base"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   rows={4}
                 />
                 <div className="mt-2 flex flex-wrap gap-1 md:gap-2">
@@ -210,7 +210,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                       variant="outline"
                       onClick={() => setTextPrompt(textPrompt + (textPrompt ? ", " : "") + tag)}
                       className="bg-[#f5f1e8] border-1 md:border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] font-black rounded-lg md:rounded-xl transform hover:rotate-1 transition-all text-xs px-2 py-1"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       {tag}
                     </Button>
@@ -223,7 +223,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                 <h3
                   className="text-[#2d3e2d] font-black text-base md:text-lg mb-3 md:mb-4 transform -rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -242,7 +242,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                 <h3
                   className="text-[#2d3e2d] font-black text-base md:text-lg mb-3 md:mb-4 transform rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -256,13 +256,13 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                       <div className="text-3xl md:text-4xl mb-2 md:mb-3">📁</div>
                       <h4
                         className="text-[#2d3e2d] font-black mb-1 md:mb-2 text-sm md:text-base"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         Upload Image
                       </h4>
                       <p
                         className="text-[#8b7355] font-bold text-xs md:text-sm mb-2 md:mb-3"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         Upload your image for AI transformation!
                       </p>
@@ -279,7 +279,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                           setShowDrawing(false)
                         }}
                         className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-lg md:rounded-xl transform hover:rotate-1 transition-all text-xs md:text-sm px-3 py-2"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         <Upload className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                         Choose Image
@@ -293,13 +293,13 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                       <div className="text-3xl md:text-4xl mb-2 md:mb-3">🖌️</div>
                       <h4
                         className="text-[#2d3e2d] font-black mb-1 md:mb-2 text-sm md:text-base"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         Edit Your Image
                       </h4>
                       <p
                         className="text-[#8b7355] font-bold text-xs md:text-sm mb-2 md:mb-3"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         Draw modifications on your uploaded image!
                       </p>
@@ -311,7 +311,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                             ? "bg-[#8b7355] hover:bg-[#6d5a42] text-[#f5f1e8] hover:rotate-1" 
                             : "bg-[#8b7355]/30 text-[#8b7355] cursor-not-allowed"
                         }`}
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         <Brush className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
                         {uploadedImage ? "Start Editing" : "Upload First"}
@@ -325,7 +325,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   <div className="mb-4 md:mb-6">
                     <h4
                       className="text-[#2d3e2d] font-black mb-2 md:mb-3 text-sm md:text-base"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       Uploaded Image 📸
                     </h4>
@@ -353,7 +353,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                       <h4
                         className="text-[#2d3e2d] font-black transform -rotate-1 text-sm md:text-base"
                         style={{
-                          fontFamily: "Comic Sans MS, cursive",
+                          fontFamily: "Righteous, Arial Black, sans-serif",
                           textShadow: "1px 1px 0px #d4a574",
                         }}
                       >
@@ -364,7 +364,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                         onClick={handleCloseDrawing}
                         variant="outline"
                         className="bg-[#f5f1e8] border-1 md:border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8] font-black rounded-lg md:rounded-xl text-xs px-2 py-1"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         <X className="w-3 h-3 md:w-4 md:h-4 mr-1" />
                         Close Canvas
@@ -384,7 +384,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                     htmlFor="img2img-prompt"
                     className="text-[#2d3e2d] font-black text-base md:text-lg mb-2 md:mb-3 block transform rotate-1"
                     style={{
-                      fontFamily: "Comic Sans MS, cursive",
+                      fontFamily: "Righteous, Arial Black, sans-serif",
                       textShadow: "1px 1px 0px #d4a574",
                     }}
                   >
@@ -397,7 +397,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                       value={img2imgPrompt}
                       onChange={(e) => setImg2imgPrompt(e.target.value)}
                       className="bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] placeholder:text-[#8b7355] rounded-xl md:rounded-2xl font-bold shadow-lg min-h-[100px] md:min-h-[120px] text-sm md:text-base pr-10"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       rows={4}
                     />
                     {/* Clear button */}
@@ -406,7 +406,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                         onClick={() => setImg2imgPrompt('')}
                         className="absolute top-2 right-2 w-6 h-6 bg-[#8b7355] hover:bg-[#d4a574] text-white rounded-full flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 shadow-lg"
                         style={{ 
-                          fontFamily: "Comic Sans MS, cursive",
+                          fontFamily: "Righteous, Arial Black, sans-serif",
                           fontSize: "14px",
                           fontWeight: "bold"
                         }}
@@ -426,7 +426,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                           variant="outline"
                           onClick={() => setImg2imgPrompt(img2imgPrompt + (img2imgPrompt ? ", " : "") + tag)}
                           className="bg-[#f5f1e8] border-1 md:border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] font-black rounded-lg md:rounded-xl transform hover:rotate-1 transition-all text-xs px-2 py-1"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         >
                           {tag}
                         </Button>
@@ -497,7 +497,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                           setImg2imgPrompt(randomPrompt)
                         }}
                         className="px-3 py-1 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] rounded-lg text-xs font-bold transition-all duration-200 transform hover:scale-105 shadow-md"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         title="Generate random transformation prompt"
                       >
                         🎲 Random
@@ -505,7 +505,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                       <button
                         onClick={() => setImg2imgPrompt('')}
                         className="px-3 py-1 bg-[#8b7355] hover:bg-[#7a6449] text-white rounded-lg text-xs font-bold transition-all duration-200 transform hover:scale-105 shadow-md"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         title="Reset text"
                       >
                         🔄 Reset
@@ -519,7 +519,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   <h3
                     className="text-[#2d3e2d] font-black text-base md:text-lg mb-3 md:mb-4 transform rotate-1"
                     style={{
-                      fontFamily: "Comic Sans MS, cursive",
+                      fontFamily: "Righteous, Arial Black, sans-serif",
                       textShadow: "1px 1px 0px #d4a574",
                     }}
                   >
@@ -540,7 +540,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   htmlFor="text2video-prompt"
                   className="text-[#2d3e2d] font-black text-base md:text-lg mb-2 md:mb-3 block transform rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -553,7 +553,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                     value={text2videoPrompt}
                     onChange={(e) => setText2videoPrompt(e.target.value)}
                     className="bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] placeholder:text-[#8b7355] rounded-xl md:rounded-2xl font-bold shadow-lg min-h-[100px] md:min-h-[120px] text-sm md:text-base pr-10"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     rows={4}
                   />
                   {/* Clear button */}
@@ -562,7 +562,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                       onClick={() => setText2videoPrompt('')}
                       className="absolute top-2 right-2 w-6 h-6 bg-[#8b7355] hover:bg-[#d4a574] text-white rounded-full flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 shadow-lg"
                       style={{ 
-                        fontFamily: "Comic Sans MS, cursive",
+                        fontFamily: "Righteous, Arial Black, sans-serif",
                         fontSize: "14px",
                         fontWeight: "bold"
                       }}
@@ -583,7 +583,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                           variant="outline"
                           onClick={() => setText2videoPrompt(text2videoPrompt + (text2videoPrompt ? ", " : "") + tag)}
                           className="bg-[#f5f1e8] border-1 md:border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] font-black rounded-lg md:rounded-xl transform hover:rotate-1 transition-all text-xs px-2 py-1"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         >
                           {tag}
                         </Button>
@@ -655,7 +655,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                         setText2videoPrompt(randomPrompt)
                       }}
                       className="px-3 py-1 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] rounded-lg text-xs font-bold transition-all duration-200 transform hover:scale-105 shadow-md"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       title="Generate random video prompt"
                     >
                       🎲 Random
@@ -663,7 +663,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                     <button
                       onClick={() => setText2videoPrompt('')}
                       className="px-3 py-1 bg-[#8b7355] hover:bg-[#7a6449] text-white rounded-lg text-xs font-bold transition-all duration-200 transform hover:scale-105 shadow-md"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       title="Reset text"
                     >
                       🔄 Reset
@@ -677,7 +677,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                 <h3
                   className="text-[#2d3e2d] font-black text-base md:text-lg mb-3 md:mb-4 transform -rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -697,7 +697,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                       onClick={() => setSelectedVideoStyle(style.id)}
                     >
                       <span className="text-xl mb-1">{style.icon}</span>
-                      <span className="font-bold text-xs md:text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <span className="font-bold text-xs md:text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         {style.name}
                       </span>
                     </Button>
@@ -710,11 +710,11 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                 <div className="flex justify-between items-center">
                   <Label
                     className="text-[#2d3e2d] font-black text-sm md:text-base"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Video Duration 🕒
                   </Label>
-                  <span className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                  <span className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                     {videoDuration} seconds
                   </span>
                 </div>
@@ -739,7 +739,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                 <h3
                   className="text-[#2d3e2d] font-black text-base md:text-lg mb-3 md:mb-4 transform rotate-1"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -766,7 +766,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   ) : (
                     <div className="flex flex-col items-center justify-center py-4">
                       <Upload className="w-8 h-8 text-[#8b7355] mb-2" />
-                      <p className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                      <p className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                         Click to upload or drag and drop
                       </p>
                       <Input
@@ -793,7 +793,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                     htmlFor="img2video-prompt"
                     className="text-[#2d3e2d] font-black text-base md:text-lg mb-2 md:mb-3 block transform rotate-1"
                     style={{
-                      fontFamily: "Comic Sans MS, cursive",
+                      fontFamily: "Righteous, Arial Black, sans-serif",
                       textShadow: "1px 1px 0px #d4a574",
                     }}
                   >
@@ -805,7 +805,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                     value={img2videoPrompt}
                     onChange={(e) => setImg2videoPrompt(e.target.value)}
                     className="bg-white border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] placeholder:text-[#8b7355] rounded-xl md:rounded-2xl font-bold shadow-lg min-h-[100px] md:min-h-[120px] text-sm md:text-base"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     rows={4}
                   />
                   <div className="mt-2 flex flex-wrap gap-1 md:gap-2">
@@ -817,7 +817,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                           variant="outline"
                           onClick={() => setImg2videoPrompt(img2videoPrompt + (img2videoPrompt ? ", " : "") + tag)}
                           className="bg-[#f5f1e8] border-1 md:border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] font-black rounded-lg md:rounded-xl transform hover:rotate-1 transition-all text-xs px-2 py-1"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         >
                           {tag}
                         </Button>
@@ -831,7 +831,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   <h3
                     className="text-[#2d3e2d] font-black text-base md:text-lg mb-3 md:mb-4 transform -rotate-1"
                     style={{
-                      fontFamily: "Comic Sans MS, cursive",
+                      fontFamily: "Righteous, Arial Black, sans-serif",
                       textShadow: "1px 1px 0px #d4a574",
                     }}
                   >
@@ -851,7 +851,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                         onClick={() => setSelectedVideoStyle(style.id)}
                       >
                         <span className="text-xl mb-1">{style.icon}</span>
-                        <span className="font-bold text-xs md:text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                        <span className="font-bold text-xs md:text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                           {style.name}
                         </span>
                       </Button>
@@ -864,11 +864,11 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   <div className="flex justify-between items-center">
                     <Label
                       className="text-[#2d3e2d] font-black text-sm md:text-base"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       Video Duration 🕒
                     </Label>
-                    <span className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                    <span className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                       {videoDuration} seconds
                     </span>
                   </div>
@@ -904,14 +904,14 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   setShowDrawing(false)
                 }}
                 className="bg-[#f5f1e8] border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8] font-black rounded-xl md:rounded-2xl transform hover:rotate-1 transition-all text-xs md:text-sm px-3 py-2"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Reset 🔄
               </Button>
               <Button
                 variant="outline"
                 className="bg-[#f5f1e8] border-2 md:border-4 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8] font-black rounded-xl md:rounded-2xl transform hover:rotate-1 transition-all text-xs md:text-sm px-3 py-2"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Random Inspiration 🎲
               </Button>
@@ -925,7 +925,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   <Crown className="w-3 h-3 md:w-4 md:h-4 text-[#d4a574]" />
                   <span
                     className="font-black text-[#f5f1e8] text-xs md:text-sm"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     Credits: 3/3 ⭐
                   </span>
@@ -942,7 +942,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
                   (mode === "img2video" && (!uploadedImage || !img2videoPrompt.trim()))
                 }
                 className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-4 py-3 md:px-8 md:py-4 rounded-xl md:rounded-2xl shadow-lg transform hover:scale-105 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm md:text-base w-full md:w-auto"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 <Wand2 className="w-4 h-4 md:w-5 md:h-5 mr-1 md:mr-2" />
                 Cast AIMAGICA Magic! ✨
@@ -955,7 +955,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
             <h4
               className="text-[#2d3e2d] font-black mb-2 transform rotate-1 text-sm md:text-base"
               style={{
-                fontFamily: "Comic Sans MS, cursive",
+                fontFamily: "Righteous, Arial Black, sans-serif",
                 textShadow: "1px 1px 0px #d4a574",
               }}
             >
@@ -963,7 +963,7 @@ const CreateInterface = forwardRef<CreateInterfaceRef, CreateInterfaceProps>(
             </h4>
             <div
               className="text-[#2d3e2d] font-bold space-y-1 text-xs md:text-sm"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               {mode === "text2img" && (
                 <>

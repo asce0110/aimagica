@@ -47,7 +47,7 @@ export default function AdminDebugPage() {
       <div className="container mx-auto max-w-4xl">
         <Card className="bg-white border-4 border-[#2d3e2d] rounded-2xl shadow-lg mb-8">
           <CardHeader>
-            <CardTitle className="text-2xl font-black text-[#2d3e2d]" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+            <CardTitle className="text-2xl font-black text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
               🔍 Admin Debug Panel
             </CardTitle>
           </CardHeader>

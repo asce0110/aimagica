@@ -342,7 +342,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
               onClick={onBack}
               variant="ghost"
               className="bg-white border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-white font-black rounded-2xl transform hover:scale-105 transition-all"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back
@@ -351,7 +351,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
               <h1
                 className="text-3xl md:text-4xl font-black text-[#2d3e2d] transform -rotate-1"
                 style={{
-                  fontFamily: "Comic Sans MS, cursive",
+                  fontFamily: "Righteous, Arial Black, sans-serif",
                   textShadow: "2px 2px 0px #d4a574",
                 }}
               >
@@ -359,7 +359,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
               </h1>
               <p
                 className="text-lg font-bold text-[#8b7355]"
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 Discover and share amazing prompts!
               </p>
@@ -374,7 +374,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                   onClick={() => setView(view === 'community' ? 'my-prompts' : 'community')}
                   variant="outline"
                   className="bg-white border-2 border-[#8b7355] text-[#8b7355] hover:bg-[#8b7355] hover:text-white font-black rounded-2xl"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   <User className="w-4 h-4 mr-2" />
                   {view === 'community' ? 'My Prompts' : 'Community'}
@@ -384,7 +384,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                   <DialogTrigger asChild>
                     <Button
                       className="bg-[#d4a574] border-2 border-[#2d3e2d] text-[#2d3e2d] hover:bg-[#c19660] font-black rounded-2xl transform hover:scale-105 transition-all"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Upload Prompt
@@ -394,7 +394,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                     <DialogHeader>
                       <DialogTitle 
                         className="text-2xl font-black text-[#2d3e2d]"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         Upload New Prompt ✨
                       </DialogTitle>
@@ -502,7 +502,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="pl-10 bg-white border-2 border-[#8b7355] rounded-2xl font-bold text-[#2d3e2d] placeholder:text-[#8b7355]"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             />
           </div>
 
@@ -518,7 +518,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                     ? "bg-[#d4a574] border-2 border-[#2d3e2d] text-[#2d3e2d]"
                     : "bg-white border-2 border-[#8b7355] text-[#8b7355] hover:bg-[#8b7355] hover:text-white"
                 }`}
-                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
               >
                 {category.emoji} {category.name}
               </Button>
@@ -532,7 +532,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
             <div className="text-6xl mb-4">🔄</div>
             <h3
               className="text-2xl font-black text-[#2d3e2d]"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               Loading amazing prompts...
             </h3>
@@ -552,7 +552,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                         <div className="flex items-center space-x-2">
                           <div
                             className="bg-[#f5f1e8] border-2 border-[#8b7355] text-[#2d3e2d] font-black px-2 py-1 rounded-xl text-xs transform rotate-1"
-                            style={{ fontFamily: "Comic Sans MS, cursive" }}
+                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                           >
                             {categories.find(c => c.id === prompt.category)?.emoji} {categories.find(c => c.id === prompt.category)?.name}
                           </div>
@@ -582,7 +582,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                       {/* Title */}
                       <h3
                         className="font-black text-[#2d3e2d] text-lg leading-tight"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                       >
                         {prompt.title}
                       </h3>
@@ -590,7 +590,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                       {/* Prompt Text */}
                       <div
                         className="p-3 bg-[#f5f1e8] rounded-xl border-2 border-dashed border-[#8b7355] text-[#2d3e2d] text-sm line-clamp-3"
-                        style={{ fontFamily: "Comic Sans MS, cursive" }}
+                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         title={prompt.prompt}
                       >
                         "{prompt.prompt}"
@@ -627,7 +627,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                       <div className="flex items-center justify-between">
                         <div
                           className="flex items-center space-x-3 text-xs text-[#8b7355] font-bold"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         >
                           <span className="flex items-center">
                             <Heart className={`w-3 h-3 mr-1 ${prompt.isLikedByUser ? 'text-red-500 fill-current' : 'text-red-500'}`} />
@@ -638,7 +638,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                             {prompt.uses_count}
                           </span>
                         </div>
-                        <p className="text-xs text-[#8b7355] font-bold" style={{ fontFamily: "Comic Sans MS, cursive" }}>
+                        <p className="text-xs text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
                           by {prompt.users.name || 'Anonymous'}
                         </p>
                       </div>
@@ -649,7 +649,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                           onClick={() => handleCopyPrompt(prompt.prompt, prompt.id)}
                           size="sm"
                           className="flex-1 bg-[#f5f1e8] border-2 border-[#8b7355] text-[#2d3e2d] font-black rounded-xl hover:bg-[#8b7355] hover:text-white transform hover:rotate-1 transition-all"
-                          style={{ fontFamily: "Comic Sans MS, cursive" }}
+                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                         >
                           <Copy className="w-3 h-3 mr-1" />
                           {copiedId === prompt.id ? "Copied!" : "Copy"}
@@ -664,7 +664,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                                 ? 'text-red-600 bg-red-50' 
                                 : 'text-red-400 hover:bg-red-50'
                             }`}
-                            style={{ fontFamily: "Comic Sans MS, cursive" }}
+                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                           >
                             <Heart className={`w-3 h-3 ${prompt.isLikedByUser ? 'fill-current' : ''}`} />
                           </Button>
@@ -675,7 +675,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                             onClick={() => handleUsePrompt(prompt)}
                             size="sm"
                             className="flex-1 bg-[#d4a574] border-2 border-[#2d3e2d] text-[#2d3e2d] font-black rounded-xl hover:bg-[#c19660] transform hover:rotate-1 transition-all"
-                            style={{ fontFamily: "Comic Sans MS, cursive" }}
+                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                           >
                             Use Now! ✨
                           </Button>
@@ -694,7 +694,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                   onClick={loadMore}
                   disabled={loading}
                   className="bg-[#d4a574] border-2 border-[#2d3e2d] text-[#2d3e2d] font-black rounded-2xl hover:bg-[#c19660] transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   {loading ? "Loading..." : "Load More Prompts ✨"}
                 </Button>
@@ -708,7 +708,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                 <h3
                   className="text-2xl font-black text-[#2d3e2d] mb-2"
                   style={{
-                    fontFamily: "Comic Sans MS, cursive",
+                    fontFamily: "Righteous, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -716,7 +716,7 @@ export default function PromptsCommunity({ onBack, onUsePrompt }: PromptsCommuni
                 </h3>
                 <p
                   className="text-lg font-bold text-[#8b7355]"
-                  style={{ fontFamily: "Comic Sans MS, cursive" }}
+                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                 >
                   {view === 'my-prompts' 
                     ? 'Start by uploading your first amazing prompt!' 

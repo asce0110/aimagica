@@ -207,7 +207,7 @@ export default function MagicCoinsManagement() {
               onClick={() => router.push('/')}
               variant="ghost"
               className="text-[#2d3e2d] hover:bg-[#d4a574] hover:text-[#2d3e2d] font-black rounded-2xl transform hover:scale-105 transition-all"
-              style={{ fontFamily: "Comic Sans MS, cursive" }}
+              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
             >
               <ChevronLeft className="w-4 h-4 mr-2" />
               Back to Home 🏠
@@ -222,14 +222,14 @@ export default function MagicCoinsManagement() {
         >
           <h1 
             className="text-4xl font-black text-[#2d3e2d] mb-2 flex items-center"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             <Coins className="w-10 h-10 mr-3 text-[#d4a574]" />
             Magic Coins Management ✨
           </h1>
           <p 
             className="text-[#8b7355] text-lg font-bold"
-            style={{ fontFamily: "Comic Sans MS, cursive" }}
+            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
           >
             Manage magic coin packages, settings, and user balances
           </p>
@@ -266,7 +266,7 @@ export default function MagicCoinsManagement() {
                   <div className="flex justify-between items-center">
                     <CardTitle 
                       className="text-2xl font-black text-[#2d3e2d] flex items-center"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       <DollarSign className="w-6 h-6 mr-2" />
                       Magic Coin Packages 💰
@@ -274,7 +274,7 @@ export default function MagicCoinsManagement() {
                     <Button
                       onClick={handleNewPackage}
                       className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-2xl"
-                      style={{ fontFamily: "Comic Sans MS, cursive" }}
+                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                     >
                       <Plus className="w-4 h-4 mr-2" />
                       Add Package ➕
@@ -301,7 +301,7 @@ export default function MagicCoinsManagement() {
                             <div>
                               <h3 
                                 className="text-xl font-black text-[#2d3e2d]"
-                                style={{ fontFamily: "Comic Sans MS, cursive" }}
+                                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                               >
                                 {pkg.name}
                               </h3>
@@ -367,7 +367,7 @@ export default function MagicCoinsManagement() {
                 <CardHeader>
                   <CardTitle 
                     className="text-2xl font-black text-[#2d3e2d] flex items-center"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <Settings className="w-6 h-6 mr-2" />
                     Magic Coin Settings ⚙️
@@ -392,7 +392,7 @@ export default function MagicCoinsManagement() {
                 <CardHeader>
                   <CardTitle 
                     className="text-2xl font-black text-[#2d3e2d] flex items-center"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <Users className="w-6 h-6 mr-2" />
                     User Balances 👥
@@ -417,7 +417,7 @@ export default function MagicCoinsManagement() {
                 <CardHeader>
                   <CardTitle 
                     className="text-2xl font-black text-[#2d3e2d] flex items-center"
-                    style={{ fontFamily: "Comic Sans MS, cursive" }}
+                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
                   >
                     <Coins className="w-6 h-6 mr-2" />
                     Magic Coin Analytics 📊
