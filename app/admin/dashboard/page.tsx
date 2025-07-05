@@ -392,41 +392,47 @@ function AdminDashboardContent() {
     
   }, [isMounted, activeTab, styles]) // 当切换到styles页面或styles数据变化时检查
 
-  // 🚨 立即执行的基础检查 - 确保能看到日志
-  useEffect(() => {
-    console.log('🚨 ===== 立即基础检查 =====')
-    console.log('🚨 当前时间:', new Date().toISOString())
-    console.log('🚨 当前URL:', window.location.href)
-    console.log('🚨 useEffect执行成功!')
+  // 🚨 超级简单的检查 - 直接在组件渲染时执行
+  if (typeof window !== 'undefined') {
+    console.log('BADGE_CHECK: 组件正在渲染, 当前时间:', new Date().toISOString())
     
-    // 立即检查页面上是否有badge元素
-    const immediateCheck = () => {
-      const allBadges = document.querySelectorAll('[class*="bg-"]')
-      const redBadges = document.querySelectorAll('[class*="bg-red-500"]')
-      const yellowBadges = document.querySelectorAll('[class*="bg-yellow-400"]')
+    // 延迟检查badge元素
+    setTimeout(() => {
+      console.log('BADGE_CHECK: 开始检查badge元素...')
+      const redBadges = document.querySelectorAll('.bg-red-500')
+      const yellowBadges = document.querySelectorAll('.bg-yellow-400')
+      const greenBadges = document.querySelectorAll('.bg-green-500')
       
-      console.log('🚨 立即检查结果:')
-      console.log('  - 所有bg-元素:', allBadges.length)
-      console.log('  - 红色badge:', redBadges.length) 
-      console.log('  - 黄色badge:', yellowBadges.length)
+      console.log('BADGE_CHECK: Badge统计:', {
+        red: redBadges.length,
+        yellow: yellowBadges.length, 
+        green: greenBadges.length
+      })
       
+      // 检查第一个红色badge
       if (redBadges.length > 0) {
-        const style = window.getComputedStyle(redBadges[0])
-        console.log('🚨 第一个红色badge样式:', {
-          color: style.color,
-          text: redBadges[0].textContent
+        const redStyle = window.getComputedStyle(redBadges[0])
+        console.log('BADGE_CHECK: 红色Badge样式:', {
+          text: redBadges[0].textContent,
+          color: redStyle.color,
+          backgroundColor: redStyle.backgroundColor,
+          isWhite: redStyle.color === 'rgb(255, 255, 255)' || redStyle.color === 'white'
         })
       }
-    }
-    
-    // 立即检查
-    immediateCheck()
-    
-    // 1秒后再检查一次
-    const timer = setTimeout(immediateCheck, 1000)
-    
-    return () => clearTimeout(timer)
-  }, []) // 无依赖，只执行一次
+      
+      // 检查第一个黄色badge  
+      if (yellowBadges.length > 0) {
+        const yellowStyle = window.getComputedStyle(yellowBadges[0])
+        console.log('BADGE_CHECK: 黄色Badge样式:', {
+          text: yellowBadges[0].textContent,
+          color: yellowStyle.color,
+          backgroundColor: yellowStyle.backgroundColor,
+          isBlack: yellowStyle.color === 'rgb(0, 0, 0)' || yellowStyle.color === 'black'
+        })
+      }
+      
+    }, 2000)
+  }
 
 
 
