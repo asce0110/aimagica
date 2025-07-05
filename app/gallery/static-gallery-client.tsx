@@ -425,25 +425,64 @@ export default function StaticGalleryClient() {
   const handleShare = useCallback(async () => {
     if (!selectedImage) return
     
+    console.log('🔄 开始分享:', selectedImage.title)
     setIsSharing(true)
+    setShareStatus('copying')
+    
     const shareUrl = `${window.location.origin}/gallery#image-${selectedImage.id}`
     const shareData = {
       title: `${selectedImage.title} - AIMAGICA Gallery`,
-      text: `🎨 Amazing AI artwork: "${selectedImage.title}" by ${selectedImage.author}\\n✨ Created with AI magic - check it out in our gallery!`,
+      text: `🎨 Amazing AI artwork: "${selectedImage.title}" by ${selectedImage.author}\n✨ Created with AI magic - check it out in our gallery!`,
       url: shareUrl
     }
 
+    console.log('📱 移动端状态:', isMobile)
+    console.log('🌐 Navigator.share支持:', !!navigator.share)
+
     try {
-      if (navigator.share && isMobile) {
+      // 优先尝试原生分享（移动端）
+      if (navigator.share && (isMobile || /Android|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent))) {
+        console.log('📤 使用原生分享')
         await navigator.share(shareData)
         setShareStatus('shared')
+        console.log('✅ 原生分享成功')
       } else {
-        await navigator.clipboard.writeText(shareUrl)
-        setShareStatus('copied')
+        // 降级到复制链接
+        console.log('📋 复制链接到剪贴板')
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          await navigator.clipboard.writeText(shareUrl)
+          setShareStatus('copied')
+          console.log('✅ 复制成功')
+        } else {
+          // 降级到传统复制方法
+          const textArea = document.createElement('textarea')
+          textArea.value = shareUrl
+          document.body.appendChild(textArea)
+          textArea.select()
+          document.execCommand('copy')
+          document.body.removeChild(textArea)
+          setShareStatus('copied')
+          console.log('✅ 传统复制成功')
+        }
       }
-      setTimeout(() => setShareStatus('idle'), 2000)
+      setTimeout(() => setShareStatus('idle'), 3000)
     } catch (error) {
-      console.warn('分享失败:', error)
+      console.error('❌ 分享失败:', error)
+      // 分享失败时尝试复制链接
+      try {
+        const textArea = document.createElement('textarea')
+        textArea.value = shareUrl
+        document.body.appendChild(textArea)
+        textArea.select()
+        document.execCommand('copy')
+        document.body.removeChild(textArea)
+        setShareStatus('copied')
+        console.log('✅ 降级复制成功')
+      } catch (copyError) {
+        console.error('❌ 复制也失败了:', copyError)
+        alert(`分享链接: ${shareUrl}`)
+      }
+      setTimeout(() => setShareStatus('idle'), 3000)
     }
     
     setIsSharing(false)

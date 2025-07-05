@@ -171,25 +171,37 @@
   font-family: var(--font-hero);
 }
 
-/* Hero区域专用字体样式 - 统一俏皮风格 */
-.hero-title {
+/* 全站统一字体样式 - 俏皮魔法风格 */
+.hero-title, .magic-title {
   font-family: var(--font-magic);
   font-weight: 400;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
-.hero-subtitle {
+.hero-subtitle, .magic-subtitle {
   font-family: var(--font-magic);
   font-weight: 400;
   letter-spacing: 0.01em;
 }
 
-.hero-button {
+.hero-button, .magic-button {
   font-family: var(--font-magic);
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: uppercase;
+}
+
+/* 覆盖内联Comic Sans MS样式 */
+* {
+  font-family: inherit !important;
+}
+
+/* 全站魔法字体应用 */
+h1, h2, h3, .font-magic, 
+[style*="Comic Sans MS"], 
+[style*="font-family: Comic Sans MS"] {
+  font-family: var(--font-magic) !important;
 }
 
 /* 移动端字体优化 */
