@@ -2584,10 +2584,10 @@ function AdminDashboardContent() {
                                       {style.emoji} {style.name}
                                     </h3>
                                     <div className="flex gap-1">
-                                      <Badge className="text-xs bg-[#8b7355] text-white border-0">
+                                      <Badge className="text-xs bg-blue-600 text-white border-0 font-bold">
                                         {style.type}
                                       </Badge>
-                                      <Badge className="text-xs bg-[#2d3e2d] text-white border-0">
+                                      <Badge className="text-xs bg-purple-600 text-white border-0 font-bold">
                                         {style.category}
                                       </Badge>
                                       {style.is_premium && (
