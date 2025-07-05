@@ -68,7 +68,7 @@ import Head from "next/head"
 import { useHighPriorityImagePreloader, IMAGE_SETS } from "@/hooks/use-image-preloader"
 
 export default function AISketchPlatform() {
-  const logoUrl = useStaticUrl('/images/web-app-manifest-192x192.png');
+  const logoUrl = useStaticUrl('https://images.aimagica.ai/images/web-app-manifest-192x192.png');
   const { data: session } = useSession()
   const router = useRouter()
   const { isMobile } = useMobile()
@@ -669,7 +669,7 @@ export default function AISketchPlatform() {
         {/* Preload critical images */}
         <link rel="preload" href="/images/examples/cat-wizard.svg" as="image" type="image/svg+xml" />
         <link rel="preload" href="/images/examples/cyber-city.svg" as="image" type="image/svg+xml" />
-        <link rel="preload" href="/images/web-app-manifest-192x192.png" as="image" type="image/png" />
+        <link rel="preload" href="https://images.aimagica.ai/images/web-app-manifest-192x192.png" as="image" type="image/png" />
         
         <meta property="og:title" content="AIMAGICA - Turn Your Doodles into Art Masterpieces" />
         <meta

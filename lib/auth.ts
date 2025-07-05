@@ -35,6 +35,15 @@ export function signOut() {
 }
 
 /**
+ * UTF-8安全的base64解码函数（对应后端的utf8ToBase64）
+ */
+function base64ToUtf8(str: string): string {
+  return decodeURIComponent(atob(str).split('').map(function(c) {
+    return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2);
+  }).join(''));
+}
+
+/**
  * 从Cookie获取用户信息（客户端读取）
  */
 export function getUserFromCookie(): User | null {
@@ -47,7 +56,8 @@ export function getUserFromCookie(): User | null {
     if (!userInfoCookie) return null
     
     const userInfoStr = userInfoCookie.split('=')[1]
-    const userInfo = JSON.parse(atob(userInfoStr))
+    // 使用UTF-8安全解码，对应后端的utf8ToBase64编码
+    const userInfo = JSON.parse(base64ToUtf8(userInfoStr))
     
     return userInfo
   } catch (error) {

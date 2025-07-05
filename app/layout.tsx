@@ -15,13 +15,13 @@ export const metadata: Metadata = {
     title: 'Image to Image AI Generator | AIMAGICA',
     description: 'Transform your images into stunning AI artworks with advanced image-to-image technology',
     type: 'website',
-    images: ['/images/web-app-manifest-512x512.png'],
+    images: ['https://images.aimagica.ai/images/web-app-manifest-512x512.png'],
   },
   twitter: {
     card: 'summary_large_image',
     title: 'Image to Image AI Generator | AIMAGICA',
     description: 'Upload and transform your images into stunning AI art',
-    images: ['/images/web-app-manifest-512x512.png'],
+    images: ['https://images.aimagica.ai/images/web-app-manifest-512x512.png'],
   },
   robots: {
     index: true,
