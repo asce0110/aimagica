@@ -1098,7 +1098,7 @@ function AdminDashboardContent() {
   }
 
   return (
-    <div className="min-h-screen bg-[#f5f1e8] relative overflow-hidden">
+    <div className="admin-dashboard min-h-screen bg-[#f5f1e8] relative overflow-hidden">
       {/* Decorative Background Elements */}
       <div className="absolute inset-0 overflow-hidden pointer-events-none">
         <div className="absolute top-20 right-20 w-40 h-40 bg-[#8b7355]/5 rounded-full blur-3xl"></div>

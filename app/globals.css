@@ -10,7 +10,7 @@
   --font-heading: 'Orbitron', 'Arial Black', sans-serif; /* 科技感标题字体 */
   --font-body: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif; /* 现代正文字体 */
   --font-accent: 'Exo 2', 'Impact', sans-serif; /* 强调字体 */
-  --font-magic: 'Fredoka One', 'Arial Black', sans-serif; /* 魔法主题字体 - 移除花体 */
+  --font-magic: 'Fredoka One', 'Arial Black', sans-serif; /* 魔法主题字体 */
   --font-hero: 'Fredoka One', 'Arial Black', sans-serif; /* Hero区域专用字体 */
 }
 
@@ -171,16 +171,17 @@
   font-family: var(--font-hero);
 }
 
-/* 全站统一字体样式 - 圆润魔法风格 */
+/* 恢复原始字体策略 - 移除强制覆盖 */
+
+/* Hero区域使用魔法字体 */
 .hero-title, .magic-title {
   font-family: 'Fredoka One', 'Arial Black', sans-serif;
   font-weight: 400;
   letter-spacing: 0.02em;
-  text-transform: uppercase;
 }
 
 .hero-subtitle, .magic-subtitle {
-  font-family: 'Fredoka One', 'Arial Black', sans-serif;
+  font-family: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif;
   font-weight: 400;
   letter-spacing: 0.01em;
 }
@@ -189,74 +190,53 @@
   font-family: 'Fredoka One', 'Arial Black', sans-serif;
   font-weight: 400;
   letter-spacing: 0.05em;
-  text-transform: uppercase;
 }
 
-/* 桌面端字体策略 - 强制使用Fredoka One */
-h1, h2, h3, h4, h5, h6,
-button, input[type="button"], input[type="submit"],
-.font-heading, .font-magic, .font-hero, .hero-title,
-[style*="Comic Sans MS"], 
-[style*="font-family: Comic Sans MS"] {
-  font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
-}
-
-/* 桌面端专用 - 强制覆盖所有标题 */
+/* 桌面端字体策略 - 恢复可读性 */
 @media (min-width: 769px) {
-  h1, h2, h3, h4, h5, h6,
-  .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl,
-  button, .btn, 
-  .font-black, .font-bold,
-  [class*="text-"] {
-    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
-  }
-}
-
-/* 桌面端全部使用Fredoka One - 终极强制 */
-@media (min-width: 769px) {
-  * {
+  /* 只对特定的魔法主题元素使用Fredoka One */
+  .font-magic, .font-hero, .hero-title, .magic-title,
+  .hero-button, .magic-button {
     font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
   }
   
-  html *, body *, div *, span *, p *, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *,
-  button *, input *, select *, option *, textarea *, label *,
-  .font-body, .font-accent, .font-heading, .font-magic,
-  [style*="font-family"]:not(.keep-readable) {
-    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
+  /* 标题使用科技感字体，提升可读性 */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading) !important;
+    font-weight: 700;
   }
-}
-
-/* 移动端正文保持可读性 */
-@media (max-width: 768px) {
-  body, p, span, div, textarea, label,
+  
+  /* 正文使用现代字体，确保可读性 */
+  body, p, span, div, textarea, label, input, select,
   .font-body, .font-accent {
-    font-family: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif !important;
+    font-family: var(--font-body) !important;
+  }
+  
+  /* 按钮使用适中的字体 */
+  button, .btn, input[type="button"], input[type="submit"] {
+    font-family: var(--font-accent) !important;
+    font-weight: 600;
   }
 }
 
-/* 确保按钮和交互元素使用圆润字体 */
-button, .btn, 
-.bg-gradient-to-r, 
-.rounded-xl,
-[class*="Button"] {
-  font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
-}
-
-/* 移动端字体优化 - 区分标题和正文 */
+/* 移动端字体优化 */
 @media (max-width: 768px) {
-  /* 移动端标题使用圆润字体 */
-  h1, h2, h3, h4, h5, h6,
-  button, input[type="button"], input[type="submit"],
-  .font-heading, .font-magic, .font-hero {
-    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
-    font-style: normal !important;
+  /* 移动端标题 */
+  h1, h2, h3, h4, h5, h6 {
+    font-family: var(--font-heading) !important;
+    font-weight: 700;
   }
   
   /* 移动端正文保持可读性 */
-  body, p, span, div, textarea, label,
+  body, p, span, div, textarea, label, input, select,
   .font-body, .font-accent {
-    font-family: 'Space Grotesk', 'SF Pro Display', 'Helvetica', sans-serif !important;
-    font-style: normal !important;
+    font-family: var(--font-body) !important;
+  }
+  
+  /* 移动端按钮 */
+  button, .btn, input[type="button"], input[type="submit"] {
+    font-family: var(--font-accent) !important;
+    font-weight: 600;
   }
   
   /* Hero区域移动端优化 */
@@ -278,29 +258,18 @@ button, .btn,
     font-size: 1.1rem;
     line-height: 1.2;
     letter-spacing: 0.02em;
-    font-weight: 400 !important;
-  }
-  
-  /* 确保按钮和交互元素在移动端使用圆润字体 */
-  button, .btn, 
-  .bg-gradient-to-r, 
-  .rounded-xl,
-  [class*="Button"] {
-    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
-    font-weight: 400 !important;
+    font-weight: 600 !important;
   }
 }
 
-/* 最终大杀器 - 桌面端强制字体 */
-@media screen and (min-width: 769px) {
-  body, body *, html *, * {
-    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
-  }
+/* Gallery页面保持原有风格 - 使用Comic Sans MS风格 */
+.gallery-page [style*="Comic Sans MS"] {
+  font-family: 'Comic Sans MS', 'Fredoka One', cursive !important;
 }
 
-/* 覆盖所有内联样式 */
-@media screen and (min-width: 769px) {
-  [style*="font-family"] {
-    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
-  }
+/* Style Management页面字体优化 */
+.admin-dashboard [style*="Fredoka One"] {
+  font-weight: 600 !important; /* 减轻字重，提升可读性 */
+  letter-spacing: 0.01em;
 }
+
