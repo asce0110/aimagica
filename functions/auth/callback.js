@@ -12,6 +12,12 @@ export async function onRequest(context) {
   const GOOGLE_CLIENT_SECRET = env.GOOGLE_CLIENT_SECRET
   const JWT_SECRET = env.JWT_SECRET || 'default-secret-change-in-production'
   
+  console.log('🔧 环境变量状态:', {
+    hasClientId: !!GOOGLE_CLIENT_ID,
+    hasClientSecret: !!GOOGLE_CLIENT_SECRET,
+    hasJwtSecret: !!JWT_SECRET
+  })
+  
   // 获取授权码
   const code = url.searchParams.get('code')
   const state = url.searchParams.get('state')
@@ -105,14 +111,14 @@ export async function onRequest(context) {
     const response = Response.redirect(`${url.origin}/?login=success`, 302)
     
     // 设置HttpOnly Cookie (更安全)
-    response.headers.set('Set-Cookie', [
-      `auth-token=${jwt}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`,
-      `user-info=${btoa(JSON.stringify({
-        email: user.email,
-        name: user.name,
-        picture: user.picture
-      }))}; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`
-    ].join(', '))
+    response.headers.append('Set-Cookie', `auth-token=${jwt}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
+    response.headers.append('Set-Cookie', `user-info=${btoa(JSON.stringify({
+      email: user.email,
+      name: user.name,
+      picture: user.picture
+    }))}; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
+    
+    console.log('🍪 设置Cookie成功')
     
     return response
     
