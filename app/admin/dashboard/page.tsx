@@ -249,6 +249,7 @@ function AdminDashboardContent() {
 
   // 🔍 CSS加载检查日志 - 检查Badge字体修复是否生效
   useEffect(() => {
+    console.log('🔧 ===== CSS检查效果触发 =====')
     console.log('🔧 CSS检查触发条件:', { isMounted, activeTab, stylesLength: styles?.length })
     
     if (!isMounted) {
@@ -256,8 +257,14 @@ function AdminDashboardContent() {
       return
     }
     
+    console.log('✅ 页面已挂载，开始CSS检查')
+    
     if (activeTab !== 'styles') {
       console.log('📋 当前不在styles页面，当前页面:', activeTab)
+      // 即使不在styles页面也进行检查，看看能否找到badge元素
+      console.log('🔍 即使不在styles页面也检查一下badge元素...')
+      const allBadgesAnyPage = document.querySelectorAll('[class*="bg-red-500"], [class*="bg-yellow-400"], [class*="bg-green-500"]')
+      console.log('🔍 整个页面的Badge元素数量:', allBadgesAnyPage.length)
       return
     }
     
@@ -384,6 +391,42 @@ function AdminDashboardContent() {
     return () => clearTimeout(checkTimer)
     
   }, [isMounted, activeTab, styles]) // 当切换到styles页面或styles数据变化时检查
+
+  // 🚨 立即执行的基础检查 - 确保能看到日志
+  useEffect(() => {
+    console.log('🚨 ===== 立即基础检查 =====')
+    console.log('🚨 当前时间:', new Date().toISOString())
+    console.log('🚨 当前URL:', window.location.href)
+    console.log('🚨 useEffect执行成功!')
+    
+    // 立即检查页面上是否有badge元素
+    const immediateCheck = () => {
+      const allBadges = document.querySelectorAll('[class*="bg-"]')
+      const redBadges = document.querySelectorAll('[class*="bg-red-500"]')
+      const yellowBadges = document.querySelectorAll('[class*="bg-yellow-400"]')
+      
+      console.log('🚨 立即检查结果:')
+      console.log('  - 所有bg-元素:', allBadges.length)
+      console.log('  - 红色badge:', redBadges.length) 
+      console.log('  - 黄色badge:', yellowBadges.length)
+      
+      if (redBadges.length > 0) {
+        const style = window.getComputedStyle(redBadges[0])
+        console.log('🚨 第一个红色badge样式:', {
+          color: style.color,
+          text: redBadges[0].textContent
+        })
+      }
+    }
+    
+    // 立即检查
+    immediateCheck()
+    
+    // 1秒后再检查一次
+    const timer = setTimeout(immediateCheck, 1000)
+    
+    return () => clearTimeout(timer)
+  }, []) // 无依赖，只执行一次
 
 
 
