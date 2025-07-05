@@ -3,8 +3,6 @@
  * 路径: /api/admin/styles
  */
 
-import { createClient } from '@supabase/supabase-js'
-
 export async function onRequest(context) {
   const { request, env } = context
   
@@ -12,7 +10,7 @@ export async function onRequest(context) {
     if (request.method === 'GET') {
       console.log('🎨 获取风格列表')
       
-      // 创建Supabase客户端
+      // 检查环境变量
       const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL
       const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
       
@@ -27,18 +25,22 @@ export async function onRequest(context) {
           headers: { 'Content-Type': 'application/json' }
         })
       }
-      
-      const supabase = createClient(supabaseUrl, serviceRoleKey)
 
       try {
-        // 获取所有风格数据（管理员视图）
-        const { data: styles, error } = await supabase
-          .from('styles')
-          .select('*')
-          .order('sort_order', { ascending: true })
+        // 使用Supabase REST API直接查询
+        const headers = {
+          'apikey': serviceRoleKey,
+          'Authorization': `Bearer ${serviceRoleKey}`,
+          'Content-Type': 'application/json'
+        }
 
-        if (error) {
-          console.error('❌ 查询风格失败:', error)
+        // 获取所有风格数据（管理员视图）
+        const stylesResponse = await fetch(`${supabaseUrl}/rest/v1/styles?select=*&order=sort_order.asc`, {
+          headers: headers
+        })
+
+        if (!stylesResponse.ok) {
+          console.error('❌ 查询风格失败:', stylesResponse.status)
           return new Response(JSON.stringify({
             success: false,
             error: 'Failed to fetch styles',
@@ -48,6 +50,8 @@ export async function onRequest(context) {
             headers: { 'Content-Type': 'application/json' }
           })
         }
+
+        const styles = await stylesResponse.json()
 
         console.log(`✅ 成功获取 ${styles?.length || 0} 个风格`)
 

@@ -3,8 +3,6 @@
  * 路径: /api/dashboard/stats
  */
 
-import { createClient } from '@supabase/supabase-js'
-
 export async function onRequest(context) {
   const { request, env } = context
   
@@ -19,7 +17,7 @@ export async function onRequest(context) {
     console.log('=== Dashboard Stats API 开始 ===')
     console.log('时间戳:', new Date().toISOString())
     
-    // 创建Supabase客户端
+    // 检查环境变量
     const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL
     const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
     
@@ -48,54 +46,90 @@ export async function onRequest(context) {
       })
     }
     
-    const supabase = createClient(supabaseUrl, serviceRoleKey)
-    console.log('✅ Supabase客户端创建成功')
+    console.log('✅ 环境变量配置正确')
 
     try {
       console.log('开始查询数据库统计...')
 
-      // 查询管理员配置
-      const { data: adminUsers, error: adminError } = await supabase
-        .from('admin_config')
-        .select('email')
+      // 使用Supabase REST API直接查询
+      const headers = {
+        'apikey': serviceRoleKey,
+        'Authorization': `Bearer ${serviceRoleKey}`,
+        'Content-Type': 'application/json',
+        'Prefer': 'count=exact'
+      }
 
-      if (adminError) {
-        console.error('查询管理员失败:', adminError)
-      } else {
-        console.log('✅ 管理员用户数量:', adminUsers?.length || 0)
+      // 查询管理员配置
+      let adminUsers = []
+      try {
+        const adminResponse = await fetch(`${supabaseUrl}/rest/v1/admin_config?select=email`, {
+          headers: headers
+        })
+        if (adminResponse.ok) {
+          adminUsers = await adminResponse.json()
+          console.log('✅ 管理员用户数量:', adminUsers?.length || 0)
+        } else {
+          console.error('查询管理员失败:', adminResponse.status)
+        }
+      } catch (error) {
+        console.error('管理员API请求失败:', error)
       }
 
       // 查询用户总数
-      const { count: totalUsers, error: usersError } = await supabase
-        .from('users')
-        .select('*', { count: 'exact', head: true })
-
-      if (usersError) {
-        console.error('查询用户失败:', usersError)
-      } else {
-        console.log('✅ 用户数量:', totalUsers)
+      let totalUsers = 0
+      try {
+        const usersResponse = await fetch(`${supabaseUrl}/rest/v1/users?select=count`, {
+          headers: headers
+        })
+        if (usersResponse.ok) {
+          const countHeader = usersResponse.headers.get('content-range')
+          if (countHeader) {
+            totalUsers = parseInt(countHeader.split('/')[1]) || 0
+          }
+          console.log('✅ 用户数量:', totalUsers)
+        } else {
+          console.error('查询用户失败:', usersResponse.status)
+        }
+      } catch (error) {
+        console.error('用户API请求失败:', error)
       }
 
       // 查询图片总数
-      const { count: totalImages, error: imagesError } = await supabase
-        .from('generated_images')
-        .select('*', { count: 'exact', head: true })
-
-      if (imagesError) {
-        console.error('查询图片失败:', imagesError)
-      } else {
-        console.log('✅ 图片数量:', totalImages)
+      let totalImages = 0
+      try {
+        const imagesResponse = await fetch(`${supabaseUrl}/rest/v1/generated_images?select=count`, {
+          headers: headers
+        })
+        if (imagesResponse.ok) {
+          const countHeader = imagesResponse.headers.get('content-range')
+          if (countHeader) {
+            totalImages = parseInt(countHeader.split('/')[1]) || 0
+          }
+          console.log('✅ 图片数量:', totalImages)
+        } else {
+          console.error('查询图片失败:', imagesResponse.status)
+        }
+      } catch (error) {
+        console.error('图片API请求失败:', error)
       }
 
       // 查询点赞总数
-      const { count: totalLikes, error: likesError } = await supabase
-        .from('image_likes')
-        .select('*', { count: 'exact', head: true })
-
-      if (likesError) {
-        console.error('查询点赞失败:', likesError)
-      } else {
-        console.log('✅ 点赞数量:', totalLikes)
+      let totalLikes = 0
+      try {
+        const likesResponse = await fetch(`${supabaseUrl}/rest/v1/image_likes?select=count`, {
+          headers: headers
+        })
+        if (likesResponse.ok) {
+          const countHeader = likesResponse.headers.get('content-range')
+          if (countHeader) {
+            totalLikes = parseInt(countHeader.split('/')[1]) || 0
+          }
+          console.log('✅ 点赞数量:', totalLikes)
+        } else {
+          console.error('查询点赞失败:', likesResponse.status)
+        }
+      } catch (error) {
+        console.error('点赞API请求失败:', error)
       }
 
       // 基于真实数据计算统计

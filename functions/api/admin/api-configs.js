@@ -3,8 +3,6 @@
  * 路径: /api/admin/api-configs
  */
 
-import { createClient } from '@supabase/supabase-js'
-
 export async function onRequest(context) {
   const { request, env } = context
   
@@ -12,7 +10,7 @@ export async function onRequest(context) {
     if (request.method === 'GET') {
       console.log('⚙️ 获取API配置列表')
       
-      // 创建Supabase客户端
+      // 检查环境变量
       const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL
       const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
       
@@ -27,18 +25,22 @@ export async function onRequest(context) {
           headers: { 'Content-Type': 'application/json' }
         })
       }
-      
-      const supabase = createClient(supabaseUrl, serviceRoleKey)
 
       try {
-        // 查询API配置
-        const { data: configs, error } = await supabase
-          .from('api_configs')
-          .select('*')
-          .order('priority', { ascending: true })
+        // 使用Supabase REST API直接查询
+        const headers = {
+          'apikey': serviceRoleKey,
+          'Authorization': `Bearer ${serviceRoleKey}`,
+          'Content-Type': 'application/json'
+        }
 
-        if (error) {
-          console.error('❌ 查询API配置失败:', error)
+        // 查询API配置
+        const configsResponse = await fetch(`${supabaseUrl}/rest/v1/api_configs?select=*&order=priority.asc`, {
+          headers: headers
+        })
+
+        if (!configsResponse.ok) {
+          console.error('❌ 查询API配置失败:', configsResponse.status)
           return new Response(JSON.stringify({
             success: false,
             error: 'Failed to fetch configs',
@@ -48,6 +50,8 @@ export async function onRequest(context) {
             headers: { 'Content-Type': 'application/json' }
           })
         }
+
+        const configs = await configsResponse.json()
 
         // 隐藏敏感信息（API密钥）
         const safeConfigs = (configs || []).map(config => ({
@@ -82,7 +86,7 @@ export async function onRequest(context) {
       const body = await request.json()
       console.log('➕ 创建新API配置:', body.name)
       
-      // 创建Supabase客户端
+      // 检查环境变量
       const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL
       const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
       
@@ -95,45 +99,55 @@ export async function onRequest(context) {
           headers: { 'Content-Type': 'application/json' }
         })
       }
-      
-      const supabase = createClient(supabaseUrl, serviceRoleKey)
 
       try {
-        // 插入新的API配置
-        const { data, error } = await supabase
-          .from('api_configs')
-          .insert([{
-            name: body.name,
-            endpoint: body.endpoint,
-            api_key: body.api_key,
-            model: body.model,
-            is_active: body.is_active || true,
-            priority: body.priority || 1,
-            timeout_seconds: body.timeout_seconds || 60,
-            rate_limit_per_minute: body.rate_limit_per_minute || 10,
-            config_data: body.config_data || {}
-          }])
-          .select()
-          .single()
+        // 使用Supabase REST API直接插入
+        const headers = {
+          'apikey': serviceRoleKey,
+          'Authorization': `Bearer ${serviceRoleKey}`,
+          'Content-Type': 'application/json',
+          'Prefer': 'return=representation'
+        }
 
-        if (error) {
-          console.error('❌ 创建API配置失败:', error)
+        const configData = {
+          name: body.name,
+          endpoint: body.endpoint,
+          api_key: body.api_key,
+          model: body.model,
+          is_active: body.is_active || true,
+          priority: body.priority || 1,
+          timeout_seconds: body.timeout_seconds || 60,
+          rate_limit_per_minute: body.rate_limit_per_minute || 10,
+          config_data: body.config_data || {}
+        }
+
+        const createResponse = await fetch(`${supabaseUrl}/rest/v1/api_configs`, {
+          method: 'POST',
+          headers: headers,
+          body: JSON.stringify(configData)
+        })
+
+        if (!createResponse.ok) {
+          console.error('❌ 创建API配置失败:', createResponse.status)
           return new Response(JSON.stringify({
             success: false,
             error: 'Failed to create config',
-            message: error.message
+            message: 'Database insert failed'
           }), {
             status: 500,
             headers: { 'Content-Type': 'application/json' }
           })
         }
 
-        console.log('✅ API配置创建成功:', data.id)
+        const data = await createResponse.json()
+        const newConfig = Array.isArray(data) ? data[0] : data
+
+        console.log('✅ API配置创建成功:', newConfig?.id)
 
         return new Response(JSON.stringify({
           success: true,
           message: '配置创建成功',
-          id: data.id
+          id: newConfig?.id
         }), {
           status: 201,
           headers: { 'Content-Type': 'application/json' }

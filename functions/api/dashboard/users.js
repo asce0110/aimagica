@@ -3,8 +3,6 @@
  * 路径: /api/dashboard/users
  */
 
-import { createClient } from '@supabase/supabase-js'
-
 export async function onRequest(context) {
   const { request, env } = context
   
@@ -18,7 +16,7 @@ export async function onRequest(context) {
   try {
     console.log('👥 获取用户列表')
     
-    // 创建Supabase客户端
+    // 检查环境变量
     const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL
     const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
     
@@ -33,25 +31,22 @@ export async function onRequest(context) {
         headers: { 'Content-Type': 'application/json' }
       })
     }
-    
-    const supabase = createClient(supabaseUrl, serviceRoleKey)
 
     try {
-      // 查询用户列表，包含基本信息
-      const { data: users, error: usersError } = await supabase
-        .from('users')
-        .select(`
-          id,
-          full_name,
-          email,
-          avatar_url,
-          created_at
-        `)
-        .order('created_at', { ascending: false })
-        .limit(20)
+      // 使用Supabase REST API直接查询
+      const headers = {
+        'apikey': serviceRoleKey,
+        'Authorization': `Bearer ${serviceRoleKey}`,
+        'Content-Type': 'application/json'
+      }
 
-      if (usersError) {
-        console.error('❌ 查询用户失败:', usersError)
+      // 查询用户列表，包含基本信息
+      const usersResponse = await fetch(`${supabaseUrl}/rest/v1/users?select=id,full_name,email,avatar_url,created_at&order=created_at.desc&limit=20`, {
+        headers: headers
+      })
+
+      if (!usersResponse.ok) {
+        console.error('❌ 查询用户失败:', usersResponse.status)
         return new Response(JSON.stringify({ 
           success: false,
           error: 'Failed to fetch users',
@@ -62,22 +57,41 @@ export async function onRequest(context) {
         })
       }
 
+      const users = await usersResponse.json()
+
       // 为每个用户获取订阅信息和图片统计
       const usersWithStats = await Promise.all(
         (users || []).map(async (user) => {
           try {
             // 获取订阅信息
-            const { data: subscription } = await supabase
-              .from('user_subscriptions')
-              .select('subscription_tier, subscription_status')
-              .eq('user_id', user.id)
-              .single()
+            let subscription = null
+            try {
+              const subResponse = await fetch(`${supabaseUrl}/rest/v1/user_subscriptions?select=subscription_tier,subscription_status&user_id=eq.${user.id}&limit=1`, {
+                headers: headers
+              })
+              if (subResponse.ok) {
+                const subs = await subResponse.json()
+                subscription = subs[0] || null
+              }
+            } catch (error) {
+              console.error('获取订阅失败:', error)
+            }
 
             // 获取图片数量
-            const { count: imageCount } = await supabase
-              .from('generated_images')
-              .select('*', { count: 'exact', head: true })
-              .eq('user_id', user.id)
+            let imageCount = 0
+            try {
+              const imgResponse = await fetch(`${supabaseUrl}/rest/v1/generated_images?select=count&user_id=eq.${user.id}`, {
+                headers: { ...headers, 'Prefer': 'count=exact' }
+              })
+              if (imgResponse.ok) {
+                const countHeader = imgResponse.headers.get('content-range')
+                if (countHeader) {
+                  imageCount = parseInt(countHeader.split('/')[1]) || 0
+                }
+              }
+            } catch (error) {
+              console.error('获取图片数量失败:', error)
+            }
 
             return {
               id: user.id,

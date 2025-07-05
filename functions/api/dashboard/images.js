@@ -3,8 +3,6 @@
  * 路径: /api/dashboard/images
  */
 
-import { createClient } from '@supabase/supabase-js'
-
 export async function onRequest(context) {
   const { request, env } = context
   
@@ -18,7 +16,7 @@ export async function onRequest(context) {
   try {
     console.log('🖼️ 获取图片列表')
     
-    // 创建Supabase客户端
+    // 检查环境变量
     const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL
     const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
     
@@ -33,28 +31,22 @@ export async function onRequest(context) {
         headers: { 'Content-Type': 'application/json' }
       })
     }
-    
-    const supabase = createClient(supabaseUrl, serviceRoleKey)
 
     try {
-      // 查询生成的图片，获取基本信息
-      const { data: images, error: imagesError } = await supabase
-        .from('generated_images')
-        .select(`
-          id,
-          prompt,
-          image_url,
-          style,
-          status,
-          view_count,
-          created_at,
-          user_id
-        `)
-        .order('created_at', { ascending: false })
-        .limit(20)
+      // 使用Supabase REST API直接查询
+      const headers = {
+        'apikey': serviceRoleKey,
+        'Authorization': `Bearer ${serviceRoleKey}`,
+        'Content-Type': 'application/json'
+      }
 
-      if (imagesError) {
-        console.error('❌ 查询图片失败:', imagesError)
+      // 查询生成的图片，获取基本信息
+      const imagesResponse = await fetch(`${supabaseUrl}/rest/v1/generated_images?select=id,prompt,image_url,style,status,view_count,created_at,user_id&order=created_at.desc&limit=20`, {
+        headers: headers
+      })
+
+      if (!imagesResponse.ok) {
+        console.error('❌ 查询图片失败:', imagesResponse.status)
         return new Response(JSON.stringify({
           success: false,
           error: 'Failed to fetch images',
@@ -65,22 +57,41 @@ export async function onRequest(context) {
         })
       }
 
+      const images = await imagesResponse.json()
+
       // 为每个图片获取用户信息和点赞统计
       const imagesWithStats = await Promise.all(
         (images || []).map(async (image) => {
           try {
             // 获取用户信息
-            const { data: user } = await supabase
-              .from('users')
-              .select('full_name, email')
-              .eq('id', image.user_id)
-              .single()
+            let user = null
+            try {
+              const userResponse = await fetch(`${supabaseUrl}/rest/v1/users?select=full_name,email&id=eq.${image.user_id}&limit=1`, {
+                headers: headers
+              })
+              if (userResponse.ok) {
+                const users = await userResponse.json()
+                user = users[0] || null
+              }
+            } catch (error) {
+              console.error('获取用户信息失败:', error)
+            }
 
             // 获取点赞数
-            const { count: likeCount } = await supabase
-              .from('image_likes')
-              .select('*', { count: 'exact', head: true })
-              .eq('image_id', image.id)
+            let likeCount = 0
+            try {
+              const likesResponse = await fetch(`${supabaseUrl}/rest/v1/image_likes?select=count&image_id=eq.${image.id}`, {
+                headers: { ...headers, 'Prefer': 'count=exact' }
+              })
+              if (likesResponse.ok) {
+                const countHeader = likesResponse.headers.get('content-range')
+                if (countHeader) {
+                  likeCount = parseInt(countHeader.split('/')[1]) || 0
+                }
+              }
+            } catch (error) {
+              console.error('获取点赞数失败:', error)
+            }
 
             return {
               id: image.id,
