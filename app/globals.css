@@ -192,19 +192,40 @@
   text-transform: uppercase;
 }
 
-/* 桌面端字体策略 - 区分标题和正文 */
+/* 桌面端字体策略 - 强制使用Fredoka One */
 h1, h2, h3, h4, h5, h6,
 button, input[type="button"], input[type="submit"],
-.font-heading, .font-magic, .font-hero,
+.font-heading, .font-magic, .font-hero, .hero-title,
 [style*="Comic Sans MS"], 
 [style*="font-family: Comic Sans MS"] {
   font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
 }
 
-/* 正文内容保持可读性 */
-body, p, span, div, textarea, label,
-.font-body, .font-accent {
-  font-family: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif !important;
+/* 桌面端专用 - 强制覆盖所有标题 */
+@media (min-width: 769px) {
+  h1, h2, h3, h4, h5, h6,
+  .text-2xl, .text-3xl, .text-4xl, .text-5xl, .text-6xl,
+  button, .btn, 
+  .font-black, .font-bold,
+  [class*="text-"] {
+    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
+  }
+}
+
+/* 桌面端全部使用Fredoka One - 正文也使用装饰字体 */
+@media (min-width: 769px) {
+  body, p, span, div, textarea, label,
+  .font-body, .font-accent, *:not(.keep-readable) {
+    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
+  }
+}
+
+/* 移动端正文保持可读性 */
+@media (max-width: 768px) {
+  body, p, span, div, textarea, label,
+  .font-body, .font-accent {
+    font-family: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif !important;
+  }
 }
 
 /* 确保按钮和交互元素使用圆润字体 */
