@@ -371,49 +371,67 @@
   color: #2d3e2d !important;
 }
 
-/* Style Management Badge标签字体优化 - 确保文字内容清晰可见 */
-.admin-dashboard .text-xs.bg-red-500,
-.admin-dashboard .text-xs.bg-red-500 * {
+/* SUPER FORCE Badge颜色 - 终极强制版本 */
+/* 红色Badge - 强制白色文字 */
+[class*="bg-red-500"],
+[class*="bg-red-500"] *,
+.bg-red-500,
+.bg-red-500 *,
+.admin-dashboard [class*="bg-red-500"],
+.admin-dashboard [class*="bg-red-500"] * {
   color: white !important;
   font-weight: 700 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9) !important;
 }
 
-.admin-dashboard .text-xs.bg-yellow-400,
-.admin-dashboard .text-xs.bg-yellow-400 * {
-  color: #000000 !important;
+/* 黄色Badge - 强制黑色文字 */
+[class*="bg-yellow-400"],
+[class*="bg-yellow-400"] *,
+.bg-yellow-400,
+.bg-yellow-400 *,
+.admin-dashboard [class*="bg-yellow-400"],
+.admin-dashboard [class*="bg-yellow-400"] * {
+  color: black !important;
   font-weight: 700 !important;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.3) !important;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9) !important;
 }
 
-.admin-dashboard .text-xs.bg-green-500,
-.admin-dashboard .text-xs.bg-green-500 * {
+/* 绿色Badge - 强制白色文字 */
+[class*="bg-green-500"],
+[class*="bg-green-500"] *,
+.bg-green-500,
+.bg-green-500 *,
+.admin-dashboard [class*="bg-green-500"],
+.admin-dashboard [class*="bg-green-500"] * {
   color: white !important;
   font-weight: 700 !important;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5) !important;
+  text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.9) !important;
 }
 
-.admin-dashboard .text-xs.bg-\[\#d4a574\],
-.admin-dashboard .text-xs.bg-\[\#d4a574\] * {
-  color: #000000 !important;
+/* 金色Badge - 强制深色文字 */
+[class*="d4a574"],
+[class*="d4a574"] *,
+.admin-dashboard [class*="d4a574"],
+.admin-dashboard [class*="d4a574"] * {
+  color: #2d3e2d !important;
   font-weight: 700 !important;
-  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.2) !important;
+  text-shadow: 1px 1px 3px rgba(255, 255, 255, 0.9) !important;
 }
 
-/* 强制所有Badge内的文字使用深色或白色 */
-.admin-dashboard [class*="bg-red-500"] {
+/* 针对所有可能的Badge选择器 */
+span[class*="bg-red-500"],
+span[class*="bg-yellow-400"],
+span[class*="bg-green-500"],
+div[class*="bg-red-500"],
+div[class*="bg-yellow-400"],
+div[class*="bg-green-500"] {
   color: white !important;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8) !important;
 }
 
-.admin-dashboard [class*="bg-yellow-400"] {
-  color: #000000 !important;
-}
-
-.admin-dashboard [class*="bg-green-500"] {
-  color: white !important;
-}
-
-.admin-dashboard [class*="bg-"][class*="d4a574"] {
-  color: #000000 !important;
+span[class*="bg-yellow-400"],
+div[class*="bg-yellow-400"] {
+  color: black !important;
+  text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.8) !important;
 }
 
