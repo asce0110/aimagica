@@ -225,23 +225,25 @@ export default function StaticGalleryClient() {
     return displayedImages.map((image, index) => {
       const getItemHeight = () => {
         if (isMobile) {
-          if (image.size === 'vertical') return 350
-          if (image.size === 'horizontal') return 200
-          if (image.size === 'large') return 380
-          if (image.size === 'small') return 250
-          return 300
+          // 移动端：缩短长图片高度，让整体更协调
+          if (image.size === 'vertical') return 280 // 从350减少到280
+          if (image.size === 'horizontal') return 180 // 从200减少到180
+          if (image.size === 'large') return 300 // 从380减少到300
+          if (image.size === 'small') return 220 // 从250减少到220
+          return 260 // 从300减少到260
         } else {
+          // 桌面端：也适当缩短，但保持比例差异
           const baseHeights = {
-            'vertical': 550,
-            'horizontal': 300,
-            'large': 600,
-            'small': 350,
-            'medium': 450
+            'vertical': 480, // 从550减少到480
+            'horizontal': 280, // 从300减少到280
+            'large': 520, // 从600减少到520
+            'small': 320, // 从350减少到320
+            'medium': 400 // 从450减少到400
           }
           
-          const baseHeight = baseHeights[image.size] || 450
-          const variation = (index % 5) * 25 - 50
-          return Math.max(280, baseHeight + variation)
+          const baseHeight = baseHeights[image.size] || 400
+          const variation = (index % 5) * 20 - 40 // 减少变化幅度
+          return Math.max(260, baseHeight + variation) // 最小高度从280减少到260
         }
       }
       
@@ -578,10 +580,11 @@ export default function StaticGalleryClient() {
               <TabsTrigger value="fantasy" className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform rotate-0.5 hover:scale-105 transition-all">
                 Fantasy 🧙‍♂️
               </TabsTrigger>
+              {/* 移动端隐藏部分过滤器，保持界面简洁 */}
               <TabsTrigger value="cyberpunk" className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-0.5 hover:scale-105 transition-all">
                 Cyberpunk 🤖
               </TabsTrigger>
-              <TabsTrigger value="sci-fi" className="rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-1 hover:scale-105 transition-all">
+              <TabsTrigger value="sci-fi" className="hidden md:flex rounded-lg font-bold data-[state=active]:bg-[#d4a574] data-[state=active]:text-black text-gray-300 text-xs md:text-sm transform -rotate-1 hover:scale-105 transition-all">
                 Sci-Fi 🚀
               </TabsTrigger>
             </TabsList>
