@@ -76,7 +76,8 @@
       "Bash(cross-env NEXT_CONFIG_FILE=next.config.static.mjs next build)",
       "Bash(npx:*)",
       "Bash(kill:*)",
-      "WebFetch(domain:66333676.aimagica.pages.dev)"
+      "WebFetch(domain:66333676.aimagica.pages.dev)",
+      "Bash(NODE_OPTIONS=\"--max-old-space-size=4096\" npm run build:pages)"
     ],
     "deny": []
   }

@@ -75,12 +75,21 @@ export async function onRequest(context) {
     const user = await userResponse.json()
     console.log('✅ 获取用户信息成功:', user.email)
     
-    // 3. 生成JWT Token
+    // 3. 检查管理员权限
+    let isAdmin = false
+    const adminEmails = ['asce3801@gmail.com'] // 管理员邮箱列表
+    if (adminEmails.includes(user.email.toLowerCase())) {
+      isAdmin = true
+      console.log('🛡️ 检测到管理员用户:', user.email)
+    }
+    
+    // 4. 生成JWT Token
     const payload = {
       id: user.id,
       email: user.email,
       name: user.name,
       picture: user.picture,
+      isAdmin: isAdmin,
       iat: Math.floor(Date.now() / 1000),
       exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30天
     }
@@ -109,7 +118,8 @@ export async function onRequest(context) {
     const userInfoBase64 = utf8ToBase64(JSON.stringify({
       email: user.email,
       name: user.name,
-      picture: user.picture
+      picture: user.picture,
+      isAdmin: isAdmin
     }))
     const encodedUserInfo = userInfoBase64
     

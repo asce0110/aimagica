@@ -903,13 +903,38 @@ export default function AISketchPlatform() {
                 {session ? (
                   <>
                     <DropdownMenuItem
-                      onClick={() => router.push('/admin/dashboard')}
+                      onClick={() => router.push(session.user?.isAdmin ? '/admin/dashboard' : '/dashboard')}
                       className="font-bold text-[#2d3e2d] hover:bg-[#f5f1e8] rounded-xl m-1 cursor-pointer text-sm"
                       style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
-                      <User className="mr-2 h-3 w-3 md:h-4 md:w-4" />
-                      <span>My Dashboard 📊</span>
+                      {session.user?.isAdmin ? (
+                        <Shield className="mr-2 h-3 w-3 md:h-4 md:w-4" />
+                      ) : (
+                        <User className="mr-2 h-3 w-3 md:h-4 md:w-4" />
+                      )}
+                      <span>{session.user?.isAdmin ? 'Admin Dashboard 🛡️' : 'My Dashboard 📊'}</span>
                     </DropdownMenuItem>
+                    {session.user?.isAdmin && (
+                      <>
+                        <DropdownMenuItem
+                          onClick={() => router.push('/admin/magic-coins')}
+                          className="font-bold text-[#2d3e2d] hover:bg-[#f5f1e8] rounded-xl m-1 cursor-pointer text-sm"
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                        >
+                          <Crown className="mr-2 h-3 w-3 md:h-4 md:w-4" />
+                          <span>Magic Coins 🪙</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuItem
+                          onClick={() => router.push('/admin/prompts')}
+                          className="font-bold text-[#2d3e2d] hover:bg-[#f5f1e8] rounded-xl m-1 cursor-pointer text-sm"
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                        >
+                          <Wand2 className="mr-2 h-3 w-3 md:h-4 md:w-4" />
+                          <span>Prompts Manager 🎨</span>
+                        </DropdownMenuItem>
+                        <DropdownMenuSeparator className="bg-[#8b7355]" />
+                      </>
+                    )}
                     <DropdownMenuItem
                       onClick={() => router.push('/favorites')}
                       className="font-bold text-[#2d3e2d] hover:bg-[#f5f1e8] rounded-xl m-1 cursor-pointer text-sm"
