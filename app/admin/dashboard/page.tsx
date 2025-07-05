@@ -396,42 +396,93 @@ function AdminDashboardContent() {
   if (typeof window !== 'undefined') {
     console.log('BADGE_CHECK: 组件正在渲染, 当前时间:', new Date().toISOString())
     
-    // 延迟检查badge元素
-    setTimeout(() => {
-      console.log('BADGE_CHECK: 开始检查badge元素...')
-      const redBadges = document.querySelectorAll('.bg-red-500')
-      const yellowBadges = document.querySelectorAll('.bg-yellow-400')
-      const greenBadges = document.querySelectorAll('.bg-green-500')
-      
-      console.log('BADGE_CHECK: Badge统计:', {
-        red: redBadges.length,
-        yellow: yellowBadges.length, 
-        green: greenBadges.length
-      })
-      
-      // 检查第一个红色badge
-      if (redBadges.length > 0) {
-        const redStyle = window.getComputedStyle(redBadges[0])
-        console.log('BADGE_CHECK: 红色Badge样式:', {
-          text: redBadges[0].textContent,
-          color: redStyle.color,
-          backgroundColor: redStyle.backgroundColor,
-          isWhite: redStyle.color === 'rgb(255, 255, 255)' || redStyle.color === 'white'
-        })
-      }
-      
-      // 检查第一个黄色badge  
-      if (yellowBadges.length > 0) {
-        const yellowStyle = window.getComputedStyle(yellowBadges[0])
-        console.log('BADGE_CHECK: 黄色Badge样式:', {
-          text: yellowBadges[0].textContent,
-          color: yellowStyle.color,
-          backgroundColor: yellowStyle.backgroundColor,
-          isBlack: yellowStyle.color === 'rgb(0, 0, 0)' || yellowStyle.color === 'black'
-        })
-      }
-      
-    }, 2000)
+         // 延迟检查badge元素
+     setTimeout(() => {
+       console.log('BADGE_CHECK: ===== 开始详细检查badge元素 =====')
+       
+       // 检查具体的style Badge选择器
+       const styleRedBadges = document.querySelectorAll('.text-xs.bg-red-500.text-white')
+       const styleYellowBadges = document.querySelectorAll('.text-xs.bg-yellow-400.text-black')
+       const styleGoldBadges = document.querySelectorAll('.text-xs.bg-\\[\\#d4a574\\]')
+       
+       console.log('BADGE_CHECK: 具体Style Badge统计:', {
+         red: styleRedBadges.length,
+         yellow: styleYellowBadges.length,
+         gold: styleGoldBadges.length
+       })
+       
+       // 检查所有可能的badge
+       const allRedBadges = document.querySelectorAll('[class*="bg-red-500"]')
+       const allYellowBadges = document.querySelectorAll('[class*="bg-yellow-400"]')
+       
+       console.log('BADGE_CHECK: 所有Badge统计:', {
+         allRed: allRedBadges.length,
+         allYellow: allYellowBadges.length
+       })
+       
+       // 详细检查第一个红色badge
+       if (allRedBadges.length > 0) {
+         const redBadge = allRedBadges[0]
+         const redStyle = window.getComputedStyle(redBadge)
+         console.log('BADGE_CHECK: 🔴 第一个红色Badge详细信息:', {
+           text: redBadge.textContent?.trim(),
+           className: redBadge.className,
+           computedColor: redStyle.color,
+           computedBgColor: redStyle.backgroundColor,
+           fontWeight: redStyle.fontWeight,
+           textShadow: redStyle.textShadow,
+           hasTextWhiteClass: redBadge.classList.contains('text-white'),
+           expectedColor: 'white',
+           isCorrect: redStyle.color === 'rgb(255, 255, 255)' || redStyle.color === 'white'
+         })
+       }
+       
+       // 详细检查第一个黄色badge
+       if (allYellowBadges.length > 0) {
+         const yellowBadge = allYellowBadges[0]
+         const yellowStyle = window.getComputedStyle(yellowBadge)
+         console.log('BADGE_CHECK: 🟡 第一个黄色Badge详细信息:', {
+           text: yellowBadge.textContent?.trim(),
+           className: yellowBadge.className,
+           computedColor: yellowStyle.color,
+           computedBgColor: yellowStyle.backgroundColor,
+           fontWeight: yellowStyle.fontWeight,
+           textShadow: yellowStyle.textShadow,
+           hasTextBlackClass: yellowBadge.classList.contains('text-black'),
+           expectedColor: 'black',
+           isCorrect: yellowStyle.color === 'rgb(0, 0, 0)' || yellowStyle.color === 'black'
+         })
+       }
+       
+       // 检查是否有CSS冲突
+       console.log('BADGE_CHECK: ===== CSS冲突检查 =====')
+       
+       if (allRedBadges.length > 0) {
+         const redBadge = allRedBadges[0]
+         console.log('BADGE_CHECK: 红色Badge所有应用的样式:')
+         
+         // 获取所有应用的CSS规则
+         const allRules = document.styleSheets
+         for (let i = 0; i < allRules.length; i++) {
+           try {
+             const rules = allRules[i].cssRules || allRules[i].rules
+             for (let j = 0; j < rules.length; j++) {
+               const rule = rules[j]
+               if (rule.style && rule.selectorText) {
+                 if (redBadge.matches(rule.selectorText)) {
+                   console.log('  匹配的规则:', rule.selectorText, '→ color:', rule.style.color)
+                 }
+               }
+             }
+           } catch (e) {
+             // 跨域样式表，忽略
+           }
+         }
+       }
+       
+       console.log('BADGE_CHECK: ===== 检查结束 =====')
+       
+     }, 3000)
   }
 
 
@@ -2768,14 +2819,23 @@ function AdminDashboardContent() {
                                       {style.emoji} {style.name}
                                     </h3>
                                     <div className="flex gap-1">
-                                      <Badge className="text-xs bg-red-500 text-white border-2 border-black font-bold px-2 py-1">
+                                      <Badge 
+                                        className="text-xs bg-red-500 border-2 border-black font-bold px-2 py-1"
+                                        style={{ color: 'white', fontWeight: '700', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+                                      >
                                         {style.type}
                                       </Badge>
-                                      <Badge className="text-xs bg-yellow-400 text-black border-2 border-black font-bold px-2 py-1">
+                                      <Badge 
+                                        className="text-xs bg-yellow-400 border-2 border-black font-bold px-2 py-1"
+                                        style={{ color: 'black', fontWeight: '700', textShadow: '0 1px 2px rgba(255,255,255,0.5)' }}
+                                      >
                                         {style.category}
                                       </Badge>
                                       {style.is_premium && (
-                                        <Badge className="text-xs bg-[#d4a574] text-[#2d3e2d] font-bold">
+                                        <Badge 
+                                          className="text-xs bg-[#d4a574] font-bold"
+                                          style={{ color: '#2d3e2d', fontWeight: '700', textShadow: '0 1px 2px rgba(255,255,255,0.5)' }}
+                                        >
                                           Premium
                                         </Badge>
                                       )}
