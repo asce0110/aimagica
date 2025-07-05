@@ -1,31 +1,18 @@
-/**
- * Cloudflare Pages Function - Dashboard统计数据
- * 路径: /api/dashboard/stats
- */
-
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-export async function onRequest(context) {
-  const { request, env } = context
-  
-  if (request.method !== 'GET') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' }
-    })
-  }
-
+export async function GET(request: NextRequest) {
   try {
     console.log('=== Dashboard Stats API 开始 ===')
     console.log('时间戳:', new Date().toISOString())
     
     // 创建Supabase客户端
-    const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL
-    const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
     
     if (!supabaseUrl || !serviceRoleKey) {
       console.error('❌ Supabase环境变量未配置')
-      return new Response(JSON.stringify({
+      return NextResponse.json({
         success: false,
         error: 'Database not configured',
         stats: {
@@ -42,9 +29,6 @@ export async function onRequest(context) {
           userLikes: 0,
           userFollowers: 0
         }
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
       })
     }
     
@@ -127,7 +111,7 @@ export async function onRequest(context) {
 
       console.log('✅ 统计数据计算完成:', JSON.stringify(stats, null, 2))
 
-      return new Response(JSON.stringify({
+      return NextResponse.json({
         isRealData: true,
         success: true,
         stats: stats,
@@ -140,18 +124,12 @@ export async function onRequest(context) {
           }
         },
         timestamp: new Date().toISOString()
-      }), {
-        status: 200,
-        headers: { 
-          'Content-Type': 'application/json',
-          'Cache-Control': 'no-cache'
-        }
       })
 
     } catch (dbError) {
       console.error("❌ 数据库查询失败:", dbError)
       
-      return new Response(JSON.stringify({
+      return NextResponse.json({
         isRealData: false,
         success: false,
         error: 'Database query failed',
@@ -170,16 +148,13 @@ export async function onRequest(context) {
           userFollowers: 0
         },
         timestamp: new Date().toISOString()
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
       })
     }
 
   } catch (error) {
     console.error("❌ Dashboard Stats API 错误:", error)
     
-    return new Response(JSON.stringify({
+    return NextResponse.json({
       success: false,
       error: 'Internal server error',
       stats: {
@@ -196,9 +171,6 @@ export async function onRequest(context) {
         userLikes: 0,
         userFollowers: 0
       }
-    }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    })
+    }, { status: 500 })
   }
 }

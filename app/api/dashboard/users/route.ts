@@ -1,36 +1,20 @@
-/**
- * Cloudflare Pages Function - Dashboard用户列表
- * 路径: /api/dashboard/users
- */
-
+import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@supabase/supabase-js'
 
-export async function onRequest(context) {
-  const { request, env } = context
-  
-  if (request.method !== 'GET') {
-    return new Response(JSON.stringify({ error: 'Method not allowed' }), {
-      status: 405,
-      headers: { 'Content-Type': 'application/json' }
-    })
-  }
-
+export async function GET(request: NextRequest) {
   try {
     console.log('👥 获取用户列表')
     
     // 创建Supabase客户端
-    const supabaseUrl = env.NEXT_PUBLIC_SUPABASE_URL
-    const serviceRoleKey = env.SUPABASE_SERVICE_ROLE_KEY
+    const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
+    const serviceRoleKey = process.env.SUPABASE_SERVICE_ROLE_KEY
     
     if (!supabaseUrl || !serviceRoleKey) {
       console.error('❌ Supabase环境变量未配置')
-      return new Response(JSON.stringify({
+      return NextResponse.json({
         success: false,
         error: 'Database not configured',
         users: []
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
       })
     }
     
@@ -52,13 +36,10 @@ export async function onRequest(context) {
 
       if (usersError) {
         console.error('❌ 查询用户失败:', usersError)
-        return new Response(JSON.stringify({ 
+        return NextResponse.json({ 
           success: false,
           error: 'Failed to fetch users',
           users: [] 
-        }), {
-          status: 200,
-          headers: { 'Content-Type': 'application/json' }
         })
       }
 
@@ -107,36 +88,27 @@ export async function onRequest(context) {
 
       console.log(`✅ 成功获取 ${usersWithStats.length} 个用户`)
 
-      return new Response(JSON.stringify({
+      return NextResponse.json({
         success: true,
         users: usersWithStats,
         timestamp: new Date().toISOString()
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
       })
 
     } catch (dbError) {
       console.error("❌ 数据库查询失败:", dbError)
-      return new Response(JSON.stringify({ 
+      return NextResponse.json({ 
         success: false,
         error: 'Database query failed',
         users: [] 
-      }), {
-        status: 200,
-        headers: { 'Content-Type': 'application/json' }
       })
     }
     
   } catch (error) {
     console.error("❌ 获取用户列表失败:", error)
-    return new Response(JSON.stringify({ 
+    return NextResponse.json({ 
       success: false,
       error: 'Failed to fetch users',
       users: []
-    }), { 
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
-    })
+    }, { status: 500 })
   }
 }

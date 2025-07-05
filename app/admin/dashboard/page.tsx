@@ -181,7 +181,7 @@ function AdminDashboardContent() {
     file: null as File | null,
     title: '',
     prompt: '',
-    style: 'Admin',
+    style: '',
     isPublic: false
   })
   
@@ -380,6 +380,8 @@ function AdminDashboardContent() {
       
       // 加载统计数据 - 添加时间戳防止缓存
       const timestamp = new Date().getTime();
+      console.log('🔄 开始请求统计API...');
+      
       const statsResponse = await fetch(`/api/dashboard/stats?t=${timestamp}`, {
         cache: 'no-cache',
         headers: {
@@ -387,11 +389,23 @@ function AdminDashboardContent() {
         }
       });
       
-      console.log('📊 Stats API响应状态:', statsResponse.status);
+      console.log('📊 Stats API响应:', {
+        status: statsResponse.status,
+        statusText: statsResponse.statusText,
+        url: statsResponse.url,
+        headers: Object.fromEntries(statsResponse.headers.entries())
+      });
       
       if (statsResponse.ok) {
         const statsData = await statsResponse.json()
         console.log('📊 收到统计数据:', statsData);
+        
+        // 检查是否是真实数据
+        if (statsData.isRealData) {
+          console.log('✅ 这是真实数据库数据!');
+        } else {
+          console.log('⚠️ 这可能是模拟数据!');
+        }
         
         if (statsData.stats) {
           console.log('✅ 设置Dashboard统计:', statsData.stats);
@@ -400,23 +414,76 @@ function AdminDashboardContent() {
           console.error('⚠️ 统计数据格式错误:', statsData);
         }
       } else {
-        console.error('❌ Stats API请求失败:', statsResponse.status);
+        // 尝试读取错误响应
+        let errorText = '';
+        try {
+          errorText = await statsResponse.text();
+        } catch (e) {
+          errorText = '无法读取错误响应';
+        }
+        console.error('❌ Stats API请求失败:', {
+          status: statsResponse.status,
+          statusText: statsResponse.statusText,
+          errorText: errorText
+        });
       }
 
       // 如果是管理员，加载用户和图片列表
       if (userRole === 'admin') {
+        console.log('👤 开始请求用户API...');
+        
         // 加载用户列表
         const usersResponse = await fetch('/api/dashboard/users')
+        console.log('👤 Users API响应:', {
+          status: usersResponse.status,
+          statusText: usersResponse.statusText,
+          url: usersResponse.url
+        });
+        
         if (usersResponse.ok) {
           const usersData = await usersResponse.json()
+          console.log('👤 收到用户数据:', usersData);
           setRecentUsers(usersData.users || [])
+        } else {
+          let errorText = '';
+          try {
+            errorText = await usersResponse.text();
+          } catch (e) {
+            errorText = '无法读取错误响应';
+          }
+          console.error('❌ Users API请求失败:', {
+            status: usersResponse.status,
+            statusText: usersResponse.statusText,
+            errorText: errorText
+          });
         }
 
+        console.log('🖼️ 开始请求图片API...');
+        
         // 加载图片列表
         const imagesResponse = await fetch('/api/dashboard/images')
+        console.log('🖼️ Images API响应:', {
+          status: imagesResponse.status,
+          statusText: imagesResponse.statusText,
+          url: imagesResponse.url
+        });
+        
         if (imagesResponse.ok) {
           const imagesData = await imagesResponse.json()
+          console.log('🖼️ 收到图片数据:', imagesData);
           setRecentImages(imagesData.images || [])
+        } else {
+          let errorText = '';
+          try {
+            errorText = await imagesResponse.text();
+          } catch (e) {
+            errorText = '无法读取错误响应';
+          }
+          console.error('❌ Images API请求失败:', {
+            status: imagesResponse.status,
+            statusText: imagesResponse.statusText,
+            errorText: errorText
+          });
         }
 
         // 只有在数据为空时才加载API配置和风格数据
