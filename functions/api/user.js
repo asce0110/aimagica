@@ -59,7 +59,16 @@ export async function onRequest(context) {
     
   } catch (error) {
     console.error('❌ JWT验证失败:', error)
-    return new Response(JSON.stringify({ error: 'Invalid token' }), {
+    console.error('Token内容:', authToken)
+    console.error('错误详情:', error.message)
+    return new Response(JSON.stringify({ 
+      error: 'Invalid token',
+      debug: { 
+        tokenLength: authToken?.length,
+        tokenParts: authToken?.split('.').length,
+        errorMessage: error.message
+      }
+    }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' }
     })
