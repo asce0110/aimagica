@@ -33,6 +33,11 @@ export async function onRequest(context) {
     return Response.redirect(`${url.origin}/?error=missing_code`, 302)
   }
   
+  if (!GOOGLE_CLIENT_SECRET) {
+    console.error('❌ 缺少GOOGLE_CLIENT_SECRET')
+    return Response.redirect(`${url.origin}/?error=missing_secret`, 302)
+  }
+  
   try {
     // 1. 用授权码换取访问令牌
     const tokenResponse = await fetch('https://oauth2.googleapis.com/token', {
