@@ -3,13 +3,14 @@
 import React, { ReactNode, createContext, useContext } from "react"
 import { SessionProvider, useSession, signOut, signIn } from "next-auth/react"
 import { ThemeProvider } from "@/components/theme-provider"
+import { getUserFromCookie, signIn as authSignIn, signOut as authSignOut, checkLoginStatus } from "@/lib/auth"
 
 interface ProvidersProps {
   children: ReactNode
 }
 
-// 检测是否为静态导出环境
-const isStaticExport = false // 切换到服务器模式以支持谷歌登录
+// 检测是否为静态导出环境 - 使用Pages Functions OAuth
+const isStaticExport = true // 使用Pages Functions实现OAuth
 
 // Mock Session Context for static export
 interface MockSession {
@@ -50,30 +51,45 @@ function MockSessionProvider({ children }: { children: ReactNode }) {
 // 导出兼容的 useSession hook
 export function useSessionCompat() {
   if (isStaticExport) {
-    // 使用 useState 来确保组件状态的一致性
-    const [defaultSession] = React.useState<MockSessionContextType>({
+    // 使用Pages Functions OAuth
+    const [session, setSession] = React.useState<MockSessionContextType>({
       data: null,
-      status: "unauthenticated",
+      status: "loading",
       update: async () => null,
     })
 
-    // 在服务器端渲染或静态导出中，直接返回默认状态
-    if (typeof window === 'undefined') {
-      return defaultSession
-    }
-
-    // 在客户端，尝试使用 MockSessionContext
-    try {
-      const context = useContext(MockSessionContext)
-      if (context) {
-        return context
+    React.useEffect(() => {
+      // 检查登录状态
+      checkLoginStatus()
+      
+      // 从Cookie获取用户信息
+      const user = getUserFromCookie()
+      
+      if (user) {
+        setSession({
+          data: { user },
+          status: "authenticated",
+          update: async () => null,
+        })
+      } else {
+        setSession({
+          data: null,
+          status: "unauthenticated", 
+          update: async () => null,
+        })
       }
-    } catch (e) {
-      console.debug('MockSessionContext not available:', e)
+    }, [])
+
+    // 在服务器端渲染中，直接返回loading状态
+    if (typeof window === 'undefined') {
+      return {
+        data: null,
+        status: "loading" as const,
+        update: async () => null,
+      }
     }
 
-    // 返回默认状态
-    return defaultSession
+    return session
   } else {
     // 服务器模式，使用真正的NextAuth
     return useSession()
@@ -83,10 +99,8 @@ export function useSessionCompat() {
 // 导出兼容的 signOut function
 export async function signOutCompat(options?: any) {
   if (isStaticExport) {
-    // 静态导出模式下，只做客户端重定向
-    if (typeof window !== 'undefined') {
-      window.location.href = options?.callbackUrl || '/'
-    }
+    // 使用Pages Functions登出
+    authSignOut()
     return
   } else {
     // 服务器模式，使用真正的NextAuth signOut
@@ -97,10 +111,8 @@ export async function signOutCompat(options?: any) {
 // 导出兼容的 signIn function
 export async function signInCompat(provider?: string, options?: any) {
   if (isStaticExport) {
-    // 静态导出模式下，重定向到登录页面
-    if (typeof window !== 'undefined') {
-      window.location.href = '/admin/login'
-    }
+    // 使用Pages Functions登录
+    authSignIn()
     return
   } else {
     // 服务器模式，使用真正的NextAuth signIn

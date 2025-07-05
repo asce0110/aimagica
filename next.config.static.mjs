@@ -4,7 +4,7 @@ const nextConfig = {
   output: 'export',
   
   // 基础配置
-  distDir: '.next',
+  distDir: 'out',
   trailingSlash: false,
   assetPrefix: '',
   
