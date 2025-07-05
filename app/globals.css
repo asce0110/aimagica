@@ -371,3 +371,28 @@
   color: #2d3e2d !important;
 }
 
+/* Style Management Badge标签字体优化 */
+.admin-dashboard .text-xs.bg-red-500 {
+  color: white !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.admin-dashboard .text-xs.bg-yellow-400 {
+  color: #1a1a1a !important;
+  font-weight: 700 !important;
+  text-shadow: none;
+}
+
+.admin-dashboard .text-xs.bg-green-500,
+.admin-dashboard .text-xs.bg-red-500 {
+  color: white !important;
+  font-weight: 700 !important;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+}
+
+.admin-dashboard .text-xs.bg-\[\#d4a574\] {
+  color: #2d3e2d !important;
+  font-weight: 700 !important;
+}
+

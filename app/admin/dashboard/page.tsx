@@ -2581,19 +2581,19 @@ function AdminDashboardContent() {
                                       {style.emoji} {style.name}
                                     </h3>
                                     <div className="flex gap-1">
-                                      <Badge className="text-xs bg-red-500 text-black border-2 border-black font-black px-2 py-1">
+                                      <Badge className="text-xs bg-red-500 text-white border-2 border-black font-bold px-2 py-1">
                                         {style.type}
                                       </Badge>
-                                      <Badge className="text-xs bg-yellow-400 text-black border-2 border-black font-black px-2 py-1">
+                                      <Badge className="text-xs bg-yellow-400 text-black border-2 border-black font-bold px-2 py-1">
                                         {style.category}
                                       </Badge>
                                       {style.is_premium && (
-                                        <Badge className="text-xs bg-[#d4a574] text-[#2d3e2d]">
+                                        <Badge className="text-xs bg-[#d4a574] text-[#2d3e2d] font-bold">
                                           Premium
                                         </Badge>
                                       )}
                                       <Badge 
-                                        className={`text-xs ${style.is_active ? 'bg-green-500' : 'bg-red-500'} text-white`}
+                                        className={`text-xs ${style.is_active ? 'bg-green-500' : 'bg-red-500'} text-white font-bold`}
                                       >
                                         {style.is_active ? 'Active' : 'Inactive'}
                                       </Badge>
