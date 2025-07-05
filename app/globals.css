@@ -212,10 +212,16 @@ button, input[type="button"], input[type="submit"],
   }
 }
 
-/* 桌面端全部使用Fredoka One - 正文也使用装饰字体 */
+/* 桌面端全部使用Fredoka One - 终极强制 */
 @media (min-width: 769px) {
-  body, p, span, div, textarea, label,
-  .font-body, .font-accent, *:not(.keep-readable) {
+  * {
+    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
+  }
+  
+  html *, body *, div *, span *, p *, h1 *, h2 *, h3 *, h4 *, h5 *, h6 *,
+  button *, input *, select *, option *, textarea *, label *,
+  .font-body, .font-accent, .font-heading, .font-magic,
+  [style*="font-family"]:not(.keep-readable) {
     font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
   }
 }
@@ -282,5 +288,19 @@ button, .btn,
   [class*="Button"] {
     font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
     font-weight: 400 !important;
+  }
+}
+
+/* 最终大杀器 - 桌面端强制字体 */
+@media screen and (min-width: 769px) {
+  body, body *, html *, * {
+    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
+  }
+}
+
+/* 覆盖所有内联样式 */
+@media screen and (min-width: 769px) {
+  [style*="font-family"] {
+    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
   }
 }
