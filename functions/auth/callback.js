@@ -100,11 +100,10 @@ export async function onRequest(context) {
     console.log('✅ JWT生成成功')
     
     // 4. 重定向回前端并设置Token
-    const response = Response.redirect(`${url.origin}/?login=success`, 302)
-    
-    // 设置HttpOnly Cookie (更安全)
-    response.headers.append('Set-Cookie', `auth-token=${jwt}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
-    response.headers.append('Set-Cookie', `user-info=${utf8ToBase64(JSON.stringify({
+    const headers = new Headers()
+    headers.set('Location', `${url.origin}/?login=success`)
+    headers.append('Set-Cookie', `auth-token=${jwt}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
+    headers.append('Set-Cookie', `user-info=${utf8ToBase64(JSON.stringify({
       email: user.email,
       name: user.name,
       picture: user.picture
@@ -112,7 +111,10 @@ export async function onRequest(context) {
     
     console.log('🍪 设置Cookie成功')
     
-    return response
+    return new Response(null, {
+      status: 302,
+      headers: headers
+    })
     
   } catch (error) {
     console.error('❌ OAuth处理失败:', error)
