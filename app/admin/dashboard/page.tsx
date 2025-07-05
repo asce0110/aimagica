@@ -1038,7 +1038,7 @@ function AdminDashboardContent() {
         <div className="absolute bottom-20 left-20 w-32 h-32 bg-[#2d3e2d]/5 rounded-full blur-2xl"></div>
         
         {/* Floating Magic Elements */}
-        {isMounted && magicElements.map((element) => (
+        {isMounted && magicElements && Array.isArray(magicElements) && magicElements.map((element) => (
           <motion.div
             key={element.id}
             className="absolute"
@@ -1682,7 +1682,7 @@ function AdminDashboardContent() {
                       <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8b7355]"></div>
                       <span className="ml-4 text-[#8b7355] font-bold">Loading images...</span>
                     </div>
-                  ) : adminImages.length === 0 ? (
+                  ) : (!adminImages || !Array.isArray(adminImages) || adminImages.length === 0) ? (
                     <div className="text-center py-20">
                       <ImageIcon className="w-16 h-16 text-[#d4a574] mx-auto mb-4" />
                       <p className="text-[#8b7355] font-bold text-lg">No images found</p>
@@ -1820,7 +1820,7 @@ function AdminDashboardContent() {
                   )}
                   
                   {/* 加载更多按钮 */}
-                  {adminImages.length > 0 && hasMoreImages && (
+                  {adminImages && Array.isArray(adminImages) && adminImages.length > 0 && hasMoreImages && (
                     <div className="text-center mt-6">
                       <Button
                         onClick={loadMoreImages}
@@ -2330,7 +2330,7 @@ function AdminDashboardContent() {
                         )}
 
                         {/* Empty State - only show when not loading and no data */}
-                        {!isApiConfigsLoading && apiConfigs.filter(config => config.type === selectedApiType).length === 0 && (
+                        {!isApiConfigsLoading && apiConfigs && Array.isArray(apiConfigs) && apiConfigs.filter(config => config.type === selectedApiType).length === 0 && (
                           <div className="text-center py-8">
                             <p 
                               className="text-xl font-black text-[#8b7355] mb-4"
@@ -2544,9 +2544,9 @@ function AdminDashboardContent() {
                                   </p>
                                   
                                   <div className="text-xs text-gray-600">
-                                    <strong>Prompt Template:</strong> {style.prompt_template.length > 100 
+                                    <strong>Prompt Template:</strong> {style.prompt_template && style.prompt_template.length > 100 
                                       ? style.prompt_template.substring(0, 100) + '...' 
-                                      : style.prompt_template
+                                      : style.prompt_template || 'No template'
                                     }
                                   </div>
                                 </div>
@@ -2627,7 +2627,7 @@ function AdminDashboardContent() {
                         )}
 
                         {/* Empty State - only show when initial loading is complete and no data */}
-                        {!isStylesLoading && hasInitiallyLoadedStyles && styles.length === 0 && (
+                        {!isStylesLoading && hasInitiallyLoadedStyles && styles && Array.isArray(styles) && styles.length === 0 && (
                           <div className="text-center py-8">
                             <p 
                               className="text-xl font-black text-[#8b7355] mb-4"
