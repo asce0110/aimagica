@@ -27,9 +27,16 @@ export async function onRequest(context) {
   }
   
   try {
+    // UTF-8安全的base64解码
+    function base64ToUtf8(str) {
+      return decodeURIComponent(atob(str).split('').map(c => {
+        return '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)
+      }).join(''))
+    }
+    
     // 验证JWT (简化版本)
     const [header, payload, signature] = authToken.split('.')
-    const decodedPayload = JSON.parse(atob(payload))
+    const decodedPayload = JSON.parse(base64ToUtf8(payload))
     
     // 检查过期时间
     if (decodedPayload.exp < Math.floor(Date.now() / 1000)) {

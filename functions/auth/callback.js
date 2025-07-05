@@ -85,9 +85,16 @@ export async function onRequest(context) {
       exp: Math.floor(Date.now() / 1000) + (30 * 24 * 60 * 60), // 30天
     }
     
+    // UTF-8安全的base64编码
+    function utf8ToBase64(str) {
+      return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => {
+        return String.fromCharCode('0x' + p1)
+      }))
+    }
+    
     // 简化的JWT实现（仅用于测试）
-    const header = btoa(JSON.stringify({ alg: 'none', typ: 'JWT' }))
-    const payloadStr = btoa(JSON.stringify(payload))
+    const header = utf8ToBase64(JSON.stringify({ alg: 'none', typ: 'JWT' }))
+    const payloadStr = utf8ToBase64(JSON.stringify(payload))
     const jwt = `${header}.${payloadStr}.unsigned`
     
     console.log('✅ JWT生成成功')
@@ -97,7 +104,7 @@ export async function onRequest(context) {
     
     // 设置HttpOnly Cookie (更安全)
     response.headers.append('Set-Cookie', `auth-token=${jwt}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
-    response.headers.append('Set-Cookie', `user-info=${btoa(JSON.stringify({
+    response.headers.append('Set-Cookie', `user-info=${utf8ToBase64(JSON.stringify({
       email: user.email,
       name: user.name,
       picture: user.picture
