@@ -8,12 +8,19 @@ export async function onRequest(context) {
   
   // 从Cookie获取JWT
   const cookies = request.headers.get('Cookie') || ''
+  console.log('🍪 收到的Cookies:', cookies)
+  
   const authToken = cookies.split(';')
     .find(c => c.trim().startsWith('auth-token='))
     ?.split('=')[1]
   
+  console.log('🔑 提取的Token:', authToken ? '存在' : '不存在')
+  
   if (!authToken) {
-    return new Response(JSON.stringify({ error: 'Not authenticated' }), {
+    return new Response(JSON.stringify({ 
+      error: 'Not authenticated',
+      debug: { cookies: cookies || 'No cookies found' }
+    }), {
       status: 401,
       headers: { 'Content-Type': 'application/json' }
     })
@@ -22,7 +29,9 @@ export async function onRequest(context) {
   try {
     // 验证JWT (简化版本)
     const [header, payload, signature] = authToken.split('.')
-    const decodedPayload = JSON.parse(atob(payload))
+    // 处理base64url解码
+    const payloadPadded = payload.replace(/[-_]/g, m => ({'-':'+','_':'/'}[m])) + '=='.substring(0, (4 - payload.length % 4) % 4)
+    const decodedPayload = JSON.parse(atob(payloadPadded))
     
     // 检查过期时间
     if (decodedPayload.exp < Math.floor(Date.now() / 1000)) {

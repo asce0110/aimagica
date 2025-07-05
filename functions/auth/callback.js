@@ -75,8 +75,8 @@ export async function onRequest(context) {
     }
     
     // 简单的JWT实现（生产环境建议用库）
-    const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' }))
-    const payloadStr = btoa(JSON.stringify(payload))
+    const header = btoa(JSON.stringify({ alg: 'HS256', typ: 'JWT' })).replace(/[+/=]/g, m => ({'+':'-','/':'_','=':''}[m]))
+    const payloadStr = btoa(JSON.stringify(payload)).replace(/[+/=]/g, m => ({'+':'-','/':'_','=':''}[m]))
     
     // 使用Web Crypto API生成签名
     const key = await crypto.subtle.importKey(
@@ -93,7 +93,11 @@ export async function onRequest(context) {
       new TextEncoder().encode(`${header}.${payloadStr}`)
     )
     
-    const jwt = `${header}.${payloadStr}.${btoa(String.fromCharCode(...new Uint8Array(signature)))}`
+    // 转换签名为base64url
+    const signatureArray = new Uint8Array(signature)
+    const signatureBase64 = btoa(String.fromCharCode(...signatureArray)).replace(/[+/=]/g, m => ({'+':'-','/':'_','=':''}[m]))
+    
+    const jwt = `${header}.${payloadStr}.${signatureBase64}`
     
     console.log('✅ JWT生成成功')
     
