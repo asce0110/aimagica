@@ -1165,8 +1165,7 @@ function AdminDashboardContent() {
                     AIMAGICA {userRole === 'admin' ? 'Admin' : 'User'}
                   </h1>
                   <p
-                    className="text-sm font-bold text-[#8b7355] transform rotate-1"
-                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                    className="text-sm font-bold text-[#2d3e2d] transform rotate-1"
                   >
                     {userRole === 'admin' ? 'Master Control Panel 👑' : 'Creative Workspace 🎨'}
                   </p>
@@ -1220,8 +1219,7 @@ function AdminDashboardContent() {
                         {session.user.name || 'Magic User'}
                       </p>
                       <p 
-                        className="text-[#8b7355] font-bold text-xs"
-                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                        className="text-[#2d3e2d] font-bold text-xs"
                       >
                         {userRole === 'admin' ? 'Admin' : 'User'} 
                       </p>

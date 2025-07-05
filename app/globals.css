@@ -296,9 +296,33 @@
   font-weight: 600 !important;
 }
 
-/* 确保Admin Dashboard中的文字颜色足够深 */
+/* 确保Admin Dashboard中的文字颜色足够深 - 强制覆盖所有浅色 */
 .admin-dashboard .text-\[\#8b7355\] {
   color: #2d3e2d !important;
+}
+
+/* 覆盖所有可能的浅色文字 */
+.admin-dashboard [class*="text-[#8b7355]"] {
+  color: #2d3e2d !important;
+}
+
+.admin-dashboard [class*="text-gray"] {
+  color: #2d3e2d !important;
+}
+
+/* 特别针对Style Management页面的描述文字 */
+.admin-dashboard p,
+.admin-dashboard span:not(.emoji),
+.admin-dashboard div:not(.w-):not(.h-):not(.bg-):not(.border-):not(.rounded-):not(.flex):not(.grid):not(.absolute):not(.relative) {
+  color: #2d3e2d !important;
+}
+
+/* 确保标签和描述文字可读 */
+.admin-dashboard label,
+.admin-dashboard .text-sm,
+.admin-dashboard .text-xs {
+  color: #2d3e2d !important;
+  font-weight: 500 !important;
 }
 
 /* Admin Dashboard字体覆盖所有内联样式 */
@@ -316,5 +340,34 @@
 .admin-dashboard .text-2xl,
 .admin-dashboard .text-3xl {
   font-family: var(--font-heading) !important;
+}
+
+/* 终极强制规则 - 覆盖所有可能的浅色文字 */
+.admin-dashboard * {
+  color: #2d3e2d !important;
+  font-weight: 500 !important;
+}
+
+/* 保留必要的颜色 - 背景、边框等 */
+.admin-dashboard .bg-\[\#d4a574\],
+.admin-dashboard .bg-\[\#8b7355\],
+.admin-dashboard .border-\[\#8b7355\],
+.admin-dashboard .border-\[\#d4a574\] {
+  background-color: initial !important;
+  border-color: initial !important;
+}
+
+/* 按钮和交互元素保持原色 */
+.admin-dashboard button,
+.admin-dashboard .bg-red-500,
+.admin-dashboard .bg-green-500,
+.admin-dashboard .bg-blue-500,
+.admin-dashboard .bg-yellow-500 {
+  color: white !important;
+}
+
+/* 徽章保持原色 */
+.admin-dashboard .bg-\[\#d4a574\] {
+  color: #2d3e2d !important;
 }
 
