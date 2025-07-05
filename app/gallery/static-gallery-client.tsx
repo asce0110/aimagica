@@ -499,21 +499,56 @@ export default function StaticGalleryClient() {
       {/* 导航栏 */}
       <header className="p-4 md:p-6 bg-[#0a0a0a] border-b border-[#333] sticky top-0 z-50">
         <div className="container mx-auto">
-          <div className="flex justify-between items-center">
+          {/* 移动端：上下布局，避免搜索框挡住logo */}
+          <div className="md:hidden">
+            {/* Logo行 */}
+            <div className="flex items-center justify-center mb-3">
+              <div className="flex items-center space-x-3 cursor-pointer transform hover:scale-105 transition-all">
+                <div className="relative">
+                  <img
+                    src={logoUrl}
+                    alt="AIMAGICA"
+                    className="w-8 h-8 rounded-lg shadow-lg transform rotate-3 hover:rotate-0 transition-all"
+                  />
+                  <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#d4a574] rounded-full animate-pulse"></div>
+                </div>
+                <div>
+                  <h1 className="text-lg font-black text-white transform -rotate-1" style={{ textShadow: "2px 2px 0px #333" }}>
+                    AIMAGICA
+                  </h1>
+                  <p className="text-xs text-gray-400 transform rotate-1">Gallery ✨</p>
+                </div>
+              </div>
+            </div>
+            
+            {/* 搜索行 */}
+            <div className="relative">
+              <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+              <Input
+                placeholder="Search magical art..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className="pl-10 w-full bg-[#1a1a1a] border-2 border-[#444] text-white placeholder:text-gray-400 rounded-xl font-bold"
+              />
+            </div>
+          </div>
+
+          {/* 桌面端：左右布局 */}
+          <div className="hidden md:flex justify-between items-center">
             <div className="flex items-center space-x-3 cursor-pointer transform hover:scale-105 transition-all">
               <div className="relative">
                 <img
                   src={logoUrl}
                   alt="AIMAGICA"
-                  className="w-8 h-8 md:w-10 md:h-10 rounded-lg shadow-lg transform rotate-3 hover:rotate-0 transition-all"
+                  className="w-10 h-10 rounded-lg shadow-lg transform rotate-3 hover:rotate-0 transition-all"
                 />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#d4a574] rounded-full animate-pulse"></div>
               </div>
               <div>
-                <h1 className="text-lg md:text-xl font-black text-white transform -rotate-1" style={{ textShadow: "2px 2px 0px #333" }}>
+                <h1 className="text-xl font-black text-white transform -rotate-1" style={{ textShadow: "2px 2px 0px #333" }}>
                   AIMAGICA
                 </h1>
-                <p className="text-xs text-gray-400 transform rotate-1">Static Gallery ✨</p>
+                <p className="text-xs text-gray-400 transform rotate-1">Gallery ✨</p>
               </div>
             </div>
 
@@ -555,33 +590,53 @@ export default function StaticGalleryClient() {
 
         {/* 统计信息 */}
         <motion.div 
-          className="mb-6 flex items-center justify-between bg-[#1a1a1a] rounded-xl p-4 border-2 border-[#444]"
+          className="mb-6 bg-[#1a1a1a] rounded-xl p-4 border-2 border-[#444]"
           initial={{ opacity: 0, y: -10 }}
           animate={{ opacity: 1, y: 0 }}
         >
-          <div className="flex items-center space-x-4">
-            <div className="flex items-center space-x-2">
-              <Sparkles className="w-5 h-5 text-[#d4a574]" />
-              <span className="text-white font-bold">
-                {displayedImages.length} of {filteredImages.length} artworks
-              </span>
+          {/* 移动端：简化版统计信息 */}
+          <div className="md:hidden">
+            <div className="flex items-center justify-between">
+              <div className="flex items-center space-x-2">
+                <Sparkles className="w-5 h-5 text-[#d4a574]" />
+                <span className="text-white font-bold">
+                  {displayedImages.length} / {filteredImages.length}
+                </span>
+              </div>
+              {searchQuery && (
+                <Badge variant="outline" className="bg-[#2a2a2a] text-gray-300 text-xs">
+                  "{searchQuery}"
+                </Badge>
+              )}
             </div>
-            {/* 显示静态Gallery状态 */}
-            <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
-              ✨ Static Gallery Ready
-            </Badge>
-            <Badge variant="outline" className="bg-blue-500/20 text-blue-300 border-blue-500">
-              📱 No API Required
-            </Badge>
-            {searchQuery && (
-              <Badge variant="outline" className="bg-[#2a2a2a] text-gray-300">
-                Search: "{searchQuery}"
-              </Badge>
-            )}
           </div>
-          <div className="flex items-center space-x-2 text-gray-400 text-sm">
-            <TrendingUp className="w-4 h-4" />
-            <span>🚀 Instant loading gallery</span>
+
+          {/* 桌面端：完整版统计信息 */}
+          <div className="hidden md:flex items-center justify-between">
+            <div className="flex items-center space-x-4">
+              <div className="flex items-center space-x-2">
+                <Sparkles className="w-5 h-5 text-[#d4a574]" />
+                <span className="text-white font-bold">
+                  {displayedImages.length} of {filteredImages.length} magical creations
+                </span>
+              </div>
+              {/* 显示静态Gallery状态 - 仅桌面端 */}
+              <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
+                ✨ Gallery Ready
+              </Badge>
+              <Badge variant="outline" className="bg-blue-500/20 text-blue-300 border-blue-500">
+                📱 No API Required
+              </Badge>
+              {searchQuery && (
+                <Badge variant="outline" className="bg-[#2a2a2a] text-gray-300">
+                  Search: "{searchQuery}"
+                </Badge>
+              )}
+            </div>
+            <div className="flex items-center space-x-2 text-gray-400 text-sm">
+              <TrendingUp className="w-4 h-4" />
+              <span>🚀 Instant loading</span>
+            </div>
           </div>
         </motion.div>
 
@@ -606,10 +661,9 @@ export default function StaticGalleryClient() {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
           >
-            {/* 搜索/过滤后无结果 */}
             <div className="text-6xl mb-4">🔍</div>
-            <h3 className="text-xl font-bold text-white mb-2">No artworks found</h3>
-            <p className="text-gray-400">Try adjusting your search or filter criteria</p>
+            <h3 className="text-xl font-bold text-white mb-2">Nothing found</h3>
+            <p className="text-gray-400">Try different search or filter</p>
             <button 
               onClick={() => {
                 setFilter('all')
@@ -617,7 +671,7 @@ export default function StaticGalleryClient() {
               }}
               className="mt-4 px-4 py-2 bg-[#d4a574] text-black font-bold rounded-lg hover:bg-[#c19660] transition-colors"
             >
-              Show All Artworks
+              Show All
             </button>
           </motion.div>
         )}
@@ -768,8 +822,8 @@ export default function StaticGalleryClient() {
                     </Button>
                   </div>
 
-                  {/* 评论区域 - 本地存储版本 */}
-                  <div>
+                  {/* 评论区域 - 仅桌面端显示 */}
+                  <div className="hidden md:block">
                     <h3 className="text-white font-black mb-4 transform -rotate-0.5" style={{ textShadow: "1px 1px 0px #333" }}>
                       Magic Comments 💬
                       {isLoadingComments && (
