@@ -2578,8 +2578,7 @@ function AdminDashboardContent() {
                                 <div className="flex-1">
                                   <div className="flex items-center space-x-3 mb-2">
                                     <h3 
-                                      className="text-xl font-black text-[#2d3e2d]"
-                                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                                      className="text-xl font-bold text-[#2d3e2d]"
                                     >
                                       {style.emoji} {style.name}
                                     </h3>
@@ -2604,14 +2603,13 @@ function AdminDashboardContent() {
                                   </div>
                                   
                                   <p 
-                                    className="text-[#8b7355] font-bold text-sm mb-2"
-                                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                                    className="text-[#2d3e2d] font-medium text-sm mb-2"
                                   >
                                     {style.description}
                                   </p>
                                   
-                                  <div className="text-xs text-[#2d3e2d]">
-                                    <strong>Prompt Template:</strong> {style.prompt_template && style.prompt_template.length > 100 
+                                  <div className="text-xs text-[#4a5a4a] font-medium">
+                                    <strong className="text-[#2d3e2d]">Prompt Template:</strong> {style.prompt_template && style.prompt_template.length > 100 
                                       ? style.prompt_template.substring(0, 100) + '...' 
                                       : style.prompt_template || 'No template'
                                     }
@@ -2670,22 +2668,19 @@ function AdminDashboardContent() {
                           <div className="text-center py-12">
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8b7355] mx-auto mb-4"></div>
                             <p 
-                              className="text-lg font-black text-[#8b7355] mb-2"
-                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                              className="text-lg font-bold text-[#2d3e2d] mb-2"
                             >
                               Loading styles... 🔄
                             </p>
                             <p 
-                              className="text-sm text-[#8b7355] opacity-75"
-                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                              className="text-sm text-[#4a5a4a] opacity-75"
                             >
                               This may take a few seconds...
                             </p>
                             {/* Timeout Hint */}
                             <div className="mt-4">
                               <p 
-                                className="text-xs text-[#8b7355]"
-                                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                                className="text-xs text-[#4a5a4a]"
                               >
                                 If loading takes too long, try refreshing the page
                               </p>
@@ -2697,12 +2692,11 @@ function AdminDashboardContent() {
                         {!isStylesLoading && hasInitiallyLoadedStyles && styles && Array.isArray(styles) && styles.length === 0 && (
                           <div className="text-center py-8">
                             <p 
-                              className="text-xl font-black text-[#8b7355] mb-4"
-                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                              className="text-xl font-bold text-[#2d3e2d] mb-4"
                             >
                               No styles configured yet! 🎨
                             </p>
-                            <p className="text-[#8b7355] mb-6">
+                            <p className="text-[#4a5a4a] mb-6">
                               Create your first style to get started.
                             </p>
                             <Button
@@ -2710,8 +2704,7 @@ function AdminDashboardContent() {
                                 setEditingStyle(null)
                                 setShowAddStyleForm(true)
                               }}
-                              className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-6 py-3 rounded-2xl transform hover:scale-105 transition-all text-lg"
-                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
+                              className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-bold px-6 py-3 rounded-2xl transform hover:scale-105 transition-all text-lg"
                             >
                               <Plus className="w-5 h-5 mr-2" />
                               Add Your First Style ✨

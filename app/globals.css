@@ -273,3 +273,48 @@
   letter-spacing: 0.01em;
 }
 
+/* Admin Dashboard强制字体优化 - 确保可读性 */
+.admin-dashboard h1, 
+.admin-dashboard h2, 
+.admin-dashboard h3, 
+.admin-dashboard h4, 
+.admin-dashboard h5, 
+.admin-dashboard h6 {
+  font-family: var(--font-heading) !important;
+  font-weight: 700 !important;
+}
+
+.admin-dashboard p, 
+.admin-dashboard span, 
+.admin-dashboard div:not(.emoji):not(.icon) {
+  font-family: var(--font-body) !important;
+  font-weight: 400 !important;
+}
+
+.admin-dashboard button {
+  font-family: var(--font-accent) !important;
+  font-weight: 600 !important;
+}
+
+/* 确保Admin Dashboard中的文字颜色足够深 */
+.admin-dashboard .text-\[\#8b7355\] {
+  color: #2d3e2d !important;
+}
+
+/* Admin Dashboard字体覆盖所有内联样式 */
+.admin-dashboard * {
+  font-family: var(--font-body) !important;
+}
+
+.admin-dashboard h1, 
+.admin-dashboard h2, 
+.admin-dashboard h3, 
+.admin-dashboard h4, 
+.admin-dashboard h5, 
+.admin-dashboard h6,
+.admin-dashboard .text-xl,
+.admin-dashboard .text-2xl,
+.admin-dashboard .text-3xl {
+  font-family: var(--font-heading) !important;
+}
+

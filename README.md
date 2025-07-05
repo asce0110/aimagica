@@ -199,13 +199,15 @@ tail -f build-monitor.log
   - 原因：错误地替换了 `MagicImage` 组件为普通 `img` 标签，丢失了Next.js图片优化；Gallery页面使用硬编码数据而非API；HeroSection使用错误的API路径
   - 解决方案：
 - ✅ **🆕 桌面端字体优化修复** (2025-07-01)：
-  - 问题：桌面端所有字体被强制覆盖为Fredoka One，导致Style Management页面等字体过粗，可读性差
-  - 原因：globals.css中的`@media (min-width: 769px) { * { font-family: 'Fredoka One'... } }`规则强制覆盖了所有元素字体
+  - 问题：桌面端所有字体被强制覆盖为Fredoka One，导致Style Management页面等字体过粗，可读性差；Style卡片描述文字颜色过浅
+  - 原因：globals.css中的强制字体覆盖规则 + Admin Dashboard页面大量内联字体样式 + 浅色文字颜色(#8b7355)
   - 解决方案：
     1. 恢复原始字体策略：标题使用科技感字体(Orbitron)，正文使用现代字体(Space Grotesk)
     2. 仅对特定魔法主题元素使用Fredoka One字体(.font-magic, .hero-title等)
-    3. Admin Dashboard页面添加.admin-dashboard类，优化Style Management页面字体可读性
-    4. 保留Gallery页面的Comic Sans MS艺术风格
+    3. **移除所有内联字体样式**：从Admin Dashboard页面移除`style={{ fontFamily: "Fredoka One..." }}`
+    4. **优化文字颜色对比度**：将浅色文字(#8b7355)改为深色(#2d3e2d)，提升可读性
+    5. 添加强制CSS规则确保Admin Dashboard字体正确应用
+    6. 保留Gallery页面的Comic Sans MS艺术风格
     1. 恢复 `MagicImage` 组件使用，保持Next.js图片优化和错误处理
     2. 恢复Gallery页面完整API调用逻辑，从workers数据库加载真实图片
     3. 修复HeroSection组件API路径，使用 `getApiEndpoint('GALLERY_PUBLIC')` 获取正确的workers API URL
