@@ -249,34 +249,62 @@ function AdminDashboardContent() {
 
   // 🔍 CSS加载检查日志 - 检查Badge字体修复是否生效
   useEffect(() => {
-    if (!isMounted || activeTab !== 'styles') return
+    console.log('🔧 CSS检查触发条件:', { isMounted, activeTab, stylesLength: styles?.length })
     
-    console.log('🎨 Admin Dashboard CSS 检查开始...')
+    if (!isMounted) {
+      console.log('⏳ 页面未挂载，等待...')
+      return
+    }
+    
+    if (activeTab !== 'styles') {
+      console.log('📋 当前不在styles页面，当前页面:', activeTab)
+      return
+    }
+    
+    console.log('🎨 ===== Admin Dashboard CSS 检查开始 =====')
     console.log('📋 当前页面URL:', window.location.href)
     console.log('🕐 当前时间:', new Date().toISOString())
+    console.log('📊 Styles数据数量:', styles?.length || 0)
     
-    // 检查.admin-dashboard类是否存在
+    // 立即检查admin-dashboard类
     const adminDashboard = document.querySelector('.admin-dashboard')
     console.log('📋 .admin-dashboard 元素:', adminDashboard ? '✅ 找到' : '❌ 未找到')
     
+    // 立即检查badge元素
+    const badges = document.querySelectorAll('.admin-dashboard [class*="bg-"]')
+    console.log('🏷️ 所有带背景色的元素数量:', badges.length)
+    
     // 延迟检查Badge元素，确保页面完全渲染
     const checkTimer = setTimeout(() => {
-      const badges = document.querySelectorAll('.admin-dashboard .text-xs[class*="bg-"]')
-      console.log('🏷️ Badge 元素数量:', badges.length)
+      console.log('⏰ 开始详细Badge检查...')
       
-      if (badges.length === 0) {
-        console.log('⚠️ 未找到Badge元素，可能页面还未加载完成')
+      const styleBadges = document.querySelectorAll('.admin-dashboard .text-xs[class*="bg-"]')
+      console.log('🏷️ Badge 元素数量:', styleBadges.length)
+      
+      if (styleBadges.length === 0) {
+        console.log('⚠️ 未找到Badge元素，尝试其他选择器...')
+        const allBadges = document.querySelectorAll('[class*="bg-red-500"], [class*="bg-yellow-400"], [class*="bg-green-500"]')
+        console.log('🔍 所有可能的Badge元素:', allBadges.length)
+        
+        allBadges.forEach((badge, index) => {
+          console.log(`🔍 可能的Badge ${index + 1}:`, {
+            textContent: badge.textContent?.trim(),
+            className: badge.className,
+            tagName: badge.tagName
+          })
+        })
         return
       }
       
-      badges.forEach((badge, index) => {
+      console.log('🔍 开始检查每个Badge的样式...')
+      styleBadges.forEach((badge, index) => {
         const computedStyle = window.getComputedStyle(badge)
         const color = computedStyle.color
         const backgroundColor = computedStyle.backgroundColor
         const fontWeight = computedStyle.fontWeight
         const textShadow = computedStyle.textShadow
         
-        console.log(`🏷️ Badge ${index + 1}:`, {
+        console.log(`🏷️ Badge ${index + 1} 详细信息:`, {
           textContent: badge.textContent?.trim(),
           className: badge.className,
           color: color,
@@ -294,6 +322,7 @@ function AdminDashboardContent() {
       const yellowBadges = document.querySelectorAll('.admin-dashboard .bg-yellow-400')
       const greenBadges = document.querySelectorAll('.admin-dashboard .bg-green-500')
       
+      console.log('📊 Badge统计:')
       console.log('🔴 红色Badge数量:', redBadges.length)
       console.log('🟡 黄色Badge数量:', yellowBadges.length)
       console.log('🟢 绿色Badge数量:', greenBadges.length)
@@ -301,7 +330,8 @@ function AdminDashboardContent() {
       // 检查第一个红色Badge的颜色
       if (redBadges.length > 0) {
         const redBadgeStyle = window.getComputedStyle(redBadges[0])
-        console.log('🔴 第一个红色Badge样式:', {
+        console.log('🔴 第一个红色Badge样式检查:', {
+          textContent: redBadges[0].textContent?.trim(),
           color: redBadgeStyle.color,
           expected: 'white',
           isCorrect: redBadgeStyle.color === 'rgb(255, 255, 255)' || redBadgeStyle.color === 'white'
@@ -311,26 +341,45 @@ function AdminDashboardContent() {
       // 检查第一个黄色Badge的颜色
       if (yellowBadges.length > 0) {
         const yellowBadgeStyle = window.getComputedStyle(yellowBadges[0])
-        console.log('🟡 第一个黄色Badge样式:', {
+        console.log('🟡 第一个黄色Badge样式检查:', {
+          textContent: yellowBadges[0].textContent?.trim(),
           color: yellowBadgeStyle.color,
           expected: 'black',
           isCorrect: yellowBadgeStyle.color === 'rgb(0, 0, 0)' || yellowBadgeStyle.color === 'black'
         })
       }
       
-      // 总结
-      const isWorkingCorrectly = 
-        (redBadges.length === 0 || window.getComputedStyle(redBadges[0]).color === 'rgb(255, 255, 255)') &&
-        (yellowBadges.length === 0 || window.getComputedStyle(yellowBadges[0]).color === 'rgb(0, 0, 0)')
+      // 总结检查结果
+      let isWorkingCorrectly = true
+      let issues = []
       
+      if (redBadges.length > 0) {
+        const redColor = window.getComputedStyle(redBadges[0]).color
+        if (redColor !== 'rgb(255, 255, 255)' && redColor !== 'white') {
+          isWorkingCorrectly = false
+          issues.push(`红色Badge文字颜色: ${redColor} (期望: white)`)
+        }
+      }
+      
+      if (yellowBadges.length > 0) {
+        const yellowColor = window.getComputedStyle(yellowBadges[0]).color
+        if (yellowColor !== 'rgb(0, 0, 0)' && yellowColor !== 'black') {
+          isWorkingCorrectly = false
+          issues.push(`黄色Badge文字颜色: ${yellowColor} (期望: black)`)
+        }
+      }
+      
+      console.log('🎯 ===== 最终检查结果 =====')
       if (isWorkingCorrectly) {
         console.log('✅ Badge颜色修复成功应用!')
       } else {
-        console.log('❌ Badge颜色未正确应用，可能是缓存问题')
+        console.log('❌ Badge颜色未正确应用，发现问题:')
+        issues.forEach(issue => console.log(`   - ${issue}`))
         console.log('💡 建议操作: 强制刷新 (Ctrl+F5) 或清理浏览器缓存')
       }
+      console.log('🎯 ===== 检查结束 =====')
       
-    }, 2000) // 等待2秒让页面完全加载
+    }, 3000) // 增加到3秒等待时间
     
     return () => clearTimeout(checkTimer)
     
