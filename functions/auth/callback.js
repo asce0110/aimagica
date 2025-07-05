@@ -105,11 +105,13 @@ export async function onRequest(context) {
     
     // URL编码Cookie值防止特殊字符问题
     const encodedJwt = encodeURIComponent(jwt)
-    const encodedUserInfo = encodeURIComponent(utf8ToBase64(JSON.stringify({
+    // 只使用UTF-8安全编码，不再双重编码
+    const userInfoBase64 = utf8ToBase64(JSON.stringify({
       email: user.email,
       name: user.name,
       picture: user.picture
-    })))
+    }))
+    const encodedUserInfo = userInfoBase64
     
     headers.append('Set-Cookie', `auth-token=${encodedJwt}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
     headers.append('Set-Cookie', `user-info=${encodedUserInfo}; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)

@@ -74,7 +74,9 @@
       "Bash(do echo \"Processing $file...\")",
       "Bash(done)",
       "Bash(cross-env NEXT_CONFIG_FILE=next.config.static.mjs next build)",
-      "Bash(npx:*)"
+      "Bash(npx:*)",
+      "Bash(kill:*)",
+      "WebFetch(domain:66333676.aimagica.pages.dev)"
     ],
     "deny": []
   }
