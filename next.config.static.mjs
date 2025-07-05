@@ -5,7 +5,7 @@ const nextConfig = {
   
   // 基础配置
   trailingSlash: false,
-  assetPrefix: '',
+  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
   
   // Next.js 14 静态导出配置
   
