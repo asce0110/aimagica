@@ -591,57 +591,20 @@ export default function StaticGalleryClient() {
           </Tabs>
         </div>
 
-        {/* 统计信息 */}
-        <motion.div 
-          className="mb-6 bg-[#1a1a1a] rounded-xl p-4 border-2 border-[#444]"
-          initial={{ opacity: 0, y: -10 }}
-          animate={{ opacity: 1, y: 0 }}
-        >
-          {/* 移动端：简化版统计信息 */}
-          <div className="md:hidden">
-            <div className="flex items-center justify-between">
-              <div className="flex items-center space-x-2">
-                <Sparkles className="w-5 h-5 text-[#d4a574]" />
-                <span className="text-white font-bold">
-                  {displayedImages.length} / {filteredImages.length}
-                </span>
-              </div>
-              {searchQuery && (
-                <Badge variant="outline" className="bg-[#2a2a2a] text-gray-300 text-xs">
-                  "{searchQuery}"
-                </Badge>
-              )}
-            </div>
-          </div>
-
-          {/* 桌面端：完整版统计信息 */}
-          <div className="hidden md:flex items-center justify-between">
-            <div className="flex items-center space-x-4">
-              <div className="flex items-center space-x-2">
-                <Sparkles className="w-5 h-5 text-[#d4a574]" />
-                <span className="text-white font-bold">
-                  {displayedImages.length} of {filteredImages.length} magical creations
-                </span>
-              </div>
-              {/* 显示静态Gallery状态 - 仅桌面端 */}
-              <Badge variant="outline" className="bg-green-500/20 text-green-300 border-green-500">
-                ✨ Gallery Ready
+        {/* 状态信息 - 仅在搜索时显示 */}
+        {searchQuery && (
+          <motion.div 
+            className="mb-6 bg-[#1a1a1a] rounded-xl p-3 border-2 border-[#444]"
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+          >
+            <div className="flex items-center justify-center">
+              <Badge variant="outline" className="bg-[#2a2a2a] text-gray-300 text-sm">
+                🔍 "{searchQuery}"
               </Badge>
-              <Badge variant="outline" className="bg-blue-500/20 text-blue-300 border-blue-500">
-                📱 No API Required
-              </Badge>
-              {searchQuery && (
-                <Badge variant="outline" className="bg-[#2a2a2a] text-gray-300">
-                  Search: "{searchQuery}"
-                </Badge>
-              )}
             </div>
-            <div className="flex items-center space-x-2 text-gray-400 text-sm">
-              <TrendingUp className="w-4 h-4" />
-              <span>🚀 Instant loading</span>
-            </div>
-          </div>
-        </motion.div>
+          </motion.div>
+        )}
 
         {/* 瀑布流画廊 */}
         <VirtualWaterfall

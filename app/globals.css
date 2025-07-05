@@ -171,9 +171,9 @@
   font-family: var(--font-hero);
 }
 
-/* Hero区域专用字体样式 */
+/* Hero区域专用字体样式 - 统一俏皮风格 */
 .hero-title {
-  font-family: var(--font-hero);
+  font-family: var(--font-magic);
   font-weight: 400;
   letter-spacing: 0.02em;
   text-transform: uppercase;
@@ -203,9 +203,9 @@
     font-weight: 600;
   }
   
-  /* Hero区域移动端优化 - 强制覆盖字体 */
+  /* Hero区域移动端优化 - 统一使用俏皮字体 */
   .hero-title {
-    font-family: 'Righteous', 'Arial Black', sans-serif !important;
+    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
     font-size: 2rem;
     line-height: 1.1;
     letter-spacing: 0.01em;
@@ -239,10 +239,10 @@
     font-family: inherit !important;
   }
   
-  /* 移动端Hero区域专用样式 - 最高优先级 */
+  /* 移动端Hero区域专用样式 - 统一俏皮字体 */
   .hero-title, 
   h1.hero-title {
-    font-family: 'Righteous', 'Arial Black', 'Helvetica', sans-serif !important;
+    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
     font-weight: 400 !important;
     font-style: normal !important;
   }

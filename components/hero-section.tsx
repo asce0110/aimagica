@@ -512,7 +512,7 @@ export default function HeroSection() {
               }}
             >
               <Eye className="w-5 h-5 mr-3" />
-              VIEW GALLERY 🖼️
+              VIEW GALLERY ✨
             </Button>
           </div>
         </div>
