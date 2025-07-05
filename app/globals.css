@@ -10,7 +10,7 @@
   --font-heading: 'Orbitron', 'Arial Black', sans-serif; /* 科技感标题字体 */
   --font-body: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif; /* 现代正文字体 */
   --font-accent: 'Exo 2', 'Impact', sans-serif; /* 强调字体 */
-  --font-magic: 'Fredoka One', 'Righteous', 'Comic Sans MS', cursive; /* 魔法主题字体 */
+  --font-magic: 'Fredoka One', 'Righteous', 'Arial Black', sans-serif; /* 魔法主题字体 - 移除花体 */
   --font-hero: 'Righteous', 'Fredoka One', 'Arial Black', sans-serif; /* Hero区域专用字体 */
 }
 
@@ -203,28 +203,61 @@
     font-weight: 600;
   }
   
-  /* Hero区域移动端优化 */
+  /* Hero区域移动端优化 - 强制覆盖字体 */
   .hero-title {
+    font-family: 'Righteous', 'Arial Black', sans-serif !important;
     font-size: 2rem;
     line-height: 1.1;
     letter-spacing: 0.01em;
+    font-weight: 400 !important;
   }
   
   .hero-subtitle {
+    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
     font-size: 1rem;
     line-height: 1.3;
     letter-spacing: 0.005em;
+    font-weight: 400 !important;
   }
   
   .hero-button {
+    font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
     font-size: 1.1rem;
     line-height: 1.2;
     letter-spacing: 0.02em;
+    font-weight: 400 !important;
   }
   
   /* 确保按钮文字在移动端清晰 */
   button, .btn {
     font-family: var(--font-accent);
     font-weight: 600;
+  }
+  
+  /* 强制移除所有花体字 */
+  * {
+    font-family: inherit !important;
+  }
+  
+  /* 移动端Hero区域专用样式 - 最高优先级 */
+  .hero-title, 
+  h1.hero-title {
+    font-family: 'Righteous', 'Arial Black', 'Helvetica', sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+  }
+  
+  .hero-subtitle,
+  p.hero-subtitle {
+    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
+  }
+  
+  .hero-button,
+  button.hero-button {
+    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
+    font-weight: 400 !important;
+    font-style: normal !important;
   }
 }
