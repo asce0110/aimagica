@@ -65,7 +65,7 @@ export default function TestStylesPage() {
           <CardHeader className="bg-[#2d3e2d] text-white rounded-t-xl">
             <CardTitle 
               className="text-2xl font-black text-center"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               🧸 风格要求测试 - TOY PHOTOGRAPHY
             </CardTitle>
@@ -76,17 +76,17 @@ export default function TestStylesPage() {
             <div className="p-4 bg-[#f5f1e8] rounded-xl border-2 border-[#8b7355]/30">
               <h3 
                 className="text-[#2d3e2d] font-bold mb-2"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 风格要求：
               </h3>
-              <ul className="space-y-1 text-sm text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <ul className="space-y-1 text-sm text-[#8b7355] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 <li>📸 必须上传参考图片</li>
                 <li>✍️ 必须输入描述</li>
                 <li>📝 描述至少 10 个字符</li>
                 <li>🖼️ 支持格式：jpg, jpeg, png, webp</li>
               </ul>
-              <p className="text-xs text-[#8b7355] mt-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <p className="text-xs text-[#8b7355] mt-2" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 💡 {toyPhotographyStyle.requirements_description}
               </p>
             </div>
@@ -97,7 +97,7 @@ export default function TestStylesPage() {
                 <Label 
                   htmlFor="test-prompt"
                   className="text-[#2d3e2d] font-bold"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   测试提示词：
                 </Label>
@@ -124,7 +124,7 @@ export default function TestStylesPage() {
                 <Label 
                   htmlFor="has-image"
                   className="text-[#2d3e2d] font-bold"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   模拟已上传图片
                 </Label>
@@ -135,7 +135,7 @@ export default function TestStylesPage() {
             <Button
               onClick={testValidation}
               className="w-full bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-bold py-3 rounded-xl transform transition-all duration-200 hover:scale-105"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               🧪 测试风格要求验证
             </Button>
@@ -150,7 +150,7 @@ export default function TestStylesPage() {
                 }}
                 variant="outline"
                 className="border-2 border-red-300 text-red-600 hover:bg-red-50 font-bold rounded-xl"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 ❌ 测试失败情况
               </Button>
@@ -163,7 +163,7 @@ export default function TestStylesPage() {
                 }}
                 variant="outline"
                 className="border-2 border-green-300 text-green-600 hover:bg-green-50 font-bold rounded-xl"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 ✅ 测试成功情况
               </Button>

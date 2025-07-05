@@ -31,7 +31,7 @@ export default function TextToImagePage() {
                 <h1
                   className="text-xl font-black text-[#2d3e2d]"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "2px 2px 0px #d4a574",
                   }}
                 >
@@ -72,7 +72,7 @@ export default function TextToImagePage() {
           <h1
             className="text-4xl md:text-6xl font-black text-[#2d3e2d] mb-4 transform -rotate-1"
             style={{
-              fontFamily: "Righteous, Arial Black, sans-serif",
+              fontFamily: "Fredoka One, Arial Black, sans-serif",
               textShadow: "3px 3px 0px #d4a574",
             }}
           >
@@ -80,7 +80,7 @@ export default function TextToImagePage() {
           </h1>
           <p
             className="text-xl md:text-2xl font-bold text-[#8b7355] max-w-4xl mx-auto mb-6"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             Transform your words into stunning AI-generated artwork! Just describe what you want to see and watch the magic happen in seconds.
           </p>
@@ -106,7 +106,7 @@ export default function TextToImagePage() {
       {/* 功能导航区域 */}
       <section className="container mx-auto px-4 py-8">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <h2 className="text-2xl font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             Try Other AI Features! 🚀
           </h2>
         </div>
@@ -115,7 +115,7 @@ export default function TextToImagePage() {
           <Link href="/" className="block">
             <div className="bg-white border-2 border-[#8b7355] rounded-xl p-4 transform hover:scale-105 transition-all text-center">
               <div className="text-3xl mb-2">🖼️</div>
-              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Image to Image
               </h3>
             </div>
@@ -123,7 +123,7 @@ export default function TextToImagePage() {
           <Link href="/text-to-video" className="block">
             <div className="bg-white border-2 border-[#8b7355] rounded-xl p-4 transform hover:scale-105 transition-all text-center">
               <div className="text-3xl mb-2">🎬</div>
-              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Text to Video
               </h3>
             </div>
@@ -131,7 +131,7 @@ export default function TextToImagePage() {
           <Link href="/image-to-video" className="block">
             <div className="bg-white border-2 border-[#8b7355] rounded-xl p-4 transform hover:scale-105 transition-all text-center">
               <div className="text-3xl mb-2">🎥</div>
-              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Image to Video
               </h3>
             </div>
@@ -146,7 +146,7 @@ export default function TextToImagePage() {
             <h2
               className="text-2xl font-black text-[#f5f1e8] flex items-center justify-center gap-3"
               style={{
-                fontFamily: "Righteous, Arial Black, sans-serif",
+                fontFamily: "Fredoka One, Arial Black, sans-serif",
                 textShadow: "2px 2px 0px #8b7355",
               }}
             >
@@ -173,14 +173,14 @@ export default function TextToImagePage() {
       {/* SEO Content Section */}
       <section className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-black text-[#2d3e2d] mb-6 text-center" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <h2 className="text-3xl font-black text-[#2d3e2d] mb-6 text-center" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             How Text to Image AI Works
           </h2>
           
           <div className="grid md:grid-cols-3 gap-6 mb-8">
             <div className="text-center p-6 bg-white rounded-xl border-2 border-[#8b7355]">
               <div className="text-4xl mb-3">📝</div>
-              <h3 className="font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Write Your Prompt
               </h3>
               <p className="text-[#8b7355] font-bold text-sm">
@@ -190,7 +190,7 @@ export default function TextToImagePage() {
             
             <div className="text-center p-6 bg-white rounded-xl border-2 border-[#8b7355]">
               <div className="text-4xl mb-3">🎨</div>
-              <h3 className="font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Choose Your Style
               </h3>
               <p className="text-[#8b7355] font-bold text-sm">
@@ -200,7 +200,7 @@ export default function TextToImagePage() {
             
             <div className="text-center p-6 bg-white rounded-xl border-2 border-[#8b7355]">
               <div className="text-4xl mb-3">✨</div>
-              <h3 className="font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Get Your Image
               </h3>
               <p className="text-[#8b7355] font-bold text-sm">
@@ -210,7 +210,7 @@ export default function TextToImagePage() {
           </div>
 
           <div className="prose prose-lg mx-auto">
-            <h3 className="text-2xl font-black text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <h3 className="text-2xl font-black text-[#2d3e2d]" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               Create Amazing Images from Text
             </h3>
             <p className="text-[#8b7355] font-bold">
@@ -219,7 +219,7 @@ export default function TextToImagePage() {
               our tool makes it possible in just seconds.
             </p>
             
-            <h3 className="text-2xl font-black text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <h3 className="text-2xl font-black text-[#2d3e2d]" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               Popular Text to Image Styles
             </h3>
             <ul className="text-[#8b7355] font-bold">

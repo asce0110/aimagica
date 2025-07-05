@@ -69,7 +69,10 @@
       "Bash(tar:*)",
       "WebFetch(domain:abaf5aef.aimagica.pages.dev)",
       "Bash(node:*)",
-      "WebFetch(domain:9974c0f1.aimagica.pages.dev)"
+      "WebFetch(domain:9974c0f1.aimagica.pages.dev)",
+      "Bash(for:*)",
+      "Bash(do echo \"Processing $file...\")",
+      "Bash(done)"
     ],
     "deny": []
   }

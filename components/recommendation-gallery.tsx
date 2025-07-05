@@ -199,7 +199,7 @@ export default function RecommendationGallery({ onUsePrompt, className }: Recomm
           <h3
             className="text-lg md:text-xl font-black text-[#2d3e2d] transform rotate-1"
             style={{
-              fontFamily: "Righteous, Arial Black, sans-serif",
+              fontFamily: "Fredoka One, Arial Black, sans-serif",
               textShadow: "2px 2px 0px #f5f1e8, 1px 1px 0px rgba(255,255,255,0.8)",
             }}
           >
@@ -211,7 +211,7 @@ export default function RecommendationGallery({ onUsePrompt, className }: Recomm
             disabled={refreshing}
             size="sm"
             className="bg-white hover:bg-[#f5f1e8] text-[#2d3e2d] border-2 border-[#2d3e2d] rounded-xl font-black transform hover:scale-105 transition-all shadow-lg"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             <RefreshCw className={`w-4 h-4 ${refreshing ? 'animate-spin' : ''}`} />
           </Button>
@@ -219,7 +219,7 @@ export default function RecommendationGallery({ onUsePrompt, className }: Recomm
         <p
           className="text-sm text-[#2d3e2d] mt-1 font-bold"
           style={{ 
-            fontFamily: "Righteous, Arial Black, sans-serif",
+            fontFamily: "Fredoka One, Arial Black, sans-serif",
             textShadow: "1px 1px 0px #f5f1e8"
           }}
         >
@@ -253,7 +253,7 @@ export default function RecommendationGallery({ onUsePrompt, className }: Recomm
                   <div className="absolute bottom-2 left-2 right-2">
                     <p 
                       className="text-white text-xs font-bold line-clamp-2 mb-1"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       {image.prompt.substring(0, 50)}...
                     </p>
@@ -276,7 +276,7 @@ export default function RecommendationGallery({ onUsePrompt, className }: Recomm
                 <div className="absolute top-2 left-2">
                   <span
                     className="bg-[#d4a574] text-[#2d3e2d] text-xs font-black px-2 py-1 rounded-lg border border-[#2d3e2d]"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     {image.style}
                   </span>
@@ -304,14 +304,14 @@ export default function RecommendationGallery({ onUsePrompt, className }: Recomm
               <div className="p-2">
                 <h4 
                   className="text-[#2d3e2d] font-black text-sm line-clamp-1 mb-1"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   {image.title}
                 </h4>
                 <div className="flex items-center justify-between">
                   <p 
                     className="text-[#8b7355] text-xs font-bold"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     by {image.author}
                   </p>
@@ -323,7 +323,7 @@ export default function RecommendationGallery({ onUsePrompt, className }: Recomm
                     }}
                     size="sm"
                     className="h-6 px-3 text-xs bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] border border-[#2d3e2d] rounded-lg font-black transform hover:scale-105 transition-all shadow-md"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     title={`Use this prompt and ${image.style} style`}
                   >
                     ✨ Use
@@ -338,7 +338,7 @@ export default function RecommendationGallery({ onUsePrompt, className }: Recomm
         <Button
           onClick={() => window.location.href = '/gallery'}
                       className="w-full mt-4 bg-[#4a5a4a] hover:bg-[#5a6a5a] text-[#f5f1e8] font-black py-2 rounded-xl shadow-lg transform hover:scale-105 transition-all"
-          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
         >
           <Eye className="w-4 h-4 mr-2" />
           Explore More! 🎨

@@ -59,13 +59,13 @@ export default function ContentPolicyError({
             <div>
               <h2 
                 className="text-2xl font-black text-white mb-2"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 🛡️ 内容审核提醒
               </h2>
               <p 
                 className="text-white/90 font-medium"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 您的提示词包含了可能违反内容政策的内容
               </p>
@@ -79,14 +79,14 @@ export default function ContentPolicyError({
           <div className="bg-orange-50 border-2 border-orange-200 rounded-xl p-4">
             <h3 
               className="text-lg font-bold text-orange-800 mb-2 flex items-center gap-2"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               <AlertTriangle className="w-5 h-5" />
               为什么会出现这个提示？
             </h3>
             <p 
               className="text-orange-700 font-medium"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               AI系统检测到您的提示词可能包含敏感内容。为了保护所有用户，我们需要确保生成的内容安全、积极且适合所有年龄段。
             </p>
@@ -96,7 +96,7 @@ export default function ContentPolicyError({
           <div className="bg-blue-50 border-2 border-blue-200 rounded-xl p-4">
             <h3 
               className="text-lg font-bold text-blue-800 mb-3 flex items-center gap-2"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               <Lightbulb className="w-5 h-5" />
               如何修改您的提示词？
@@ -106,7 +106,7 @@ export default function ContentPolicyError({
                 <li 
                   key={index}
                   className="flex items-start gap-2 text-blue-700 font-medium"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <div className="w-2 h-2 bg-blue-400 rounded-full mt-2 flex-shrink-0"></div>
                   <span>{suggestion}</span>
@@ -119,7 +119,7 @@ export default function ContentPolicyError({
           <div className="bg-green-50 border-2 border-green-200 rounded-xl p-4">
             <h3 
               className="text-lg font-bold text-green-800 mb-3 flex items-center gap-2"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               ✨ 提示词示例对比
             </h3>
@@ -129,13 +129,13 @@ export default function ContentPolicyError({
                   <div className="mb-2">
                     <span 
                       className="text-red-600 font-bold text-sm"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       ❌ 避免使用：
                     </span>
                     <p 
                       className="text-red-700 font-medium mt-1"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       "{example.bad}"
                     </p>
@@ -143,13 +143,13 @@ export default function ContentPolicyError({
                   <div>
                     <span 
                       className="text-green-600 font-bold text-sm"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       ✅ 推荐使用：
                     </span>
                     <p 
                       className="text-green-700 font-medium mt-1"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       "{example.good}"
                     </p>
@@ -164,7 +164,7 @@ export default function ContentPolicyError({
             <Button
               onClick={onClose}
               className="flex-1 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-xl transform hover:scale-105 transition-all"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               <Lightbulb className="w-4 h-4 mr-2" />
               我明白了，去修改提示词
@@ -178,7 +178,7 @@ export default function ContentPolicyError({
                 }}
                 variant="outline"
                 className="flex-1 border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#f5f1e8] font-black rounded-xl transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 重新尝试生图
@@ -190,7 +190,7 @@ export default function ContentPolicyError({
           <div className="text-center pt-4 border-t border-gray-200">
             <p 
               className="text-gray-600 text-sm font-medium"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               💡 提示：您可以参考我们的风格模板来创建安全且精美的艺术作品！
             </p>

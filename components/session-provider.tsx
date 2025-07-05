@@ -1,6 +1,7 @@
 "use client"
 
 import React, { ReactNode, createContext, useContext } from "react"
+import { SessionProvider, useSession, signOut } from "next-auth/react"
 import { ThemeProvider } from "@/components/theme-provider"
 
 interface ProvidersProps {
@@ -8,7 +9,7 @@ interface ProvidersProps {
 }
 
 // 检测是否为静态导出环境
-const isStaticExport = true // 强制使用静态导出模式
+const isStaticExport = false // 切换到服务器模式以支持谷歌登录
 
 // Mock Session Context for static export
 interface MockSession {
@@ -47,33 +48,36 @@ function MockSessionProvider({ children }: { children: ReactNode }) {
 }
 
 // 导出兼容的 useSession hook
-export function useSessionCompat(): MockSessionContextType {
-  // 使用 useState 来确保组件状态的一致性
-  const [defaultSession] = React.useState<MockSessionContextType>({
-    data: null,
-    status: "unauthenticated",
-    update: async () => null,
-  })
+export function useSessionCompat() {
+  if (isStaticExport) {
+    // 使用 useState 来确保组件状态的一致性
+    const [defaultSession] = React.useState<MockSessionContextType>({
+      data: null,
+      status: "unauthenticated",
+      update: async () => null,
+    })
 
-  // 在服务器端渲染或静态导出中，直接返回默认状态
-  if (typeof window === 'undefined') {
-    return defaultSession
-  }
-
-  // 在客户端，尝试使用 MockSessionContext
-  try {
-    const context = useContext(MockSessionContext)
-    if (context) {
-      return context
+    // 在服务器端渲染或静态导出中，直接返回默认状态
+    if (typeof window === 'undefined') {
+      return defaultSession
     }
-  } catch (e) {
-    console.debug('MockSessionContext not available:', e)
+
+    // 在客户端，尝试使用 MockSessionContext
+    try {
+      const context = useContext(MockSessionContext)
+      if (context) {
+        return context
+      }
+    } catch (e) {
+      console.debug('MockSessionContext not available:', e)
+    }
+
+    // 返回默认状态
+    return defaultSession
+  } else {
+    // 服务器模式，使用真正的NextAuth
+    return useSession()
   }
-
-  // 静态导出模式下不使用 next-auth
-
-  // 返回默认状态
-  return defaultSession
 }
 
 // 导出兼容的 signOut function
@@ -84,11 +88,9 @@ export async function signOutCompat(options?: any) {
       window.location.href = options?.callbackUrl || '/'
     }
     return
-  }
-  
-  // 静态导出模式下，直接重定向
-  if (typeof window !== 'undefined') {
-    window.location.href = options?.callbackUrl || '/'
+  } else {
+    // 服务器模式，使用真正的NextAuth signOut
+    return await signOut(options)
   }
 }
 
@@ -109,9 +111,9 @@ export default function Providers({ children }: ProvidersProps) {
     )
   }
 
-  // 在静态导出模式下，不应该到达这里，但提供备用实现
+  // 服务器模式，使用真正的NextAuth SessionProvider
   return (
-    <MockSessionProvider>
+    <SessionProvider>
       <ThemeProvider
         attribute="class"
         defaultTheme="dark"
@@ -121,6 +123,6 @@ export default function Providers({ children }: ProvidersProps) {
       >
         {children}
       </ThemeProvider>
-    </MockSessionProvider>
+    </SessionProvider>
   )
 } 

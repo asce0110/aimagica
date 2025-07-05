@@ -1022,7 +1022,7 @@ function AdminDashboardContent() {
       <div className="min-h-screen bg-gradient-to-br from-[#f5f1e8] via-[#e8dcc0] to-[#d4a574] flex items-center justify-center">
         <div className="text-center">
           <div className="w-16 h-16 border-4 border-[#2d3e2d] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             Loading magical dashboard... ✨
           </p>
         </div>
@@ -1077,7 +1077,7 @@ function AdminDashboardContent() {
                 onClick={() => router.push('/')}
                 variant="ghost"
                 className="text-[#2d3e2d] hover:bg-[#d4a574] hover:text-[#2d3e2d] font-black rounded-2xl transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 <ChevronLeft className="w-4 h-4 mr-2" />
                 Back to Home 🏠
@@ -1091,7 +1091,7 @@ function AdminDashboardContent() {
                   <h1
                     className="text-2xl font-black text-[#2d3e2d] transform -rotate-1"
                     style={{
-                      fontFamily: "Righteous, Arial Black, sans-serif",
+                      fontFamily: "Fredoka One, Arial Black, sans-serif",
                       textShadow: "2px 2px 0px #8b7355",
                     }}
                   >
@@ -1099,7 +1099,7 @@ function AdminDashboardContent() {
                   </h1>
                   <p
                     className="text-sm font-bold text-[#8b7355] transform rotate-1"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     {userRole === 'admin' ? 'Master Control Panel 👑' : 'Creative Workspace 🎨'}
                   </p>
@@ -1112,7 +1112,7 @@ function AdminDashboardContent() {
               <Button
                 variant="ghost"
                 className="text-[#2d3e2d] hover:bg-[#d4a574] hover:text-[#2d3e2d] font-black rounded-2xl transform hover:scale-105 transition-all relative"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 <Bell className="w-5 h-5" />
                 <div className="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></div>
@@ -1148,13 +1148,13 @@ function AdminDashboardContent() {
                     <div className="hidden md:block">
                       <p 
                         className="text-[#2d3e2d] font-black text-sm"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         {session.user.name || 'Magic User'}
                       </p>
                       <p 
                         className="text-[#8b7355] font-bold text-xs"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         {userRole === 'admin' ? 'Admin' : 'User'} 
                       </p>
@@ -1166,7 +1166,7 @@ function AdminDashboardContent() {
               <Button
                 onClick={handleLogout}
                 className="bg-[#2d3e2d] hover:bg-[#1a2a1a] text-[#f5f1e8] font-black px-6 py-3 rounded-2xl shadow-lg transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 <LogOut className="w-4 h-4 mr-2" />
                 Logout 👋
@@ -1193,7 +1193,7 @@ function AdminDashboardContent() {
               <h2
                 className="text-3xl md:text-4xl font-black text-[#f5f1e8] mb-2 transform -rotate-1"
                 style={{
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "2px 2px 0px rgba(0,0,0,0.3)",
                 }}
               >
@@ -1201,7 +1201,7 @@ function AdminDashboardContent() {
               </h2>
               <p
                 className="text-[#f5f1e8] font-bold text-lg opacity-90"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 {userRole === 'admin' 
                   ? 'Manage the magical kingdom of AIMAGICA with your supreme power!' 
@@ -1218,7 +1218,7 @@ function AdminDashboardContent() {
             <TabsTrigger
               value="overview"
               className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               <Activity className="w-4 h-4 mr-2" />
               Overview 📊
@@ -1226,7 +1226,7 @@ function AdminDashboardContent() {
             <TabsTrigger
               value="images"
               className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               <ImageIcon className="w-4 h-4 mr-2" />
               {userRole === 'admin' ? 'All Images' : 'My Art'} 🎨
@@ -1236,7 +1236,7 @@ function AdminDashboardContent() {
                 <TabsTrigger
                   value="users"
                   className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <Users className="w-4 h-4 mr-2" />
                   Users 👥
@@ -1244,7 +1244,7 @@ function AdminDashboardContent() {
                 <TabsTrigger
                   value="styles"
                   className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <Sparkles className="w-4 h-4 mr-2" />
                   Styles 🎭
@@ -1252,7 +1252,7 @@ function AdminDashboardContent() {
                 <TabsTrigger
                   value="api-configs"
                   className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <Zap className="w-4 h-4 mr-2" />
                   API Configs ⚡
@@ -1260,7 +1260,7 @@ function AdminDashboardContent() {
                 <TabsTrigger
                   value="payment"
                   className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <CreditCard className="w-4 h-4 mr-2" />
                   Payment 💳
@@ -1268,7 +1268,7 @@ function AdminDashboardContent() {
                 <TabsTrigger
                   value="prompts"
                   className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   onClick={() => router.push('/admin/prompts')}
                 >
                   <Wand2 className="w-4 h-4 mr-2" />
@@ -1279,7 +1279,7 @@ function AdminDashboardContent() {
             <TabsTrigger
               value="settings"
               className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] data-[state=active]:shadow-lg text-[#f5f1e8] transform hover:scale-105 transition-all"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               <Settings className="w-4 h-4 mr-2" />
               Settings ⚙️
@@ -1301,13 +1301,13 @@ function AdminDashboardContent() {
                       <div>
                         <p 
                           className="text-[#8b7355] font-bold text-sm"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           {userRole === 'admin' ? 'Total Users' : 'My Images'}
                         </p>
                         <p 
                           className="text-3xl font-black text-[#2d3e2d]"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           {userRole === 'admin' ? (dashboardStats?.totalUsers?.toString() || '0') : (dashboardStats?.userImages?.toString() || '0')}
                         </p>
@@ -1331,13 +1331,13 @@ function AdminDashboardContent() {
                       <div>
                         <p 
                           className="text-[#8b7355] font-bold text-sm"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           {userRole === 'admin' ? 'Total Images' : 'Total Views'}
                         </p>
                         <p 
                           className="text-3xl font-black text-[#2d3e2d]"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           {userRole === 'admin' ? (dashboardStats?.totalImages || 0).toString() : (dashboardStats?.userViews || 0).toString()}
                         </p>
@@ -1361,13 +1361,13 @@ function AdminDashboardContent() {
                       <div>
                         <p 
                           className="text-[#8b7355] font-bold text-sm"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           {userRole === 'admin' ? 'Monthly Revenue' : 'Total Likes'}
                         </p>
                         <p 
                           className="text-3xl font-black text-[#2d3e2d]"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           {userRole === 'admin' ? `$${(dashboardStats?.revenue || 0).toString()}` : (dashboardStats?.userLikes || 0).toString()}
                         </p>
@@ -1395,13 +1395,13 @@ function AdminDashboardContent() {
                       <div>
                         <p 
                           className="text-[#8b7355] font-bold text-sm"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           {userRole === 'admin' ? 'Growth Rate' : 'Followers'}
                         </p>
                         <p 
                           className="text-3xl font-black text-[#2d3e2d]"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           {userRole === 'admin' ? `+${dashboardStats.revenueGrowth}%` : dashboardStats.userFollowers?.toString() || '0'}
                         </p>
@@ -1427,7 +1427,7 @@ function AdminDashboardContent() {
                   <CardHeader>
                     <CardTitle 
                       className="text-2xl font-black text-[#2d3e2d] flex items-center"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <BarChart className="w-6 h-6 mr-2" />
                       {userRole === 'admin' ? 'Platform Statistics 📈' : 'My Progress 📊'}
@@ -1458,7 +1458,7 @@ function AdminDashboardContent() {
                   <CardHeader>
                     <CardTitle 
                       className="text-2xl font-black text-[#2d3e2d] flex items-center"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <PieChart className="w-6 h-6 mr-2" />
                       {userRole === 'admin' ? 'User Distribution 🥧' : 'Style Breakdown 🎨'}
@@ -1502,14 +1502,14 @@ function AdminDashboardContent() {
                     <div className="flex justify-between items-center">
                       <CardTitle 
                         className="text-3xl font-black text-[#2d3e2d] flex items-center"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         <Users className="w-8 h-8 mr-3" />
                         User Management 👥
                       </CardTitle>
                       <Button
                         className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-2xl"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         <Plus className="w-4 h-4 mr-2" />
                         Add User ➕
@@ -1533,13 +1533,13 @@ function AdminDashboardContent() {
                             <div>
                               <h4 
                                 className="font-black text-[#2d3e2d]"
-                                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                               >
                                 {user.name}
                               </h4>
                               <p 
                                 className="text-[#8b7355] font-bold text-sm"
-                                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                               >
                                 {user.email}
                               </p>
@@ -1555,7 +1555,7 @@ function AdminDashboardContent() {
                             </Badge>
                             <span 
                               className="text-[#8b7355] font-bold text-sm"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               {user.images} images
                             </span>
@@ -1591,7 +1591,7 @@ function AdminDashboardContent() {
                   <div className="flex justify-between items-center">
                     <CardTitle 
                       className="text-3xl font-black text-[#2d3e2d] flex items-center"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <ImageIcon className="w-8 h-8 mr-3" />
                       {userRole === 'admin' ? 'Image Management 🖼️' : 'My Artworks 🎨'}
@@ -1602,7 +1602,7 @@ function AdminDashboardContent() {
                           <Button
                             onClick={() => setShowImageUpload(true)}
                             className="bg-[#2d3e2d] hover:bg-[#1a2a1a] text-[#f5f1e8] font-black rounded-2xl"
-                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                           >
                             <Upload className="w-4 h-4 mr-2" />
                             Upload Image ⬆️
@@ -1610,7 +1610,7 @@ function AdminDashboardContent() {
                           <Button
                             onClick={handleMakeAllPublic}
                             className="bg-green-600 hover:bg-green-700 text-white font-black rounded-2xl"
-                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                           >
                             <CheckCircle className="w-4 h-4 mr-2" />
                             Make All Public 🌐
@@ -1618,7 +1618,7 @@ function AdminDashboardContent() {
                           <Button
                             onClick={handleDiagnoseImages}
                             className="bg-purple-600 hover:bg-purple-700 text-white font-black rounded-2xl"
-                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                           >
                             <Activity className="w-4 h-4 mr-2" />
                             Diagnose 🔍
@@ -1629,7 +1629,7 @@ function AdminDashboardContent() {
                         onClick={loadAdminImages}
                         variant="outline"
                         className="border-[#8b7355] text-[#8b7355] font-black rounded-2xl"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         <Activity className="w-4 h-4 mr-2" />
                                                   Refresh List 🔄
@@ -1646,14 +1646,14 @@ function AdminDashboardContent() {
                         value={imageSearchTerm}
                         onChange={(e) => setImageSearchTerm(e.target.value)}
                         className="w-full px-4 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       />
                     </div>
                     <select
                       value={imageFilter}
                       onChange={(e) => setImageFilter(e.target.value)}
                       className="px-4 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <option value="all">All Images</option>
                       <option value="public">Public Images</option>
@@ -1665,7 +1665,7 @@ function AdminDashboardContent() {
                     <Button
                       onClick={handleImageSearch}
                       className="bg-[#8b7355] hover:bg-[#6b5a44] text-white font-black rounded-xl px-6"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       Search 🔍
                     </Button>
@@ -1730,14 +1730,14 @@ function AdminDashboardContent() {
                           <div className="p-4">
                             <h4 
                               className="font-black text-[#2d3e2d] text-sm mb-2 line-clamp-2"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                               title={image.prompt}
                             >
                               {image.title}
                             </h4>
                             <p 
                               className="text-[#8b7355] font-bold text-xs mb-3"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               User: {image.user_name} • {image.created_at}
                             </p>
@@ -1826,7 +1826,7 @@ function AdminDashboardContent() {
                         onClick={loadMoreImages}
                         disabled={isLoadingMore}
                         className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-2xl px-8"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         {isLoadingMore ? 'Loading...' : 'Load More 📸'}
                       </Button>
@@ -1846,7 +1846,7 @@ function AdminDashboardContent() {
                 >
                   <h3 
                     className="text-2xl font-black text-[#2d3e2d] mb-4"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     Upload Image 📸
                   </h3>
@@ -1862,7 +1862,7 @@ function AdminDashboardContent() {
                         accept="image/*"
                         onChange={handleFileSelect}
                         className="w-full px-3 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       />
                     </div>
                     
@@ -1877,7 +1877,7 @@ function AdminDashboardContent() {
                         onChange={(e) => setUploadForm({...uploadForm, title: e.target.value})}
                         placeholder="Enter image title..."
                         className="w-full px-3 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       />
                     </div>
                     
@@ -1892,7 +1892,7 @@ function AdminDashboardContent() {
                         placeholder="Enter image description..."
                         rows={3}
                         className="w-full px-3 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none resize-none"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       />
                     </div>
                     
@@ -1905,7 +1905,7 @@ function AdminDashboardContent() {
                         value={uploadForm.style}
                         onChange={(e) => setUploadForm({...uploadForm, style: e.target.value})}
                         className="w-full px-3 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         <option value="Admin">Admin</option>
                         <option value="Realistic">Realistic</option>
@@ -1928,7 +1928,7 @@ function AdminDashboardContent() {
                       <label
                         htmlFor="isPublic"
                         className="text-sm font-bold text-[#8b7355]"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         Share to Gallery
                       </label>
@@ -1941,7 +1941,7 @@ function AdminDashboardContent() {
                       onClick={() => setShowImageUpload(false)}
                       variant="outline"
                       className="border-[#8b7355] text-[#8b7355] font-black rounded-xl"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       Cancel
                     </Button>
@@ -1949,7 +1949,7 @@ function AdminDashboardContent() {
                       onClick={handleImageUpload}
                       disabled={isUploading || !uploadForm.file}
                       className="bg-[#2d3e2d] hover:bg-[#1a2a1a] text-white font-black rounded-xl"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       {isUploading ? 'Uploading...' : 'Upload 📤'}
                     </Button>
@@ -1968,7 +1968,7 @@ function AdminDashboardContent() {
                 >
                   <h3 
                     className="text-2xl font-black text-[#2d3e2d] mb-4 flex items-center"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <Edit className="w-6 h-6 mr-2" />
                     Edit Image Metadata ✏️
@@ -2010,7 +2010,7 @@ function AdminDashboardContent() {
                         placeholder="Enter image description or prompt..."
                         rows={4}
                         className="w-full px-3 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none resize-none"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       />
                     </div>
                     
@@ -2023,7 +2023,7 @@ function AdminDashboardContent() {
                         value={editForm.style}
                         onChange={(e) => setEditForm({...editForm, style: e.target.value})}
                         className="w-full px-3 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         {/* 数据库风格选项 */}
                         {styles.length > 0 ? (
@@ -2062,7 +2062,7 @@ function AdminDashboardContent() {
                         value={editForm.status}
                         onChange={(e) => setEditForm({...editForm, status: e.target.value as any})}
                         className="w-full px-3 py-2 border-2 border-[#d4a574] rounded-xl focus:border-[#8b7355] outline-none"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         <option value="pending">Pending</option>
                         <option value="processing">Processing</option>
@@ -2083,7 +2083,7 @@ function AdminDashboardContent() {
                       <label
                         htmlFor="editIsPublic"
                         className="text-sm font-bold text-[#8b7355]"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         Public Gallery Visibility
                       </label>
@@ -2106,7 +2106,7 @@ function AdminDashboardContent() {
                       onClick={handleCancelEdit}
                       variant="outline"
                       className="border-[#8b7355] text-[#8b7355] font-black rounded-xl"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       Cancel
                     </Button>
@@ -2114,7 +2114,7 @@ function AdminDashboardContent() {
                       onClick={handleSaveEdit}
                       disabled={isEditing}
                       className="bg-[#2d3e2d] hover:bg-[#1a2a1a] text-white font-black rounded-xl"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       {isEditing ? 'Saving...' : 'Save Changes 💾'}
                     </Button>
@@ -2137,7 +2137,7 @@ function AdminDashboardContent() {
                       <div className="flex justify-between items-center">
                         <CardTitle 
                           className="text-3xl font-black text-[#2d3e2d] flex items-center"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <Zap className="w-8 h-8 mr-3" />
                           API Configuration Management ⚡
@@ -2147,7 +2147,7 @@ function AdminDashboardContent() {
                             onClick={loadApiConfigs}
                             variant="outline"
                             className="border-[#8b7355] text-[#8b7355] font-black rounded-2xl"
-                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                           >
                             <Activity className="w-4 h-4 mr-2" />
                             Refresh 🔄
@@ -2158,7 +2158,7 @@ function AdminDashboardContent() {
                               setShowAddApiForm(true)
                             }}
                             className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-2xl"
-                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                           >
                             <Plus className="w-4 h-4 mr-2" />
                             Add API Config ➕
@@ -2170,7 +2170,7 @@ function AdminDashboardContent() {
                           onClick={() => setSelectedApiType('image_generation')}
                           variant={selectedApiType === 'image_generation' ? 'default' : 'outline'}
                           className="rounded-xl font-black"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                                                       Image Generation 🎨
                         </Button>
@@ -2178,7 +2178,7 @@ function AdminDashboardContent() {
                           onClick={() => setSelectedApiType('video_generation')}
                           variant={selectedApiType === 'video_generation' ? 'default' : 'outline'}
                           className="rounded-xl font-black"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                                                       Video Generation 🎬
                         </Button>
@@ -2202,7 +2202,7 @@ function AdminDashboardContent() {
                                 <div className="flex items-center space-x-3 mb-2">
                                   <h3 
                                     className="text-xl font-black text-[#2d3e2d]"
-                                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                                   >
                                     {config.name}
                                   </h3>
@@ -2322,7 +2322,7 @@ function AdminDashboardContent() {
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8b7355] mx-auto mb-4"></div>
                             <p 
                               className="text-lg font-black text-[#8b7355]"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               Loading API configurations... 🔄
                             </p>
@@ -2334,7 +2334,7 @@ function AdminDashboardContent() {
                           <div className="text-center py-8">
                             <p 
                               className="text-xl font-black text-[#8b7355] mb-4"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               No {selectedApiType === 'image_generation' ? 'Image' : 'Video'} Generation APIs configured yet! 🚀
                             </p>
@@ -2347,7 +2347,7 @@ function AdminDashboardContent() {
                                 setShowAddApiForm(true)
                               }}
                               className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-2xl"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               <Plus className="w-4 h-4 mr-2" />
                               Add Your First API Config ✨
@@ -2417,7 +2417,7 @@ function AdminDashboardContent() {
                       <div className="flex justify-between items-center">
                         <CardTitle 
                           className="text-3xl font-black text-[#2d3e2d] flex items-center"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <Palette className="w-8 h-8 mr-3" />
                           Style Management 🎭
@@ -2446,7 +2446,7 @@ function AdminDashboardContent() {
                               }
                             }}
                             className="bg-orange-500 hover:bg-orange-600 text-white font-black px-4 py-2 rounded-xl"
-                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                           >
                             <Shield className="w-4 h-4 mr-1" />
                             Fix Templates
@@ -2459,7 +2459,7 @@ function AdminDashboardContent() {
                             variant="outline"
                             size="sm"
                             className="border-[#8b7355] text-[#8b7355] hover:bg-[#8b7355] hover:text-white font-black rounded-xl"
-                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             disabled={isStylesLoading}
                           >
                             <Activity className="w-4 h-4 mr-1" />
@@ -2471,7 +2471,7 @@ function AdminDashboardContent() {
                               setShowAddStyleForm(true)
                             }}
                             className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-2xl"
-                            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                           >
                             <Plus className="w-4 h-4 mr-2" />
                             Add Style ✨
@@ -2512,7 +2512,7 @@ function AdminDashboardContent() {
                                   <div className="flex items-center space-x-3 mb-2">
                                     <h3 
                                       className="text-xl font-black text-[#2d3e2d]"
-                                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                                     >
                                       {style.emoji} {style.name}
                                     </h3>
@@ -2538,7 +2538,7 @@ function AdminDashboardContent() {
                                   
                                   <p 
                                     className="text-[#8b7355] font-bold text-sm mb-2"
-                                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                                   >
                                     {style.description}
                                   </p>
@@ -2604,13 +2604,13 @@ function AdminDashboardContent() {
                             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#8b7355] mx-auto mb-4"></div>
                             <p 
                               className="text-lg font-black text-[#8b7355] mb-2"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               Loading styles... 🔄
                             </p>
                             <p 
                               className="text-sm text-[#8b7355] opacity-75"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               This may take a few seconds...
                             </p>
@@ -2618,7 +2618,7 @@ function AdminDashboardContent() {
                             <div className="mt-4">
                               <p 
                                 className="text-xs text-gray-500"
-                                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                               >
                                 If loading takes too long, try refreshing the page
                               </p>
@@ -2631,7 +2631,7 @@ function AdminDashboardContent() {
                           <div className="text-center py-8">
                             <p 
                               className="text-xl font-black text-[#8b7355] mb-4"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               No styles configured yet! 🎨
                             </p>
@@ -2644,7 +2644,7 @@ function AdminDashboardContent() {
                                 setShowAddStyleForm(true)
                               }}
                               className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-6 py-3 rounded-2xl transform hover:scale-105 transition-all text-lg"
-                              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                             >
                               <Plus className="w-5 h-5 mr-2" />
                               Add Your First Style ✨
@@ -2712,7 +2712,7 @@ function AdminDashboardContent() {
                   <CardHeader>
                     <CardTitle 
                       className="text-3xl font-black text-[#2d3e2d] flex items-center"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <CreditCard className="w-8 h-8 mr-3" />
                       Payment System Management 💳
@@ -2727,7 +2727,7 @@ function AdminDashboardContent() {
                         <CreditCard className="w-16 h-16 text-[#d4a574] mx-auto mb-4" />
                         <h3 
                           className="text-2xl font-black text-[#2d3e2d] mb-2"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           Payment Configuration Required 🔧
                         </h3>
@@ -2742,7 +2742,7 @@ function AdminDashboardContent() {
                             window.open('/admin/payment', '_blank')
                           }}
                           className="w-full bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-6 py-4 rounded-2xl transform hover:scale-105 transition-all text-lg"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <CreditCard className="w-5 h-5 mr-2" />
                           Open Payment Management 🚀
@@ -2787,7 +2787,7 @@ function AdminDashboardContent() {
                 <CardHeader>
                   <CardTitle 
                     className="text-3xl font-black text-[#2d3e2d] flex items-center"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <Settings className="w-8 h-8 mr-3" />
                     Settings & Quick Actions ⚙️
@@ -2804,7 +2804,7 @@ function AdminDashboardContent() {
                         <Button 
                           onClick={() => window.open('/admin/payment', '_blank')}
                           className="w-full bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-2xl p-4 h-auto flex flex-col items-center"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <CreditCard className="w-8 h-8 mb-2" />
                           <span>Payment Management</span>
@@ -2814,7 +2814,7 @@ function AdminDashboardContent() {
                         <Button 
                           onClick={() => setActiveTab('api-configs')}
                           className="w-full bg-[#8b7355] hover:bg-[#6d5a42] text-white font-black rounded-2xl p-4 h-auto flex flex-col items-center"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <Zap className="w-8 h-8 mb-2" />
                           <span>API Configurations</span>
@@ -2824,7 +2824,7 @@ function AdminDashboardContent() {
                         <Button 
                           onClick={() => setActiveTab('styles')}
                           className="w-full bg-[#2d3e2d] hover:bg-[#1a2a1a] text-white font-black rounded-2xl p-4 h-auto flex flex-col items-center"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <Palette className="w-8 h-8 mb-2" />
                           <span>Style Management</span>
@@ -2834,7 +2834,7 @@ function AdminDashboardContent() {
                         <Button 
                           onClick={() => window.open('/admin/magic-coins', '_blank')}
                           className="w-full bg-yellow-500 hover:bg-yellow-600 text-white font-black rounded-2xl p-4 h-auto flex flex-col items-center"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <Coins className="w-8 h-8 mb-2" />
                           <span>Magic Coins</span>
@@ -2844,7 +2844,7 @@ function AdminDashboardContent() {
                         <Button 
                           onClick={() => setActiveTab('users')}
                           className="w-full bg-green-500 hover:bg-green-600 text-white font-black rounded-2xl p-4 h-auto flex flex-col items-center"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <Users className="w-8 h-8 mb-2" />
                           <span>User Management</span>
@@ -2854,7 +2854,7 @@ function AdminDashboardContent() {
                         <Button 
                           onClick={() => setActiveTab('images')}
                           className="w-full bg-purple-500 hover:bg-purple-600 text-white font-black rounded-2xl p-4 h-auto flex flex-col items-center"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <ImageIcon className="w-8 h-8 mb-2" />
                           <span>Image Gallery</span>
@@ -2866,7 +2866,7 @@ function AdminDashboardContent() {
                     <Button 
                       onClick={() => setActiveTab('overview')}
                       className="w-full bg-blue-500 hover:bg-blue-600 text-white font-black rounded-2xl p-4 h-auto flex flex-col items-center"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <Activity className="w-8 h-8 mb-2" />
                       <span>Dashboard Overview</span>
@@ -2878,7 +2878,7 @@ function AdminDashboardContent() {
                   <div className="border-t-2 border-[#8b7355] pt-6">
                     <h4 
                       className="text-xl font-black text-[#2d3e2d] mb-4"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       Account Actions 👤
                     </h4>
@@ -2886,7 +2886,7 @@ function AdminDashboardContent() {
                       <Button 
                         onClick={handleLogout}
                         className="w-full bg-red-500 hover:bg-red-600 text-white font-black rounded-2xl p-3"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         <LogOut className="w-4 h-4 mr-2" />
                         Sign Out 🚪
@@ -2895,7 +2895,7 @@ function AdminDashboardContent() {
                       <Button 
                         onClick={() => window.open('/', '_blank')}
                         className="w-full bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-2xl p-3"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         <Eye className="w-4 h-4 mr-2" />
                         View Main Site 🌐
@@ -2907,7 +2907,7 @@ function AdminDashboardContent() {
                   <div className="border-t-2 border-[#8b7355] pt-6">
                     <h4 
                       className="text-xl font-black text-[#2d3e2d] mb-4"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       System Information ℹ️
                     </h4>
@@ -2950,7 +2950,7 @@ export default function AdminDashboard() {
       <div className="min-h-screen bg-gradient-to-br from-[#f5f1e8] to-[#ede7d3] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-32 w-32 border-b-2 border-[#d4a574] mx-auto mb-4"></div>
-          <p className="text-[#2d3e2d] font-black text-xl" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <p className="text-[#2d3e2d] font-black text-xl" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             Loading Admin Dashboard... ⚡
           </p>
         </div>

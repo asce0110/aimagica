@@ -231,7 +231,7 @@ export default function ImageCropper({
         <CardHeader className="bg-[#d4a574] border-b-4 border-[#8b7355]">
           <CardTitle 
             className="text-2xl font-black text-[#2d3e2d] flex items-center justify-between"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             <span className="flex items-center gap-2">
               <CropIcon className="w-6 h-6" />
@@ -254,7 +254,7 @@ export default function ImageCropper({
               <Upload className="w-12 h-12 text-[#8b7355] mx-auto mb-4" />
               <p 
                 className="text-[#8b7355] font-bold text-lg mb-2"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 选择图片进行裁剪 📸
               </p>
@@ -272,7 +272,7 @@ export default function ImageCropper({
                 <Button 
                   type="button"
                   className="bg-[#8b7355] hover:bg-[#6d5a44] text-white font-bold rounded-xl cursor-pointer"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   asChild
                 >
                   <span>选择图片</span>
@@ -285,7 +285,7 @@ export default function ImageCropper({
               <div className="lg:col-span-2 space-y-4">
                 <Label 
                   className="text-[#2d3e2d] font-bold text-lg"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   裁剪和编辑图片
                 </Label>
@@ -317,7 +317,7 @@ export default function ImageCropper({
                   <div>
                     <Label 
                       className="text-[#2d3e2d] font-bold text-sm mb-2 block"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <ZoomIn className="w-4 h-4 inline mr-1" />
                       缩放: {scale[0]}%
@@ -337,7 +337,7 @@ export default function ImageCropper({
                       type="button"
                       onClick={handleRotation}
                       className="bg-[#8b7355] hover:bg-[#6d5a44] text-white font-bold rounded-xl"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <RotateCcw className="w-4 h-4 mr-1" />
                       旋转90°
@@ -350,7 +350,7 @@ export default function ImageCropper({
                   onClick={resetCrop}
                   variant="outline"
                   className="w-full border-2 border-[#8b7355] text-[#8b7355] hover:bg-[#f5f1e8] font-bold rounded-xl"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   重置裁剪
                 </Button>
@@ -360,7 +360,7 @@ export default function ImageCropper({
               <div className="space-y-4">
                 <Label 
                   className="text-[#2d3e2d] font-bold text-lg"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   预览效果
                 </Label>
@@ -369,7 +369,7 @@ export default function ImageCropper({
                   <div className="mb-3">
                     <p 
                       className="text-[#2d3e2d] font-bold text-sm"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       在首页中的显示效果：
                     </p>
@@ -391,7 +391,7 @@ export default function ImageCropper({
                             />
                           </div>
                           <div className="text-sm">🎨</div>
-                          <h4 className="text-[#2d3e2d] font-black text-xs leading-tight" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                          <h4 className="text-[#2d3e2d] font-black text-xs leading-tight" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                             YOUR STYLE
                           </h4>
                         </div>
@@ -399,14 +399,14 @@ export default function ImageCropper({
                       
                       <p 
                         className="text-[#8b7355] text-xs"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         裁剪框中的内容就是最终显示的效果
                       </p>
                     </div>
                   ) : (
                     <div className="h-64 flex items-center justify-center text-[#8b7355]">
-                      <p style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                      <p style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                         调整裁剪区域查看预览
                       </p>
                     </div>
@@ -419,7 +419,7 @@ export default function ImageCropper({
                     onClick={handleSave}
                     disabled={!completedCrop || isUploading}
                     className="bg-green-600 hover:bg-green-700 text-white font-bold rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     {isUploading ? (
                       <>
@@ -439,7 +439,7 @@ export default function ImageCropper({
                     onClick={onCancel}
                     variant="outline"
                     className="border-2 border-red-500 text-red-500 hover:bg-red-50 font-bold rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <X className="w-4 h-4 mr-1" />
                     取消

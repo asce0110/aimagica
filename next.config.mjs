@@ -1,7 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  // 纯静态导出 - 不包含任何API路由
-  output: 'export',
+  // 切换到服务器模式以支持API路由和NextAuth
+  // output: 'export', // 注释掉静态导出
   
   // 基础配置
   distDir: '.next',
@@ -29,7 +29,7 @@ const nextConfig = {
     NEXT_PUBLIC_R2_PUBLIC_URL: process.env.NEXT_PUBLIC_R2_PUBLIC_URL || 'https://images.aimagica.ai',
     NEXT_PUBLIC_ENABLE_CDN: process.env.NEXT_PUBLIC_ENABLE_CDN || 'true',
     // 提供构建时环境变量默认值
-    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://aimagica.pages.dev',
+    NEXTAUTH_URL: process.env.NEXTAUTH_URL || 'https://aimagica.ai',
     NEXTAUTH_SECRET: process.env.NEXTAUTH_SECRET || 'build_placeholder_secret',
   },
   

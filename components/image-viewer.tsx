@@ -227,7 +227,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
 
         {/* 缩放提示 */}
         {fullscreenZoom > 1 && (
-          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-black/70 text-white px-4 py-2 rounded-lg text-lg font-bold backdrop-blur-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <div className="absolute top-4 left-1/2 transform -translate-x-1/2 z-10 bg-black/70 text-white px-4 py-2 rounded-lg text-lg font-bold backdrop-blur-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             🔍 Zoom: {Math.round(fullscreenZoom * 100)}% • 💡 Drag to move • Scroll to navigate
           </div>
         )}
@@ -272,7 +272,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
       >
         {/* 头部 */}
         <div className="flex items-center justify-between p-4 border-b border-gray-200">
-          <h2 className="text-xl font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <h2 className="text-xl font-bold text-[#2d3e2d]" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             🎨 Your Amazing Creation!
           </h2>
           <Button
@@ -295,7 +295,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                 variant="outline"
                 size="sm"
                 className="bg-white border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] px-4"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 <Maximize className="w-4 h-4 mr-2" />
                 View Fullscreen
@@ -322,7 +322,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                 draggable={false}
               />
               {zoom > 1 && (
-                <div className="absolute top-2 left-2 bg-gray-600/70 text-white px-2 py-1 rounded text-xs" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <div className="absolute top-2 left-2 bg-gray-600/70 text-white px-2 py-1 rounded text-xs" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   💡 Drag to move • Scroll to move up/down
                 </div>
               )}
@@ -334,14 +334,14 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
             <div className="space-y-6">
               {/* 下载和复制 */}
               <div className="space-y-3">
-                <h3 className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <h3 className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   💾 Save & Copy
                 </h3>
                 <div className="flex gap-2">
                   <Button
                     onClick={downloadImage}
                     className="flex-1 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <Download className="w-4 h-4 mr-2" />
                     Download
@@ -350,7 +350,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                     onClick={copyImageLink}
                     variant="outline"
                     className="flex-1 bg-white border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574]"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <Copy className="w-4 h-4 mr-2" />
                     Copy Link
@@ -360,7 +360,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
 
               {/* 自定义分享文本 */}
               <div className="space-y-3">
-                <h3 className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <h3 className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   ✏️ Customize Share Message
                 </h3>
                 <Textarea
@@ -368,17 +368,17 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                   onChange={(e) => setCustomShareText(e.target.value)}
                   placeholder="Write your share message..."
                   className="border-2 border-[#8b7355] rounded-xl resize-none"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   rows={3}
                 />
-                <p className="text-xs text-[#8b7355]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <p className="text-xs text-[#8b7355]" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   💡 Your message will include the image and: "Created with AIMAGICA: https://aimagica.ai"
                 </p>
               </div>
 
               {/* 社交媒体分享 */}
               <div className="space-y-3">
-                <h3 className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <h3 className="text-lg font-bold text-[#2d3e2d]" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   🌟 Share Your Art
                 </h3>
                 
@@ -387,7 +387,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                   <Button
                     onClick={shareToFacebook}
                     className="bg-blue-600 hover:bg-blue-700 text-white font-bold rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <Facebook className="w-4 h-4 mr-2" />
                     Facebook
@@ -395,7 +395,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                   <Button
                     onClick={shareToTwitter}
                     className="bg-sky-500 hover:bg-sky-600 text-white font-bold rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <Twitter className="w-4 h-4 mr-2" />
                     Twitter
@@ -403,7 +403,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                   <Button
                     onClick={shareToWhatsApp}
                     className="bg-green-500 hover:bg-green-600 text-white font-bold rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <MessageCircle className="w-4 h-4 mr-2" />
                     WhatsApp
@@ -411,7 +411,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                   <Button
                     onClick={shareToLinkedIn}
                     className="bg-blue-700 hover:bg-blue-800 text-white font-bold rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <Share2 className="w-4 h-4 mr-2" />
                     LinkedIn
@@ -423,14 +423,14 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
                   <Button
                     onClick={shareToTelegram}
                     className="bg-blue-500 hover:bg-blue-600 text-white font-bold rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     📱 Telegram
                   </Button>
                   <Button
                     onClick={shareToReddit}
                     className="bg-orange-500 hover:bg-orange-600 text-white font-bold rounded-xl"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     🔴 Reddit
                   </Button>
@@ -439,7 +439,7 @@ export default function ImageViewer({ imageUrl, onClose }: ImageViewerProps) {
 
               {/* 分享提示 */}
               <div className="bg-[#f5f1e8] border-2 border-[#8b7355] rounded-xl p-4">
-                <p className="text-sm text-[#2d3e2d] font-bold text-center" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <p className="text-sm text-[#2d3e2d] font-bold text-center" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   ✨ Share your amazing AI artwork with the world! 
                   <br />
                   Don't forget to tag #AIMAGICA! 🎨

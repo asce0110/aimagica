@@ -458,13 +458,13 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
               <h2
                 className="text-xl md:text-3xl font-black text-[#f5f1e8] mb-2 transform -rotate-1"
                 style={{
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "2px 2px 0px #8b7355",
                 }}
               >
                 CREATE YOUR AIMAGICA! 🎨
               </h2>
-              <p className="text-[#f5f1e8] font-bold text-sm md:text-base" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <p className="text-[#f5f1e8] font-bold text-sm md:text-base" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Quick & Easy Generation ⚡
               </p>
             </div>
@@ -482,7 +482,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
               <h3
                 className="text-[#2d3e2d] font-black text-lg mb-4 transform -rotate-2"
                 style={{
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "2px 2px 0px #d4a574",
                 }}
               >
@@ -496,7 +496,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                       ? "bg-[#d4a574] border-[#d4a574] text-[#2d3e2d] scale-105 rotate-1 shadow-lg"
                       : "bg-[#f5f1e8] border-[#8b7355] text-[#8b7355] hover:border-[#d4a574] hover:bg-white"
                   }`}
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <Type className="w-6 h-6 mx-auto mb-2" />
                   <div className="font-bold text-sm">Text to Image</div>
@@ -527,7 +527,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                         ? "bg-[#d4a574] border-[#d4a574] text-[#2d3e2d] scale-105 -rotate-1 shadow-lg"
                         : "bg-[#f5f1e8] border-[#8b7355] text-[#8b7355] hover:border-[#d4a574] hover:bg-white"
                   }`}
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <ImageIcon className="w-6 h-6 mx-auto mb-2" />
                   <div className="font-bold text-sm">Image to Image</div>
@@ -540,7 +540,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                       ? "bg-[#d4a574] border-[#d4a574] text-[#2d3e2d] scale-105 rotate-2 shadow-lg"
                       : "bg-[#f5f1e8] border-[#8b7355] text-[#8b7355] hover:border-[#d4a574] hover:bg-white"
                   }`}
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <Video className="w-6 h-6 mx-auto mb-2" />
                   <div className="font-bold text-sm">Text to Video</div>
@@ -571,7 +571,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                         ? "bg-[#d4a574] border-[#d4a574] text-[#2d3e2d] scale-105 -rotate-2 shadow-lg"
                         : "bg-[#f5f1e8] border-[#8b7355] text-[#8b7355] hover:border-[#d4a574] hover:bg-white"
                   }`}
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <Film className="w-6 h-6 mx-auto mb-2" />
                   <div className="font-bold text-sm">Image to Video</div>
@@ -586,7 +586,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                 <h3
                   className="text-[#2d3e2d] font-black text-lg mb-4 transform rotate-1"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -605,7 +605,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                       <button
                         onClick={() => setUploadedImage(null)}
                         className="absolute -top-2 -right-2 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] rounded-full w-8 h-8 flex items-center justify-center font-bold"
-                        style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                        style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -613,7 +613,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                         <button
                           onClick={() => setUploadedImage(null)}
                           className="bg-white border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] font-bold px-4 py-2 rounded-xl transition-all"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <ImageIcon className="w-4 h-4 mr-1 inline" />
                           Upload New
@@ -621,7 +621,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                         <button
                           onClick={handleStartDrawing}
                           className="bg-white border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#d4a574] font-bold px-4 py-2 rounded-xl transition-all"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <Brush className="w-4 h-4 mr-1 inline" />
                           Edit Image
@@ -633,10 +633,10 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                   /* Image Editing Canvas */
                   <div className="border-2 border-dashed border-[#8b7355] rounded-xl p-6 bg-[#f5f1e8]">
                     <div className="text-center mb-4">
-                      <h4 className="text-[#2d3e2d] font-bold text-lg mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                      <h4 className="text-[#2d3e2d] font-bold text-lg mb-2" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                         🖼️ Edit Your Image!
                       </h4>
-                      <p className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                      <p className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                         Draw modifications on your image - AI will enhance the changes!
                       </p>
                     </div>
@@ -652,7 +652,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                         <button
                           onClick={() => setShowDrawing(false)}
                           className="bg-white border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8] font-bold px-6 py-3 rounded-xl transition-all transform hover:scale-105"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           Cancel
                         </button>
@@ -667,13 +667,13 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                             }
                           }}
                           className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-bold px-6 py-3 rounded-xl transition-all transform hover:scale-105 shadow-lg animate-pulse"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <CheckCircle className="w-4 h-4 mr-2 inline" />
                           Save Changes! ✨
                         </button>
                       </div>
-                      <p className="text-[#8b7355] text-sm mt-2 font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                      <p className="text-[#8b7355] text-sm mt-2 font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                         💡 Tip: You can also use the "Apply Changes!" button on the canvas
                       </p>
                     </div>
@@ -685,14 +685,14 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                       <div className="flex justify-center gap-8 mb-6">
                         <div className="text-center">
                           <ImageIcon className="w-12 h-12 text-[#8b7355] mx-auto mb-2" />
-                          <p className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                          <p className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                             Upload Image
                           </p>
                         </div>
                         <div className="text-[#8b7355] text-2xl flex items-center">OR</div>
                         <div className="text-center">
                           <Brush className="w-12 h-12 text-[#8b7355] mx-auto mb-2" />
-                          <p className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                          <p className="text-[#8b7355] font-bold text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                             Edit Image
                           </p>
                         </div>
@@ -725,7 +725,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                               ? "bg-[#8b7355] hover:bg-[#6d5a42] text-[#f5f1e8] hover:scale-105" 
                               : "bg-[#8b7355]/30 text-[#8b7355] cursor-not-allowed"
                           }`}
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           <Brush className="w-5 h-5 mr-2 inline" />
                           {uploadedImage ? "Start Editing" : "Upload Image First"}
@@ -747,7 +747,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                 <Label
                   className="text-[#2d3e2d] font-black text-base transform -rotate-1 hover:rotate-1 hover:scale-105 inline-block transition-all duration-300 cursor-pointer"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #d4a574",
                   }}
                 >
@@ -766,7 +766,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                         "A magical forest with glowing mushrooms and fairy lights..."
                     }
                     className="border-2 border-[#8b7355] bg-[#f5f1e8] text-[#2d3e2d] placeholder:text-[#8b7355]/70 font-bold resize-none focus:border-[#d4a574] focus:ring-2 focus:ring-[#d4a574]/20 pr-10 py-6"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     rows={7}
                   />
                   {/* Clear button - 只在有内容且hover时显示 */}
@@ -775,7 +775,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                       onClick={() => setTextPrompt('')}
                       className="absolute top-2 right-2 w-6 h-6 bg-[#8b7355] hover:bg-[#d4a574] text-white rounded-full flex items-center justify-center transition-all duration-200 opacity-0 group-hover:opacity-100 hover:scale-110 shadow-lg"
                       style={{ 
-                        fontFamily: "Righteous, Arial Black, sans-serif",
+                        fontFamily: "Fredoka One, Arial Black, sans-serif",
                         fontSize: "14px",
                         fontWeight: "bold"
                       }}
@@ -850,7 +850,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                       setTextPrompt(randomPrompt)
                     }}
                     className="px-3 py-1 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] rounded-lg text-xs font-bold transition-all duration-200 transform hover:scale-105 shadow-md"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     title="Generate random prompt"
                   >
                     🎲 Random
@@ -858,7 +858,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                   <button
                     onClick={() => setTextPrompt('')}
                     className="px-3 py-1 bg-[#8b7355] hover:bg-[#7a6449] text-white rounded-lg text-xs font-bold transition-all duration-200 transform hover:scale-105 shadow-md"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     title="Reset text"
                   >
                     🔄 Reset
@@ -887,7 +887,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                 <div className="absolute -bottom-1 -right-1 w-3 h-3 bg-[#8b7355] rounded-full"></div>
                 
                 <h4 className="text-[#2d3e2d] font-black text-base mb-3 transform rotate-1" style={{ 
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "1px 1px 0px #d4a574"
                 }}>
                   Aspect Ratio 📐
@@ -903,7 +903,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                           ? `bg-[#d4a574] border-[#d4a574] text-[#2d3e2d] scale-105 shadow-lg ${index % 2 === 0 ? 'rotate-1' : '-rotate-1'}`
                           : "bg-[#f5f1e8] border-[#8b7355] text-[#8b7355] hover:bg-[#d4a574]/20 hover:border-[#d4a574]"
                       }`}
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <div className="flex flex-col items-center space-y-1">
                         {typeof ratio.icon === 'string' ? (
@@ -934,7 +934,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
               <h3
                 className="text-[#2d3e2d] font-black text-lg mb-4 transform -rotate-1"
                 style={{
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "1px 1px 0px #d4a574",
                 }}
               >
@@ -955,7 +955,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                 <div className="absolute -bottom-1 -left-1 w-3 h-3 bg-[#8b7355] rounded-full"></div>
                 
                 <h4 className="text-[#2d3e2d] font-black text-base mb-3 transform -rotate-1" style={{ 
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "1px 1px 0px #d4a574"
                 }}>
                   Number of {creationMode.includes("video") ? "Videos" : "Images"} 🖼️
@@ -974,7 +974,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                           ? `bg-[#d4a574] border-[#d4a574] text-[#2d3e2d] scale-110 shadow-xl ${index % 2 === 0 ? 'rotate-2' : '-rotate-2'}`
                           : "bg-[#f5f1e8] border-[#8b7355] text-[#8b7355] hover:bg-[#d4a574]/20 hover:border-[#d4a574]"
                       }`}
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       <div className="flex flex-col items-center space-y-1">
                         <span className="text-2xl font-black">{count}</span>
@@ -996,7 +996,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                 <h4
                   className="text-[#2d3e2d] font-black mb-2 transform rotate-1 animate-wiggle"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "2px 2px 0px #d4a574",
                   }}
                 >
@@ -1004,7 +1004,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                 </h4>
                 <div
                   className="text-[#2d3e2d] font-bold space-y-1 text-sm"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   {creationMode === "text2img" && (
                     <>
@@ -1048,7 +1048,7 @@ const GenerationInterface = forwardRef<GenerationInterfaceRef, GenerationInterfa
                 disabled={false} // 移除所有disabled限制，让弹窗验证机制处理拦截
                 className="relative w-full bg-gradient-to-r from-[#d4a574] to-[#8b7355] hover:from-[#c19660] hover:to-[#6d5a42] text-[#2d3e2d] font-black text-lg py-4 rounded-2xl shadow-2xl border-4 border-[#2d3e2d] transform hover:scale-105 hover:-rotate-1 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:rotate-0 animate-pulse"
                 style={{
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "2px 2px 0px rgba(245, 241, 232, 0.8)",
                 }}
               >

@@ -16,13 +16,13 @@ export default function DemoGlassEffects() {
         <h2
           className="text-2xl md:text-3xl font-black text-[#2d3e2d] transform -rotate-1"
           style={{
-            fontFamily: "Righteous, Arial Black, sans-serif",
+            fontFamily: "Fredoka One, Arial Black, sans-serif",
             textShadow: "3px 3px 0px #d4a574",
           }}
         >
           AIMAGICA 玻璃拟态效果展示 ✨
         </h2>
-        <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+        <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
           在各种设备上都能完美呈现的魔法玻璃效果！
         </p>
       </div>
@@ -32,7 +32,7 @@ export default function DemoGlassEffects() {
           <TabsTrigger
             value="cards"
             className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             <Palette className="w-4 h-4 mr-2" />
             卡片效果
@@ -40,7 +40,7 @@ export default function DemoGlassEffects() {
           <TabsTrigger
             value="buttons"
             className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             <Wand2 className="w-4 h-4 mr-2" />
             按钮效果
@@ -48,7 +48,7 @@ export default function DemoGlassEffects() {
           <TabsTrigger
             value="info"
             className="rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             <Info className="w-4 h-4 mr-2" />
             使用说明
@@ -58,7 +58,7 @@ export default function DemoGlassEffects() {
         <TabsContent value="cards" className="mt-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <MobileOptimizedCard title="主色调玻璃卡片" icon={<Sparkles className="w-5 h-5" />} color="primary">
-              <p className="text-[#f5f1e8] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <p className="text-[#f5f1e8] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 这是一个使用主色调的玻璃拟态卡片，在移动设备上也能完美呈现！
               </p>
               <div className="mt-4 flex justify-end">
@@ -69,7 +69,7 @@ export default function DemoGlassEffects() {
             </MobileOptimizedCard>
 
             <MobileOptimizedCard title="次要色调玻璃卡片" icon={<Star className="w-5 h-5" />} color="secondary">
-              <p className="text-[#f5f1e8] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <p className="text-[#f5f1e8] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 这是一个使用次要色调的玻璃拟态卡片，在移动设备上也能完美呈现！
               </p>
               <div className="mt-4 flex justify-end">
@@ -80,7 +80,7 @@ export default function DemoGlassEffects() {
             </MobileOptimizedCard>
 
             <MobileOptimizedCard title="强调色玻璃卡片" icon={<Wand2 className="w-5 h-5" />} color="accent">
-              <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 这是一个使用强调色的玻璃拟态卡片，在移动设备上也能完美呈现！
               </p>
               <div className="mt-4 flex justify-end">
@@ -91,7 +91,7 @@ export default function DemoGlassEffects() {
             </MobileOptimizedCard>
 
             <MobileOptimizedCard title="中性色玻璃卡片" icon={<Palette className="w-5 h-5" />} color="neutral">
-              <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 这是一个使用中性色的玻璃拟态卡片，在移动设备上也能完美呈现！
               </p>
               <div className="mt-4 flex justify-end">
@@ -110,7 +110,7 @@ export default function DemoGlassEffects() {
                 <h3
                   className="text-xl font-black text-[#2d3e2d] transform -rotate-1"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "2px 2px 0px #d4a574",
                   }}
                 >
@@ -136,7 +136,7 @@ export default function DemoGlassEffects() {
                 <h3
                   className="text-xl font-black text-[#2d3e2d] transform -rotate-1"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "2px 2px 0px #d4a574",
                   }}
                 >
@@ -159,7 +159,7 @@ export default function DemoGlassEffects() {
                 <h3
                   className="text-xl font-black text-[#2d3e2d] transform -rotate-1"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "2px 2px 0px #d4a574",
                   }}
                 >
@@ -184,7 +184,7 @@ export default function DemoGlassEffects() {
               <h3
                 className="text-xl font-black text-[#2d3e2d] transform -rotate-1"
                 style={{
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "2px 2px 0px #d4a574",
                 }}
               >
@@ -192,16 +192,16 @@ export default function DemoGlassEffects() {
               </h3>
 
               <div className="space-y-2">
-                <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   ✨ 这些组件专为移动设备优化，确保在各种屏幕尺寸上都能呈现完美的玻璃拟态效果。
                 </p>
 
-                <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   🔍 主要特点：
                 </p>
                 <ul
                   className="list-disc pl-6 space-y-1 text-[#2d3e2d]"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <li>自动检测设备类型，调整模糊效果强度</li>
                   <li>针对不支持backdrop-filter的设备提供优雅降级方案</li>
@@ -210,7 +210,7 @@ export default function DemoGlassEffects() {
                   <li>减少移动设备上的装饰元素，提高性能</li>
                 </ul>
 
-                <p className="text-[#2d3e2d] font-bold mt-4" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                <p className="text-[#2d3e2d] font-bold mt-4" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                   🧙‍♂️ 如何使用：
                 </p>
                 <div className="bg-[#2d3e2d]/10 p-3 rounded-xl">

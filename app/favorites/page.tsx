@@ -90,7 +90,7 @@ export default function FavoritesPage() {
       <div className="min-h-screen bg-[#f5f1e8] flex items-center justify-center">
         <div className="text-center">
           <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#d4a574] mx-auto mb-4"></div>
-          <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             Loading your favorites...
           </p>
         </div>
@@ -112,7 +112,7 @@ export default function FavoritesPage() {
               onClick={() => router.push("/")}
               variant="outline"
               className="bg-[#f5f1e8] border-2 border-[#8b7355] text-[#2d3e2d] hover:bg-[#8b7355] hover:text-[#f5f1e8] font-black rounded-xl transform hover:rotate-1 transition-all"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to AIMAGICA
@@ -121,7 +121,7 @@ export default function FavoritesPage() {
               <h1
                 className="text-2xl md:text-3xl font-black text-[#2d3e2d] transform -rotate-1"
                 style={{
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "2px 2px 0px #d4a574",
                 }}
               >
@@ -129,7 +129,7 @@ export default function FavoritesPage() {
               </h1>
               <p
                 className="text-sm text-[#8b7355] font-bold"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 Your loved AIMAGICA creations
               </p>
@@ -143,7 +143,7 @@ export default function FavoritesPage() {
         {loading ? (
           <div className="text-center py-12">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#d4a574] mx-auto mb-4"></div>
-            <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <p className="text-[#2d3e2d] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               Loading your favorites...
             </p>
           </div>
@@ -153,20 +153,20 @@ export default function FavoritesPage() {
               <Heart className="w-16 h-16 text-[#d4a574] mx-auto mb-4" />
               <h2
                 className="text-xl font-black text-[#2d3e2d] mb-2"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 No favorites yet! 💔
               </h2>
               <p
                 className="text-[#8b7355] font-bold mb-4"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 Start creating and loving your AIMAGICA artworks!
               </p>
               <Button
                 onClick={() => router.push("/")}
                 className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black rounded-xl shadow-lg transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 Create Your First Artwork! 🎨
               </Button>
@@ -229,7 +229,7 @@ export default function FavoritesPage() {
                     <Heart className="w-4 h-4 text-red-500 fill-current" />
                     <span
                       className="text-xs text-[#8b7355] font-bold"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       Added {new Date(favorite.created_at).toLocaleDateString()}
                     </span>
@@ -237,16 +237,16 @@ export default function FavoritesPage() {
                   
                   <p
                     className="text-sm text-[#2d3e2d] font-bold line-clamp-2 mb-2"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     {favorite.generated_images.prompt}
                   </p>
                   
                   <div className="flex items-center justify-between text-xs text-[#8b7355]">
-                    <span style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                    <span style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                       Style: {favorite.generated_images.style}
                     </span>
-                    <span style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                    <span style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                       ❤️ {favorite.generated_images.likes_count}
                     </span>
                   </div>

@@ -51,7 +51,7 @@ export default function FeaturedImagesSection() {
             <h2
               className="text-3xl md:text-4xl lg:text-5xl font-black text-[#2d3e2d] mb-4 transform -rotate-1"
               style={{
-                fontFamily: "Righteous, Arial Black, sans-serif",
+                fontFamily: "Fredoka One, Arial Black, sans-serif",
                 textShadow: "3px 3px 0px #d4a574",
               }}
             >
@@ -59,7 +59,7 @@ export default function FeaturedImagesSection() {
             </h2>
             <p
               className="text-lg md:text-xl font-bold text-[#8b7355] max-w-3xl mx-auto"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               Handpicked by our team - the most amazing AI artworks created by our community!
             </p>
@@ -98,7 +98,7 @@ export default function FeaturedImagesSection() {
           <h2
             className="text-3xl md:text-4xl lg:text-5xl font-black text-[#2d3e2d] mb-4 transform -rotate-1"
             style={{
-              fontFamily: "Righteous, Arial Black, sans-serif",
+              fontFamily: "Fredoka One, Arial Black, sans-serif",
               textShadow: "3px 3px 0px #d4a574",
             }}
           >
@@ -106,7 +106,7 @@ export default function FeaturedImagesSection() {
           </h2>
           <p
             className="text-lg md:text-xl font-bold text-[#8b7355] max-w-3xl mx-auto"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             Handpicked by our team - the most amazing AI artworks created by our community!
           </p>
@@ -121,7 +121,7 @@ export default function FeaturedImagesSection() {
             onClick={() => router.push("/gallery")}
             className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-8 py-4 rounded-xl shadow-lg transform hover:scale-110 transition-all border-2 border-[#2d3e2d]"
             style={{ 
-              fontFamily: "Righteous, Arial Black, sans-serif",
+              fontFamily: "Fredoka One, Arial Black, sans-serif",
             }}
           >
             <Eye className="w-5 h-5 mr-3 inline" />

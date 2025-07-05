@@ -120,7 +120,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
         {requirementsText && (
           <div className="absolute top-1 right-1 z-10">
             <div className="bg-[#d4a574] text-[#2d3e2d] text-xs font-bold px-1 py-0.5 rounded-md border border-[#8b7355]" 
-                 style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                 style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               ⚙️
             </div>
           </div>
@@ -146,7 +146,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           </div>
           <h4
             className="text-[#2d3e2d] font-black text-xs leading-tight mb-1"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             {style.name.toUpperCase()}
           </h4>
@@ -154,7 +154,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           {/* 要求信息 */}
           {requirementsText && (
             <div className="text-xs text-[#8b7355] font-bold leading-tight" 
-                 style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                 style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               {requirementsText}
             </div>
           )}
@@ -182,7 +182,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-[#8b7355] mx-auto mb-4"></div>
           <p 
             className="text-[#8b7355] font-bold"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             Loading styles... 🎨
           </p>
@@ -201,14 +201,14 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           </div>
           <p 
             className="text-red-600 font-bold mb-4"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             {error}
           </p>
           <Button
             onClick={loadStyles}
             className="bg-[#8b7355] hover:bg-[#4a5a4a] text-white font-black px-4 py-2 rounded-xl transform hover:scale-105 transition-all"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             🔄 Try Again
           </Button>
@@ -227,20 +227,20 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           </div>
           <p 
             className="text-[#8b7355] font-bold mb-4"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             No styles configured yet
           </p>
           <p 
             className="text-[#8b7355] text-sm mb-4"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             Initialize the styles table with sample data or add your first style manually.
           </p>
           <Button
             onClick={loadStyles}
             className="bg-[#8b7355] hover:bg-[#4a5a4a] text-white font-black px-4 py-2 rounded-xl transform hover:scale-105 transition-all"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             🔄 Refresh
           </Button>
@@ -256,7 +256,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           <TabsTrigger
             value="standard"
             className="rounded-lg md:rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm py-2"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             <Sparkles className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             STANDARD STYLES
@@ -264,7 +264,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           <TabsTrigger
             value="premium"
             className="rounded-lg md:rounded-xl font-black data-[state=active]:bg-[#d4a574] data-[state=active]:text-[#2d3e2d] text-[#f5f1e8] transform hover:scale-105 transition-all text-xs md:text-sm py-2"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             <Crown className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
             PREMIUM STYLES
@@ -276,7 +276,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
             <h3
               className="text-[#2d3e2d] font-black text-base md:text-lg mb-2 md:mb-3 flex items-center transform rotate-1"
               style={{
-                fontFamily: "Righteous, Arial Black, sans-serif",
+                fontFamily: "Fredoka One, Arial Black, sans-serif",
                 textShadow: "1px 1px 0px #d4a574",
               }}
             >
@@ -299,7 +299,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
                   </div>
                   <h4
                     className="text-[#2d3e2d] font-black text-xs leading-tight"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     NO STYLE
                   </h4>
@@ -321,13 +321,13 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
                         </div>
                         <h4
                           className="text-foreground font-black text-xs leading-tight"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           VIEW MORE
                         </h4>
                         <p
                           className="text-muted-foreground font-bold text-xs mt-1"
-                          style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                          style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                         >
                           +{hiddenFreeStyles.length} styles
                         </p>
@@ -339,7 +339,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
                       <DialogTitle 
                         className="text-[#2d3e2d] font-black text-xl flex items-center"
                         style={{ 
-                          fontFamily: "Righteous, Arial Black, sans-serif",
+                          fontFamily: "Fredoka One, Arial Black, sans-serif",
                           textShadow: "1px 1px 0px #d4a574"
                         }}
                       >
@@ -366,7 +366,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
               <h3
                 className="text-[#2d3e2d] font-black text-base md:text-lg transform rotate-1"
                 style={{
-                  fontFamily: "Righteous, Arial Black, sans-serif",
+                  fontFamily: "Fredoka One, Arial Black, sans-serif",
                   textShadow: "1px 1px 0px #d4a574",
                 }}
               >
@@ -375,7 +375,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
             </div>
             <p
               className="text-[#8b7355] font-bold text-xs md:text-sm mt-1"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               Unlock these exclusive styles with AIMAGICA PRO! 🌟
             </p>
@@ -403,7 +403,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
                     </div>
                     <h4
                       className="text-[#2d3e2d] font-black text-xs leading-tight"
-                      style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                      style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                     >
                       {style.name.toUpperCase()}
                     </h4>
@@ -421,7 +421,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           <div className="flex justify-center mt-3 md:mt-4">
             <Button
               className="bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black px-4 py-2 md:px-6 md:py-3 rounded-xl md:rounded-2xl shadow-lg transform hover:scale-105 transition-all text-xs md:text-sm"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               <Crown className="w-3 h-3 md:w-4 md:h-4 mr-1 md:mr-2" />
               UPGRADE TO PRO
@@ -435,7 +435,7 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
         <h4
           className="text-[#2d3e2d] font-black mb-1 md:mb-2 transform rotate-1 text-sm md:text-base"
           style={{
-            fontFamily: "Righteous, Arial Black, sans-serif",
+            fontFamily: "Fredoka One, Arial Black, sans-serif",
             textShadow: "1px 1px 0px #d4a574",
           }}
         >
@@ -452,14 +452,14 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
           <div className="flex-1 min-w-0">
             <p
               className="text-[#2d3e2d] font-black text-xs md:text-sm"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               {selectedStyle === null 
                 ? "🎨 No Style" 
                 : `${styles.find((s) => s.id === selectedStyle)?.emoji} ${styles.find((s) => s.id === selectedStyle)?.name}`
               }
             </p>
-            <p className="text-[#8b7355] font-bold text-xs mb-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <p className="text-[#8b7355] font-bold text-xs mb-1" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               {selectedStyle === null 
                 ? "Original prompt will be used" 
                 : styles.find((s) => s.id === selectedStyle)?.description || "AI-enhanced artistic style"
@@ -474,14 +474,14 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
               if (requirementsText) {
                 return (
                   <div className="mt-2 p-2 bg-[#d4a574]/20 rounded-lg border border-[#8b7355]/30">
-                    <p className="text-xs font-bold text-[#2d3e2d] mb-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                    <p className="text-xs font-bold text-[#2d3e2d] mb-1" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                       ⚙️ 使用要求：
                     </p>
-                    <p className="text-xs text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                    <p className="text-xs text-[#8b7355] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                       {requirementsText}
                     </p>
                     {selectedStyleData?.requirements_description && (
-                      <p className="text-xs text-[#8b7355] mt-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+                      <p className="text-xs text-[#8b7355] mt-1" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                         💡 {selectedStyleData.requirements_description}
                       </p>
                     )}

@@ -214,12 +214,12 @@ const WaitingGame: React.FC<WaitingGameProps> = ({ onGameComplete, isVisible = t
           {/* Header */}
           <div className="text-center mb-4">
             <h2 className="text-xl font-black text-[#2d3e2d] mb-1 transform -rotate-1" style={{ 
-              fontFamily: "Righteous, Arial Black, sans-serif",
+              fontFamily: "Fredoka One, Arial Black, sans-serif",
               textShadow: "1px 1px 0px #d4a574"
             }}>
               🧠 Mind Sharpener
             </h2>
-            <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               Keep your brain busy while we create magic! ✨
             </p>
           </div>
@@ -252,7 +252,7 @@ const WaitingGame: React.FC<WaitingGameProps> = ({ onGameComplete, isVisible = t
                       ? 'bg-white text-[#2d3e2d] hover:bg-[#f5f1e8] border-2 border-[#8b7355]'
                       : 'bg-[#8b7355]/30 text-[#8b7355] cursor-not-allowed border-2 border-[#8b7355]/50'
                   }`}
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   <div className="flex items-center justify-center gap-1 mb-1">
                     {lvl.icon}
@@ -305,7 +305,7 @@ const WaitingGame: React.FC<WaitingGameProps> = ({ onGameComplete, isVisible = t
                 }
                 ${!gameStarted || gameCompleted ? 'cursor-not-allowed opacity-50' : 'cursor-pointer'}
               `}
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 {number}
               </button>
@@ -318,7 +318,7 @@ const WaitingGame: React.FC<WaitingGameProps> = ({ onGameComplete, isVisible = t
               <Button
                 onClick={startGame}
                 className="flex-1 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] font-black py-2 px-4 rounded-lg transform hover:scale-105 transition-all border-2 border-[#2d3e2d] shadow-lg"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 <Zap className="w-4 h-4 mr-2" />
                 Start Level {currentLevel}!
@@ -328,7 +328,7 @@ const WaitingGame: React.FC<WaitingGameProps> = ({ onGameComplete, isVisible = t
                 onClick={resetGame}
                 variant="outline"
                 className="flex-1 border-2 border-[#8b7355] text-[#8b7355] hover:bg-[#8b7355] hover:text-white font-black py-2 px-4 rounded-lg transform hover:scale-105 transition-all"
-                style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
               >
                 <RefreshCw className="w-4 h-4 mr-2" />
                 Reset
@@ -340,7 +340,7 @@ const WaitingGame: React.FC<WaitingGameProps> = ({ onGameComplete, isVisible = t
           {gameCompleted && (
             <div className="mt-4 p-3 bg-[#f5f1e8] rounded-lg text-center border-2 border-[#d4a574] relative">
               <div className="absolute -top-1 -right-1 w-3 h-3 bg-[#d4a574] rounded-full"></div>
-              <p className="text-[#2d3e2d] font-black mb-1" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <p className="text-[#2d3e2d] font-black mb-1" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 🎉 Level {currentLevel} Complete!
               </p>
               <p className="text-sm text-[#8b7355] font-bold">
@@ -350,7 +350,7 @@ const WaitingGame: React.FC<WaitingGameProps> = ({ onGameComplete, isVisible = t
                 <Button
                   onClick={() => selectLevel(currentLevel + 1)}
                   className="mt-2 bg-[#4a5a4a] hover:bg-[#2d3e2d] text-white text-sm py-1 px-3 rounded font-black border-2 border-[#2d3e2d] transform hover:scale-105 transition-all"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   Next Level! 🚀
                 </Button>

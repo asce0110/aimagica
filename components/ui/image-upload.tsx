@@ -194,24 +194,24 @@ export default function ImageUpload({
         {isUploading ? (
           <div className="flex flex-col items-center space-y-2">
             <Loader2 className="w-8 h-8 text-[#8b7355] animate-spin" />
-            <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               Uploading... 📤
             </p>
           </div>
         ) : uploadSuccess ? (
           <div className="flex flex-col items-center space-y-2">
             <CheckCircle className="w-8 h-8 text-green-500" />
-            <p className="text-green-600 font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <p className="text-green-600 font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               Upload successful! ✅
             </p>
           </div>
         ) : (
           <div className="flex flex-col items-center space-y-2">
             <Upload className="w-8 h-8 text-[#8b7355]" />
-            <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <p className="text-[#8b7355] font-bold" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               Click to upload or drag & drop 🖼️
             </p>
-            <p className="text-[#8b7355] text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <p className="text-[#8b7355] text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               JPEG, PNG, WebP, GIF (max {Math.round(maxSize / 1024 / 1024)}MB)
             </p>
           </div>

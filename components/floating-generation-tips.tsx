@@ -114,7 +114,7 @@ export default function FloatingGenerationTips() {
              <h3
                className="text-base font-black text-[#f5f1e8] transform rotate-1"
                style={{
-                 fontFamily: "Righteous, Arial Black, sans-serif",
+                 fontFamily: "Fredoka One, Arial Black, sans-serif",
                  textShadow: "1px 1px 0px rgba(0,0,0,0.3)",
                }}
              >
@@ -134,7 +134,7 @@ export default function FloatingGenerationTips() {
                <Clock className="w-4 h-4 text-[#8b7355]" />
                <span 
                  className="text-sm font-bold text-[#2d3e2d]"
-                 style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                 style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                >
                  生成进度：{Math.round(generationState.renderProgress)}%
                </span>
@@ -153,7 +153,7 @@ export default function FloatingGenerationTips() {
              <div className="mt-2 text-center">
                <p 
                  className="text-xs text-[#8b7355] font-medium"
-                 style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                 style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                >
                  {generationState.renderProgress < 30 ? "🎯 AI正在理解您的创意..." :
                   generationState.renderProgress < 60 ? "🎨 正在绘制精美作品..." :

@@ -21,7 +21,7 @@ export default function TextToVideoPage() {
                 <h1
                   className="text-xl font-black text-[#2d3e2d]"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "2px 2px 0px #d4a574",
                   }}
                 >
@@ -62,7 +62,7 @@ export default function TextToVideoPage() {
           <h1
             className="text-4xl md:text-6xl font-black text-[#2d3e2d] mb-4 transform -rotate-1"
             style={{
-              fontFamily: "Righteous, Arial Black, sans-serif",
+              fontFamily: "Fredoka One, Arial Black, sans-serif",
               textShadow: "3px 3px 0px #d4a574",
             }}
           >
@@ -70,7 +70,7 @@ export default function TextToVideoPage() {
           </h1>
           <p
             className="text-xl md:text-2xl font-bold text-[#8b7355] max-w-4xl mx-auto mb-6"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             Transform your words into stunning AI-generated videos! Advanced text-to-video technology that brings your imagination to life in motion.
           </p>
@@ -100,7 +100,7 @@ export default function TextToVideoPage() {
             <h2
               className="text-2xl font-black text-[#f5f1e8] flex items-center justify-center gap-3"
               style={{
-                fontFamily: "Righteous, Arial Black, sans-serif",
+                fontFamily: "Fredoka One, Arial Black, sans-serif",
                 textShadow: "2px 2px 0px #8b7355",
               }}
             >
@@ -114,20 +114,20 @@ export default function TextToVideoPage() {
             <div className="text-8xl mb-6">🚧</div>
             <h3
               className="text-3xl font-black text-[#2d3e2d] mb-4"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               Text to Video is Coming Soon!
             </h3>
             <p
               className="text-lg text-[#8b7355] font-bold mb-6"
-              style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+              style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
             >
               We're working hard to bring you the most amazing text-to-video AI technology. 
               Stay tuned for updates!
             </p>
             
             <div className="bg-[#f5f1e8] rounded-xl p-6 mb-6">
-              <h4 className="font-black text-[#2d3e2d] mb-3" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h4 className="font-black text-[#2d3e2d] mb-3" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 What to expect:
               </h4>
               <ul className="text-[#8b7355] font-bold space-y-2">
@@ -151,7 +151,7 @@ export default function TextToVideoPage() {
       {/* 功能导航区域 */}
       <section className="container mx-auto px-4 py-8">
         <div className="text-center mb-6">
-          <h2 className="text-2xl font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <h2 className="text-2xl font-black text-[#2d3e2d] mb-2" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             Try Available AI Features! 🚀
           </h2>
         </div>
@@ -160,7 +160,7 @@ export default function TextToVideoPage() {
           <Link href="/" className="block">
             <div className="bg-gradient-to-br from-[#d4a574] to-[#c19660] border-2 border-[#2d3e2d] rounded-xl p-4 transform hover:scale-105 transition-all text-center">
               <div className="text-3xl mb-2">🖼️</div>
-              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Image to Image
               </h3>
               <p className="text-xs text-[#2d3e2d] font-bold">Available Now!</p>
@@ -169,7 +169,7 @@ export default function TextToVideoPage() {
           <Link href="/text-to-image" className="block">
             <div className="bg-gradient-to-br from-[#8b7355] to-[#6d5a42] border-2 border-[#2d3e2d] rounded-xl p-4 transform hover:scale-105 transition-all text-center">
               <div className="text-3xl mb-2">📝</div>
-              <h3 className="font-black text-[#f5f1e8] text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#f5f1e8] text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Text to Image
               </h3>
               <p className="text-xs text-[#f5f1e8] font-bold">Available Now!</p>
@@ -178,7 +178,7 @@ export default function TextToVideoPage() {
           <Link href="/image-to-video" className="block">
             <div className="bg-white border-2 border-[#8b7355] rounded-xl p-4 transform hover:scale-105 transition-all text-center">
               <div className="text-3xl mb-2">🎥</div>
-              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+              <h3 className="font-black text-[#2d3e2d] text-sm" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
                 Image to Video
               </h3>
               <p className="text-xs text-[#8b7355] font-bold">Coming Soon</p>
@@ -190,7 +190,7 @@ export default function TextToVideoPage() {
       {/* SEO Content Section */}
       <section className="container mx-auto px-4 py-12">
         <div className="max-w-4xl mx-auto">
-          <h2 className="text-3xl font-black text-[#2d3e2d] mb-6 text-center" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+          <h2 className="text-3xl font-black text-[#2d3e2d] mb-6 text-center" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
             About Text to Video AI
           </h2>
           
@@ -202,7 +202,7 @@ export default function TextToVideoPage() {
               to bring their ideas to life through AI-generated videos.
             </p>
             
-            <h3 className="text-2xl font-black text-[#2d3e2d]" style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}>
+            <h3 className="text-2xl font-black text-[#2d3e2d]" style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}>
               Perfect for Content Creation
             </h3>
             <ul className="text-[#8b7355] font-bold">

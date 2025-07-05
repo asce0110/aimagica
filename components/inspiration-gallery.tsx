@@ -166,7 +166,7 @@ export default function InspirationGallery() {
             <h2
               className="text-3xl font-black text-[#2d3e2d] transform -rotate-1"
               style={{
-                fontFamily: "Righteous, Arial Black, sans-serif",
+                fontFamily: "Fredoka One, Arial Black, sans-serif",
                 textShadow: "3px 3px 0px #d4a574",
               }}
             >
@@ -176,7 +176,7 @@ export default function InspirationGallery() {
           </div>
           <p
             className="text-lg font-bold text-[#8b7355] max-w-2xl mx-auto"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             探索用户创造的神奇艺术世界！每一幅作品都是AI、图像和魔法的完美结合！🪄
           </p>
@@ -247,7 +247,7 @@ export default function InspirationGallery() {
                 <h3
                   className="text-sm font-black text-[#f5f1e8] transform rotate-1 line-clamp-1"
                   style={{
-                    fontFamily: "Righteous, Arial Black, sans-serif",
+                    fontFamily: "Fredoka One, Arial Black, sans-serif",
                     textShadow: "1px 1px 0px #2d3e2d",
                   }}
                 >
@@ -255,7 +255,7 @@ export default function InspirationGallery() {
                 </h3>
                 <p
                   className="text-[#d4a574] font-bold text-xs line-clamp-1"
-                  style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                  style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                 >
                   by {image.author}
                 </p>
@@ -273,7 +273,7 @@ export default function InspirationGallery() {
                   <Button
                     size="sm"
                     className="h-6 px-2 py-0 bg-[#d4a574] hover:bg-[#c19660] text-[#2d3e2d] text-xs font-black rounded-lg"
-                    style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+                    style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                   >
                     <Download className="w-3 h-3" />
                   </Button>
@@ -292,7 +292,7 @@ export default function InspirationGallery() {
           <Button
             onClick={loadMore}
             className="bg-[#4a5a4a] hover:bg-[#5a6a5a] text-[#f5f1e8] font-black px-6 py-2 rounded-xl shadow-md transform hover:scale-105 transition-all"
-            style={{ fontFamily: "Righteous, Arial Black, sans-serif" }}
+            style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
           >
             更多魔法作品
             <ArrowRight className="w-4 h-4 ml-2" />
