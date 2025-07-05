@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AIMAGICA - AI图片生成平台</title>
+    <style>
+        body {
+            font-family: 'Fredoka One', Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+        .container {
+            max-width: 600px;
+            padding: 2rem;
+        }
+        h1 {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+        p {
+            font-size: 1.2rem;
+            margin-bottom: 2rem;
+            opacity: 0.9;
+        }
+        .btn {
+            background: rgba(255,255,255,0.2);
+            border: 2px solid white;
+            color: white;
+            padding: 1rem 2rem;
+            font-size: 1.1rem;
+            border-radius: 50px;
+            text-decoration: none;
+            display: inline-block;
+            transition: all 0.3s ease;
+            margin: 0.5rem;
+        }
+        .btn:hover {
+            background: white;
+            color: #667eea;
+        }
+        .status {
+            margin-top: 2rem;
+            padding: 1rem;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎨 AIMAGICA</h1>
+        <p>AI魔法图片生成平台</p>
+        <p>Pages Functions OAuth已部署！</p>
+        
+        <div class="status">
+            <h3>🚀 部署状态</h3>
+            <p>✅ Cloudflare Pages Functions已部署</p>
+            <p>✅ OAuth系统已就绪</p>
+            <p>⚙️ 正在优化构建流程...</p>
+        </div>
+        
+        <div style="margin-top: 2rem;">
+            <a href="/auth/google" class="btn">🔐 测试谷歌登录</a>
+            <a href="/api/user" class="btn">👤 检查用户状态</a>
+        </div>
+        
+        <p style="margin-top: 2rem; font-size: 0.9rem; opacity: 0.7;">
+            完整网站正在构建中，OAuth功能可正常使用
+        </p>
+    </div>
+</body>
+</html>
