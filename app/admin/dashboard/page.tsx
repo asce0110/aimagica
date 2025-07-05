@@ -2819,43 +2819,43 @@ function AdminDashboardContent() {
                                       {style.emoji} {style.name}
                                     </h3>
                                     <div className="flex gap-1">
-                                      <Badge 
-                                        className="text-xs border-2 border-white font-bold px-2 py-1"
+                                      <div 
+                                        className="inline-flex items-center rounded-full text-xs font-bold px-2 py-1"
                                         style={{ 
-                                          backgroundColor: '#ef4444 !important',
-                                          color: '#ffffff !important', 
-                                          fontWeight: '900 !important', 
-                                          textShadow: '2px 2px 4px rgba(0,0,0,0.8) !important',
-                                          border: '2px solid #ffffff !important'
+                                          backgroundColor: '#ef4444',
+                                          color: '#ffffff', 
+                                          fontWeight: '900', 
+                                          textShadow: '2px 2px 4px rgba(0,0,0,0.8)',
+                                          border: '2px solid #ffffff'
                                         }}
                                       >
                                         {style.type}
-                                      </Badge>
-                                      <Badge 
-                                        className="text-xs border-2 border-black font-bold px-2 py-1"
+                                      </div>
+                                      <div 
+                                        className="inline-flex items-center rounded-full text-xs font-bold px-2 py-1"
                                         style={{ 
-                                          backgroundColor: '#facc15 !important',
-                                          color: '#000000 !important', 
-                                          fontWeight: '900 !important', 
-                                          textShadow: '1px 1px 2px rgba(255,255,255,0.8) !important',
-                                          border: '2px solid #000000 !important'
+                                          backgroundColor: '#facc15',
+                                          color: '#000000', 
+                                          fontWeight: '900', 
+                                          textShadow: '1px 1px 2px rgba(255,255,255,0.8)',
+                                          border: '2px solid #000000'
                                         }}
                                       >
                                         {style.category}
-                                      </Badge>
+                                      </div>
                                       {style.is_premium && (
-                                        <Badge 
-                                          className="text-xs font-bold px-2 py-1"
+                                        <div 
+                                          className="inline-flex items-center rounded-full text-xs font-bold px-2 py-1"
                                           style={{ 
-                                            backgroundColor: '#d4a574 !important',
-                                            color: '#2d3e2d !important', 
-                                            fontWeight: '900 !important', 
-                                            textShadow: '1px 1px 2px rgba(255,255,255,0.9) !important',
-                                            border: '2px solid #2d3e2d !important'
+                                            backgroundColor: '#d4a574',
+                                            color: '#2d3e2d', 
+                                            fontWeight: '900', 
+                                            textShadow: '1px 1px 2px rgba(255,255,255,0.9)',
+                                            border: '2px solid #2d3e2d'
                                           }}
                                         >
                                           Premium
-                                        </Badge>
+                                        </div>
                                       )}
                                       <Badge 
                                         className={`text-xs ${style.is_active ? 'bg-green-500' : 'bg-red-500'} text-white font-bold`}
