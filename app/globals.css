@@ -3,15 +3,15 @@
 @tailwind utilities;
 
 /* 导入适合AI魔法主题的字体 */
-@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Fredoka+One:wght@400&family=Righteous:wght@400&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Exo+2:wght@300;400;600;700;800&family=Space+Grotesk:wght@300;400;500;600;700&family=Fredoka+One:wght@400&display=swap');
 
 /* 定义字体变量 */
 :root {
   --font-heading: 'Orbitron', 'Arial Black', sans-serif; /* 科技感标题字体 */
   --font-body: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif; /* 现代正文字体 */
   --font-accent: 'Exo 2', 'Impact', sans-serif; /* 强调字体 */
-  --font-magic: 'Fredoka One', 'Righteous', 'Arial Black', sans-serif; /* 魔法主题字体 - 移除花体 */
-  --font-hero: 'Righteous', 'Fredoka One', 'Arial Black', sans-serif; /* Hero区域专用字体 */
+  --font-magic: 'Fredoka One', 'Arial Black', sans-serif; /* 魔法主题字体 - 移除花体 */
+  --font-hero: 'Fredoka One', 'Arial Black', sans-serif; /* Hero区域专用字体 */
 }
 
 @layer base {
@@ -173,33 +173,38 @@
 
 /* 全站统一字体样式 - 圆润魔法风格 */
 .hero-title, .magic-title {
-  font-family: 'Righteous', 'Arial Black', sans-serif;
+  font-family: 'Fredoka One', 'Arial Black', sans-serif;
   font-weight: 400;
   letter-spacing: 0.02em;
   text-transform: uppercase;
 }
 
 .hero-subtitle, .magic-subtitle {
-  font-family: 'Righteous', 'Arial Black', sans-serif;
+  font-family: 'Fredoka One', 'Arial Black', sans-serif;
   font-weight: 400;
   letter-spacing: 0.01em;
 }
 
 .hero-button, .magic-button {
-  font-family: 'Righteous', 'Arial Black', sans-serif;
+  font-family: 'Fredoka One', 'Arial Black', sans-serif;
   font-weight: 400;
   letter-spacing: 0.05em;
   text-transform: uppercase;
 }
 
-/* 全站圆润字体应用 - 统一使用Righteous */
-body, 
+/* 桌面端字体策略 - 区分标题和正文 */
 h1, h2, h3, h4, h5, h6,
-p, span, div, button, input, textarea, label,
-.font-heading, .font-body, .font-accent, .font-magic,
+button, input[type="button"], input[type="submit"],
+.font-heading, .font-magic, .font-hero,
 [style*="Comic Sans MS"], 
 [style*="font-family: Comic Sans MS"] {
-  font-family: 'Righteous', 'Arial Black', sans-serif !important;
+  font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
+}
+
+/* 正文内容保持可读性 */
+body, p, span, div, textarea, label,
+.font-body, .font-accent {
+  font-family: 'Space Grotesk', 'SF Pro Display', 'Helvetica Neue', sans-serif !important;
 }
 
 /* 确保按钮和交互元素使用圆润字体 */
@@ -207,19 +212,23 @@ button, .btn,
 .bg-gradient-to-r, 
 .rounded-xl,
 [class*="Button"] {
-  font-family: 'Righteous', 'Arial Black', sans-serif !important;
+  font-family: 'Fredoka One', 'Arial Black', sans-serif !important;
 }
 
-/* 移动端字体优化 - 全站统一圆润字体 */
+/* 移动端字体优化 - 区分标题和正文 */
 @media (max-width: 768px) {
-  
-  /* 移动端所有元素统一使用圆润字体 */
-  body, 
+  /* 移动端标题使用圆润字体 */
   h1, h2, h3, h4, h5, h6,
-  p, span, div, button, input, textarea, label,
-  .font-heading, .font-body, .font-accent, .font-magic,
-  * {
-    font-family: 'Righteous', 'Arial Black', 'Helvetica', sans-serif !important;
+  button, input[type="button"], input[type="submit"],
+  .font-heading, .font-magic, .font-hero {
+    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
+    font-style: normal !important;
+  }
+  
+  /* 移动端正文保持可读性 */
+  body, p, span, div, textarea, label,
+  .font-body, .font-accent {
+    font-family: 'Space Grotesk', 'SF Pro Display', 'Helvetica', sans-serif !important;
     font-style: normal !important;
   }
   
@@ -250,7 +259,7 @@ button, .btn,
   .bg-gradient-to-r, 
   .rounded-xl,
   [class*="Button"] {
-    font-family: 'Righteous', 'Arial Black', 'Helvetica', sans-serif !important;
+    font-family: 'Fredoka One', 'Arial Black', 'Helvetica', sans-serif !important;
     font-weight: 400 !important;
   }
 }
