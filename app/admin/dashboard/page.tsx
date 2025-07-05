@@ -2058,7 +2058,7 @@ function AdminDashboardContent() {
                         </Badge>
                       </div>
                     </div>
-                    <p className="text-sm text-gray-600 mt-2">
+                    <p className="text-sm text-[#2d3e2d] mt-2">
                       <strong>ID:</strong> {editingImage.id} | 
                       <strong> User:</strong> {editingImage.user_name} | 
                       <strong> Created:</strong> {editingImage.created_at}
@@ -2584,10 +2584,10 @@ function AdminDashboardContent() {
                                       {style.emoji} {style.name}
                                     </h3>
                                     <div className="flex gap-1">
-                                      <Badge variant="outline" className="text-xs">
+                                      <Badge className="text-xs bg-[#8b7355] text-white border-0">
                                         {style.type}
                                       </Badge>
-                                      <Badge variant="outline" className="text-xs">
+                                      <Badge className="text-xs bg-[#2d3e2d] text-white border-0">
                                         {style.category}
                                       </Badge>
                                       {style.is_premium && (
@@ -2610,7 +2610,7 @@ function AdminDashboardContent() {
                                     {style.description}
                                   </p>
                                   
-                                  <div className="text-xs text-gray-600">
+                                  <div className="text-xs text-[#2d3e2d]">
                                     <strong>Prompt Template:</strong> {style.prompt_template && style.prompt_template.length > 100 
                                       ? style.prompt_template.substring(0, 100) + '...' 
                                       : style.prompt_template || 'No template'
@@ -2684,7 +2684,7 @@ function AdminDashboardContent() {
                             {/* Timeout Hint */}
                             <div className="mt-4">
                               <p 
-                                className="text-xs text-gray-500"
+                                className="text-xs text-[#8b7355]"
                                 style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                               >
                                 If loading takes too long, try refreshing the page
