@@ -14,9 +14,12 @@ export async function onRequest(context) {
     .find(c => c.trim().startsWith('auth-token='))
     ?.split('=')[1]
   
-  console.log('🔑 提取的Token:', authToken ? '存在' : '不存在')
+  // URL解码Cookie值
+  const decodedToken = authToken ? decodeURIComponent(authToken) : null
   
-  if (!authToken) {
+  console.log('🔑 提取的Token:', decodedToken ? '存在' : '不存在')
+  
+  if (!decodedToken) {
     return new Response(JSON.stringify({ 
       error: 'Not authenticated',
       debug: { cookies: cookies || 'No cookies found' }
@@ -35,7 +38,7 @@ export async function onRequest(context) {
     }
     
     // 验证JWT (简化版本)
-    const [header, payload, signature] = authToken.split('.')
+    const [header, payload, signature] = decodedToken.split('.')
     const decodedPayload = JSON.parse(base64ToUtf8(payload))
     
     // 检查过期时间
@@ -59,13 +62,13 @@ export async function onRequest(context) {
     
   } catch (error) {
     console.error('❌ JWT验证失败:', error)
-    console.error('Token内容:', authToken)
+    console.error('Token内容:', decodedToken)
     console.error('错误详情:', error.message)
     return new Response(JSON.stringify({ 
       error: 'Invalid token',
       debug: { 
-        tokenLength: authToken?.length,
-        tokenParts: authToken?.split('.').length,
+        tokenLength: decodedToken?.length,
+        tokenParts: decodedToken?.split('.').length,
         errorMessage: error.message
       }
     }), {

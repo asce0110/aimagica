@@ -102,14 +102,21 @@ export async function onRequest(context) {
     // 4. 重定向回前端并设置Token
     const headers = new Headers()
     headers.set('Location', `${url.origin}/?login=success`)
-    headers.append('Set-Cookie', `auth-token=${jwt}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
-    headers.append('Set-Cookie', `user-info=${utf8ToBase64(JSON.stringify({
+    
+    // URL编码Cookie值防止特殊字符问题
+    const encodedJwt = encodeURIComponent(jwt)
+    const encodedUserInfo = encodeURIComponent(utf8ToBase64(JSON.stringify({
       email: user.email,
       name: user.name,
       picture: user.picture
-    }))}; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
+    })))
+    
+    headers.append('Set-Cookie', `auth-token=${encodedJwt}; HttpOnly; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
+    headers.append('Set-Cookie', `user-info=${encodedUserInfo}; Secure; SameSite=Lax; Max-Age=${30 * 24 * 60 * 60}; Path=/`)
     
     console.log('🍪 设置Cookie成功')
+    console.log('JWT长度:', jwt.length)
+    console.log('JWT部分:', jwt.split('.').length)
     
     return new Response(null, {
       status: 302,
