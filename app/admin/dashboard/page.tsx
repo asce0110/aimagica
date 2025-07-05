@@ -2820,21 +2820,39 @@ function AdminDashboardContent() {
                                     </h3>
                                     <div className="flex gap-1">
                                       <Badge 
-                                        className="text-xs bg-red-500 border-2 border-black font-bold px-2 py-1"
-                                        style={{ color: 'white', fontWeight: '700', textShadow: '0 1px 2px rgba(0,0,0,0.5)' }}
+                                        variant="outline"
+                                        className="text-xs border-2 border-black font-bold px-2 py-1 !bg-red-500"
+                                        style={{ 
+                                          backgroundColor: 'rgb(239, 68, 68) !important',
+                                          color: 'white !important', 
+                                          fontWeight: '700', 
+                                          textShadow: '1px 1px 3px rgba(0,0,0,0.8)' 
+                                        }}
                                       >
                                         {style.type}
                                       </Badge>
                                       <Badge 
-                                        className="text-xs bg-yellow-400 border-2 border-black font-bold px-2 py-1"
-                                        style={{ color: 'black', fontWeight: '700', textShadow: '0 1px 2px rgba(255,255,255,0.5)' }}
+                                        variant="outline"
+                                        className="text-xs border-2 border-black font-bold px-2 py-1 !bg-yellow-400"
+                                        style={{ 
+                                          backgroundColor: 'rgb(250, 204, 21) !important',
+                                          color: 'black !important', 
+                                          fontWeight: '700', 
+                                          textShadow: '1px 1px 3px rgba(255,255,255,0.8)' 
+                                        }}
                                       >
                                         {style.category}
                                       </Badge>
                                       {style.is_premium && (
                                         <Badge 
-                                          className="text-xs bg-[#d4a574] font-bold"
-                                          style={{ color: '#2d3e2d', fontWeight: '700', textShadow: '0 1px 2px rgba(255,255,255,0.5)' }}
+                                          variant="outline"
+                                          className="text-xs font-bold !bg-[#d4a574]"
+                                          style={{ 
+                                            backgroundColor: '#d4a574 !important',
+                                            color: '#2d3e2d !important', 
+                                            fontWeight: '700', 
+                                            textShadow: '1px 1px 3px rgba(255,255,255,0.8)' 
+                                          }}
                                         >
                                           Premium
                                         </Badge>
