@@ -1477,7 +1477,7 @@ function AdminDashboardContent() {
                           fill="#8884d8"
                           dataKey="value"
                         >
-                          {pieData.map((entry, index) => (
+                          {pieData && Array.isArray(pieData) && pieData.map((entry, index) => (
                             <Cell key={`cell-${index}`} fill={entry.color} />
                           ))}
                         </Pie>
@@ -1518,7 +1518,7 @@ function AdminDashboardContent() {
                   </CardHeader>
                   <CardContent>
                     <div className="space-y-4">
-                      {recentUsers.map((user, index) => (
+                      {recentUsers && Array.isArray(recentUsers) && recentUsers.map((user, index) => (
                         <motion.div
                           key={user.id}
                           initial={{ opacity: 0, x: -20 }}
@@ -1690,7 +1690,7 @@ function AdminDashboardContent() {
                     </div>
                   ) : (
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                      {adminImages.map((image, index) => (
+                      {adminImages && Array.isArray(adminImages) && adminImages.map((image, index) => (
                         <motion.div
                           key={image.id}
                           initial={{ opacity: 0, scale: 0.9 }}
@@ -2026,7 +2026,7 @@ function AdminDashboardContent() {
                         style={{ fontFamily: "Fredoka One, Arial Black, sans-serif" }}
                       >
                         {/* 数据库风格选项 */}
-                        {styles.length > 0 ? (
+                        {styles && Array.isArray(styles) && styles.length > 0 ? (
                           styles.map(style => (
                             <option key={style.id} value={style.name}>
                               {style.emoji} {style.name}
@@ -2187,7 +2187,7 @@ function AdminDashboardContent() {
                     <CardContent>
                       <div className="space-y-4">
                         {/* 配置列表 - 只有在没有加载时显示 */}
-                        {!isApiConfigsLoading && apiConfigs
+                        {!isApiConfigsLoading && apiConfigs && Array.isArray(apiConfigs) && apiConfigs
                           .filter(config => config.type === selectedApiType)
                           .map((config, index) => (
                           <motion.div
@@ -2482,7 +2482,7 @@ function AdminDashboardContent() {
                     <CardContent>
                       <div className="space-y-4">
                         {/* Style List - only show when not loading */}
-                        {!isStylesLoading && styles.map((style, index) => (
+                        {!isStylesLoading && styles && Array.isArray(styles) && styles.map((style, index) => (
                           <motion.div
                             key={style.id}
                             initial={{ opacity: 0, x: -20 }}
