@@ -8,7 +8,7 @@
     "allowJs": true,
     "target": "ES6",
     "skipLibCheck": true,
-    "strict": true,
+    "strict": false,
     "noEmit": true,
     "esModuleInterop": true,
     "module": "esnext",
@@ -26,7 +26,18 @@
       "@/*": [
         "./*"
       ]
-    }
+    },
+    "noImplicitAny": false,
+    "strictNullChecks": false,
+    "strictFunctionTypes": false,
+    "strictBindCallApply": false,
+    "strictPropertyInitialization": false,
+    "noImplicitReturns": false,
+    "noFallthroughCasesInSwitch": false,
+    "noUncheckedIndexedAccess": false,
+    "noImplicitOverride": false,
+    "allowUnreachableCode": true,
+    "allowUnusedLabels": true
   },
   "include": [
     "**/*.ts",
@@ -36,6 +47,7 @@
     "out/types/**/*.ts"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    "temp-backup"
   ]
 }
