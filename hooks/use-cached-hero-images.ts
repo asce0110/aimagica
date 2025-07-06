@@ -86,18 +86,18 @@ export function useCachedHeroImages() {
           const verifiedMapping: Record<string, CachedImage> = {}
           for (const [id, item] of Object.entries(mapping)) {
             try {
-              const cacheResponse = await fetch(item.cachedUrl, { method: 'HEAD' })
+              const cacheResponse = await fetch((item as any).cachedUrl, { method: 'HEAD' })
               verifiedMapping[id] = {
-                ...item,
+                ...(item as any),
                 isAvailable: cacheResponse.ok
               }
               if (cacheResponse.ok) {
-                console.log(`✅ 缓存文件可用: ${item.filename}`)
+                console.log(`✅ 缓存文件可用: ${(item as any).filename}`)
               }
             } catch (error) {
-              console.warn(`⚠️ 缓存文件不可用: ${item.filename}`)
+              console.warn(`⚠️ 缓存文件不可用: ${(item as any).filename}`)
               verifiedMapping[id] = {
-                ...item,
+                ...(item as any),
                 isAvailable: false
               }
             }

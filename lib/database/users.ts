@@ -71,7 +71,7 @@ export async function upsertUser(userData: {
       const { data, error } = await supabase
         .from('users')
         .update({
-          full_name: userData.full_name || existingUser.full_name,
+          full_name: userData.full_name || (existingUser as any).full_name,
           avatar_url: userData.avatar_url || existingUser.avatar_url,
           google_id: userData.google_id || existingUser.google_id,
           updated_at: new Date().toISOString()

@@ -1,4 +1,5 @@
-import { ApiConfig } from '@/lib/services/api-manager'
+// import { ApiConfig } from '@/lib/services/api-manager'
+type ApiConfig = any
 
 interface KieFluxRequest {
   prompt: string

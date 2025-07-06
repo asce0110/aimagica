@@ -88,10 +88,13 @@ export class PaymentSecurity {
    * 加密敏感支付数据
    */
   static encryptPaymentData(data: any): string {
-    const cipher = crypto.createCipher('aes-256-cbc', this.SECRET_KEY);
+    // Use createCipheriv instead of deprecated createCipher
+    const iv = crypto.randomBytes(16);
+    const cipher = crypto.createCipheriv('aes-256-cbc', this.SECRET_KEY.substring(0, 32), iv);
     let encrypted = cipher.update(JSON.stringify(data), 'utf8', 'hex');
     encrypted += cipher.final('hex');
-    return encrypted;
+    // Prepend IV to encrypted data
+    return iv.toString('hex') + ':' + encrypted;
   }
 
   /**
@@ -99,8 +102,16 @@ export class PaymentSecurity {
    */
   static decryptPaymentData(encryptedData: string): any {
     try {
-      const decipher = crypto.createDecipher('aes-256-cbc', this.SECRET_KEY);
-      let decrypted = decipher.update(encryptedData, 'hex', 'utf8');
+      // Extract IV and encrypted data
+      const parts = encryptedData.split(':');
+      if (parts.length !== 2) {
+        throw new Error('Invalid encrypted data format');
+      }
+      const iv = Buffer.from(parts[0], 'hex');
+      const encrypted = parts[1];
+      
+      const decipher = crypto.createDecipheriv('aes-256-cbc', this.SECRET_KEY.substring(0, 32), iv);
+      let decrypted = decipher.update(encrypted, 'hex', 'utf8');
       decrypted += decipher.final('utf8');
       return JSON.parse(decrypted);
     } catch (error) {
@@ -120,7 +131,7 @@ export class PaymentSecurity {
     try {
       // 从数据库获取真实的计划价格
       const { createClient } = await import('@/lib/supabase-server');
-      const supabase = createClient();
+      const supabase = await createClient();
 
       const { data: plan, error } = await supabase
         .from('subscription_plans')
