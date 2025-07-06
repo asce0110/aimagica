@@ -5,7 +5,7 @@ const nextConfig = {
   distDir: '.next',
   
   // 基础配置
-  trailingSlash: true,
+  trailingSlash: false,
   assetPrefix: '',
   basePath: '',
   
