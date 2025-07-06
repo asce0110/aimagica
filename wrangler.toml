@@ -4,9 +4,5 @@ compatibility_date = "2024-12-06"
 # Cloudflare Pages 配置
 pages_build_output_dir = "out"
 
-[build]
-command = "npm run build:pages"
-cwd = "."
-
 [env.production]
 name = "aimagica-pages"
