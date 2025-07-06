@@ -5,8 +5,9 @@ const nextConfig = {
   distDir: '.next',
   
   // 基础配置
-  trailingSlash: false,
-  assetPrefix: process.env.NODE_ENV === 'production' ? '' : '',
+  trailingSlash: true,
+  assetPrefix: '',
+  basePath: '',
   
   // 排除API路由和服务端功能
   generateBuildId: () => 'static-build',
