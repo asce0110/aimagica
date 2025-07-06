@@ -2,15 +2,11 @@
 const nextConfig = {
   // 纯静态导出 - 不包含任何API路由
   output: 'export',
-  distDir: '.next',
   
   // 基础配置
   trailingSlash: false,
   assetPrefix: '',
   basePath: '',
-  
-  // 排除API路由和服务端功能
-  generateBuildId: () => 'static-build',
   
   // Next.js 14 静态导出配置
   
