@@ -45,7 +45,7 @@ import MagicImage from "@/components/ui/magic-image"
 import SimpleGalleryImage from "@/components/ui/simple-gallery-image"
 import RobustGalleryImage from "@/components/ui/robust-gallery-image"
 import SimpleImage from "@/components/ui/simple-image"
-import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
+import { getStaticGalleryData, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import useStaticUrl from "@/hooks/use-static-url"
 import { getSmartImageUrl, preloadNewImages, getImageLoadingProps, preloadLocalMappedImages } from "@/lib/smart-image-url"
 import { useRouter } from "next/navigation"
@@ -317,6 +317,7 @@ const sampleComments: Comment[] = [
     content: "This is absolutely stunning! The colors are magical! ✨",
     createdAt: "2 hours ago",
     likes: 24,
+    isLiked: false,
   },
   {
     id: 2,
@@ -325,6 +326,7 @@ const sampleComments: Comment[] = [
     content: "How did you create this masterpiece? The details are incredible!",
     createdAt: "1 day ago",
     likes: 18,
+    isLiked: false,
   },
   {
     id: 3,
@@ -333,6 +335,7 @@ const sampleComments: Comment[] = [
     content: "I'm inspired to create something similar. Thanks for sharing your art!",
     createdAt: "3 days ago",
     likes: 12,
+    isLiked: false,
   },
 ]
 
@@ -439,7 +442,7 @@ export default function GalleryClient() {
         setApiAttempted(true)
         console.log('🚀 开始尝试加载API数据...')
         
-        const apiUrl = getApiEndpoint('GALLERY_PUBLIC')
+        const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '/api'
         console.log('🔗 API URL:', apiUrl)
         
         if (!apiUrl) {
@@ -532,7 +535,7 @@ export default function GalleryClient() {
   // 获取图片详细信息
   const fetchImageDetails = async (imageId: string | number) => {
     try {
-      const apiUrl = getApiEndpoint('GALLERY_ITEM')
+      const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '/api'
       if (!apiUrl) {
         throw new Error('Gallery API not available')
       }
@@ -618,7 +621,7 @@ export default function GalleryClient() {
 
   const handleLike = async (id: string | number) => {
     try {
-      const apiUrl = getApiEndpoint('GALLERY_ITEM')
+      const apiUrl = process.env.NEXT_PUBLIC_API_BASE_URL || '/api'
       if (!apiUrl) {
         throw new Error('Gallery API not available')
       }

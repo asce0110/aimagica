@@ -26,7 +26,7 @@ import {
 import { useSessionCompat as useSession } from "@/components/session-provider"
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
 import useStaticUrl from "@/hooks/use-static-url"
-import { getStaticGalleryData, getImagesByStyle, searchImages, type StaticGalleryImage } from "@/lib/static-gallery-data"
+import { getStaticGalleryData, type StaticGalleryImage } from "@/lib/static-gallery-data"
 import VirtualWaterfall, { type WaterfallItem } from "@/components/ui/virtual-waterfall"
 import LazyGalleryImage from "@/components/ui/lazy-gallery-image"
 
@@ -250,7 +250,7 @@ export default function OptimizedGalleryClient() {
                 rotation: -1,
               }
             ]
-            setAllImages(fallbackData)
+            setAllImages(fallbackData as StaticGalleryImage[])
             console.log('📦 使用基本展示数据:', fallbackData.length, '张图片')
           }
         } catch (staticError) {
