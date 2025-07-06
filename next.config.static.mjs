@@ -2,6 +2,7 @@
 const nextConfig = {
   // 纯静态导出 - 不包含任何API路由
   output: 'export',
+  distDir: '.next',
   
   // 基础配置
   trailingSlash: false,
