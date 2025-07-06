@@ -2,6 +2,12 @@
   "name": "ai-sketch-platform",
   "version": "0.1.0",
   "private": true,
+  "cloudflare": {
+    "build": {
+      "command": "npm run build:pages",
+      "destination": "out"
+    }
+  },
   "scripts": {
     "dev": "cross-env NEXT_CONFIG_FILE=next.config.dev.mjs next dev",
     "build": "cross-env NEXT_CONFIG_FILE=next.config.vercel.mjs next build",
