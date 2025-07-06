@@ -101,12 +101,11 @@ export async function POST(request: NextRequest) {
         message: 'Image shared to gallery successfully',
         data: {
           ...uploadResult.data,
-          imageId: generatedImage.id,
-          generatedImageId: generatedImage.id,
+          imageId: Number(generatedImage.id),
           prompt,
           styleId,
           isPublic: true
-        }
+        } as any
       })
       
     } catch (dbError) {
@@ -149,6 +148,6 @@ export async function GET() {
         'User authentication',
         'Public gallery sharing'
       ]
-    }
+    } as any
   })
 }

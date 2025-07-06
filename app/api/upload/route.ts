@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
         compressionRatio: uploadResult.data!.compressionRatio,
         r2Key: uploadResult.data!.r2Key,
         imageId: uploadResult.data?.imageId
-      }
+      } as any
     })
     
   } catch (error) {
@@ -165,6 +165,6 @@ export async function GET() {
         'Optional database storage',
         'User authentication support'
       ]
-    }
+    } as any
   })
 }
