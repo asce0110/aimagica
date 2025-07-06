@@ -4,11 +4,6 @@ compatibility_date = "2024-12-06"
 # Cloudflare Pages 静态网站配置
 pages_build_output_dir = "out"
 
-# 强制禁用自动框架检测，使用自定义构建脚本
-[build]
-command = "bash cloudflare-build.sh"
-destination = "out"
-
 # 明确指定这是静态网站，不使用next-on-pages
 [vars]
 STATIC_SITE = "true"
