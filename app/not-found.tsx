@@ -495,8 +495,7 @@ export default function MagicalNotFound() {
               style={{
                 borderColor: '#d4a574',
                 backgroundColor: 'rgba(255, 255, 255, 0.9)',
-                color: '#2d3e2d',
-                focusRingColor: '#d4a574'
+                color: '#2d3e2d'
               }}
             />
           </div>
