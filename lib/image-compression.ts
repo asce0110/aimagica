@@ -41,9 +41,13 @@ export class ImageCompressor {
     if (typeof OffscreenCanvas !== 'undefined') {
       this.canvas = new OffscreenCanvas(1, 1)
       this.ctx = this.canvas.getContext('2d')!
-    } else {
+    } else if (typeof document !== 'undefined') {
       this.canvas = document.createElement('canvas')
       this.ctx = this.canvas.getContext('2d')!
+    } else {
+      // 服务器端环境，延迟初始化
+      this.canvas = null as any
+      this.ctx = null as any
     }
   }
 
@@ -54,6 +58,11 @@ export class ImageCompressor {
     file: File, 
     options: CompressionOptions = {}
   ): Promise<CompressionResult> {
+    // 服务器端环境检查
+    if (this.canvas === null || this.ctx === null) {
+      throw new Error('Image compression not available in server environment')
+    }
+    
     const startTime = performance.now()
     
     const {
@@ -197,6 +206,10 @@ export class ImageCompressor {
 
   // 私有方法
   private loadImage(file: File): Promise<HTMLImageElement> {
+    if (typeof Image === 'undefined' || typeof URL === 'undefined') {
+      throw new Error('Image loading not available in server environment')
+    }
+    
     return new Promise((resolve, reject) => {
       const img = new Image()
       img.onload = () => resolve(img)
