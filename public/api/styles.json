@@ -1,1 +1,102 @@
- 
+{
+  "success": true,
+  "count": 8,
+  "styles": [
+    {
+      "id": "1",
+      "name": "Realistic Photo",
+      "prompt_template": "photorealistic, high quality, detailed",
+      "category": "realistic",
+      "type": "image",
+      "is_active": true,
+      "is_premium": false,
+      "image_url": "/placeholder.svg",
+      "sort_order": 1
+    },
+    {
+      "id": "2",
+      "name": "Digital Art",
+      "prompt_template": "digital art, vibrant colors, artistic",
+      "category": "artistic",
+      "type": "image",
+      "is_active": true,
+      "is_premium": false,
+      "image_url": "/placeholder.svg",
+      "sort_order": 2
+    },
+    {
+      "id": "3",
+      "name": "Anime Style",
+      "prompt_template": "anime style, manga, japanese animation",
+      "category": "anime",
+      "type": "image",
+      "is_active": true,
+      "is_premium": false,
+      "image_url": "/placeholder.svg",
+      "sort_order": 3
+    },
+    {
+      "id": "4",
+      "name": "Fantasy Art",
+      "prompt_template": "fantasy art, magical, mystical atmosphere",
+      "category": "fantasy",
+      "type": "image",
+      "is_active": true,
+      "is_premium": true,
+      "image_url": "/placeholder.svg",
+      "sort_order": 4
+    },
+    {
+      "id": "5",
+      "name": "Cyberpunk",
+      "prompt_template": "cyberpunk style, neon lights, futuristic",
+      "category": "sci-fi",
+      "type": "image",
+      "is_active": true,
+      "is_premium": true,
+      "image_url": "/placeholder.svg",
+      "sort_order": 5
+    },
+    {
+      "id": "6",
+      "name": "Watercolor",
+      "prompt_template": "watercolor painting, soft brushstrokes",
+      "category": "artistic",
+      "type": "image",
+      "is_active": true,
+      "is_premium": false,
+      "image_url": "/placeholder.svg",
+      "sort_order": 6
+    },
+    {
+      "id": "7",
+      "name": "Oil Painting",
+      "prompt_template": "oil painting, classical art style",
+      "category": "classical",
+      "type": "image",
+      "is_active": true,
+      "is_premium": true,
+      "image_url": "/placeholder.svg",
+      "sort_order": 7
+    },
+    {
+      "id": "8",
+      "name": "Sketch",
+      "prompt_template": "pencil sketch, black and white drawing",
+      "category": "sketch",
+      "type": "image",
+      "is_active": true,
+      "is_premium": false,
+      "image_url": "/placeholder.svg",
+      "sort_order": 8
+    }
+  ],
+  "metadata": {
+    "total": 8,
+    "filtered_by": {
+      "type": "image",
+      "category": "all",
+      "active_only": true
+    }
+  }
+}

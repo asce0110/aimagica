@@ -1,63 +1,42 @@
 {
   "success": true,
+  "count": 4,
   "data": [
     {
-      "id": "featured-1",
-      "url": "https://images.aimagica.ai/images/examples/cat-wizard.svg",
-      "title": "Magical Cat Wizard",
-      "author": "AI Artist",
-      "prompt": "A magical cat wizard casting spells in an enchanted forest",
+      "id": "1",
+      "title": "Mystical Forest Guardian",
+      "prompt": "A mystical forest guardian with glowing eyes",
+      "url": "/placeholder.svg",
+      "originalUrl": "/placeholder.svg",
       "style": "Fantasy Art",
-      "likes": 245,
-      "views": 1205,
-      "createdAt": "2024-12-20T10:30:00Z",
-      "tags": ["fantasy", "cat", "wizard", "magic"],
-      "is_public": true,
-      "is_featured": true
+      "created_at": "2024-01-01T00:00:00Z"
     },
     {
-      "id": "featured-2", 
-      "url": "https://images.aimagica.ai/images/examples/cyber-city.svg",
-      "title": "Neon Cyber City",
-      "author": "Digital Dreams",
-      "prompt": "Futuristic cyberpunk city with neon lights and flying cars",
+      "id": "2", 
+      "title": "Cyberpunk City Night",
+      "prompt": "Neon-lit cyberpunk cityscape at night",
+      "url": "/placeholder.svg",
+      "originalUrl": "/placeholder.svg", 
       "style": "Cyberpunk",
-      "likes": 389,
-      "views": 2156,
-      "createdAt": "2024-12-19T15:45:00Z",
-      "tags": ["cyberpunk", "city", "neon", "futuristic"],
-      "is_public": true,
-      "is_featured": true
+      "created_at": "2024-01-02T00:00:00Z"
     },
     {
-      "id": "featured-3",
-      "url": "https://images.aimagica.ai/images/examples/magic-forest.svg", 
-      "title": "Enchanted Magic Forest",
-      "author": "Nature Spirit",
-      "prompt": "Mystical forest with glowing trees and magical creatures",
-      "style": "Fantasy Nature",
-      "likes": 167,
-      "views": 892,
-      "createdAt": "2024-12-18T09:20:00Z",
-      "tags": ["forest", "magic", "nature", "mystical"],
-      "is_public": true,
-      "is_featured": true
+      "id": "3",
+      "title": "Ocean Sunset Serenity", 
+      "prompt": "Peaceful ocean sunset with gentle waves",
+      "url": "/placeholder.svg",
+      "originalUrl": "/placeholder.svg",
+      "style": "Realistic",
+      "created_at": "2024-01-03T00:00:00Z"
     },
     {
-      "id": "featured-4",
-      "url": "https://images.aimagica.ai/images/examples/space-art.svg",
-      "title": "Cosmic Space Art",
-      "author": "Stellar Creator", 
-      "prompt": "Beautiful cosmic scene with nebulas and distant galaxies",
-      "style": "Space Art",
-      "likes": 298,
-      "views": 1567,
-      "createdAt": "2024-12-17T14:15:00Z",
-      "tags": ["space", "cosmic", "galaxy", "nebula"],
-      "is_public": true,
-      "is_featured": true
+      "id": "4",
+      "title": "Abstract Geometric Dreams",
+      "prompt": "Colorful abstract geometric shapes",
+      "url": "/placeholder.svg", 
+      "originalUrl": "/placeholder.svg",
+      "style": "Abstract",
+      "created_at": "2024-01-04T00:00:00Z"
     }
-  ],
-  "total": 4,
-  "hasMore": false
-} 
+  ]
+}

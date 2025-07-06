@@ -1,0 +1,71 @@
+{
+  "success": true,
+  "count": 4,
+  "models": [
+    {
+      "id": "1",
+      "name": "DALL-E 3",
+      "model": "dall-e-3",
+      "endpoint": "https://api.openai.com/v1/images/generations",
+      "is_active": true,
+      "priority": 1,
+      "timeout_seconds": 60,
+      "rate_limit_per_minute": 10,
+      "config_data": {
+        "type": "image_generation",
+        "provider": "openai"
+      },
+      "api_key_available": true
+    },
+    {
+      "id": "2",
+      "name": "Kie.ai Flux Pro",
+      "model": "flux-pro",
+      "endpoint": "https://api.kie.ai/v1/images/generations",
+      "is_active": true,
+      "priority": 2,
+      "timeout_seconds": 120,
+      "rate_limit_per_minute": 5,
+      "config_data": {
+        "type": "image_generation",
+        "provider": "kie"
+      },
+      "api_key_available": true
+    },
+    {
+      "id": "3",
+      "name": "Stability AI",
+      "model": "stable-diffusion-xl",
+      "endpoint": "https://api.stability.ai/v1/generation",
+      "is_active": true,
+      "priority": 3,
+      "timeout_seconds": 90,
+      "rate_limit_per_minute": 8,
+      "config_data": {
+        "type": "image_generation",
+        "provider": "stability"
+      },
+      "api_key_available": true
+    },
+    {
+      "id": "4",
+      "name": "Replicate",
+      "model": "flux-dev",
+      "endpoint": "https://api.replicate.com/v1/predictions",
+      "is_active": true,
+      "priority": 4,
+      "timeout_seconds": 180,
+      "rate_limit_per_minute": 3,
+      "config_data": {
+        "type": "image_generation",
+        "provider": "replicate"
+      },
+      "api_key_available": true
+    }
+  ],
+  "metadata": {
+    "total": 4,
+    "active_only": true,
+    "type_filter": "image_generation"
+  }
+}

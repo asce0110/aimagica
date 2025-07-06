@@ -61,23 +61,39 @@ export default function StyleSelector({ onStyleSelect, selectedStyleId }: StyleS
       setError(null)
       console.log('🎨 Loading styles...')
       
-      const response = await fetch('/api/styles?type=image')
+      // 尝试从API加载，失败时fallback到静态JSON
+      let response = await fetch('/api/styles?type=image')
       console.log('📡 API Response status:', response.status)
       
       if (response.ok) {
-        const data = await response.json()
-        console.log('📊 API Response data:', data)
-        setStyles(data.styles || [])
-        console.log('✅ Styles loaded:', data.styles?.length || 0)
+        try {
+          const data = await response.json()
+          console.log('📊 API Response data:', data)
+          setStyles(data.styles || [])
+          console.log('✅ Styles loaded from API:', data.styles?.length || 0)
+          return
+        } catch (parseError) {
+          console.warn('API response not JSON, trying static fallback')
+          throw new Error('Invalid JSON response')
+        }
       } else {
-        const errorText = await response.text()
-        console.error('❌ API Error:', response.status, errorText)
-        setError(`Failed to load styles: ${response.status}`)
+        throw new Error(`API responded with status ${response.status}`)
       }
       
     } catch (err) {
-      console.error('❌ Network Error:', err)
-      setError('Network error occurred')
+      console.warn('Primary API failed, trying static fallback:', err)
+      
+      // Fallback to static JSON
+      try {
+        const fallbackResponse = await fetch('/api/styles.json')
+        const fallbackData = await fallbackResponse.json()
+        setStyles(fallbackData.styles || [])
+        console.log('✅ Styles loaded from static fallback:', fallbackData.styles?.length || 0)
+        setError(null) // 清除错误状态
+      } catch (fallbackError) {
+        console.error('Both API and fallback failed:', fallbackError)
+        setError('Failed to load styles')
+      }
     } finally {
       setIsLoading(false)
     }

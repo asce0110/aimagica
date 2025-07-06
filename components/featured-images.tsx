@@ -26,8 +26,20 @@ export default function FeaturedImages() {
 
   const loadFeaturedImages = async () => {
     try {
-      const response = await fetch('/api/featured-images')
-      const result = await response.json()
+      // 尝试从API加载，失败时fallback到静态JSON
+      let response = await fetch('/api/featured-images')
+      let result: any
+      
+      if (response.ok) {
+        try {
+          result = await response.json()
+        } catch (parseError) {
+          console.warn('API response not JSON, trying static fallback')
+          throw new Error('Invalid JSON response')
+        }
+      } else {
+        throw new Error(`API responded with status ${response.status}`)
+      }
       
       if (result.success) {
         // 确保所有图片都优先使用originalUrl (R2直链)
@@ -37,10 +49,27 @@ export default function FeaturedImages() {
         }))
         setFeaturedImages(processedImages)
       } else {
-        console.error('Failed to load featured images:', result.error)
+        throw new Error(result.error || 'API returned unsuccessful response')
       }
     } catch (error) {
-      console.error('Error loading featured images:', error)
+      console.warn('Primary API failed, trying static fallback:', error)
+      
+      // Fallback to static JSON
+      try {
+        const fallbackResponse = await fetch('/api/featured-images.json')
+        const fallbackResult = await fallbackResponse.json()
+        
+        if (fallbackResult.success) {
+          const processedImages = fallbackResult.data.map((item: any) => ({
+            ...item,
+            url: item.originalUrl || item.url || item.image_url || "/placeholder.svg"
+          }))
+          setFeaturedImages(processedImages)
+          console.log('✅ Loaded featured images from static fallback')
+        }
+      } catch (fallbackError) {
+        console.error('Both API and fallback failed:', fallbackError)
+      }
     } finally {
       setIsLoading(false)
     }
