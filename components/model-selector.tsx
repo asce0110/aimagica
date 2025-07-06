@@ -45,8 +45,21 @@ export default function ModelSelector({
     const fetchModels = async () => {
       try {
         setIsLoading(true)
-        const response = await fetch(`/api/models/available?type=${type}`)
-        const data = await response.json()
+        
+        // 尝试从API加载，失败时fallback到静态JSON
+        let response = await fetch(`/api/models/available?type=${type}`)
+        let data: any
+
+        if (response.ok) {
+          try {
+            data = await response.json()
+          } catch (parseError) {
+            console.warn('API response not JSON, trying static fallback')
+            throw new Error('Invalid JSON response')
+          }
+        } else {
+          throw new Error(`API responded with status ${response.status}`)
+        }
 
         if (!response.ok) {
           if (response.status === 401) {
@@ -72,8 +85,21 @@ export default function ModelSelector({
         }
 
       } catch (err) {
-        console.error('Error fetching models:', err)
-        setError(err instanceof Error ? err.message : 'Unknown error')
+        console.warn('Primary API failed, trying static fallback:', err)
+        
+        // Fallback to static JSON
+        try {
+          const fallbackResponse = await fetch('/api/models-available.json')
+          const fallbackData = await fallbackResponse.json()
+          
+          setModels(fallbackData.models || [])
+          setDefaultModel(fallbackData.defaultModel || null)
+          setError(null) // 清除错误状态
+          console.log('✅ Models loaded from static fallback')
+        } catch (fallbackError) {
+          console.error('Both API and fallback failed:', fallbackError)
+          setError('Failed to load AI models')
+        }
       } finally {
         setIsLoading(false)
       }

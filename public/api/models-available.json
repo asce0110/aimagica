@@ -5,64 +5,49 @@
     {
       "id": "1",
       "name": "DALL-E 3",
+      "provider": "openai",
       "model": "dall-e-3",
-      "endpoint": "https://api.openai.com/v1/images/generations",
-      "is_active": true,
-      "priority": 1,
-      "timeout_seconds": 60,
-      "rate_limit_per_minute": 10,
-      "config_data": {
-        "type": "image_generation",
-        "provider": "openai"
-      },
-      "api_key_available": true
+      "isDefault": true,
+      "displayName": "DALL-E 3 (OpenAI)",
+      "shortName": "DALL-E"
     },
     {
       "id": "2",
       "name": "Kie.ai Flux Pro",
+      "provider": "kie",
       "model": "flux-pro",
-      "endpoint": "https://api.kie.ai/v1/images/generations",
-      "is_active": true,
-      "priority": 2,
-      "timeout_seconds": 120,
-      "rate_limit_per_minute": 5,
-      "config_data": {
-        "type": "image_generation",
-        "provider": "kie"
-      },
-      "api_key_available": true
+      "isDefault": false,
+      "displayName": "Flux Pro (Kie.ai)",
+      "shortName": "Flux Pro"
     },
     {
       "id": "3",
       "name": "Stability AI",
+      "provider": "stability",
       "model": "stable-diffusion-xl",
-      "endpoint": "https://api.stability.ai/v1/generation",
-      "is_active": true,
-      "priority": 3,
-      "timeout_seconds": 90,
-      "rate_limit_per_minute": 8,
-      "config_data": {
-        "type": "image_generation",
-        "provider": "stability"
-      },
-      "api_key_available": true
+      "isDefault": false,
+      "displayName": "SDXL (Stability AI)",
+      "shortName": "SDXL"
     },
     {
       "id": "4",
       "name": "Replicate",
+      "provider": "replicate",
       "model": "flux-dev",
-      "endpoint": "https://api.replicate.com/v1/predictions",
-      "is_active": true,
-      "priority": 4,
-      "timeout_seconds": 180,
-      "rate_limit_per_minute": 3,
-      "config_data": {
-        "type": "image_generation",
-        "provider": "replicate"
-      },
-      "api_key_available": true
+      "isDefault": false,
+      "displayName": "Flux Dev (Replicate)",
+      "shortName": "Flux Dev"
     }
   ],
+  "defaultModel": {
+    "id": "1",
+    "name": "DALL-E 3",
+    "provider": "openai",
+    "model": "dall-e-3",
+    "isDefault": true,
+    "displayName": "DALL-E 3 (OpenAI)",
+    "shortName": "DALL-E"
+  },
   "metadata": {
     "total": 4,
     "active_only": true,
