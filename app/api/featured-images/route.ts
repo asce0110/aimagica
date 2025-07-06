@@ -4,13 +4,12 @@ import { createClient } from '@/lib/supabase-server'
 /**
  * 精选图片API - 获取社区精选的优秀AI生成作品
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     console.log('🌟 Featured images API called')
     
-    // 获取查询参数
-    const { searchParams } = new URL(request.url)
-    const limit = parseInt(searchParams.get('limit') || '12')
+    // 默认参数（静态导出时不能使用request.url）
+    const limit = 12
     
     // 创建Supabase客户端
     const supabase = await createClient()

@@ -4,13 +4,12 @@ import { createClient } from '@/lib/supabase-server'
 /**
  * 可用模型API - 获取所有可用的AI模型配置
  */
-export async function GET(request: NextRequest) {
+export async function GET() {
   try {
     console.log('🤖 Available models API called')
     
-    // 获取查询参数
-    const { searchParams } = new URL(request.url)
-    const type = searchParams.get('type') // image_generation, text_generation, etc.
+    // 默认类型（静态导出时不能使用request.url）
+    const type = 'image_generation'
     
     // 创建Supabase客户端
     const supabase = await createClient()
