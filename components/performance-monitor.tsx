@@ -17,7 +17,7 @@ export default function PerformanceMonitor() {
       
       entries.forEach((entry) => {
         if (entry.entryType === 'resource' && entry.name.match(/\.(jpg|jpeg|png|webp|avif|svg)$/i)) {
-          const loadTime = entry.responseEnd - entry.startTime
+          const loadTime = (entry as any).responseEnd - entry.startTime
           console.log(`📊 Image loaded: ${entry.name.split('/').pop()} in ${loadTime.toFixed(2)}ms`)
           
           // 记录到性能指标

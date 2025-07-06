@@ -34,14 +34,14 @@ import { useSessionCompat as useSession, signOutCompat as signOut, signInCompat 
 import { useRouter } from "next/navigation"
 import { cn } from "@/lib/utils"
 import GenerationInterface from "@/components/generation-interface"
-import { GenerationInterfaceSimple } from "@/components/generation-interface-simple"
+// import { GenerationInterfaceSimple } from "@/components/generation-interface-simple"
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from "@/components/ui/dropdown-menu"
 import ImageViewer from "@/components/image-viewer"
 import { getProxiedAvatarUrl, getFallbackAvatarUrl } from "@/lib/utils/avatar"
 import PromptsCommunity from "@/components/prompts-community"
 import useMobile from "@/hooks/use-mobile"
 import PerformanceMonitor from "@/components/performance-monitor"
-import { WaitingGame } from "@/components/waiting-game"
+import WaitingGame from "@/components/waiting-game"
 import Link from "next/link"
 import Image from "next/image"
 import useStaticUrl from "@/hooks/use-static-url"
@@ -1451,7 +1451,7 @@ export default function AISketchPlatform() {
                         onUsePrompt={handleUsePrompt} 
                         onViewMore={handleViewPromptsCommunity}
                         creationMode={creationMode}
-                        mode={interfaceMode}
+                        mode={interfaceMode as "pro" | "quick"}
                       />
                     </div>
                   </div>

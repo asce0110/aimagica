@@ -15,6 +15,7 @@ export default function FloatingGenerationTips() {
     textPrompt: '',
     selectedAspectRatio: '1:1',
     selectedStyleId: null,
+    selectedStyleName: null,
     currentStep: 'create',
     startTime: null
   })
