@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(NEXT_CONFIG_FILE=next.config.static.mjs next build)",
+      "WebFetch(domain:production.aimagica.pages.dev)"
+    ],
+    "deny": []
+  }
+}
